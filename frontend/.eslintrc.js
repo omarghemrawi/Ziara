@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   root: true,
   extends: ['@react-native'],
   parser: '@babel/eslint-parser',

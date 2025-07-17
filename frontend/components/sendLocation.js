@@ -1,81 +1,85 @@
 import React, { useEffect, useRef } from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
+import { PermissionsAndroid, Platform, Alert, Linking } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import axios from 'axios';
+import { useDispatch } from 'react-redux';
 
+// The purpose of this component is to track the user's location while the app is open
+// and save it in Redux. When the app is closed, tracking will stop automatically.
+// and should put in main(App.js ==  with app navigation)
 const SendLocation = () => {
-  // Used to store the watch ID so we can stop watching later
+  const dispatch = useDispatch();
   const watchId = useRef(null);
 
-  // Ask for location permission
+  // Ask Android for location permission
   const requestLocationPermission = async () => {
     if (Platform.OS === 'android') {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
-          title: 'Location Permission',
-          message: 'Ziara needs your location to find nearby places',
+          title: 'Allow Location Access',
+          message:
+            'Ziara needs your location to show nearby attractions and restaurants.',
           buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
         },
       );
       return granted === PermissionsAndroid.RESULTS.GRANTED;
     }
-    // iOS permissions are handled in Info.plist
     return true;
   };
 
-  // Send the latitude and longitude to the backend
-  const sendLocationToBackend = async (latitude, longitude) => {
-    try {
-      const response = await axios.post(
-        'https://your-backend-url.com/api/nearby',
-        {
-          latitude,
-          longitude,
-        },
-      );
-      console.log('Nearby places:', response.data);
-    } catch (err) {
-      console.error('Error sending location:', err.message);
-    }
+  // Start watching the user's location
+  const startWatchingLocation = async () => {
+    const permission = await requestLocationPermission();
+    if (!permission) return;
+
+    watchId.current = Geolocation.watchPosition(
+      position => {
+        const { latitude, longitude } = position.coords;
+
+        if (latitude !== null && longitude !== null) {
+          dispatch({
+            type: 'SET_COORDINATES',
+            payload: { latitude, longitude },
+          });
+        }
+      },
+      error => {
+        if (error.code === 2) {
+          Alert.alert(
+            'GPS is Disabled',
+            'Please enable location services (GPS) in your device settings.',
+            [
+              { text: 'Open Settings', onPress: () => Linking.openSettings() },
+              { text: 'Cancel', style: 'cancel' },
+            ],
+          );
+        } else {
+          console.error('Location Error:', error.message);
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        distanceFilter: 10, // Only update when user moves 10 meters
+        interval: 10000, // Android only: minimum time between updates
+        fastestInterval: 5000, // Android only: fastest rate of updates
+      },
+    );
   };
 
   useEffect(() => {
-    // Start watching the user's location
-    const startWatching = async () => {
-      const permission = await requestLocationPermission();
-      if (!permission) return; // Stop if permission is denied
+    startWatchingLocation();
 
-      watchId.current = Geolocation.watchPosition(
-        position => {
-          const { latitude, longitude } = position.coords;
-          console.log('Updated coords:', latitude, longitude);
-          sendLocationToBackend(latitude, longitude);
-        },
-        error => {
-          console.error('Location watch error:', error.message);
-        },
-        {
-          enableHighAccuracy: true, // Use GPS if available
-          distanceFilter: 50, // Only update if the user moved 50 meters
-          interval: 10000, // Try to get location every 10 seconds
-          fastestInterval: 5000, // Minimum time between updates (Android only)
-        },
-      );
-    };
-
-    startWatching();
-
-    // Stop watching when the component unmounts
+    // Stop tracking when component unmounts
     return () => {
       if (watchId.current !== null) {
         Geolocation.clearWatch(watchId.current);
+        console.log('Location tracking stopped');
       }
     };
   }, []);
 
-  // This component doesn't show any UI
-  return null;
+  return null; // No UI needed
 };
 
 export default SendLocation;
