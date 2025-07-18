@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet,Image } from 'react-native';
 
 export default function HomeScreen() {
   return (
+
     <View style={styles.container}>
-      <Text style={styles.text}>Hello Baraa</Text>
+      
+     
+      <Image source={require('../assets/images/launching.png')}/>
     </View>
   );
 }
@@ -15,6 +18,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff'
+  },
+  image: {
+
   },
   text: {
     fontSize: 24,
