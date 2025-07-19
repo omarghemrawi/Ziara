@@ -1,9 +1,9 @@
 import axios from "axios";
-const apiKey = "AIzaSyCEcwxMIkPKG2RoZ8Qa1LKAkB0BHnKU6go";
+
 
 export const getNearbyPlaces = async (req, res) => {
   const { latitude, longitude } = req.body;
-
+const apiKey = "process.env.API_KEY_GOOGLE_PLACES";
   if (!latitude || !longitude) {
     return res
       .status(400)
@@ -25,7 +25,7 @@ export const getNearbyPlaces = async (req, res) => {
 
 export const getNearbyRestaurants = async (req, res) => {
   const { latitude, longitude } = req.body;
-
+const apiKey = "process.env.API_KEY_GOOGLE_PLACES";
   if (!latitude || !longitude) {
     return res
       .status(400)
@@ -47,7 +47,7 @@ export const getNearbyRestaurants = async (req, res) => {
 
 export const getNearbyTouristicPlaces = async (req, res) => {
   const { latitude, longitude } = req.body;
-
+const apiKey = "process.env.API_KEY_GOOGLE_PLACES";
   if (!latitude || !longitude) {
     return res
       .status(400)
@@ -70,7 +70,7 @@ export const getNearbyTouristicPlaces = async (req, res) => {
 export const getNearbyReligiousPlaces = async (req, res) => {
   const { latitude, longitude } = req.body;
   const radius = 1500;
-
+const apiKey = "process.env.API_KEY_GOOGLE_PLACES";
   if (!latitude || !longitude) {
     return res
       .status(400)
