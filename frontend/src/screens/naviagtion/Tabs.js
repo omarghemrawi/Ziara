@@ -1,24 +1,31 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { TouchableOpacity } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialDesignIcons from 'react-native-vector-icons/MaterialCommunityIcons'; 
+import Fontisto from 'react-native-vector-icons/Fontisto';
+
 import Home from '../Home/Home';
 import Search from '../Search/Search';
-
+import Favorites from '../Favorites/Favorites';
+import Shops from '../Shops/Shops';
+import AiSupport from '../AiSupport/aiSupport';
 
 const Tab = createBottomTabNavigator();
 
 const CustomTabBar = ({ state, descriptors, navigation }) => {
   return (
-    <View style={{
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      paddingVertical: 10,
-      backgroundColor: '#fff',
-      borderTopWidth: 1,
-      borderColor: '#ddd',
-    }}>
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingVertical: 10,
+        backgroundColor: '#fff',
+        borderTopWidth: 1,
+        borderColor: '#ddd',
+      }}
+    >
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label = options.tabBarLabel ?? route.name;
@@ -35,25 +42,61 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
           }
         };
 
-        let iconName;
+        let icon;
         switch (route.name) {
           case 'Home':
-            iconName = 'home-outline';
+            icon = (
+              <Ionicons
+                name="home-outline"
+                size={24}
+                color={isFocused ? '#FFD700' : '#999'}
+              />
+            );
             break;
           case 'Search':
-            iconName = 'search-outline';
+            icon = (
+              <Ionicons
+                name="search-outline"
+                size={24}
+                color={isFocused ? '#FFD700' : '#999'}
+              />
+            );
             break;
           case 'Favorites':
-            iconName = 'heart-outline';
+            icon = (
+              <Ionicons
+                name="heart-outline"
+                size={24}
+                color={isFocused ? '#FFD700' : '#999'}
+              />
+            );
             break;
-          case 'Shop':
-            iconName = 'cart-outline';
+          case 'Shops':
+            icon = (
+              <Fontisto
+                name="shopping-store"
+                size={24}
+                color={isFocused ? '#FFD700' : '#999'}
+              />
+            );
             break;
-          case 'Chatbot':
-            iconName = 'chatbubble-ellipses-outline';
+          case 'AI Support':
+            icon = (
+              <MaterialDesignIcons
+                name="robot-outline"
+                size={24}
+                color={isFocused ? '#FFD700' : '#999'}
+              />
+            );
             break;
           default:
-            iconName = 'ellipse';
+            icon = (
+              <Ionicons
+                name="ellipse"
+                size={24}
+                color={isFocused ? '#FFD700' : '#999'}
+              />
+            );
         }
 
         return (
@@ -62,12 +105,14 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             onPress={onPress}
             style={{ alignItems: 'center' }}
           >
-            <Ionicons
-              name={iconName}
-              size={24}
-              color={isFocused ? '#FFD700' : '#999'}
-            />
-            <Text style={{ color: isFocused ? '#FFD700' : '#999', fontSize: 12 }}>
+            {icon}
+            <Text
+              style={{
+                color: isFocused ? '#FFD700' : '#999',
+                fontSize: 12,
+                marginTop: 4,
+              }}
+            >
               {label}
             </Text>
           </TouchableOpacity>
@@ -85,9 +130,12 @@ export default function MyTabs() {
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Search" component={Search} />
-      {/* <Tab.Screen name="Favorites" component={Favorites} />
-      <Tab.Screen name="Shop" component={Shop} />
-      <Tab.Screen name="Chatbot" component={Chatbot} /> */}
+      <Tab.Screen name="Favorites" component={Favorites} />
+      <Tab.Screen name="Shops" component={Shops} />
+      <Tab.Screen name="AI Support" component={AiSupport} />
     </Tab.Navigator>
   );
 }
+
+
+
