@@ -7,170 +7,154 @@ export default function Home() {
     console.log('Profile pressed');
   };
 
-  const handleArrowPress = () => {
-    console.log('Arrow pressed');
-  };
-
   return (
     <View style={styles.container}>
-      {/* Profile Icon Button */}
+      {/* Profile Icon with Tarbush */}
       <TouchableOpacity style={styles.profileIcon} onPress={handleProfilePress}>
-        <EvilIcons name="user" size={80} color="#000" />
+        <EvilIcons name="user" size={70} color="#000" />
         <Image style={styles.tarbush} source={require('../../assets/images/miniTarbush.png')} />
       </TouchableOpacity>
 
-      <Text style={styles.text}>Find Your Destination</Text>
+      {/* Header Text */}
+      <Text style={styles.headerText}>Find Your Destination</Text>
 
-    {/* Scrollable Row of Boxes */}
-      <View style={styles.horizontalSection}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <TouchableOpacity onPress={() => console.log('Nearby pressed')} style={styles.box}>
-            <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
-            <Text style={styles.boxText}>Nearby</Text>
-          </TouchableOpacity>
+      {/* Horizontal Scroll Section */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.horizontalScroll}
+        contentContainerStyle={styles.horizontalContent}
+      >
+        <OptionBox label="Nearby" image={require('../../assets/images/map.png')} />
+        <OptionBox label="Popular Foods" image={require('../../assets/images/Hummus.png')} isBrown />
+        <OptionBox label="Popular Places" image={require('../../assets/images/window1.png')} />
+      </ScrollView>
 
-          <TouchableOpacity onPress={() => console.log('Popular Foods pressed')} style={[styles.box, styles.brownBox]}>
-            <Image style={styles.boxImage} source={require('../../assets/images/Hummus.png')} />
-            <Text style={styles.boxText}>Popular Foods</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => console.log('Popular Places pressed')} style={styles.box}>
-            <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
-            <Text style={styles.boxText}>Popular Places</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-
-       {/* Scrollable Column of Boxes */}
-      <View style={styles.verticalSection}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <TouchableOpacity onPress={() => console.log('Touristic Places pressed')} style={styles.box1}>
-            <Image style={styles.boxImage1} source={require('../../assets/images/touristicPlaces.png')} />
-            <Text style={styles.boxText1Margin}>Touristic Places</Text>
-            <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => console.log('Religious Places pressed')} style={[styles.box1, styles.brownBox, styles.box1Margin]}>
-            <Image style={styles.boxImage1} source={require('../../assets/images/religious.png')} />
-            <Text style={styles.boxText1Margin}>Religious Places</Text>
-            <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => console.log('Restaurants pressed')} style={styles.box1}>
-            <Image style={styles.boxImage1} source={require('../../assets/images/pizza.png')} />
-            <Text style={styles.boxText1}>Restaurants</Text>
-            <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
+      {/* Vertical Scroll Section */}
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.verticalScroll}>
+        <DetailBox label="Touristic Places" image={require('../../assets/images/touristicPlaces.png')} />
+        <DetailBox label="Religious Places" image={require('../../assets/images/religious.png')} isBrown />
+        <DetailBox label="Restaurants" image={require('../../assets/images/pizza.png')} />
+      </ScrollView>
     </View>
   );
 }
 
+// Small horizontal square box
+const OptionBox = ({ label, image, isBrown }) => (
+  <TouchableOpacity
+    onPress={() => console.log(`${label} pressed`)}
+    style={[styles.optionBox, isBrown && styles.brownBox]}
+  >
+    <Image source={image} style={styles.optionImage} />
+    <Text style={styles.optionText}>{label}</Text>
+  </TouchableOpacity>
+);
 
+// Big vertical box
+const DetailBox = ({ label, image, isBrown }) => (
+  <TouchableOpacity
+    onPress={() => console.log(`${label} pressed`)}
+    style={[styles.detailBox, isBrown && styles.brownBox]}
+  >
+    <Image source={image} style={styles.detailImage} />
+    <Text style={styles.detailText}>{label}</Text>
+    <EvilIcons name="chevron-right" size={30} color="#fff" style={styles.arrow} />
+  </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
-    container: {
+  container: {
     flex: 1,
     paddingTop: 60,
+    backgroundColor: '#fff',
   },
   profileIcon: {
     position: 'absolute',
-    top: 100,
+    top: 60,
     right: 20,
     zIndex: 10,
+    alignItems: 'center',
   },
-  tarbush:{
-      position: 'absolute',
-    bottom: 35,
+  tarbush: {
+    position: 'absolute',
+    bottom: 30,
     right: 5,
-    zIndex: 10,
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
   },
-  text: {
+  headerText: {
     fontFamily: 'RobotoBold',
-    fontSize: 50,
-    margin: 30,
+    fontSize: 36,
+    marginHorizontal: 30,
+    // marginTop: 20,
+    marginBottom: 15,
+    padding:7,
+    color: '#000',
   },
-  row: {
+  horizontalScroll: {
+    paddingLeft: 10,
+  },
+  horizontalContent: {
+    paddingRight: 10,
+  },
+  optionBox: {
+    width: 100,
+    height: 100,
+    backgroundColor: '#fac75c',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 8,
+    marginBottom:25,
+    marginLeft:12,
+    
+  },
+  optionImage: {
+    width: 60,
+    height: 60,
+    marginBottom: 10,
+    resizeMode: 'contain',
+  },
+  optionText: {
+    fontSize: 10,
+    color: '#fff',
+    textAlign: 'center',
+  },
+  verticalScroll: {
+    marginTop: 20,
+    paddingHorizontal: 10,
+  },
+  detailBox: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  box: {
-    width: 140,
+    alignItems: 'center',
     height: 140,
     backgroundColor: '#fac75c',
-    borderRadius: 40,
-    alignItems: 'center',
-    padding: 20,
-     margin:10,
+    borderRadius: 30,
+    marginVertical: 8,
+    padding: 15,
+    position: 'relative',
   },
-    box1: {
-  flexDirection: 'row',       
-  alignItems: 'center',       
-  width: 360,
-  height: 160,
-  backgroundColor: '#fac75c',
-  borderRadius: 40,
-  padding: 20,
-  margin: 10,
+  detailImage: {
+    position: 'absolute',
+    width: 220,
+    height: 140,
+    borderRadius: 30,
+    left: -10,
   },
-  brownBox:{
-    backgroundColor:'#9a370e',
-  },
-  boxImage: {
-    width: 80,
-    height: 60,
-    borderRadius: 60,
-    marginBottom: 10,
-   
-  },
-  boxText: {
-    textAlign: 'center',
-    fontSize: 14,
-    color:'#ffffff'
-  },
-    boxImage1: {
-      position:'absolute',
-    width: 240,
-    height: 160,
-    top:20,
-    left:-10,
-    borderRadius: 60,
-    marginBottom: 10,
-   
-  },
-  boxText1: {
-    position:'absolute',
-    textAlign: 'center',
+  detailText: {
+    marginLeft: 200,
     fontSize: 17,
-    left:200,
-    marginLeft:30,
-    color:'#ffffff'
+    fontWeight: '600',
+    color: '#fff',
   },
-  boxText1Margin:{
-  marginRight:20,
-    position:'absolute',
-    textAlign: 'center',
-    fontSize: 17,
-    left:200,
-  
-    color:'#ffffff'
+  arrow: {
+    position: 'absolute',
+    left: 330,
+    bottom: 60,
   },
-  arrow:{
-      position:'absolute',
-
-  right:0,
-  bottom:65,
-  
-   
-  },
-  verticalSection: {
-  flex: 1, 
-  paddingHorizontal: 10,
-  marginTop: 20,
-},
-  horizontalSection: {
-    height: 160,
-    paddingLeft: 10,
+  brownBox: {
+    backgroundColor: '#9a370e',
   },
 });
