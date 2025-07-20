@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign'; 
+import EvilIcons from 'react-native-vector-icons/EvilIcons'; 
 
 export default function Home() {
   const handleProfilePress = () => {
@@ -11,8 +11,10 @@ export default function Home() {
   return (
     <View style={styles.container}>
       {/* Profile Icon Button */}
+     
       <TouchableOpacity style={styles.profileIcon} onPress={handleProfilePress}>
-        <AntDesign name="user" size={30} color="#000" />
+        <EvilIcons name="user" size={80} color="#000" />
+        <Image style={styles.tarbush} source={require('../../assets/images/miniTarbush.png')}/>
       
       </TouchableOpacity>
 
@@ -30,7 +32,13 @@ const styles = StyleSheet.create({
   profileIcon: {
     position: 'absolute',
     top: 100,
-    right: 40,
+    right: 20,
+    zIndex: 10,
+  },
+  tarbush:{
+      position: 'absolute',
+    bottom: 35,
+    right: 5,
     zIndex: 10,
   },
   text: {
