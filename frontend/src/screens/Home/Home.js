@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-
+import { useNavigation } from '@react-navigation/native';
 export default function Home() {
   const handleProfilePress = () => {
     console.log('Profile pressed');
@@ -32,7 +32,7 @@ export default function Home() {
 
       {/* Vertical Scroll Section */}
       <ScrollView showsVerticalScrollIndicator={false} style={styles.verticalScroll}>
-        <DetailBox label="Touristic Places" image={require('../../assets/images/touristicPlaces.png')} />
+        <DetailBox  label="Touristic Places" image={require('../../assets/images/touristicPlaces.png')} />
         <DetailBox label="Religious Places" image={require('../../assets/images/religious.png')} isBrown />
         <DetailBox label="Restaurants" image={require('../../assets/images/pizza.png')} />
       </ScrollView>
@@ -52,16 +52,38 @@ const OptionBox = ({ label, image, isBrown }) => (
 );
 
 // Big vertical box
-const DetailBox = ({ label, image, isBrown }) => (
-  <TouchableOpacity
-    onPress={() => console.log(`${label} pressed`)}
-    style={[styles.detailBox, isBrown && styles.brownBox]}
-  >
-    <Image source={image} style={styles.detailImage} />
-    <Text style={styles.detailText}>{label}</Text>
-    <EvilIcons name="chevron-right" size={30} color="#fff" style={styles.arrow} />
-  </TouchableOpacity>
-);
+const DetailBox = ({ label, image, isBrown }) => {
+  const navigation = useNavigation();
+
+  
+  const screenMap = {
+    'Touristic Places': 'TouristicPlaces',
+    'Religious Places': 'ReligiousPlaces',
+    'Restaurants': 'Restaurants',
+  };
+
+  const screenName = screenMap[label];
+
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        if (screenName) {
+          navigation.navigate(screenName);
+        } else {
+          console.warn(`No screen found for label: ${label}`);
+        }
+      }}
+      style={[styles.detailBox, isBrown && styles.brownBox]}
+    >
+      <Image source={image} style={styles.detailImage} />
+      <Text style={[styles.detailText, label === 'Restaurants' && { marginLeft: 200 }]}>
+        {label}
+      </Text>
+      <EvilIcons name="chevron-right" size={30} color="#fff" style={styles.arrow} />
+    </TouchableOpacity>
+  );
+};
+
 
 const styles = StyleSheet.create({
   container: {
@@ -144,7 +166,7 @@ const styles = StyleSheet.create({
     left: -10,
   },
   detailText: {
-    marginLeft: 200,
+    marginLeft: 170,
     fontSize: 17,
     fontWeight: '600',
     color: '#fff',
