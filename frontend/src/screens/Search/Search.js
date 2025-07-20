@@ -23,7 +23,7 @@ const Search = () => {
     <PlacesSection
       title="Search"
       headerColor="#9a370e"
-      headerImage={require('../../assets/images/baytna.jpg')}
+      headerImage={require('../../assets/images/Search.png')}
       data={data}
       onDiscover={handleDiscover}
       onSave={handleSave}
