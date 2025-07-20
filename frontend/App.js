@@ -10,8 +10,8 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-//     <NavigationContainer>
-//         <Stack.Navigator
+    <NavigationContainer>
+{/* //         <Stack.Navigator
 //     initialRouteName='Onboarding'
 //         screenOptions={{
 //           headerShown: false, 
@@ -20,7 +20,7 @@ export default function App() {
 //          <Stack.Screen name="Onboarding" options={{headerShown: false}} component={OnboardingScreen} />
 //  <Stack.Screen name="Home" component={MyTabs} options={{headerShown: false}} />
 //         <Stack.Screen name="Launching" component={LaunchingScreen} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
+//       </Stack.Navigator> */}
+    </NavigationContainer>
   );
 }
