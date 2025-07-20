@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 
 const PlacesSection = ({ 
   title, 
@@ -12,10 +14,14 @@ const PlacesSection = ({
   onSearchChange, 
   searchValue 
 }) => {
+    const navigation = useNavigation();
   return (
     <ScrollView style={styles.container}>
       <View style={[styles.header, { backgroundColor: headerColor }]}>
-        <Image source={headerImage} style={styles.headerImage} />
+        <Image source={headerImage} style={[
+  styles.headerImage,
+  title === 'Search' && { width: 110}
+]} />
         <Text style={styles.title}>{title}</Text>
       </View>
 
@@ -54,13 +60,16 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
     borderBottomRightRadius: 70,
     padding: 20,
+   
   },
   headerImage: {
-    width: 80,
-    height: 80,
+   
+    width: 160,//110
+    height: 110,
     position: 'absolute',
-    top: 20,
-    right: 20,
+    top: 120,
+    left: 20,
+    
   },
   title: {
     color: '#fff',
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     height: 60,
     marginBottom: 30,
-    marginTop: 30,
+    marginTop: 80,
     borderColor: '#000',
     borderWidth: 1,
   },
