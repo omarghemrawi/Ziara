@@ -23,20 +23,20 @@ export default function Home() {
 
       {/* Scrollable Row of Boxes */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollRow}>
-        <View style={styles.box}>
+        <TouchableOpacity  onPress={() => console.log('Religious Places pressed')} style={styles.box}>
           <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
           <Text style={styles.boxText}>Nearby</Text>
-        </View>
+        </TouchableOpacity>
 
-        <View style={[styles.box, styles.brownBox]}>
+        <TouchableOpacity onPress={() => console.log('Religious Places pressed')} style={[styles.box, styles.brownBox]}>
           <Image style={styles.boxImage} source={require('../../assets/images/Hummus.png')} />
           <Text style={styles.boxText}>Popular Foods</Text>
-        </View>
+        </TouchableOpacity>
 
-        <View style={styles.box}>
+        <TouchableOpacity onPress={() => console.log('Religious Places pressed')} style={styles.box}>
           <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
           <Text style={styles.boxText}>Popular Places</Text>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
 
 
@@ -45,32 +45,32 @@ export default function Home() {
 
         {/* Scrollable Column of Boxes */}
       <ScrollView vertical showsVerticalScrollIndicator={false} style={styles.scrollRow}>
-        <View style={styles.box1}>
+        <TouchableOpacity  onPress={() => console.log('Religious Places pressed')}style={styles.box1}>
           <Image style={styles.boxImage1} source={require('../../assets/images/touristicPlaces.png')} />
           <Text style={styles.boxText1Margin}>Touristic Places</Text>
              <TouchableOpacity style={styles.profileIcon} onPress={handleArrowPress}>
         <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
        
       </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
 
-        <View style={[styles.box1,styles.brownBox,styles.box1Margin]}>
+        <TouchableOpacity onPress={() => console.log('Religious Places pressed')}style={[styles.box1,styles.brownBox,styles.box1Margin]}>
           <Image style={styles.boxImage1} source={require('../../assets/images/religious.png')} />
           <Text style={styles.boxText1Margin}>Religious Places</Text>
            <TouchableOpacity style={styles.profileIcon} onPress={handleArrowPress}>
         <EvilIcons style={styles.arrow} name="chevron-right" size={50} color="#ffffff" />
        
       </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
 
-        <View style={styles.box1}>
+        <TouchableOpacity  onPress={() => console.log('Religious Places pressed')} style={styles.box1}>
           <Image style={styles.boxImage1} source={require('../../assets/images/pizza.png')} />
           <Text style={styles.boxText1}>Restaurants</Text>
              <TouchableOpacity style={styles.profileIcon} onPress={handleArrowPress}>
         <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
        
       </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
  
