@@ -1,19 +1,27 @@
-import React from 'react';
+// Ziara/frontend/App.js
+import 'react-native-gesture-handler';        // ← 1️⃣ must be first
+import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './src/screens/Home';
+
+import Welcome       from './src/screens/Welcome/Welcome';
+import Login         from './src/screens/Login/Login';
+import Signup        from './src/screens/Signup/Signup';
+import ForgotPassword from './src/screens/ForgotPassword/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-        <Stack.Navigator
-        screenOptions={{
-          headerShown: false, 
-        }}
+      <Stack.Navigator 
+        initialRouteName="Welcome"
+        screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Login"   component={Login}   />
+        <Stack.Screen name="Signup"  component={Signup}  />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );
