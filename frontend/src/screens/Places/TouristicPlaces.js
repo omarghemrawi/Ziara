@@ -23,7 +23,7 @@ const TouristicPlaces = () => {
     <PlacesSection
       title="Touristic Places"
       headerColor="#FAC75C"
-      headerImage={require('../../assets/images/baytna.jpg')}
+      headerImage={require('../../assets/images/touristicPlaces.png')}
       data={data}
       onDiscover={handleDiscover}
       onSave={handleSave}

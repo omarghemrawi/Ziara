@@ -23,7 +23,7 @@ const Restaurants = () => {
     <PlacesSection
       title="Restaurants"
       headerColor="#FAC75C"
-      headerImage={require('../../assets/images/baytna.jpg')}
+      headerImage={require('../../assets/images/pizza.png')}
       data={data}
       onDiscover={handleDiscover}
       onSave={handleSave}

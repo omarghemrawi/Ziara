@@ -23,7 +23,7 @@ const ReligiousPlaces = () => {
     <PlacesSection
       title="Religious Places"
       headerColor="#9a370e"
-      headerImage={require('../../assets/images/baytna.jpg')}
+      headerImage={require('../../assets/images/religious.png')}
       data={data}
       onDiscover={handleDiscover}
       onSave={handleSave}
