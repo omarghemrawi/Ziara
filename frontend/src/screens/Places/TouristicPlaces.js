@@ -22,7 +22,7 @@ const TouristicPlaces = () => {
   return (
     <PlacesSection
       title="Touristic Places"
-      headerColor="#9a370e"
+      headerColor="#FAC75C"
       headerImage={require('../../assets/images/baytna.jpg')}
       data={data}
       onDiscover={handleDiscover}
