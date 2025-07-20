@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import EvilIcons from 'react-native-vector-icons/EvilIcons'; 
-
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 export default function Home() {
   const handleProfilePress = () => {
     console.log('Profile pressed');
   };
-  const handleArrowPress=()=>{
 
+  const handleArrowPress = () => {
+    console.log('Arrow pressed');
   };
 
   return (
@@ -21,68 +21,52 @@ export default function Home() {
 
       <Text style={styles.text}>Find Your Destination</Text>
 
-      {/* Scrollable Row of Boxes */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollRow}>
-        <TouchableOpacity  onPress={() => console.log('Religious Places pressed')} style={styles.box}>
-          <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
-          <Text style={styles.boxText}>Nearby</Text>
-        </TouchableOpacity>
+    {/* Scrollable Row of Boxes */}
+      <View style={styles.horizontalSection}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <TouchableOpacity onPress={() => console.log('Nearby pressed')} style={styles.box}>
+            <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
+            <Text style={styles.boxText}>Nearby</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => console.log('Religious Places pressed')} style={[styles.box, styles.brownBox]}>
-          <Image style={styles.boxImage} source={require('../../assets/images/Hummus.png')} />
-          <Text style={styles.boxText}>Popular Foods</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => console.log('Popular Foods pressed')} style={[styles.box, styles.brownBox]}>
+            <Image style={styles.boxImage} source={require('../../assets/images/Hummus.png')} />
+            <Text style={styles.boxText}>Popular Foods</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => console.log('Religious Places pressed')} style={styles.box}>
-          <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
-          <Text style={styles.boxText}>Popular Places</Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity onPress={() => console.log('Popular Places pressed')} style={styles.box}>
+            <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
+            <Text style={styles.boxText}>Popular Places</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
 
+       {/* Scrollable Column of Boxes */}
+      <View style={styles.verticalSection}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <TouchableOpacity onPress={() => console.log('Touristic Places pressed')} style={styles.box1}>
+            <Image style={styles.boxImage1} source={require('../../assets/images/touristicPlaces.png')} />
+            <Text style={styles.boxText1Margin}>Touristic Places</Text>
+            <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
+          </TouchableOpacity>
 
+          <TouchableOpacity onPress={() => console.log('Religious Places pressed')} style={[styles.box1, styles.brownBox, styles.box1Margin]}>
+            <Image style={styles.boxImage1} source={require('../../assets/images/religious.png')} />
+            <Text style={styles.boxText1Margin}>Religious Places</Text>
+            <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
+          </TouchableOpacity>
 
-
-
-        {/* Scrollable Column of Boxes */}
-      <ScrollView vertical showsVerticalScrollIndicator={false} style={styles.scrollRow}>
-        <TouchableOpacity  onPress={() => console.log('Religious Places pressed')}style={styles.box1}>
-          <Image style={styles.boxImage1} source={require('../../assets/images/touristicPlaces.png')} />
-          <Text style={styles.boxText1Margin}>Touristic Places</Text>
-             <TouchableOpacity style={styles.profileIcon} onPress={handleArrowPress}>
-        <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
-       
-      </TouchableOpacity>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => console.log('Religious Places pressed')}style={[styles.box1,styles.brownBox,styles.box1Margin]}>
-          <Image style={styles.boxImage1} source={require('../../assets/images/religious.png')} />
-          <Text style={styles.boxText1Margin}>Religious Places</Text>
-           <TouchableOpacity style={styles.profileIcon} onPress={handleArrowPress}>
-        <EvilIcons style={styles.arrow} name="chevron-right" size={50} color="#ffffff" />
-       
-      </TouchableOpacity>
-        </TouchableOpacity>
-
-        <TouchableOpacity  onPress={() => console.log('Religious Places pressed')} style={styles.box1}>
-          <Image style={styles.boxImage1} source={require('../../assets/images/pizza.png')} />
-          <Text style={styles.boxText1}>Restaurants</Text>
-             <TouchableOpacity style={styles.profileIcon} onPress={handleArrowPress}>
-        <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
-       
-      </TouchableOpacity>
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity onPress={() => console.log('Restaurants pressed')} style={styles.box1}>
+            <Image style={styles.boxImage1} source={require('../../assets/images/pizza.png')} />
+            <Text style={styles.boxText1}>Restaurants</Text>
+            <EvilIcons name="chevron-right" style={styles.arrow} size={50} color="#ffffff" />
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
     </View>
- 
-
-
-
-
-
-
-
   );
 }
+
 
 
 const styles = StyleSheet.create({
@@ -175,9 +159,18 @@ const styles = StyleSheet.create({
   arrow:{
       position:'absolute',
 
-  right:-25,
-  bottom:5,
+  right:0,
+  bottom:65,
   
    
-  }
+  },
+  verticalSection: {
+  flex: 1, 
+  paddingHorizontal: 10,
+  marginTop: 20,
+},
+  horizontalSection: {
+    height: 160,
+    paddingLeft: 10,
+  },
 });
