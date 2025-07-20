@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'; 
 
+
 export default function Home() {
   const handleProfilePress = () => {
     console.log('Profile pressed');
   };
- 
 
   return (
     <View style={styles.container}>
@@ -18,14 +18,14 @@ export default function Home() {
 
       <Text style={styles.text}>Find Your Destination</Text>
 
-      {/* Row of Boxes */}
-      <View style={styles.row}>
+      {/* Scrollable Row of Boxes */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollRow}>
         <View style={styles.box}>
           <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
-          <Text style={styles.boxText}>nearby</Text>
+          <Text style={styles.boxText}>Nearby</Text>
         </View>
 
-        <View style={styles.box}>
+        <View style={[styles.box, styles.brownBox]}>
           <Image style={styles.boxImage} source={require('../../assets/images/Hummus.png')} />
           <Text style={styles.boxText}>Popular Foods</Text>
         </View>
@@ -34,7 +34,7 @@ export default function Home() {
           <Image style={styles.boxImage} source={require('../../assets/images/map.png')} />
           <Text style={styles.boxText}>Popular Places</Text>
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -75,6 +75,9 @@ const styles = StyleSheet.create({
     padding: 20,
      margin:10,
   },
+  brownBox:{
+    backgroundColor:'#9a370e',
+  },
   boxImage: {
     width: 80,
     height: 60,
@@ -85,5 +88,6 @@ const styles = StyleSheet.create({
   boxText: {
     textAlign: 'center',
     fontSize: 14,
+    color:'#ffffff'
   },
 });
