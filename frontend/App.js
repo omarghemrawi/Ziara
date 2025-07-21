@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LaunchingScreen from './src/screens/Launching';
@@ -29,3 +30,19 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff'
+  },
+  image: {
+
+  },
+  text: {
+    fontSize: 24,
+    color: '#333'
+  }
+});
