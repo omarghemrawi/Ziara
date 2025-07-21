@@ -30,7 +30,7 @@ placeRouter.post("/nearby/nearbyRestaurant", getNearbyRestaurants);
 placeRouter.post("/nearby/nearbyTourist", getNearbyTouristicPlaces);
 placeRouter.post("/nearby/nearbyReligious", getNearbyReligiousPlaces);
 
-// all place  + send city by query
+// all place + send city by query
 placeRouter.post("/all/restaurant", getRestaurants);
 placeRouter.post("/all/tourist", getTouristAttractions);
 placeRouter.post("/all/religious", getReligiousPlaces);
