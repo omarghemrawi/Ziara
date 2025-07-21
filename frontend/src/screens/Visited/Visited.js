@@ -9,12 +9,10 @@ import {
   Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Modal from 'react-native-modal';
 
 export default function Visited() {
-
-
+  const navigation = useNavigation();
+  const [isEnabled, setIsEnabled] = useState(false);
 
 
 
@@ -22,12 +20,10 @@ export default function Visited() {
     <ScrollView style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
-        {/* <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Entypo name="chevron-left" size={28} color="#fff" />
-        </TouchableOpacity> */}
-        <Text style={styles.title}>Visited </Text>
-
-     
+        <View style={styles.headerTopRow}>
+          <Text style={styles.title}>Visited</Text>
+  
+        </View>
 
         <Image
           source={require('../../assets/images/Favourites.png')}
@@ -46,11 +42,7 @@ export default function Visited() {
           <Text style={styles.placeName}>Al-Amin Mosque</Text>
           <Text style={styles.placeLocation}>Beirut</Text>
         </View>
-
-     
       </View>
-
-    
     </ScrollView>
   );
 }
@@ -65,9 +57,19 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 70,
     padding: 20,
     backgroundColor: '#9a370e',
+    justifyContent: 'flex-start',
+  },
+  headerTopRow: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  title: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+    fontFamily: 'RobotoSlabBold',
   },
   headerImage: {
     width: 90,
@@ -75,14 +77,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -20,
     left: 20,
-  },
-  title: {
-    color: '#fff',
-    fontSize: 24,
-    fontWeight: 'bold',
-    fontFamily: 'RobotoSlabBold',
-    marginTop: 20,
-    marginLeft: 10,
   },
   grid: {
     flexDirection: 'row',
@@ -108,23 +102,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#555',
     marginTop: 2,
-  },
-  iconContainer: {
-    paddingLeft: 10,
-  },
-  modal: {
-    justifyContent: 'flex-end',
-    margin: 0,
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  modalOption: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
   },
 });
