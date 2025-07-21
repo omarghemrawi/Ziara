@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 // Status Code : 200 = OK , 201= created , 400= bad request (invalid input) , 401= Unauthorized (wrong credentials), 500 = internal server Error
 
@@ -36,6 +37,11 @@ export const userSignUp = async (req, res) => {
     const newUser = new User({ username, email, password: hashPassword });
     await newUser.save(); // we used .save instead of .create directly before with newUser because if we wanna do some custom logic before saving
 
+    const token = jwt.sign(
+      { id: newUser._id, email: newUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
     // Remove Password before send to frontend
     const userSafe = newUser.toObject();
     delete userSafe.password;
@@ -44,6 +50,7 @@ export const userSignUp = async (req, res) => {
       success: true,
       message: "User SignUp Successfully",
       user: userSafe,
+      token: token,
     });
   } catch (error) {
     console.log(error);
@@ -78,11 +85,17 @@ export const userLogin = async (req, res) => {
         .json({ success: false, message: "Password is not correct" });
     }
 
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     // Remove Password before send to frontend
     const userSafe = user.toObject();
     delete userSafe.password;
 
-    res.status(200).json({ success: true, user: userSafe });
+    res.status(200).json({ success: true, user: userSafe, token: token });
   } catch (error) {
     return res
       .status(500)
