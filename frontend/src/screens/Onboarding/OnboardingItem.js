@@ -43,12 +43,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+     marginTop:30,
     fontFamily: 'RobotoSlabBolad',
   },
   description: {
     fontSize: 16,
     color: '#555',
     textAlign: 'center',
-    marginTop:10,
+    marginTop:30,
   },
 });

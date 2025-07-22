@@ -20,7 +20,7 @@ const PlacesSection = ({
       <View style={[styles.header, { backgroundColor: headerColor }]}>
         <Image source={headerImage} style={[
   styles.headerImage,
-  title === 'Search' && { width: 110}
+  title === 'Search'  && { width: 110}
 ]} />
         <Text style={styles.title}>{title}</Text>
       </View>

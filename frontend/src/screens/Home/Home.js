@@ -3,8 +3,9 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'rea
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
 export default function Home() {
+  const navigation = useNavigation();
   const handleProfilePress = () => {
-    console.log('Profile pressed');
+   navigation.navigate('Profile');
   };
 
   return (
