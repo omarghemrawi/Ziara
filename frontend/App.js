@@ -38,7 +38,7 @@ export default function App() {
 <Stack.Screen name="Visited" component={Visited}/>
 <Stack.Screen name="Profile" component={ProfileScreen}/>
 <Stack.Screen name="EditProfile" component={EditProfile}/>
-<Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
+{/* <Stack.Screen name="SettingsScreen" component={SettingsScreen}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
