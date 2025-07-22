@@ -1,5 +1,18 @@
 import axios from "axios";
 
+const filterPlaces = (places) => {
+  return places.map((place) => ({
+    place_id: place.place_id,
+    name: place.name,
+    lat: place.geometry?.location?.lat,
+    lng: place.geometry?.location?.lng,
+    address: place.vicinity,
+    rating: place.rating,
+    types: place.types,
+    photo_reference: place.photos?.[0]?.photo_reference || null,
+  }));
+};
+
 export const getNearbyPlaces = async (req, res) => {
   const { latitude, longitude } = req.body;
   const apiKey = process.env.API_KEY_GOOGLE_PLACES;
@@ -16,7 +29,8 @@ export const getNearbyPlaces = async (req, res) => {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&key=${apiKey}`;
 
     const response = await axios.get(url);
-    res.status(200).json({ places: response.data });
+    const filtered = filterPlaces(response.data.results);
+    res.status(200).json({ places: filtered });
   } catch (error) {
     console.error("Google Places error:", error.message);
     res.status(500).json({ error: "Failed to fetch nearby places" });
@@ -39,7 +53,9 @@ export const getNearbyRestaurants = async (req, res) => {
   try {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${apiKey}`;
     const response = await axios.get(url);
-    res.status(200).json({ restaurants: response.data.results });
+    const filtered = filterPlaces(response.data.results);
+
+    res.status(200).json({ restaurants: filtered });
   } catch (error) {
     console.error("Google Places error:", error.message);
     res.status(500).json({ error: "Failed to fetch restaurants" });
@@ -62,7 +78,9 @@ export const getNearbyTouristicPlaces = async (req, res) => {
   try {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${apiKey}`;
     const response = await axios.get(url);
-    res.status(200).json({ touristPlaces: response.data.results });
+    const filtered = filterPlaces(response.data.results);
+
+    res.status(200).json({ touristPlaces: filtered });
   } catch (error) {
     console.error("Google Places error:", error.message);
     res.status(500).json({ error: "Failed to fetch tourist places" });
@@ -102,8 +120,9 @@ export const getNearbyReligiousPlaces = async (req, res) => {
 
     // Final result
     const uniquePlaces = Array.from(placesMap.values());
+    const filtered = filterPlaces(uniquePlaces);
 
-    res.status(200).json({ religiousPlaces: uniquePlaces });
+    res.status(200).json({ religiousPlaces: filtered });
   } catch (error) {
     console.error("Google Places error:", error.message);
     res.status(500).json({ error: "Failed to fetch religious places" });
