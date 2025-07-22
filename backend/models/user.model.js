@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { placeSchema } from "./place.model.js";
+import { reviewSchema } from "./review.model.js";
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true },
@@ -8,9 +9,9 @@ const userSchema = new mongoose.Schema({
   favoritePlaces: [placeSchema],
   visitedPlaces: [placeSchema],
   about: String,
-  // profileImage: String,
-  // review: [], // will be related with object of city or place
-  // currentCity: String,
+  profileImage: String,
+  review: [reviewSchema],
+  currentCity: String,
 });
 
 const User = mongoose.model("User", userSchema);

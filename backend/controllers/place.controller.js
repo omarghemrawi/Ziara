@@ -79,7 +79,7 @@ export const addToFav = async (req, res) => {
   }
 };
 
-export const removeFromFav = async (req, res) => {
+export const deleteFav = async (req, res) => {
   try {
     const { place_id } = req.params;
     const userId = req.user.id;
@@ -123,15 +123,16 @@ export const getVisitedPlaces = async (req, res) => {
   }
 };
 
-// CHECK THIS
 export const addToVisited = async (req, res) => {
   const userId = req.user.id;
   const { place_id } = req.params;
+
   if (!place_id) {
     return res
       .status(400)
       .json({ success: false, message: "Place ID is required" });
   }
+
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -139,17 +140,30 @@ export const addToVisited = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found" });
     }
+
     const place = user.favoritePlaces.find((fav) => fav.place_id === place_id);
     if (!place) {
       return res
         .status(404)
         .json({ success: false, message: "Place not found in favorites" });
     }
-    user.visitedPlaces.push(place);
-    await user.save();
+
+    // Check if already in visited
+    const alreadyVisited = user.visitedPlaces.some(
+      (visited) => visited.place_id === place_id
+    );
+
+    if (!alreadyVisited) {
+      user.visitedPlaces.push(place);
+    }
 
     user.favoritePlaces.pull({ place_id: place_id });
     await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Place moved to visited successfully",
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: "Server error" });

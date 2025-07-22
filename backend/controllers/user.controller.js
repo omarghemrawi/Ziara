@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import { Review } from "../models/review.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -100,5 +101,82 @@ export const userLogin = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Invalid Credentials" });
+  }
+};
+
+export const createReview = async (req, res) => {
+  try {
+    const { place_name, place_city, rate, review, data } = req.body;
+    const userId = req.user.id;
+
+    // Validate required fields
+    if (!place_name || !place_city || !rate || !review) {
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required" });
+    }
+
+    // Create new review
+    const newReview = new Review({
+      place_name,
+      place_city,
+      rate,
+      review,
+      userId,
+      visitedDate: data ? new Date(data) : new Date(),
+    });
+
+    await newReview.save();
+
+    // Add review to user's reviews array
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    user.review.push(newReview._id);
+    await user.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "Review created successfully",
+      review: newReview,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const getUserReviews = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findById(userId).populate("review");
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+    return res.status(200).json({
+      success: true,
+      reviews: user.review,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const getReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find();
+    return res.status(200).json({
+      success: true,
+      reviews: reviews,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
