@@ -17,7 +17,7 @@ export default function OnboardingScreen({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleSkip = () => {
-    navigation.replace('Home'); // Navigate to Home 
+    navigation.replace('Welcome'); // Navigate to Home 
   };
 
   const handleNext = () => {

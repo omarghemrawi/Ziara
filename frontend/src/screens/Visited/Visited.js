@@ -9,41 +9,20 @@ import {
   Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Entypo from 'react-native-vector-icons/Entypo';
-import Modal from 'react-native-modal';
 
-export default function Favourites() {
+export default function Visited() {
   const navigation = useNavigation();
-  const [isVisited, setIsVisited] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
 
-  const handleToggle = () => {
-    setIsVisited(!isVisited);
-    if (!isVisited) {
-      navigation.navigate('Visited');
-    }
-  };
 
-  const handleDotsPress = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
 
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
-          <Text style={styles.title}>Favourites</Text>
-          <Switch
-            value={isVisited}
-            onValueChange={handleToggle}
-            thumbColor="#fff"
-            trackColor={{ false: '#ccc', true: '#fff' }}
-          />
+          <Text style={styles.title}>Visited</Text>
+  
         </View>
 
         <Image
@@ -63,30 +42,7 @@ export default function Favourites() {
           <Text style={styles.placeName}>Al-Amin Mosque</Text>
           <Text style={styles.placeLocation}>Beirut</Text>
         </View>
-
-        <TouchableOpacity style={styles.iconContainer} onPress={handleDotsPress}>
-          <Entypo name="dots-three-vertical" size={18} color="#000" />
-        </TouchableOpacity>
       </View>
-
-      {/* Modal Bottom Sheet */}
-      <Modal
-        isVisible={isModalVisible}
-        onBackdropPress={closeModal}
-        style={styles.modal}
-      >
-        <View style={styles.modalContent}>
-          <TouchableOpacity style={styles.modalOption}>
-            <Text>Edit Trip</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.modalOption}>
-            <Text>✓ Move to Visited</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.modalOption}>
-            <Text style={{ color: 'red' }}>🗑 Delete</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
     </ScrollView>
   );
 }
@@ -146,23 +102,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#555',
     marginTop: 2,
-  },
-  iconContainer: {
-    paddingLeft: 20,
-  },
-  modal: {
-    justifyContent: 'flex-end',
-    margin: 0,
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  modalOption: {
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
   },
 });
