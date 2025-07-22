@@ -9,11 +9,22 @@ import {
   ScrollView,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { launchImageLibrary } from 'react-native-image-picker';
 
-export default function EditProfile({ navigation }) {
+export default function EditProfileScreen({ navigation }) {
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
   const [about, setAbout] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handleImagePick = () => {
+    launchImageLibrary({ mediaType: 'photo' }, (response) => {
+      if (response.assets && response.assets.length > 0) {
+        setProfileImage(response.assets[0].uri);
+      }
+    });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -25,15 +36,22 @@ export default function EditProfile({ navigation }) {
       {/* Title */}
       <Text style={styles.title}>Edit profile</Text>
 
-      {/* Profile Image */}
+      {/* Profile Image with Camera Icon */}
       <View style={styles.profileContainer}>
         <Image
-          source={require('../../assets/images/pizza.png')} // Replace with your own image or URI
+          source={
+            profileImage
+              ? { uri: profileImage }
+              : require('../../assets/images/pizza.png')
+          }
           style={styles.profileImage}
         />
+        <TouchableOpacity onPress={handleImagePick} style={styles.cameraIcon}>
+          <FontAwesome name="camera" size={10} color="#fff" />
+        </TouchableOpacity>
       </View>
 
-      {/* Name Field */}
+      {/* Input Fields */}
       <Text style={styles.label}>Name</Text>
       <TextInput
         style={styles.input}
@@ -43,9 +61,7 @@ export default function EditProfile({ navigation }) {
         onChangeText={setName}
       />
 
-
-
-      {/* About You Field */}
+   
       <Text style={styles.label}>About you</Text>
       <TextInput
         style={styles.textarea}
@@ -82,10 +98,18 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   profileImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     backgroundColor: '#ddd',
+  },
+  cameraIcon: {
+    position: 'absolute',
+    bottom: 0,
+    right: 130, 
+    backgroundColor: '#000',
+    padding: 5,
+    borderRadius: 15,
   },
   label: {
     fontSize: 14,
