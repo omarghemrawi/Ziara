@@ -23,10 +23,10 @@ export default function ProfileScreen() {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Profile</Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <MaterialIcons name="edit" size={30} color="#000" style={styles.icon} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
             <FontAwesome name="cog" size={30} color="#000" style={styles.icon} />
           </TouchableOpacity>
         </View>

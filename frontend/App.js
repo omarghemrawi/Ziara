@@ -2,13 +2,19 @@
 import 'react-native-gesture-handler'; // ← لازم أول شيء
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // 1) Onboarding & Splash
 import OnboardingScreen from './src/screens/Onboarding/OnboardingScreen';
 import LaunchingScreen  from './src/screens/Launching';
 
+<<<<<<< HEAD
 // 2) Welcome → Auth → Intro flow
+=======
+
+// شاشات تسجيل الدخول والتسجيل
+>>>>>>> 7cbd73411b500e9c8d7d5d1cac9c2f3d103fc7ed
 import Welcome        from './src/screens/Welcome/Welcome';
 import Login          from './src/screens/Login/Login';
 import Signup         from './src/screens/Signup/Signup';
@@ -23,11 +29,16 @@ import TouristicPlaces from './src/screens/Places/TouristicPlaces';
 import ReligiousPlaces from './src/screens/Places/ReligiousPlaces';
 import Restaurants     from './src/screens/Places/Restaurants';
 
+
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   return (
     <NavigationContainer>
+
+
+
       <Stack.Navigator
         initialRouteName="Onboarding"  /* أول شاشة عند تشغيل الأبلكيشن */
         screenOptions={{ headerShown: false }}
@@ -55,6 +66,7 @@ export default function App() {
         <Stack.Screen name="ReligiousPlaces" component={ReligiousPlaces} />
         <Stack.Screen name="Restaurants"     component={Restaurants} />
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 }

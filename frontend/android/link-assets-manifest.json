@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/RampartOne-Regular.ttf",
+      "sha1": "7c6c170d5f0d7d76a7af36e883f32b09f4c243cf"
+    },
+    {
+      "path": "src/assets/fonts/RobotoBold.ttf",
+      "sha1": "b872ba48fedf30d87dd5353b5e4b58285aef964b"
+    },
+    {
+      "path": "src/assets/fonts/RobotoSlab-VariableFont_wght.ttf",
+      "sha1": "bc63fc3e2b7eb548e05ded17963c80090bf29f61"
+    },
+    {
+      "path": "src/assets/fonts/RobotoSlabBold.ttf",
+      "sha1": "5bbb92df078cc35240b517873096aa805dff034c"
+    }
+  ]
+}

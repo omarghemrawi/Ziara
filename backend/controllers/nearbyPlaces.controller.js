@@ -122,7 +122,7 @@ export const getNearbyReligiousPlaces = async (req, res) => {
     const uniquePlaces = Array.from(placesMap.values());
     const filtered = filterPlaces(uniquePlaces);
 
-    res.status(200).json({ religiousPlaces: filtered });
+    res.status(200).json({ religiousPlaces: uniquePlaces });
   } catch (error) {
     console.error("Google Places error:", error.message);
     res.status(500).json({ error: "Failed to fetch religious places" });

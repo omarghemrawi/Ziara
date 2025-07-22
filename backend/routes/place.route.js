@@ -15,10 +15,13 @@ import {
 import {
   getFavoritePlaces,
   addToFav,
-  removeFromFav,
+  deleteFav,
   getVisitedPlaces,
   getPlace,
+  addToVisited,
 } from "../controllers/place.controller.js";
+
+import { getShops } from "../controllers/shop.controller.js";
 
 import express from "express";
 
@@ -34,16 +37,22 @@ placeRouter.post("/nearby/nearbyReligious", getNearbyReligiousPlaces);
 placeRouter.post("/all/restaurant", getRestaurants);
 placeRouter.post("/all/tourist", getTouristAttractions);
 placeRouter.post("/all/religious", getReligiousPlaces);
-placeRouter.post("/all/login", log);
+// placeRouter.post("/all/login", log);
 
 // Favorites Places
 placeRouter.get("/favorite/getAllFavorites", getFavoritePlaces);
 placeRouter.post("/favorite/add", addToFav);
-placeRouter.post("/favorite/remove/:id", removeFromFav);
+placeRouter.post("/favorite/delete/:place_id", deleteFav);
 
 // Visited Places
 placeRouter.get("/visited/getAllVisited", getVisitedPlaces);
+placeRouter.post("visited/add/:place_id", addToVisited);
 
 // Get Single Place with send its field [favoritePlaces or visitedPlaces]
 placeRouter.get("/getSinglePlace", getPlace);
+
+// Shop Router
+
+placeRouter.get("/shop", getShops);
+
 export default placeRouter;
