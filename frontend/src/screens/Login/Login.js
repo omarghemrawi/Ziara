@@ -9,14 +9,20 @@ import {
 import styles from './styles';
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+
+  // دالة وهمية تحاكي طلب الـ API
+  async function handleLogin() {
+    // هنا تضع منطق التحقق الحقيقي (API call)
+    // لنفترض أنه يرجع true للنجاح و false للفشل
+    return email === 'test@example.com' && password === '1234';
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <Text style={styles.subtitle}>Enter Your account</Text>
+      <Text style={styles.title}>تسجيل الدخول</Text>
+      <Text style={styles.subtitle}>أدخل بيانات حسابك</Text>
 
       <TextInput
         style={styles.input}
@@ -35,26 +41,19 @@ export default function Login({ navigation }) {
         onChangeText={setPassword}
       />
 
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.checkbox}
-          onPress={() => setKeepLoggedIn(prev => !prev)}
-        >
-          {keepLoggedIn && <View style={styles.checked} />}
-        </TouchableOpacity>
-        <Text style={styles.rowText}>keep me logged in</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-          <Text style={styles.linkText}>forgot password?</Text>
-        </TouchableOpacity>
-      </View>
-
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          /* handle login */
+        onPress={async () => {
+          const success = await handleLogin();
+          if (success) {
+            // إذا نجح، نستبدل الشاشة الحالية بشاشة Intro
+            navigation.replace('Intro');
+          } else {
+            alert('فشل تسجيل الدخول، تحقق من البيانات');
+          }
         }}
       >
-        <Text style={styles.buttonText}>Login</Text>
+        <Text style={styles.buttonText}>دخول</Text>
       </TouchableOpacity>
     </View>
   );

@@ -14,21 +14,33 @@ export default function Signup({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirm,  setConfirm]  = useState('');
 
+  // دالة وهمية تحاكي طلب الـ API للتسجيل
+  async function handleSignup() {
+    // تأكد أن كلمة المرور وتأكيدها متطابقان
+    if (password !== confirm) {
+      alert('كلمة المرور وتأكيدها غير متطابقين');
+      return false;
+    }
+    // هنا تضع منطق التسجيل الحقيقي (API call)
+    // لنفترض أنه يرجع true للنجاح
+    return true;
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      <Text style={styles.subtitle}>Create an account, it's free</Text>
+      <Text style={styles.title}>إنشاء حساب</Text>
+      <Text style={styles.subtitle}>أنشئ حساباً مجانياً</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder="اسم المستخدم"
         value={username}
         onChangeText={setUsername}
       />
 
       <TextInput
         style={styles.input}
-        placeholder="Email"
+        placeholder="البريد الإلكتروني"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -37,7 +49,7 @@ export default function Signup({ navigation }) {
 
       <TextInput
         style={styles.input}
-        placeholder="Password"
+        placeholder="كلمة المرور"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
@@ -45,7 +57,7 @@ export default function Signup({ navigation }) {
 
       <TextInput
         style={styles.input}
-        placeholder="Confirm Password"
+        placeholder="تأكيد كلمة المرور"
         secureTextEntry
         value={confirm}
         onChangeText={setConfirm}
@@ -53,11 +65,15 @@ export default function Signup({ navigation }) {
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {
-          /* handle signup */
+        onPress={async () => {
+          const success = await handleSignup();
+          if (success) {
+            // إذا نجح التسجيل، نستبدل الشاشة الحالية بشاشة Intro
+            navigation.replace('Intro');
+          }
         }}
       >
-        <Text style={styles.buttonText}>Signup</Text>
+        <Text style={styles.buttonText}>تسجيل</Text>
       </TouchableOpacity>
     </View>
   );

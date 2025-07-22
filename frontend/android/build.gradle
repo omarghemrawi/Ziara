@@ -1,21 +1,36 @@
+// android/build.gradle
+
 buildscript {
     ext {
-        buildToolsVersion = "35.0.0"
-        minSdkVersion = 24
-        compileSdkVersion = 35
-        targetSdkVersion = 35
-        ndkVersion = "27.1.12297006"
-        kotlinVersion = "2.1.20"
+        buildToolsVersion   = "35.0.0"
+        minSdkVersion       = 24
+        compileSdkVersion   = 35
+        targetSdkVersion    = 35
+        ndkVersion          = "27.1.12297006"
+        kotlinVersion       = "1.7.10"
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle")
+        // هنا رقم إصدار الـ AGP
+        classpath("com.android.tools.build:gradle:7.4.2")
+
+        // هنا كوتلن بلجن مطابق لـ kotlinVersion أعلاه
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+
+        // بلجن رياكت-نايتف (لا يحتاج رقم إصدار غالباً)
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
     }
 }
 
 apply plugin: "com.facebook.react.rootproject"
+
+// إضافة قسم allprojects إذا مش موجود
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
