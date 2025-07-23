@@ -9,14 +9,13 @@ const PlacesSection = ({
   headerColor, 
   headerImage, 
   data, 
-  onDiscover, 
-  onSave, 
+  onSearch, 
   onSearchChange, 
   searchValue 
 }) => {
     const navigation = useNavigation();
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={[styles.header, { backgroundColor: headerColor }]}>
         <Image source={headerImage} style={[
   styles.headerImage,
@@ -33,21 +32,20 @@ const PlacesSection = ({
           onChangeText={onSearchChange}
         />
         <View style={styles.buttons}>
-          <TouchableOpacity style={styles.discoverButton} onPress={onDiscover}>
-            <Text style={styles.buttonText}>Discover</Text>
+          <TouchableOpacity style={styles.discoverButton} onPress={onSearch}>
+            <Text style={styles.buttonText}>Search</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.saveButton} onPress={onSave}>
-            <Text style={styles.buttonTextBlack}>Saves</Text>
-          </TouchableOpacity>
+     
         </View>
       </View>
-
+<ScrollView>
       <View style={styles.grid}>
         {data.map((item, index) => (
           <Image key={index} source={item.image} style={styles.imageItem} />
         ))}
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
