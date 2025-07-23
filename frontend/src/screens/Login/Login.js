@@ -1,4 +1,3 @@
-// src/screens/Login/Login.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import styles from './styles';
@@ -7,7 +6,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
 
   // Validation schema
@@ -45,6 +44,7 @@ export default function Login({ navigation }) {
         initialValues={{
           email: '',
           password: '',
+
         }}
         validationSchema={loginSchema}
         onSubmit={handleLogin}
@@ -82,7 +82,7 @@ export default function Login({ navigation }) {
             )}
 
             <View style={styles.row}>
-              <TouchableOpacitys
+              <TouchableOpacity
                 onPress={() => navigation.navigate('ForgotPassword')}
               >
                 <Text style={styles.linkText}>forgot password?</Text>
@@ -95,6 +95,7 @@ export default function Login({ navigation }) {
           </>
         )}
       </Formik>
+
     </View>
   );
 }

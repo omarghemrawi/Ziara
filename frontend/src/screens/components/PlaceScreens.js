@@ -9,41 +9,46 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
-const PlacesSection = ({
-  title,
-  headerColor,
-  headerImage,
-  data,
-  onSearch,
-  onSearchChange,
-  searchValue,
+
+
+const PlacesSection = ({ 
+  title, 
+  headerColor, 
+  headerImage, 
+  data, 
+  onSearch, 
+  onSearchChange, 
+  searchValue 
 }) => {
   const navigation = useNavigation();
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={[styles.header, { backgroundColor: headerColor }]}>
-        <Image
-          source={headerImage}
-          style={[styles.headerImage, title === 'Search' && { width: 110 }]}
-        />
+
+        <Image source={headerImage} style={[
+  styles.headerImage,
+  title === 'Search'  && { width: 110}
+]} />
         <Text style={styles.title}>{title}</Text>
       </View>
 
-      <View style={styles.searchSection}>
-        <TextInput
-          style={styles.input}
-          placeholder="Search..."
-          value={searchValue}
-          onChangeText={onSearchChange}
-        />
-        <View style={styles.buttons}>
-          <TouchableOpacity style={styles.discoverButton} onPress={onSearch}>
-            <Text style={styles.buttonText}>Search</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+     <View style={styles.searchSection}>
+  <View style={styles.searchInputContainer}>
+    <TextInput 
+      style={styles.searchInput} 
+      placeholder="Search..." 
+      value={searchValue}
+      onChangeText={onSearchChange}
+    />
+    <TouchableOpacity onPress={onSearch} style={styles.sendIcon}>
+      <MaterialIcons name="send" size={22} color="#FAC75C" />
+    </TouchableOpacity>
+  </View>
+</View>
 
+<ScrollView>
       <View style={styles.grid}>
         {data && data.length > 0 ? (
           data.map((item, index) => (
@@ -61,7 +66,8 @@ const PlacesSection = ({
           <Text style={styles.noDataText}>No restaurants found</Text>
         )}
       </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -104,28 +110,9 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     borderWidth: 1,
   },
-  buttons: {
-    flexDirection: 'row',
-    marginBottom: 30,
-    marginLeft: 10,
-  },
-  discoverButton: {
-    backgroundColor: '#FAC96D',
-    padding: 10,
-    borderRadius: 15,
-    width: 100,
-    borderColor: '#000',
-    borderWidth: 1,
-  },
-  saveButton: {
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 15,
-    width: 100,
-    marginLeft: 10,
-    borderColor: '#000',
-    borderWidth: 1,
-  },
+
+
+
   buttonText: {
     color: '#fff',
     paddingLeft: 12,
@@ -147,6 +134,30 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginBottom: 10,
   },
+  searchInputContainer: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: '#F1F1F1',
+  borderRadius: 30,
+  borderColor: '#000',
+  borderWidth: 1,
+  height: 60,
+  paddingHorizontal: 20,
+  marginTop: 80,
+  marginBottom: 30,
+},
+searchInput: {
+  flex: 1,
+  fontSize: 16,
+},
+sendIcon: {
+  marginLeft: 10,
+
+  padding: 8,
+  borderRadius: 10,
+
+},
+
 });
 
 export default PlacesSection;

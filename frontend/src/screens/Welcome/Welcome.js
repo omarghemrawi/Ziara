@@ -6,6 +6,14 @@ import styles from './styles';
 export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
+      {/* Skip button */}
+      <TouchableOpacity
+        style={styles.skipButton}
+        onPress={() => navigation.navigate('Home')} 
+      >
+        <Text style={styles.skipText}>Skip</Text>
+      </TouchableOpacity>
+
       <Text style={styles.title}>Welcome</Text>
 
       <Image

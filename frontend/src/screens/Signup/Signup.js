@@ -1,4 +1,3 @@
-// src/screens/Signup/Signup.js
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import styles from './styles';
@@ -41,6 +40,8 @@ export default function Signup({ navigation }) {
     }
   };
 
+  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
@@ -51,6 +52,7 @@ export default function Signup({ navigation }) {
           email: '',
           password: '',
           confirmPassword: '',
+
         }}
         validationSchema={userSchema}
         onSubmit={handleSignUp}
@@ -109,6 +111,7 @@ export default function Signup({ navigation }) {
           </>
         )}
       </Formik>
+
     </View>
   );
 }
