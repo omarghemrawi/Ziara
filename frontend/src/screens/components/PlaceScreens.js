@@ -25,22 +25,19 @@ const PlacesSection = ({
         <Text style={styles.title}>{title}</Text>
       </View>
 
-      <View style={styles.searchSection}>
-        <TextInput 
-          style={styles.input} 
-          placeholder="Search..."  
-          value={searchValue}
-          onChangeText={onSearchChange}
-        />
-        <View style={styles.buttons}>
-          <TouchableOpacity style={styles.discoverButton} onPress={onDiscover}>
-            <Text style={styles.buttonText}>Discover</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.saveButton} onPress={onSave}>
-            <Text style={styles.buttonTextBlack}>Saves</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+     <View style={styles.searchSection}>
+  <View style={styles.searchInputContainer}>
+    <TextInput 
+      style={styles.searchInput} 
+      placeholder="Search..." 
+      value={searchValue}
+      onChangeText={onSearchChange}
+    />
+    <TouchableOpacity onPress={onSearch} style={styles.sendIcon}>
+      <MaterialIcons name="send" size={22} color="#FAC75C" />
+    </TouchableOpacity>
+  </View>
+</View>
 
 <ScrollView>
       <View style={styles.grid}>
