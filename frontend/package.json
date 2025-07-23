@@ -20,25 +20,19 @@
     "@reduxjs/toolkit": "^2.8.2",
     "expo-app-loading": "^1.0.3",
     "expo-font": "^13.3.2",
+    "expo-localization": "^16.1.6",
     "expo-modules-core": "^2.5.0",
     "expo-splash-screen": "^0.30.10",
+    "i18n-js": "^4.5.1",
     "react": "19.1.0",
     "react-native": "0.80.1",
     "react-native-gesture-handler": "^2.27.2",
-<<<<<<< HEAD
-    "react-native-modal": "^14.0.0-rc.1",
-    "react-native-reanimated": "^3.18.0",
-    "react-native-safe-area-context": "^5.5.2",
-    "react-native-screens": "^4.13.1",
-=======
     "react-native-image-picker": "^8.2.1",
+    "react-native-localize": "^3.5.1",
     "react-native-modal": "^14.0.0-rc.1",
-    "react-native-paper": "^5.14.5",
     "react-native-reanimated": "^3.18.0",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.13.1",
-    "react-native-tab-view": "^4.1.2",
->>>>>>> 7cbd73411b500e9c8d7d5d1cac9c2f3d103fc7ed
     "react-native-vector-icons": "^10.2.0",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1"

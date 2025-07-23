@@ -42,15 +42,32 @@ export default function Home() {
 }
 
 // Small horizontal square box
-const OptionBox = ({ label, image, isBrown }) => (
-  <TouchableOpacity
-    onPress={() => console.log(`${label} pressed`)}
-    style={[styles.optionBox, isBrown && styles.brownBox]}
-  >
-    <Image source={image} style={styles.optionImage} />
-    <Text style={styles.optionText}>{label}</Text>
-  </TouchableOpacity>
-);
+const OptionBox = ({ label, image, isBrown }) => {
+  const navigation = useNavigation();
+
+  // map label → screen name
+  const screenMap = {
+    Nearby:        'Nearby',
+    'Popular Foods':'PopularFoods',
+    'Popular Places':'PopularPlaces',
+  };
+
+  return (
+    <TouchableOpacity
+      onPress={() => {
+  const screen = screenMap[label];
+  if (screen) navigation.navigate(screen);
+  else console.warn(`No screen for ${label}`);
+}}
+
+      style={[styles.optionBox, isBrown && styles.brownBox]}
+    >
+      <Image source={image} style={styles.optionImage} />
+      <Text style={styles.optionText}>{label}</Text>
+    </TouchableOpacity>
+  );
+};
+
 
 // Big vertical box
 const DetailBox = ({ label, image, isBrown }) => {

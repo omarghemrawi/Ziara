@@ -1,117 +1,81 @@
+// SettingsScreen.js
 import React, { useState } from 'react';
 import {
+  SafeAreaView,
   View,
   Text,
-  StyleSheet,
   Switch,
-  ScrollView,
-  SafeAreaView,
-  StatusBar,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView
 } from 'react-native';
-//
-export default function SettingsScreen() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
 
-  const toggleSwitch = () => setIsDarkMode((prev) => !prev);
+const SettingsScreen = () => {
+  const navigation = useNavigation();
+  const [isLightMode, setIsLightMode] = useState(true);
 
-  const themeStyles = isDarkMode ? darkTheme : lightTheme;
+  // ربط كل بند في الإعدادات باسم الشاشة التي سينتقل إليها
+  const settingsItems = [
+    { key: 'languages',     label: 'Languages',        icon: 'language',       screen: 'Languages' },
+    { key: 'howToUse',      label: 'How to use',       icon: 'info-outline',   screen: 'HowToUse' },
+    { key: 'helpSupport',   label: 'Help and Support', icon: 'help-outline',   screen: 'HelpSupport' },
+    { key: 'privacyPolicy', label: 'Privacy policy',   icon: 'security',       screen: 'PrivacyPolicy' },
+  ];
 
   return (
-    <SafeAreaView style={[styles.container, themeStyles.container]}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        {/* زر الرجوع */}
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="arrow-back-ios" size={24} color="#000" />
+        </TouchableOpacity>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Header with toggle */}
-        <View style={styles.header}>
-          <Text style={[styles.headerText, themeStyles.text]}>Settings</Text>
-          <View style={styles.toggleContainer}>
-            <Text style={[styles.modeLabel, themeStyles.text]}>
-              {isDarkMode ? 'Dark' : 'Light'} Mode
-            </Text>
-            <Switch
-              value={isDarkMode}
-              onValueChange={toggleSwitch}
-              thumbColor={isDarkMode ? '#f4f3f4' : '#f4f3f4'}
-              trackColor={{ false: '#767577', true: '#81b0ff' }}
-            />
-          </View>
-        </View>
+        {/* عنوان الصفحة */}
+        <Text style={styles.title}>Settings</Text>
 
-        {/* Add other settings options here */}
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, themeStyles.text]}>
-            Notifications
-          </Text>
-          <Text style={[styles.sectionDescription, themeStyles.text]}>
-            Manage your notification preferences
-          </Text>
+        {/* مفتاح تغيير الوضع */}
+        <View style={styles.switchContainer}>
+          <Switch
+            value={isLightMode}
+            onValueChange={setIsLightMode}
+          />
+          <Text style={styles.switchLabel}>Light Mode</Text>
         </View>
+      </View>
 
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, themeStyles.text]}>
-            Privacy
-          </Text>
-          <Text style={[styles.sectionDescription, themeStyles.text]}>
-            Manage your privacy settings
-          </Text>
-        </View>
+      <ScrollView>
+        {settingsItems.map(item => (
+          <TouchableOpacity
+            key={item.key}
+            style={styles.item}
+            onPress={() => navigation.navigate(item.screen)}  // هنا التنقل للشاشة المناسبة
+          >
+            <Icon name={item.icon} size={24} color="#000" style={styles.itemIcon} />
+            <Text style={styles.itemLabel}>{item.label}</Text>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
-const lightTheme = StyleSheet.create({
-  container: {
-    backgroundColor: '#fff',
-  },
-  text: {
-    color: '#000',
-  },
-});
-
-const darkTheme = StyleSheet.create({
-  container: {
-    backgroundColor: '#121212',
-  },
-  text: {
-    color: '#fff',
-  },
-});
+export default SettingsScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollContent: {
-    padding: 20,
-  },
-  header: {
-    marginBottom: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  headerText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-  },
-  toggleContainer: {
+  container: { flex: 1, backgroundColor: '#fff', paddingHorizontal: 20, paddingTop: 20 },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 30 },
+  title: { fontSize: 22, fontWeight: 'bold' },
+  switchContainer: { flexDirection: 'row', alignItems: 'center' },
+  switchLabel: { marginLeft: 8, fontSize: 14 },
+  item: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1,
   },
-  modeLabel: {
-    marginRight: 10,
-    fontSize: 16,
-  },
-  section: {
-    marginBottom: 25,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    fontSize: 14,
-    marginTop: 4,
-  },
+  itemIcon: { marginRight: 15 },
+  itemLabel: { fontSize: 16 },
 });
