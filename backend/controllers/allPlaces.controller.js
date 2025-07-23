@@ -1,4 +1,5 @@
 import axios from "axios";
+
 const filterPlaces = (places) => {
   return places.map((place) => ({
     place_id: place.place_id,

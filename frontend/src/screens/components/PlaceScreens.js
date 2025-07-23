@@ -1,51 +1,65 @@
-
 import React from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-
-const PlacesSection = ({ 
-  title, 
-  headerColor, 
-  headerImage, 
-  data, 
-  onDiscover, 
-  onSave, 
-  onSearchChange, 
-  searchValue 
+const PlacesSection = ({
+  title,
+  headerColor,
+  headerImage,
+  data,
+  onSearch,
+  onSearchChange,
+  searchValue,
 }) => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
   return (
     <ScrollView style={styles.container}>
       <View style={[styles.header, { backgroundColor: headerColor }]}>
-        <Image source={headerImage} style={[
-  styles.headerImage,
-  title === 'Search' && { width: 110}
-]} />
+        <Image
+          source={headerImage}
+          style={[styles.headerImage, title === 'Search' && { width: 110 }]}
+        />
         <Text style={styles.title}>{title}</Text>
       </View>
 
       <View style={styles.searchSection}>
-        <TextInput 
-          style={styles.input} 
-          placeholder="Search..." 
+        <TextInput
+          style={styles.input}
+          placeholder="Search..."
           value={searchValue}
           onChangeText={onSearchChange}
         />
         <View style={styles.buttons}>
-          <TouchableOpacity style={styles.discoverButton} onPress={onDiscover}>
-            <Text style={styles.buttonText}>Discover</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.saveButton} onPress={onSave}>
-            <Text style={styles.buttonTextBlack}>Saves</Text>
+          <TouchableOpacity style={styles.discoverButton} onPress={onSearch}>
+            <Text style={styles.buttonText}>Search</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.grid}>
-        {data.map((item, index) => (
-          <Image key={index} source={item.image} style={styles.imageItem} />
-        ))}
+        {data && data.length > 0 ? (
+          data.map((item, index) => (
+            <Image
+              key={index}
+              source={
+                typeof item.image === 'string'
+                  ? { uri: item.image }
+                  : item.image
+              }
+              style={styles.imageItem}
+            />
+          ))
+        ) : (
+          <Text style={styles.noDataText}>No restaurants found</Text>
+        )}
       </View>
     </ScrollView>
   );
@@ -60,16 +74,13 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
     borderBottomRightRadius: 70,
     padding: 20,
-   
   },
   headerImage: {
-   
-    width: 160,//110
+    width: 160, //110
     height: 110,
     position: 'absolute',
     top: 120,
     left: 20,
-    
   },
   title: {
     color: '#fff',

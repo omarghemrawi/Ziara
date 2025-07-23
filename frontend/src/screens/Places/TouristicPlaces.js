@@ -1,13 +1,23 @@
-
 import React, { useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
+import axios from 'axios';
 
 const TouristicPlaces = () => {
   const [searchValue, setSearchValue] = useState('');
-  
+
   const data = [
     { image: require('../../assets/images/baytna.jpg') },
- 
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg') },
+
     // More images
   ];
 

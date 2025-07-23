@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 
 export const userSignUp = async (req, res) => {
   try {
-    const { email, password, confirmPassword, username } = req.body;
+    const { email, password, username } = req.body;
 
     //Validate Required fields
     if (!email || !password || !username) {
@@ -22,12 +22,6 @@ export const userSignUp = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "Email Already Exists" });
-    }
-
-    if (password !== confirmPassword) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Enter same Password" });
     }
 
     //Hash passord for more security
