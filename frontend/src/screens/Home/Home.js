@@ -36,7 +36,7 @@ export default function Home() {
         <DetailBox  label="Touristic Places" image={require('../../assets/images/touristicPlaces.png')} />
         <DetailBox label="Religious Places" image={require('../../assets/images/religious.png')} isBrown imageStyle={{width:200,height:200} } />
         <DetailBox label="Restaurants" image={require('../../assets/images/pizza.png')} />
-        <DetailBox label="Activity Places" image={require('../../assets/images/activity.png')} isBrown imageStyle={{width:130,height:130,marginLeft:30} }/>
+        <DetailBox label="Activity " image={require('../../assets/images/activity.png')} isBrown imageStyle={{width:130,height:130,marginLeft:30} }/>
              <DetailBox label="Hotels" image={require('../../assets/images/hotel.png')} imageStyle={{width:130,height:130,marginLeft:30} } />
       </ScrollView>
     </View>
@@ -80,6 +80,8 @@ const DetailBox = ({ label, image, isBrown,imageStyle }) => {
     'Touristic Places': 'TouristicPlaces',
     'Religious Places': 'ReligiousPlaces',
     'Restaurants': 'Restaurants',
+        'Activity ': 'Activity',
+            'Hotels': 'Hotels',
   };
 
   const screenName = screenMap[label];
