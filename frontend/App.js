@@ -37,6 +37,7 @@ import PrivacyPolicyScreen from './src/screens/Profile/PrivacyPolicyScreen';
 import NearbyScreen           from './src/screens/nearby/NearbyScreen';
 import PopularFoodsScreen     from './src/screens/generalInformation/PopularFoodsScreen';
 import PopularPlacesScreen    from './src/screens/generalInformation/PopularPlacesScreen';
+import ChatScreen from './src/screens/AiSupport/ChatScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -102,6 +103,11 @@ export default function App() {
           name="PrivacyPolicy" 
           component={PrivacyPolicyScreen} 
           options={{ headerShown: true, title: 'Privacy policy' }} 
+        />
+            <Stack.Screen 
+          name="ChatScreen" 
+          component={ChatScreen} 
+       
         />
       </Stack.Navigator>
     </NavigationContainer>
