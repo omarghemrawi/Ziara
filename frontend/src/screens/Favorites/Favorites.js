@@ -6,29 +6,36 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Modal from 'react-native-modal';
+import { favoritePlaces } from './FavoriteStorage';
 
 export default function Favourites() {
   const navigation = useNavigation();
-  const [isVisited, setIsVisited] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedPlaceIndex, setSelectedPlaceIndex] = useState(null);
 
-  const handleToggle = () => {
-    setIsVisited(!isVisited);
-    if (!isVisited) {
-      navigation.navigate('Visited');
-    }
-  };
-
-  const handleDotsPress = () => {
+  const handleDotsPress = (index) => {
+    setSelectedPlaceIndex(index);
     setModalVisible(true);
   };
 
   const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleMoveToVisited = () => {
+    const place = favoritePlaces[selectedPlaceIndex];
+    //  remove from favorites
+    // favoritePlaces.splice(selectedPlaceIndex, 1);
+    navigation.navigate('Visited', { place });
+    closeModal();
+  };
+
+  const handleDelete = () => {
+    favoritePlaces.splice(selectedPlaceIndex, 1);
     setModalVisible(false);
   };
 
@@ -38,9 +45,12 @@ export default function Favourites() {
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
           <Text style={styles.title}>Favourites</Text>
-         <TouchableOpacity style={styles.visitedButton} onPress={() => navigation.navigate('Visited')}>
-    <Text style={styles.visitedButtonText}>Go to Visited</Text>
-  </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.visitedButton}
+            onPress={() => navigation.navigate('Visited')}
+          >
+            <Text style={styles.visitedButtonText}>Go to Visited</Text>
+          </TouchableOpacity>
         </View>
 
         <Image
@@ -49,22 +59,26 @@ export default function Favourites() {
         />
       </View>
 
-      {/* Place Item */}
-      <View style={styles.grid}>
-        <Image
-          style={styles.imageItem}
-          source={require('../../assets/images/jbeil.jpeg')}
-        />
-
-        <View style={styles.textContainer}>
-          <Text style={styles.placeName}>Al-Amin Mosque</Text>
-          <Text style={styles.placeLocation}>Beirut</Text>
-        </View>
-
-        <TouchableOpacity style={styles.iconContainer} onPress={handleDotsPress}>
-          <Entypo name="dots-three-vertical" size={18} color="#000" />
-        </TouchableOpacity>
-      </View>
+      {/* Favorite Places List */}
+      {favoritePlaces.length === 0 ? (
+        <Text style={{ padding: 20, fontSize: 16 }}>No favourites added yet.</Text>
+      ) : (
+        favoritePlaces.map((place, index) => (
+          <View key={index} style={styles.grid}>
+            <Image style={styles.imageItem} source={place.image} />
+            <View style={styles.textContainer}>
+              <Text style={styles.placeName}>{place.name}</Text>
+              <Text style={styles.placeLocation}>ID: {place.id}</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => handleDotsPress(index)}
+            >
+              <Entypo name="dots-three-vertical" size={18} color="#000" />
+            </TouchableOpacity>
+          </View>
+        ))
+      )}
 
       {/* Modal Bottom Sheet */}
       <Modal
@@ -76,10 +90,10 @@ export default function Favourites() {
           <TouchableOpacity style={styles.modalOption}>
             <Text>Edit Trip</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.modalOption}>
+          <TouchableOpacity style={styles.modalOption} onPress={handleMoveToVisited}>
             <Text>✓ Move to Visited</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.modalOption}>
+          <TouchableOpacity style={styles.modalOption} onPress={handleDelete}>
             <Text style={{ color: 'red' }}>🗑 Delete</Text>
           </TouchableOpacity>
         </View>
@@ -110,7 +124,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
-    fontFamily: 'RobotoSlabBold',
   },
   headerImage: {
     width: 90,
@@ -123,7 +136,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginTop: 70,
+    marginTop: 40,
   },
   imageItem: {
     width: 90,
@@ -148,15 +161,15 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   visitedButton: {
-  backgroundColor: '#fff',
-  paddingHorizontal: 20,
-  paddingVertical: 8,
-  borderRadius: 20,
-},
-visitedButtonText: {
-  color: '#9a370e',
-  fontWeight: 'bold',
-},
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+  visitedButtonText: {
+    color: '#9a370e',
+    fontWeight: 'bold',
+  },
   modal: {
     justifyContent: 'flex-end',
     margin: 0,

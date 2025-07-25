@@ -1,31 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useRoute } from '@react-navigation/native';
+import { favoritePlaces } from '../Favorites/FavoriteStorage';
 
 export default function PlaceDetailScreen() {
-  const sampleImages = [
-    require('../../assets/images/jbeil.jpeg'),// if there any more images
-  
-  ];
-   const route = useRoute();
+  const [isFavourite, setIsFavourite] = useState(false);
+  const route = useRoute();
   const { id } = route.params;
+
+  const sampleImages = [
+    require('../../assets/images/jbeil.jpeg'),
+  ];
+
+  const handleFavouriteToggle = () => {
+    const newStatus = !isFavourite;
+    setIsFavourite(newStatus);
+
+    if (newStatus) {
+      // Add to favorites (once only)
+      const alreadyAdded = favoritePlaces.find(p => p.id === id);
+      if (!alreadyAdded) {
+        favoritePlaces.push({
+          id: id,
+          name: `Place Name ${id}`,
+          image: require('../../assets/images/jbeil.jpeg'),
+        });
+      }
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
-      {/* Header Image */}
-      <Text style={styles.title}>Place Name {id} </Text>
+      <Text style={styles.title}>Place Name {id}</Text>
       <View style={styles.headerImageContainer}>
         <Image
-          source={require('../../assets/images/jbeil.jpeg')}// top image
+          source={require('../../assets/images/jbeil.jpeg')}
           style={styles.headerImage}
         />
         <TouchableOpacity style={styles.mapButton}>
@@ -33,24 +51,26 @@ export default function PlaceDetailScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Gallery */}
       <View style={styles.galleryRow}>
         {sampleImages.map((img, index) => (
           <Image key={index} source={img} style={styles.galleryImage} />
         ))}
       </View>
 
-      {/* Description */}
       <Text style={styles.sectionTitle}>Description</Text>
       <Text style={styles.descriptionText}>
-        This is a brief description about the place. It can include location, highlights, history, and more.
+        This is a brief description about the place. It can include location,
+        highlights, history, and more.
       </Text>
 
-      {/* Action Buttons */}
       <View style={styles.actionsRow}>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton} onPress={handleFavouriteToggle}>
           <Text style={styles.actionText}>Add To Favourite</Text>
-          <AntDesign name="hearto" size={20} color="black" />
+          <AntDesign
+            name={isFavourite ? 'heart' : 'hearto'}
+            size={20}
+            color={isFavourite ? '#FAC75C' : 'black'}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionButton}>
@@ -61,6 +81,8 @@ export default function PlaceDetailScreen() {
     </ScrollView>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -130,6 +152,6 @@ const styles = StyleSheet.create({
   actionText: {
     fontSize: 16,
     fontWeight: '500',
-    marginBottom:30,
+    marginBottom: 30,
   },
 });
