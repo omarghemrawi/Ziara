@@ -137,9 +137,11 @@ const styles = StyleSheet.create({
   },
   horizontalScroll: {
     paddingLeft: 10,
+
   },
   horizontalContent: {
     paddingRight: 10,
+     marginBottom: 40,
   },
   optionBox: {
     width: 100,
