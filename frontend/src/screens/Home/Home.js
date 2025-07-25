@@ -34,8 +34,10 @@ export default function Home() {
       {/* Vertical Scroll Section */}
       <ScrollView showsVerticalScrollIndicator={false} style={styles.verticalScroll}>
         <DetailBox  label="Touristic Places" image={require('../../assets/images/touristicPlaces.png')} />
-        <DetailBox label="Religious Places" image={require('../../assets/images/religious.png')} isBrown />
+        <DetailBox label="Religious Places" image={require('../../assets/images/religious.png')} isBrown imageStyle={{width:200,height:200} } />
         <DetailBox label="Restaurants" image={require('../../assets/images/pizza.png')} />
+        <DetailBox label="Activity Places" image={require('../../assets/images/activity.png')} isBrown imageStyle={{width:130,height:130,marginLeft:30} }/>
+             <DetailBox label="Hotels" image={require('../../assets/images/hotel.png')} imageStyle={{width:130,height:130,marginLeft:30} } />
       </ScrollView>
     </View>
   );
@@ -70,7 +72,7 @@ const OptionBox = ({ label, image, isBrown }) => {
 
 
 // Big vertical box
-const DetailBox = ({ label, image, isBrown }) => {
+const DetailBox = ({ label, image, isBrown,imageStyle }) => {
   const navigation = useNavigation();
 
   
@@ -93,7 +95,7 @@ const DetailBox = ({ label, image, isBrown }) => {
       }}
       style={[styles.detailBox, isBrown && styles.brownBox]}
     >
-      <Image source={image} style={styles.detailImage} />
+      <Image source={image} style={[styles.detailImage,imageStyle]} />
       <Text style={[styles.detailText, label === 'Restaurants' && { marginLeft: 200 }]}>
         {label}
       </Text>
