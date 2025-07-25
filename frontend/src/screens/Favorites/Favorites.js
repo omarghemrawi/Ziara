@@ -38,12 +38,9 @@ export default function Favourites() {
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
           <Text style={styles.title}>Favourites</Text>
-          <Switch
-            value={isVisited}
-            onValueChange={handleToggle}
-            thumbColor="#fff"
-            trackColor={{ false: '#ccc', true: '#fff' }}
-          />
+         <TouchableOpacity style={styles.visitedButton} onPress={() => navigation.navigate('Visited')}>
+    <Text style={styles.visitedButtonText}>Go to Visited</Text>
+  </TouchableOpacity>
         </View>
 
         <Image
@@ -150,6 +147,16 @@ const styles = StyleSheet.create({
   iconContainer: {
     paddingLeft: 20,
   },
+  visitedButton: {
+  backgroundColor: '#fff',
+  paddingHorizontal: 20,
+  paddingVertical: 8,
+  borderRadius: 20,
+},
+visitedButtonText: {
+  color: '#9a370e',
+  fontWeight: 'bold',
+},
   modal: {
     justifyContent: 'flex-end',
     margin: 0,
