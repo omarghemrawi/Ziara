@@ -9,17 +9,20 @@ import {
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { useRoute } from '@react-navigation/native';
 
 export default function PlaceDetailScreen() {
   const sampleImages = [
     require('../../assets/images/jbeil.jpeg'),// if there any more images
   
   ];
+   const route = useRoute();
+  const { id } = route.params;
 
   return (
     <ScrollView style={styles.container}>
       {/* Header Image */}
-      <Text style={styles.title}>Place Name</Text>
+      <Text style={styles.title}>Place Name {id} </Text>
       <View style={styles.headerImageContainer}>
         <Image
           source={require('../../assets/images/jbeil.jpeg')}// top image

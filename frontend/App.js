@@ -38,6 +38,7 @@ import NearbyScreen           from './src/screens/nearby/NearbyScreen';
 import PopularFoodsScreen     from './src/screens/generalInformation/PopularFoodsScreen';
 import PopularPlacesScreen    from './src/screens/generalInformation/PopularPlacesScreen';
 import ChatScreen from './src/screens/AiSupport/ChatScreen';
+import PlaceDetailScreen from './src/screens/Places/PlaceDetailScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -109,6 +110,11 @@ export default function App() {
           component={ChatScreen} 
        
         />
+        <Stack.Screen
+  name="PlaceDetails"
+  component={PlaceDetailScreen}
+  options={{ headerShown: false }}
+/>
       </Stack.Navigator>
     </NavigationContainer>
   );

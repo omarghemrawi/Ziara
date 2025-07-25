@@ -6,7 +6,7 @@ const ReligiousPlaces = () => {
   const [searchValue, setSearchValue] = useState('');
   
   const data = [
-    { image: require('../../assets/images/baytna.jpg') },
+    { image: require('../../assets/images/baytna.jpg'),name:'jbeil' ,id:'1'},//replace the id with the real id
  
     // More images
   ];
