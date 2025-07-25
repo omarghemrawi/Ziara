@@ -11,23 +11,25 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../Theme/Theme';
 
 export default function ProfileScreen() {
      const navigation = useNavigation();
+      const { theme } = useTheme();
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={[styles.container,{backgroundColor:theme.background}]}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity  onPress={() => navigation.navigate('Home')}>
           <Entypo name="chevron-left" size={24} color="#000" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profile</Text>
-        <View style={styles.headerIcons}>
+      <Text style={[styles.headerTitle,{color:theme.text}]}>Profile</Text>
+        <View style={[styles.headerIcons,{color:theme.text}]}>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-            <MaterialIcons name="edit" size={30} color="#000" style={styles.icon} />
+            <MaterialIcons name="edit" size={30} color="#000" style={[styles.icon,,{color:theme.text}]} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
-            <FontAwesome name="cog" size={30} color="#000" style={styles.icon} />
+            <FontAwesome name="cog" size={30} color="#000" style={[styles.icon,,{color:theme.text}]} />
           </TouchableOpacity>
         </View>
       </View>
@@ -39,26 +41,26 @@ export default function ProfileScreen() {
           style={styles.avatar}
         />
         <View style={styles.user}>
-        <Text style={styles.userName}>Rama T</Text>
-        <Text style={styles.joinedText}>Joined in 2025</Text>
+        <Text style={[styles.userName,{color:theme.text}]}>Rama T</Text>
+        <Text style={[styles.joinedText,,{color:theme.text}]}>Joined in 2025</Text>
       </View>
       </View>
 
       {/* Photos Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>0 photos</Text>
-        <Text style={styles.sectionSubtitle}>You have no photos yet</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Upload a Photo</Text>
+        <Text style={[styles.sectionTitle,{color:theme.text}]}>0 photos</Text>
+        <Text style={[styles.sectionSubtitle,{color:theme.text}]}>You have no photos yet</Text>
+        <TouchableOpacity style={[styles.button,{borderColor:theme.text}]}>
+          <Text style={[styles.buttonText,{color:theme.text}]}>Upload a Photo</Text>
         </TouchableOpacity>
       </View>
 
       {/* Reviews Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>0 reviews</Text>
-        <Text style={styles.sectionSubtitle}>You have no reviews yet</Text>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Write a review</Text>
+        <Text style={[styles.sectionTitle,{color:theme.text}]}>0 reviews</Text>
+        <Text style={[styles.sectionSubtitle,{color:theme.text}]}>You have no reviews yet</Text>
+        <TouchableOpacity style={[styles.button,{borderColor:theme.text}]}>
+          <Text style={[styles.buttonText,{color:theme.text}]}>Write a review</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderWidth: 1,
-    borderColor: '#000',
+ 
     borderRadius: 30,
     paddingHorizontal: 105,
     paddingVertical: 15,

@@ -2,22 +2,24 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../Theme/Theme';
 export default function Home() {
   const navigation = useNavigation();
   const handleProfilePress = () => {
    navigation.navigate('Profile');
   };
+    const { theme } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{ backgroundColor: theme.background}] }>
       {/* Profile Icon with Tarbush */}
       <TouchableOpacity style={styles.profileIcon} onPress={handleProfilePress}>
-        <EvilIcons name="user" size={70} color="#000" />
+        <EvilIcons name="user" size={70} color={theme.text} />
         <Image style={styles.tarbush} source={require('../../assets/images/miniTarbush.png')} />
       </TouchableOpacity>
 
       {/* Header Text */}
-      <Text style={styles.headerText}>Find Your Destination</Text>
+      <Text style={[styles.headerText,{color:theme.text}]}>Find Your Destination</Text>
 
       {/* Horizontal Scroll Section */}
       <ScrollView
@@ -83,6 +85,7 @@ const DetailBox = ({ label, image, isBrown,imageStyle }) => {
         'Activity ': 'Activity',
             'Hotels': 'Hotels',
   };
+  
 
   const screenName = screenMap[label];
 

@@ -9,10 +9,12 @@ import {
   Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../Theme/Theme';
 
 export default function Visited() {
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
+   const { theme } = useTheme();
 
 
 
@@ -32,15 +34,15 @@ export default function Visited() {
       </View>
 
       {/* Place Item */}
-      <View style={styles.grid}>
+      <View style={[styles.grid,{backgroundColor:theme.background}]}>
         <Image
           style={styles.imageItem}
           source={require('../../assets/images/jbeil.jpeg')}
         />
 
         <View style={styles.textContainer}>
-          <Text style={styles.placeName}>Al-Amin Mosque</Text>
-          <Text style={styles.placeLocation}>Beirut</Text>
+          <Text style={[styles.placeName,{color:theme.text}]}>Al-Amin Mosque</Text>
+          <Text style={[styles.placeLocation,{color:theme.text}]}>Beirut</Text>
         </View>
       </View>
     </ScrollView>

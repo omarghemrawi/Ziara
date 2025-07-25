@@ -11,11 +11,13 @@ import { useNavigation } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Modal from 'react-native-modal';
 import { favoritePlaces } from './FavoriteStorage';
+import { useTheme } from '../Theme/Theme';
 
 export default function Favourites() {
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedPlaceIndex, setSelectedPlaceIndex] = useState(null);
+   const { theme } = useTheme();
 
   const handleDotsPress = (index) => {
     setSelectedPlaceIndex(index);
@@ -40,7 +42,7 @@ export default function Favourites() {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container,{backgroundColor:theme.background}]}>
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
@@ -49,7 +51,7 @@ export default function Favourites() {
             style={styles.visitedButton}
             onPress={() => navigation.navigate('Visited')}
           >
-            <Text style={styles.visitedButtonText}>Go to Visited</Text>
+            <Text style={[styles.visitedButtonText,{backgroundColor:theme.text}]}>Go to Visited</Text>
           </TouchableOpacity>
         </View>
 
@@ -61,7 +63,7 @@ export default function Favourites() {
 
       {/* Favorite Places List */}
       {favoritePlaces.length === 0 ? (
-        <Text style={{ padding: 20, fontSize: 16 }}>No favourites added yet.</Text>
+        <Text style={{ padding: 20, fontSize: 16,color:theme.text,textAlign:'center',marginTop:20 }}>No favourites added yet.</Text>
       ) : (
         favoritePlaces.map((place, index) => (
           <View key={index} style={styles.grid}>

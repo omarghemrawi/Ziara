@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../Theme/Theme';
 
 const PlacesSection = ({
   title,
@@ -21,9 +22,10 @@ const PlacesSection = ({
   searchValue,
 }) => {
   const navigation = useNavigation();
+   const { theme } = useTheme();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
       <View style={[styles.header, { backgroundColor: headerColor }]}>
         <Image
           source={headerImage}

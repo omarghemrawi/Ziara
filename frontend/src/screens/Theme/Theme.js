@@ -29,4 +29,5 @@ const darkTheme = {
   background: '#000',
   text: '#fff',
   border: '#444',
+  
 };

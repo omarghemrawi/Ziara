@@ -127,6 +127,7 @@ export default function MyTabs() {
     <Tab.Navigator
       screenOptions={{ headerShown: false }}
       tabBar={(props) => <CustomTabBar {...props} />}
+      
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Search" component={Search} />

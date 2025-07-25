@@ -33,7 +33,7 @@ const SettingsScreen = () => {
         <Text style={[styles.title, { color: theme.text }]}>Settings</Text>
 
         <View style={styles.switchContainer}>
-          <Switch value={isLightMode} onValueChange={toggleTheme} />
+          <Switch value={!isLightMode} onValueChange={toggleTheme} />
           <Text style={[styles.switchLabel, { color: theme.text }]}>
             {isLightMode ? 'Light Mode' : 'Dark Mode'}
           </Text>
