@@ -30,6 +30,8 @@ const PlacesSection = ({
           style={[
             styles.headerImage,
             title === 'Search' && { width: 110 },
+                title === 'Activity' && { width: 130, height: 160,},
+                      title === 'Hotels' && { width: 130, height: 140, },
           ]}
         />
         <Text style={styles.title}>{title}</Text>
