@@ -26,7 +26,7 @@ const SettingsScreen = () => {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Icon name="arrow-back-ios" size={24} color={theme.text} />
         </TouchableOpacity>
 
