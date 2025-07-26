@@ -117,12 +117,13 @@ export default function PlaceDetailScreen() {
               name={isFavourite ? 'heart' : 'hearto'}
               size={20}
               color={isFavourite ? '#FAC75C' : 'black'}
+                style={{ marginTop: 50 }}
             />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.actionButton} onPress={() => setModalVisible(true)}>
             <Text style={styles.actionText}>Rating & Review</Text>
-            <Entypo name="chevron-right" size={20} color="black" />
+            <Entypo name="chevron-right" size={20} color="black"   style={{ marginTop: 50 }} />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -203,11 +204,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    marginTop:30,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 8,
+    marginBottom: 18,
+    marginLeft:20,
   },
   headerImageContainer: {
     position: 'relative',
@@ -260,8 +263,9 @@ alignItems: 'center',
     alignItems: 'center',
     gap: 6,
     paddingVertical: 10,
-    paddingHorizontal: 14,
+    paddingHorizontal: 10,
     borderRadius: 10,
+    marginTop:10,
   
   },
   actionText: {
