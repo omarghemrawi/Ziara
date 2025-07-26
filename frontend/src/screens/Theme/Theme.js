@@ -22,12 +22,16 @@ export const useTheme = () => useContext(ThemeContext);
 const lightTheme = {
   background: '#fff',
   text: '#000',
+subtitle:'#000',
+subtitle1:'#fff',
   border: '#ccc',
 };
 
 const darkTheme = {
-  background: '#000',
-  text: '#fff',
+  background: '#121212',
+  text: '#b3b3b3',
+  subtitle:'#fff',
+  subtitle1:'#fff',
   border: '#444',
   
 };

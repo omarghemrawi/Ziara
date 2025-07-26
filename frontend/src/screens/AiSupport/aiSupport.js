@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../Theme/Theme';
 
 export default function AiSupport() {
   const navigation = useNavigation();
+    const { theme } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>AI Support</Text>
-      <Text style={styles.description}>
+    <View style={[styles.container,{backgroundColor:theme.background}]}>
+      <Text style={[styles.title,{color:theme.subtitle}]}>AI Support</Text>
+      <Text style={[styles.description,{color:theme.subtitle}]}>
         Chat with our AI assistant for help and guidance.
       </Text>
 

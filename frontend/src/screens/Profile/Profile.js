@@ -21,7 +21,7 @@ export default function ProfileScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity  onPress={() => navigation.navigate('Home')}>
-          <Entypo name="chevron-left" size={24} color="#000" />
+          <Entypo name="chevron-left" size={24} color={theme.text} />
         </TouchableOpacity>
       <Text style={[styles.headerTitle,{color:theme.text}]}>Profile</Text>
         <View style={[styles.headerIcons,{color:theme.text}]}>

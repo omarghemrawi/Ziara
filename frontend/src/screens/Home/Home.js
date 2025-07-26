@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'rea
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
+
 export default function Home() {
   const navigation = useNavigation();
   const handleProfilePress = () => {
@@ -76,7 +77,7 @@ const OptionBox = ({ label, image, isBrown }) => {
 // Big vertical box
 const DetailBox = ({ label, image, isBrown,imageStyle }) => {
   const navigation = useNavigation();
-
+ const { theme } = useTheme();
   
   const screenMap = {
     'Touristic Places': 'TouristicPlaces',
@@ -101,7 +102,7 @@ const DetailBox = ({ label, image, isBrown,imageStyle }) => {
       style={[styles.detailBox, isBrown && styles.brownBox]}
     >
       <Image source={image} style={[styles.detailImage,imageStyle]} />
-      <Text style={[styles.detailText, label === 'Restaurants' && { marginLeft: 200 }]}>
+      <Text style={[styles.detailText, label === 'Restaurants' && { marginLeft: 200 },{color:theme.subtitle1}]}>
         {label}
       </Text>
       <EvilIcons name="chevron-right" size={30} color="#fff" style={styles.arrow} />

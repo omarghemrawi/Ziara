@@ -11,6 +11,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../Theme/Theme';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const PlacesSection = ({
   title,
@@ -22,21 +23,26 @@ const PlacesSection = ({
   searchValue,
 }) => {
   const navigation = useNavigation();
-   const { theme } = useTheme();
+  const { theme } = useTheme();
 
   return (
-    <View style={[styles.container,{backgroundColor:theme.background}]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={[styles.header, { backgroundColor: headerColor }]}>
         <Image
           source={headerImage}
           style={[
             styles.headerImage,
             title === 'Search' && { width: 110 },
-                title === 'Activity' && { width: 130, height: 160,},
-                      title === 'Hotels' && { width: 130, height: 140, },
+            title === 'Activity' && { width: 130, height: 160 },
+            title === 'Hotels' && { width: 130, height: 140 },
           ]}
         />
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.headerTitleRow}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Entypo name="chevron-left" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{title}</Text>
+        </View>
       </View>
 
       <View style={styles.searchSection}>
@@ -58,7 +64,7 @@ const PlacesSection = ({
           <TouchableOpacity
             key={index}
             style={styles.card}
-            onPress={() => navigation.navigate('PlaceDetails',{ id: item.id })}
+            onPress={() => navigation.navigate('PlaceDetails', { id: item.id })}
             activeOpacity={0.8}
           >
             <Image
@@ -75,7 +81,9 @@ const PlacesSection = ({
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: {
+    flex: 1,
+  },
   header: {
     height: 180,
     borderTopLeftRadius: 10,
@@ -83,6 +91,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
     borderBottomRightRadius: 70,
     padding: 20,
+    justifyContent: 'flex-end',
   },
   headerImage: {
     width: 160,
@@ -91,13 +100,19 @@ const styles = StyleSheet.create({
     top: 120,
     left: 20,
   },
+  headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    marginBottom:90,
+  },
   title: {
     color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'RobotoSlabBold',
-    marginTop: 20,
     marginLeft: 10,
+   
   },
   searchSection: {
     paddingHorizontal: 20,

@@ -11,17 +11,19 @@ import Search from '../Search/Search';
 import Favorites from '../Favorites/Favorites';
 import Shops from '../Shops/Shops';
 import AiSupport from '../AiSupport/aiSupport';
+import { useTheme } from '../Theme/Theme';
 
 const Tab = createBottomTabNavigator();
 
 const CustomTabBar = ({ state, descriptors, navigation }) => {
+  const { theme } =useTheme();
   return (
     <View
       style={{
         flexDirection: 'row',
         justifyContent: 'space-around',
         paddingVertical: 10,
-        backgroundColor: '#fff',
+        backgroundColor: theme.background,
         borderTopWidth: 1,
         borderColor: '#ddd',
       }}

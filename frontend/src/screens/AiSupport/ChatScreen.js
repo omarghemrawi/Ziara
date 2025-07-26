@@ -8,8 +8,9 @@ TextInput,
  FlatList,
 KeyboardAvoidingView,
 Platform,
- ActivityIndicator, // For loading indicator
+ ActivityIndicator, 
 } from 'react-native';
+import { useTheme } from '../Theme/Theme';
 
 const ChatScreen = () => {
 const [messages, setMessages] = useState([
@@ -17,6 +18,7 @@ const [messages, setMessages] = useState([
 ]); const [inputText, setInputText] = useState('');
  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
  const flatListRef = useRef(null);
+   const { theme } = useTheme();
 
  // Function to scroll to the bottom of the chat
  useEffect(() => {
