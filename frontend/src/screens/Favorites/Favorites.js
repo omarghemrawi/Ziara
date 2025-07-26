@@ -51,7 +51,7 @@ export default function Favourites() {
             style={styles.visitedButton}
             onPress={() => navigation.navigate('Visited')}
           >
-            <Text style={[styles.visitedButtonText,{backgroundColor:theme.text}]}>Go to Visited</Text>
+            <Text style={[styles.visitedButtonText,]}>Go to Visited</Text>
           </TouchableOpacity>
         </View>
 

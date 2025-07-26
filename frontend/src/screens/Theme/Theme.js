@@ -25,6 +25,7 @@ const lightTheme = {
 subtitle:'#000',
 subtitle1:'#fff',
   border: '#ccc',
+  icon:'#FAC75C',
 };
 
 const darkTheme = {
@@ -33,5 +34,6 @@ const darkTheme = {
   subtitle:'#fff',
   subtitle1:'#fff',
   border: '#444',
+  icon:'#9A370E',
   
 };

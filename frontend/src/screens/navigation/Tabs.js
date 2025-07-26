@@ -16,8 +16,10 @@ import { useTheme } from '../Theme/Theme';
 const Tab = createBottomTabNavigator();
 
 const CustomTabBar = ({ state, descriptors, navigation }) => {
-  const { theme } =useTheme();
-  return (
+  const { theme,isLightMode } =useTheme();
+    const activeColor =  isLightMode ?'#9A370E':  '#FAC75C' ;
+  const inactiveColor = isLightMode ? '#888' : '#999';
+ return (
     <View
       style={{
         flexDirection: 'row',
@@ -45,60 +47,26 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
         };
 
         let icon;
+        const color = isFocused ? activeColor : inactiveColor;
+
         switch (route.name) {
           case 'Home':
-            icon = (
-              <Ionicons
-                name="home-outline"
-                size={24}
-                color={isFocused ? '#FFD700' : '#999'}
-              />
-            );
+            icon = <Ionicons name="home-outline" size={24} color={color} />;
             break;
           case 'Search':
-            icon = (
-              <Ionicons
-                name="search-outline"
-                size={24}
-                color={isFocused ? '#FFD700' : '#999'}
-              />
-            );
+            icon = <Ionicons name="search-outline" size={24} color={color} />;
             break;
           case 'Favorites':
-            icon = (
-              <Ionicons
-                name="heart-outline"
-                size={24}
-                color={isFocused ? '#FFD700' : '#999'}
-              />
-            );
+            icon = <Ionicons name="heart-outline" size={24} color={color} />;
             break;
           case 'Shops':
-            icon = (
-              <Fontisto
-                name="shopping-store"
-                size={24}
-                color={isFocused ? '#FFD700' : '#999'}
-              />
-            );
+            icon = <Fontisto name="shopping-store" size={24} color={color} />;
             break;
           case 'AI Support':
-            icon = (
-              <MaterialDesignIcons
-                name="robot-outline"
-                size={24}
-                color={isFocused ? '#FFD700' : '#999'}
-              />
-            );
+            icon = <MaterialDesignIcons name="robot-outline" size={24} color={color} />;
             break;
           default:
-            icon = (
-              <Ionicons
-                name="ellipse"
-                size={24}
-                color={isFocused ? '#FFD700' : '#999'}
-              />
-            );
+            icon = <Ionicons name="ellipse" size={24} color={color} />;
         }
 
         return (
@@ -110,7 +78,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
             {icon}
             <Text
               style={{
-                color: isFocused ? '#FFD700' : '#999',
+                color,
                 fontSize: 12,
                 marginTop: 4,
               }}
