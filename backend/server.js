@@ -20,5 +20,6 @@ app.use("/place", placeRouter);
 //Start Server
 app.listen(PORT, () => {
   connectCloudinary();
-  connectDB(), console.log(`Server running at http://localhost:${PORT}`);
+  connectDB();
+  console.log(`Server running at http://localhost:${PORT}`);
 });

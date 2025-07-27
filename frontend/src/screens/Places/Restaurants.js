@@ -30,10 +30,8 @@ const Restaurants = () => {
     getData(searchValue);
   };
 
-  // const handleDiscover = () => {};
-
   useEffect(() => {
-    getData();
+    // getData();
   }, []);
 
   return (
