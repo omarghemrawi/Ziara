@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
 
-const ReligiousPlaces = () => {
+const ActivityPlaces = () => {
   const [searchValue, setSearchValue] = useState('');
   
   const data = [
@@ -11,26 +11,19 @@ const ReligiousPlaces = () => {
     // More images
   ];
 
-  const handleDiscover = () => {
-    console.log('Discover clicked');
-  };
 
-  const handleSave = () => {
-    console.log('Save clicked');
-  };
 
   return (
     <PlacesSection
-      title="Religious Places"
+      title="Activity"
       headerColor="#9a370e"
-      headerImage={require('../../assets/images/religious.png')}
+      headerImage={require('../../assets/images/activity.png')}
       data={data}
-      onDiscover={handleDiscover}
-      onSave={handleSave}
+  
       searchValue={searchValue}
       onSearchChange={setSearchValue}
     />
   );
 };
 
-export default ReligiousPlaces;
+export default ActivityPlaces;

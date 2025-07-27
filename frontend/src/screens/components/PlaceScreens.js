@@ -11,6 +11,9 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
+import { useTheme } from '../Theme/Theme';
+import Entypo from 'react-native-vector-icons/Entypo';
+
 const PlacesSection = ({
   title,
   headerColor,
@@ -21,28 +24,27 @@ const PlacesSection = ({
   searchValue,
 }) => {
   const navigation = useNavigation();
-  // Google Places API key - replace with your actual API key
-  const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
-  const getPhotoUrl = (photoReference, maxwidth = 400) => {
-    if (!photoReference) return null;
-    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=${maxwidth}&photo_reference=${photoReference}&key=${GOOGLE_API_KEY}`;
-  };
+  const { theme } = useTheme();
 
-  // Handle place item press
-  const handlePlacePress = place => {
-    // Navigate to place details or handle the press
-    console.log('Place pressed:', place.name);
-    // navigation.navigate('PlaceDetails', { place });
-  };
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={[styles.header, { backgroundColor: headerColor }]}>
         <Image
           source={headerImage}
-          style={[styles.headerImage, title === 'Search' && { width: 110 }]}
+          style={[
+            styles.headerImage,
+            title === 'Search' && { width: 110 },
+            title === 'Activity' && { width: 130, height: 160 },
+            title === 'Hotels' && { width: 130, height: 140 },
+          ]}
         />
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.headerTitleRow}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Entypo name="chevron-left" size={24} color="#fff" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{title}</Text>
+        </View>
       </View>
 
       <View style={styles.searchSection}>
@@ -59,60 +61,32 @@ const PlacesSection = ({
         </View>
       </View>
 
-      {/* <ScrollView>
-        <View style={styles.grid}>
-          {data.map((place, index) => (
-            <Image key={index} source={place.image} style={styles.imageItem} />
-          ))}
-        </View>
-      </ScrollView> */}
-      <ScrollView>
-        <View style={styles.grid}>
-          {data.map((place, index) => (
-            <TouchableOpacity
-              key={place.place_id || index}
-              style={styles.placeItem}
-              onPress={() => handlePlacePress(place)}
-            >
-              <Image
-                source={{
-                  uri:
-                    getPhotoUrl(place.photo_reference) ||
-                    'https://via.placeholder.com/400x150?text=No+Image',
-                }}
-                style={styles.imageItem}
-                defaultSource={require('../../assets/images/placeholder.png')} // Add a placeholder image
-              />
-              <View style={styles.placeInfo}>
-                <Text style={styles.placeName} numberOfLines={2}>
-                  {place.name}
-                </Text>
-                <Text style={styles.placeAddress} numberOfLines={1}>
-                  {place.address}
-                </Text>
-                {place.rating && (
-                  <View style={styles.ratingContainer}>
-                    <MaterialIcons name="star" size={16} color="#FFD700" />
-                    <Text style={styles.rating}>{place.rating}</Text>
-                  </View>
-                )}
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
 
-        {data.length === 0 && (
-          <View style={styles.emptyState}>
-            <Text style={styles.emptyText}>No places found</Text>
-          </View>
-        )}
+      <ScrollView contentContainerStyle={styles.grid}>
+        {data.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.card}
+            onPress={() => navigation.navigate('PlaceDetails', { id: item.id })}
+            activeOpacity={0.8}
+          >
+            <Image
+              source={item.image}
+              style={styles.imageItem}
+              resizeMode="cover"
+            />
+            <Text style={styles.cardTitle}>{item.name}</Text>
+          </TouchableOpacity>
+        ))}
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: {
+    flex: 1,
+  },
   header: {
     height: 180,
     borderTopLeftRadius: 10,
@@ -120,57 +94,34 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
     borderBottomRightRadius: 70,
     padding: 20,
+
+    justifyContent: 'flex-end',
   },
   headerImage: {
-    width: 160, //110
+    width: 160,
     height: 110,
     position: 'absolute',
     top: 120,
     left: 20,
+
+  },
+  headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    marginBottom:90,
   },
   title: {
     color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'RobotoSlabBold',
-    marginTop: 20,
     marginLeft: 10,
+   
   },
   searchSection: {
     paddingHorizontal: 20,
     marginTop: 10,
-  },
-  input: {
-    backgroundColor: '#F1F1F1',
-    borderRadius: 30,
-    paddingHorizontal: 20,
-    height: 60,
-    marginBottom: 30,
-    marginTop: 80,
-    borderColor: '#000',
-    borderWidth: 1,
-  },
-
-  buttonText: {
-    color: '#fff',
-    paddingLeft: 12,
-  },
-  buttonTextBlack: {
-    color: '#000',
-    paddingLeft: 12,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    paddingHorizontal: 20,
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  imageItem: {
-    width: '47%',
-    height: 150,
-    borderRadius: 15,
-    marginBottom: 10,
   },
   searchInputContainer: {
     flexDirection: 'row',
@@ -184,69 +135,44 @@ const styles = StyleSheet.create({
     marginTop: 80,
     marginBottom: 30,
   },
+
   searchInput: {
     flex: 1,
     fontSize: 16,
   },
   sendIcon: {
     marginLeft: 10,
-
     padding: 8,
     borderRadius: 10,
   },
-  placeItem: {
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  card: {
     width: '47%',
-    marginBottom: 15,
-    backgroundColor: '#fff',
+    marginBottom: 20,
     borderRadius: 15,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
   },
   imageItem: {
     width: '100%',
-    height: 120,
+    height: 150,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
-  placeInfo: {
+  cardTitle: {
     padding: 10,
-  },
-  placeName: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  placeAddress: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 4,
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  rating: {
-    fontSize: 12,
-    color: '#333',
-    marginLeft: 4,
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 50,
-  },
-  emptyText: {
+    textAlign: 'center',
+    fontWeight: '600',
     fontSize: 16,
-    color: '#666',
+    color: '#333',
   },
+
 });
 
 export default PlacesSection;
