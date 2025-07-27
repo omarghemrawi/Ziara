@@ -90,7 +90,7 @@ export default function Favourites() {
       >
         <View style={styles.modalContent}>
           <TouchableOpacity style={styles.modalOption}>
-            <Text>Edit Trip</Text>
+            <Text>Edit Favorite</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.modalOption} onPress={handleMoveToVisited}>
             <Text>✓ Move to Visited</Text>

@@ -12,7 +12,7 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { favoritePlaces } from '../Favorites/FavoriteStorage';
 
 export default function PlaceDetailScreen() {
@@ -25,6 +25,7 @@ export default function PlaceDetailScreen() {
 
   const route = useRoute();
   const { id } = route.params;
+    const navigation = useNavigation();
 
   const starArray = [1, 2, 3, 4, 5];
 
@@ -87,7 +88,14 @@ export default function PlaceDetailScreen() {
   return (
     <>
       <ScrollView style={styles.container}>
-        <Text style={styles.title}>Place Name {id}</Text>
+    
+             <View style={styles.headerTitleRow}>
+                  <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+                    <Entypo name="chevron-left" size={34} color="#000" />
+                  </TouchableOpacity>
+                  <Text style={styles.title}>Place Name {id}</Text>
+                </View>
+              
         <View style={styles.headerImageContainer}>
           <Image
             source={require('../../assets/images/jbeil.jpeg')}
@@ -399,5 +407,11 @@ alignItems: 'center',
   submitText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+    headerTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+  
   },
 });

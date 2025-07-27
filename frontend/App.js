@@ -1,9 +1,10 @@
-import 'react-native-gesture-handler'; // Must be first line
+import 'react-native-gesture-handler'; 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { LanguageProvider } from './src/screens/locales/LanguageContext';
 
-// Import your custom ThemeProvider (adjust path as needed)
+// Import your custom ThemeProvider 
 import { ThemeProvider } from './src/screens/Theme/Theme';
 
 // Import screens
@@ -45,6 +46,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <ThemeProvider>
+   
       <NavigationContainer>
         <Stack.Navigator
           initialRouteName="Onboarding"
@@ -93,6 +95,7 @@ export default function App() {
           <Stack.Screen name="Activity" component={ActivityPlaces} />
         </Stack.Navigator>
       </NavigationContainer>
+   
     </ThemeProvider>
   );
 }
