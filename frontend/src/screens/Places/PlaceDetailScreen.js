@@ -101,7 +101,7 @@ export default function PlaceDetailScreen() {
             source={require('../../assets/images/jbeil.jpeg')}
             style={styles.headerImage}
           />
-          <TouchableOpacity style={styles.mapButton}>
+          <TouchableOpacity style={styles.mapButton} onPress={()=>navigation.navigate('Map')}>
             <Text style={styles.mapButtonText}>View on map</Text>
           </TouchableOpacity>
         </View>

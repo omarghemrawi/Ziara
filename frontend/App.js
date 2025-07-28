@@ -47,6 +47,7 @@ import PlaceDetailScreen      from './src/screens/Places/PlaceDetailScreen';
 import Favourites            from './src/screens/Favorites/Favorites';
 import Hotels                from './src/screens/Places/Hotels';
 import ActivityPlaces        from './src/screens/Places/ActivityPlaces';
+import MapScreen from './src/screens/Map/Map';
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +91,7 @@ export default function App() {
           <Stack.Screen name="HowToUse" component={HowToUseScreen} />
           <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
           <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+           <Stack.Screen name="Map" component={MapScreen} />
 
           <Stack.Screen name="ChatScreen" component={ChatScreen} />
           <Stack.Screen name="PlaceDetails" component={PlaceDetailScreen} />

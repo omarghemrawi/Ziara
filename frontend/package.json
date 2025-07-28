@@ -33,6 +33,7 @@
     "react-native-gesture-handler": "^2.27.2",
     "react-native-image-picker": "^8.2.1",
     "react-native-localize": "^3.5.1",
+    "react-native-maps": "^1.24.13",
     "react-native-modal": "^14.0.0-rc.1",
     "react-native-reanimated": "^3.18.0",
     "react-native-restart": "^0.0.27",
