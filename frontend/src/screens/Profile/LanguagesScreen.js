@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   View,
@@ -10,6 +10,8 @@ import {
 import { useTheme } from '../Theme/Theme'; 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import I18n from '../locales/i18n'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const languages = [
   { code: 'en', label: 'English' },
@@ -21,9 +23,23 @@ const LanguagesScreen = () => {
   const navigation = useNavigation();
   const [selectedLanguage, setSelectedLanguage] = useState('en');
 
-  const selectLanguage = (code) => {
+
+  useEffect(() => {
+    const loadLanguage = async () => {
+      const savedLang = await AsyncStorage.getItem('selectedLanguage');
+      if (savedLang) {
+        setSelectedLanguage(savedLang);
+        I18n.locale = savedLang;
+      }
+    };
+    loadLanguage();
+  }, []);
+
+
+  const selectLanguage = async (code) => {
     setSelectedLanguage(code);
-    // Add your localization logic here
+    await AsyncStorage.setItem('selectedLanguage', code);
+    I18n.locale = code;
   };
 
   const renderItem = ({ item }) => {
