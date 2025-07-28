@@ -67,7 +67,7 @@ const PlacesSection = ({
           <TouchableOpacity
             key={index}
             style={styles.card}
-            onPress={() => navigation.navigate('PlaceDetails', { id: item.id })}
+            onPress={() => navigation.navigate('PlaceDetails', { place: item })}
             activeOpacity={0.8}
           >
             <Image

@@ -85,6 +85,9 @@ export default function PlaceDetailScreen() {
     setSelectedDate('');
   };
 
+
+  const {place} = route.params; // assuming place was passed to this screen too
+
   return (
     <>
       <ScrollView style={styles.container}>
@@ -93,7 +96,7 @@ export default function PlaceDetailScreen() {
                   <TouchableOpacity onPress={() => navigation.navigate('Home')}>
                     <Entypo name="chevron-left" size={34} color="#000" />
                   </TouchableOpacity>
-                  <Text style={styles.title}>Place Name {id}</Text>
+                  <Text style={styles.title}>{place.name} {id}</Text>
                 </View>
               
         <View style={styles.headerImageContainer}>
@@ -101,7 +104,14 @@ export default function PlaceDetailScreen() {
             source={require('../../assets/images/jbeil.jpeg')}
             style={styles.headerImage}
           />
-          <TouchableOpacity style={styles.mapButton} onPress={()=>navigation.navigate('Map')}>
+          <TouchableOpacity style={styles.mapButton} onPress={()=>navigation.navigate('Map', {
+              latitude: 37.78825,
+  longitude: -122.4324,
+  title: 'Place Title'
+      // lat: place.latitude,
+      // lng: place.longitude,
+      // title: place.name,
+    })}>
             <Text style={styles.mapButtonText}>View on map</Text>
           </TouchableOpacity>
         </View>
@@ -114,8 +124,7 @@ export default function PlaceDetailScreen() {
 
         <Text style={styles.sectionTitle}>Description</Text>
         <Text style={styles.descriptionText}>
-          This is a brief description about the place. It can include location,
-          highlights, history, and more.
+         {place.description}.
         </Text>
 
         <View style={styles.actionsRow}>
