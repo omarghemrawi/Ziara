@@ -6,6 +6,9 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>frontend</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+<string>We need your location to show nearby places</string>
+
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

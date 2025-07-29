@@ -1,15 +1,51 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView , PermissionsAndroid, Platform } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
+import React, { useEffect, useState } from 'react';
+
+import Geolocation from 'react-native-geolocation-service';
 
 export default function Home() {
+  const [location, setLocation] = useState(null);
+
   const navigation = useNavigation();
   const handleProfilePress = () => {
    navigation.navigate('Profile');
   };
     const { theme } = useTheme();
+  useEffect(() => {
+    const requestPermission = async () => {
+      if (Platform.OS === 'android') {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: 'Location Permission',
+              message: 'App needs access to your location.',
+              buttonNeutral: 'Ask Me Later',
+              buttonNegative: 'Cancel',
+              buttonPositive: 'OK',
+            },
+          );
+
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log('Location permission granted');
+          } else {
+            console.log('Location permission denied');
+          }
+        } catch (err) {
+          console.warn('Permission request error:', err);
+        }
+      }
+    };
+
+    requestPermission();
+  }, []);
+
+
+
 
   return (
     <View style={[styles.container,{ backgroundColor: theme.background}] }>
@@ -29,7 +65,7 @@ export default function Home() {
         style={styles.horizontalScroll}
         contentContainerStyle={styles.horizontalContent}
       >
-        <OptionBox label="Nearby" image={require('../../assets/images/map.png')} />
+        <OptionBox label="Nearby" image={require('../../assets/images/map.png') } />
         <OptionBox label="Popular Foods" image={require('../../assets/images/Hummus.png')} isBrown />
         <OptionBox label="Popular Places" image={require('../../assets/images/window1.png')} />
       </ScrollView>
@@ -52,7 +88,7 @@ const OptionBox = ({ label, image, isBrown }) => {
 
   // map label → screen name
   const screenMap = {
-    Nearby:        'Nearby',
+    'Nearby':'NearBy',
     'Popular Foods':'PopularFoods',
     'Popular Places':'PopularPlaces',
   };

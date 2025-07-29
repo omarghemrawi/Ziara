@@ -92,6 +92,8 @@ export default function App() {
           <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
           <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
            <Stack.Screen name="Map" component={MapScreen} />
+            <Stack.Screen name="NearBy" component={NearbyScreen} />
+
 
           <Stack.Screen name="ChatScreen" component={ChatScreen} />
           <Stack.Screen name="PlaceDetails" component={PlaceDetailScreen} />
