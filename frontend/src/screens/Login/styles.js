@@ -56,6 +56,8 @@ export default StyleSheet.create({
   linkText: {
     color: '#000',
     textDecorationLine: 'underline',
+    position:'relative',
+    left:12,
   },
   button: {
     width: width * 0.9,
