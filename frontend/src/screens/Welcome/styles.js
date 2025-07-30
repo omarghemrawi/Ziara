@@ -9,7 +9,18 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingHorizontal: 20,
-    paddingVertical: 30,
+    paddingVertical: 10,
+  },
+  LoginSignupConatiner:{
+   width: '110%',
+  alignItems: 'center',
+
+  gap: 5,
+
+  },
+  skipButton:{
+ marginTop:20,
+  
   },
   title: {
     fontSize: 28,
@@ -22,7 +33,8 @@ export default StyleSheet.create({
     resizeMode: 'contain',
   },
   loginButton: {
-    width: '80%',
+       width: '80%',
+ 
     paddingVertical: 14,
     borderWidth: 1,
     borderColor: '#000',
