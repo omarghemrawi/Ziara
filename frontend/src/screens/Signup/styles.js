@@ -14,6 +14,31 @@ export default StyleSheet.create({
     fontSize: 28,
     fontWeight: '600',
   },
+  errorText:{
+fontSize:10,
+color:'red',
+position:'relative',
+right:80,
+bottom:10,
+  },
+    errorText1:{
+fontSize:10,
+color:'red',
+position:'relative',
+right:100,
+bottom:10,
+  },
+      errorText2:{
+fontSize:10,
+color:'red',
+position:'relative',
+right:110,
+bottom:10,
+  },
+  req:{
+position:'relative',
+right:80,
+  },
   subtitle: {
     marginTop: 8,
     marginBottom: 30,
