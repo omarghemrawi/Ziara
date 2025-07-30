@@ -58,7 +58,7 @@ export default function App() {
    
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Onboarding"
+          initialRouteName="Launching"
           screenOptions={{ headerShown: false }}
         >
           {/* 1: Onboarding & Splash */}
@@ -93,6 +93,8 @@ export default function App() {
           <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
            <Stack.Screen name="Map" component={MapScreen} />
             <Stack.Screen name="NearBy" component={NearbyScreen} />
+                 {/* <Stack.Screen name="PopularFoods" component={PopularFoodsScreen} /> */}
+                     <Stack.Screen name="PopularPlaces" component={PopularPlacesScreen} />
 
 
           <Stack.Screen name="ChatScreen" component={ChatScreen} />
