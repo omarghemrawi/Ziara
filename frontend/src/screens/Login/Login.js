@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import { Formik } from 'formik';
@@ -6,8 +7,9 @@ import * as Yup from 'yup';
 import axios from 'axios';
 
 export default function Login({ navigation }) {
-  const [email, setEmail]       = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
   // Validation schema
   const loginSchema = Yup.object({
@@ -21,15 +23,19 @@ export default function Login({ navigation }) {
 
   const handleLogin = async values => {
     try {
-      const response = await axios.post('http://10.0.2.2:3000/user/login', {
+      const response = await axios.post('http://10.0.2.2:5000/user/login', {
         email: values.email,
         password: values.password,
       });
 
       if (response.data.success) {
+        dispatch({
+          type: 'SET_USER',
+          payload: response.data.user,
+        });
         navigation.navigate('Home'); // Navigate to Home after successful login
       } else {
-        alert(response.data.message);
+        alert('Alert', response.data.message);
       }
     } catch (error) {
       alert('Login failed. Please check your credentials.');
@@ -44,7 +50,6 @@ export default function Login({ navigation }) {
         initialValues={{
           email: '',
           password: '',
-
         }}
         validationSchema={loginSchema}
         onSubmit={handleLogin}
@@ -95,7 +100,6 @@ export default function Login({ navigation }) {
           </>
         )}
       </Formik>
-
     </View>
   );
 }

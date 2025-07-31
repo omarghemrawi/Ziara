@@ -5,9 +5,13 @@ import {
   getReviews,
   createReview,
   getUserReviews,
+  getUser,
 } from "../controllers/user.controller.js";
 
 const userRouter = express.Router();
+
+// Get User by ID
+userRouter.post("/getUser", getUser);
 
 // SignUp User
 userRouter.post("/signup", userSignUp);

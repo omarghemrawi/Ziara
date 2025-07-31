@@ -61,21 +61,29 @@ const PlacesSection = ({
         </View>
       </View>
 
-
       <ScrollView contentContainerStyle={styles.grid}>
         {data.map((item, index) => (
           <TouchableOpacity
             key={index}
             style={styles.card}
+<<<<<<< Updated upstream
             onPress={() => navigation.navigate('PlaceDetails', { place: item })}
+=======
+            onPress={() =>
+              navigation.navigate('PlaceDetails', {
+                id: item._id,
+                serviceType: item.serviceType,
+              })
+            }
+>>>>>>> Stashed changes
             activeOpacity={0.8}
           >
             <Image
-              source={item.image}
+              source={{ uri: item.profileImage }}
               style={styles.imageItem}
               resizeMode="cover"
             />
-            <Text style={styles.cardTitle}>{item.name}</Text>
+            <Text style={styles.cardTitle}>{item.businessName}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -103,13 +111,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 120,
     left: 20,
-
   },
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
 
-    marginBottom:90,
+    marginBottom: 90,
   },
   title: {
     color: '#fff',
@@ -117,7 +124,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'RobotoSlabBold',
     marginLeft: 10,
-   
   },
   searchSection: {
     paddingHorizontal: 20,
@@ -172,7 +178,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-
 });
 
 export default PlacesSection;

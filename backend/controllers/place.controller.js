@@ -46,11 +46,12 @@ export const getFavoritePlaces = async (req, res) => {
   }
 };
 
+// Edit userId + Done
 export const addToFav = async (req, res) => {
   try {
-    const { place } = req.body;
-    const userId = req.user.id;
-    if (!place) {
+    const { placeId , userId} = req.body;
+    // const userId = req.user.id;
+    if (!placeId) {
       return res
         .status(400)
         .json({ success: false, message: "Place Data is required" });
@@ -59,7 +60,7 @@ export const addToFav = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
-        $addToSet: { favoritePlaces: place },
+        $addToSet: { favoritePlaces: placeId },
       },
       { new: true }
     );
@@ -79,18 +80,19 @@ export const addToFav = async (req, res) => {
   }
 };
 
+// Edit userId + Done
 export const deleteFav = async (req, res) => {
   try {
-    const { place_id } = req.params;
-    const userId = req.user.id;
-    if (!place_id) {
+    const { placeId , userId } = req.body;
+    // const userId = req.user.id;
+    if (!placeId) {
       return res
         .status(400)
         .json({ success: false, message: "Place ID is required" });
     }
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { $pull: { favoritePlaces: { place_id: place_id } } },
+      { $pull: { favoritePlaces:  placeId } },
       { new: true }
     );
     if (!updatedUser) {

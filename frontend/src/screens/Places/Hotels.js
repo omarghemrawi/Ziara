@@ -1,23 +1,29 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PlacesSection from '../components/PlaceScreens';
+import { useSelector } from 'react-redux';
 
 const Hotels = () => {
   const [searchValue, setSearchValue] = useState('');
-  
-  const data = [
-    { image: require('../../assets/images/baytna.jpg'),name:'jbeil' ,id:'1'},//replace the id with the real id
- 
-    // More images
-  ];
+  const [hotels, setHotels] = useState([]);
+  const data = useSelector(state => state.places.all);
+
+  const getHotel = async (searchTerm = '') => {
+    try {
+      setHotels(data.filter(item => item.serviceType === 'hotel'));
+    } catch (error) {
+      console.log('Error fetching Hotels:', error);
+    }
+  };
+  useEffect(() => {
+    getHotel();
+  }, []);
 
   return (
     <PlacesSection
       title="Hotels"
       headerColor="#9a370e"
       headerImage={require('../../assets/images/hotel.png')}
-      data={data}
-     
+      data={hotels}
       searchValue={searchValue}
       onSearchChange={setSearchValue}
     />

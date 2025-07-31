@@ -1,37 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
-import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Restaurants = () => {
   const [searchValue, setSearchValue] = useState('');
-  const [data, setData] = useState([]);
+  const [restaurants, setRestaurants] = useState([]);
+  const data = useSelector(state => state.places.all);
+  const dispatch = useDispatch();
 
-  // const datat = [{ image: require('../../assets/images/baytna.jpg') }];
-
-  const getData = async (searchTerm = '') => {
+  const getRestaurant = async (searchTerm = '') => {
     try {
-      const res = await axios.get('http://10.0.2.2:3000/place/all/restaurant', {
-        params: { city: searchTerm },
+      const filtered = data.filter(item => item.serviceType === 'restaurant');
+      setRestaurants(filtered);
+      dispatch({
+        type: 'SET_RESTAURANTS',
+        payload: filtered,
       });
-      if (res.data.places) {
-        console.log('Restaurants data:', res.data.places);
-        setData(res.data.places);
-      } else {
-        console.error('No restaurants found');
-        setData([]);
-      }
     } catch (error) {
-      console.error('Error fetching data:', error);
-      setData([]);
+      console.log('Error fetching restaurants:', error);
     }
   };
 
   const handleSearch = () => {
     getData(searchValue);
   };
-
   useEffect(() => {
-    // getData();
+    getRestaurant();
   }, []);
 
   return (
@@ -39,7 +33,7 @@ const Restaurants = () => {
       title="Restaurants"
       headerColor="#FAC75C"
       headerImage={require('../../assets/images/pizza.png')}
-      data={data}
+      data={restaurants}
       onSearch={handleSearch}
       searchValue={searchValue}
       onSearchChange={setSearchValue}

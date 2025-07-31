@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView , PermissionsAndroid, Platform } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -9,11 +10,31 @@ import Geolocation from 'react-native-geolocation-service';
 
 export default function Home() {
   const [location, setLocation] = useState(null);
+=======
+import React, { useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import { useNavigation } from '@react-navigation/native';
+import { useTheme } from '../Theme/Theme';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+
+export default function Home() {
+  const dispatch = useDispatch();
+>>>>>>> Stashed changes
 
   const navigation = useNavigation();
   const handleProfilePress = () => {
-   navigation.navigate('Profile');
+    navigation.navigate('Profile');
   };
+<<<<<<< Updated upstream
     const { theme } = useTheme();
   useEffect(() => {
     const requestPermission = async () => {
@@ -46,17 +67,45 @@ export default function Home() {
 
 
 
+=======
+  const { theme } = useTheme();
+
+  const getData = async (searchTerm = '') => {
+    try {
+      const res = await axios.get('http://10.0.2.2:5000/place/all/places', {
+        params: { city: searchTerm },
+      });
+      if (res.data.places) {
+        dispatch({ type: 'SET_PLACES', payload: res.data.places });
+      } else {
+        console.error('No restaurants found');
+        dispatch({ type: 'SET_PLACES', payload: null });
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
+>>>>>>> Stashed changes
 
   return (
-    <View style={[styles.container,{ backgroundColor: theme.background}] }>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       {/* Profile Icon with Tarbush */}
       <TouchableOpacity style={styles.profileIcon} onPress={handleProfilePress}>
         <EvilIcons name="user" size={70} color={theme.text} />
-        <Image style={styles.tarbush} source={require('../../assets/images/miniTarbush.png')} />
+        <Image
+          style={styles.tarbush}
+          source={require('../../assets/images/miniTarbush.png')}
+        />
       </TouchableOpacity>
 
       {/* Header Text */}
-      <Text style={[styles.headerText,{color:theme.text}]}>Find Your Destination</Text>
+      <Text style={[styles.headerText, { color: theme.text }]}>
+        Find Your Destination
+      </Text>
 
       {/* Horizontal Scroll Section */}
       <ScrollView
@@ -65,18 +114,57 @@ export default function Home() {
         style={styles.horizontalScroll}
         contentContainerStyle={styles.horizontalContent}
       >
+<<<<<<< Updated upstream
         <OptionBox label="Nearby" image={require('../../assets/images/map.png') } />
         <OptionBox label="Popular Foods" image={require('../../assets/images/Hummus.png')} isBrown />
         <OptionBox label="Popular Places" image={require('../../assets/images/window1.png')} />
+=======
+        <OptionBox
+          label="Nearby"
+          image={require('../../assets/images/map.png')}
+        />
+        <OptionBox
+          label="Popular Foods"
+          image={require('../../assets/images/Hummus.png')}
+          isBrown
+        />
+        <OptionBox
+          label="Popular Places"
+          image={require('../../assets/images/window1.png')}
+        />
+>>>>>>> Stashed changes
       </ScrollView>
 
       {/* Vertical Scroll Section */}
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.verticalScroll}>
-        <DetailBox  label="Touristic Places" image={require('../../assets/images/touristicPlaces.png')} />
-        <DetailBox label="Religious Places" image={require('../../assets/images/religious.png')} isBrown imageStyle={{width:200,height:200} } />
-        <DetailBox label="Restaurants" image={require('../../assets/images/pizza.png')} />
-        <DetailBox label="Activity " image={require('../../assets/images/activity.png')} isBrown imageStyle={{width:130,height:130,marginLeft:30} }/>
-             <DetailBox label="Hotels" image={require('../../assets/images/hotel.png')} imageStyle={{width:130,height:130,marginLeft:30} } />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.verticalScroll}
+      >
+        <DetailBox
+          label="Touristic Places"
+          image={require('../../assets/images/touristicPlaces.png')}
+        />
+        <DetailBox
+          label="Religious Places"
+          image={require('../../assets/images/religious.png')}
+          isBrown
+          imageStyle={{ width: 200, height: 200 }}
+        />
+        <DetailBox
+          label="Restaurants"
+          image={require('../../assets/images/pizza.png')}
+        />
+        <DetailBox
+          label="Activity "
+          image={require('../../assets/images/activity.png')}
+          isBrown
+          imageStyle={{ width: 130, height: 130, marginLeft: 30 }}
+        />
+        <DetailBox
+          label="Hotels"
+          image={require('../../assets/images/hotel.png')}
+          imageStyle={{ width: 130, height: 130, marginLeft: 30 }}
+        />
       </ScrollView>
     </View>
   );
@@ -88,19 +176,24 @@ const OptionBox = ({ label, image, isBrown }) => {
 
   // map label → screen name
   const screenMap = {
+<<<<<<< Updated upstream
     'Nearby':'NearBy',
     'Popular Foods':'PopularFoods',
     'Popular Places':'PopularPlaces',
+=======
+    Nearby: 'Nearby',
+    'Popular Foods': 'PopularFoods',
+    'Popular Places': 'PopularPlaces',
+>>>>>>> Stashed changes
   };
 
   return (
     <TouchableOpacity
       onPress={() => {
-  const screen = screenMap[label];
-  if (screen) navigation.navigate(screen);
-  else console.warn(`No screen for ${label}`);
-}}
-
+        const screen = screenMap[label];
+        if (screen) navigation.navigate(screen);
+        else console.warn(`No screen for ${label}`);
+      }}
       style={[styles.optionBox, isBrown && styles.brownBox]}
     >
       <Image source={image} style={styles.optionImage} />
@@ -109,20 +202,18 @@ const OptionBox = ({ label, image, isBrown }) => {
   );
 };
 
-
 // Big vertical box
-const DetailBox = ({ label, image, isBrown,imageStyle }) => {
+const DetailBox = ({ label, image, isBrown, imageStyle }) => {
   const navigation = useNavigation();
- const { theme } = useTheme();
-  
+  const { theme } = useTheme();
+
   const screenMap = {
     'Touristic Places': 'TouristicPlaces',
     'Religious Places': 'ReligiousPlaces',
-    'Restaurants': 'Restaurants',
-        'Activity ': 'Activity',
-            'Hotels': 'Hotels',
+    Restaurants: 'Restaurants',
+    'Activity ': 'Activity',
+    Hotels: 'Hotels',
   };
-  
 
   const screenName = screenMap[label];
 
@@ -137,15 +228,25 @@ const DetailBox = ({ label, image, isBrown,imageStyle }) => {
       }}
       style={[styles.detailBox, isBrown && styles.brownBox]}
     >
-      <Image source={image} style={[styles.detailImage,imageStyle]} />
-      <Text style={[styles.detailText, label === 'Restaurants' && { marginLeft: 200 },{color:theme.subtitle1}]}>
+      <Image source={image} style={[styles.detailImage, imageStyle]} />
+      <Text
+        style={[
+          styles.detailText,
+          label === 'Restaurants' && { marginLeft: 200 },
+          { color: theme.subtitle1 },
+        ]}
+      >
         {label}
       </Text>
-      <EvilIcons name="chevron-right" size={30} color="#fff" style={styles.arrow} />
+      <EvilIcons
+        name="chevron-right"
+        size={30}
+        color="#fff"
+        style={styles.arrow}
+      />
     </TouchableOpacity>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -174,16 +275,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     // marginTop: 20,
     marginBottom: 15,
-    padding:7,
+    padding: 7,
     color: '#000',
   },
   horizontalScroll: {
     paddingLeft: 10,
-
   },
   horizontalContent: {
     paddingRight: 10,
-     marginBottom: 40,
+    marginBottom: 40,
   },
   optionBox: {
     width: 100,
@@ -193,9 +293,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 8,
-    marginBottom:25,
-    marginLeft:12,
-    
+    marginBottom: 25,
+    marginLeft: 12,
   },
   optionImage: {
     width: 60,

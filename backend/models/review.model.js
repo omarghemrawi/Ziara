@@ -6,12 +6,9 @@ export const reviewSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  place_name: {
-    type: String,
-    required: true,
-  },
-  place_city: {
-    type: String,
+  placeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Place",
     required: true,
   },
   rate: {
@@ -21,6 +18,9 @@ export const reviewSchema = new mongoose.Schema({
   review: {
     type: String,
     required: true,
+  },
+  image: {
+    type: String,
   },
   visitedDate: { type: Date, default: Date.now },
 });

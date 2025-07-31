@@ -27,7 +27,12 @@ export default function Signup({ navigation }) {
 
   const handleSignUp = async values => {
     try {
+<<<<<<< Updated upstream
       const resp = await axios.post('http://10.0.2.2:3000/user/signup', {
+=======
+      console.log(values);
+      const resp = await axios.post('http://10.0.2.2:5000/user/signup', {
+>>>>>>> Stashed changes
         username: values.username,
         email: values.email,
         password: values.password,
@@ -43,6 +48,7 @@ export default function Signup({ navigation }) {
     }
   };
 
+<<<<<<< Updated upstream
   const checkPasswordRules = password => ({
     hasUpper: /[A-Z]/.test(password),
     hasLower: /[a-z]/.test(password),
@@ -58,6 +64,8 @@ export default function Signup({ navigation }) {
 
   );
 
+=======
+>>>>>>> Stashed changes
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
@@ -79,6 +87,7 @@ export default function Signup({ navigation }) {
           values,
           errors,
           touched,
+<<<<<<< Updated upstream
         }) => {
           const rules = checkPasswordRules(passwordInput);
           return (
@@ -146,6 +155,54 @@ export default function Signup({ navigation }) {
             </>
           );
         }}
+=======
+        }) => (
+          <>
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={values.username}
+              onBlur={handleBlur('username')}
+              onChangeText={handleChange('username')}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={values.email}
+              onBlur={handleBlur('email')}
+              onChangeText={handleChange('email')}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            {touched.email && errors.email && <Text>{errors.email}</Text>}
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry
+              value={values.password}
+              onBlur={handleBlur('password')}
+              onChangeText={handleChange('password')}
+            />
+            {touched.password && errors.password && (
+              <Text>{errors.password}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              secureTextEntry
+              value={values.confirmPassword}
+              onBlur={handleBlur('confirmPassword')}
+              onChangeText={handleChange('confirmPassword')}
+            />
+            {touched.confirmPassword && errors.confirmPassword && (
+              <Text>{errors.confirmPassword}</Text>
+            )}
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Signup</Text>
+            </TouchableOpacity>
+          </>
+        )}
+>>>>>>> Stashed changes
       </Formik>
     </View>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { favoritePlaces } from '../Favorites/FavoriteStorage';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { refreshUser } from '../../redux/actions/user.action';
 
 export default function PlaceDetailScreen() {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -24,28 +27,36 @@ export default function PlaceDetailScreen() {
   const [selectedDate, setSelectedDate] = useState('');
 
   const route = useRoute();
-  const { id } = route.params;
-    const navigation = useNavigation();
+  const { id, serviceType } = route.params;
+  const navigation = useNavigation();
+  const data = useSelector(state => state.places[serviceType]);
+  const user = useSelector(state => state.user.user);
+  const dispatch = useDispatch();
+
+  const place = data.find(item => item._id === id);
 
   const starArray = [1, 2, 3, 4, 5];
 
-  const sampleImages = [
-    require('../../assets/images/jbeil.jpeg'),
-  ];
+  const handleFavouriteToggle = async () => {
+    const newValue = !isFavourite;
+    setIsFavourite(newValue);
 
-  const handleFavouriteToggle = () => {
-    const newStatus = !isFavourite;
-    setIsFavourite(newStatus);
-
-    if (newStatus) {
-      const alreadyAdded = favoritePlaces.find(p => p.id === id);
-      if (!alreadyAdded) {
-        favoritePlaces.push({
-          id: id,
-          name: `Place Name ${id}`,
-          image: require('../../assets/images/jbeil.jpeg'),
+    try {
+      if (newValue) {
+        await axios.post('http://10.0.2.2:5000/place/favorite/add', {
+          placeId: id,
+          userId: user._id,
+        });
+      } else {
+        await axios.post('http://10.0.2.2:5000/place/favorite/delete', {
+          placeId: id,
+          userId: user._id,
         });
       }
+      dispatch(refreshUser(user._id)); // Refresh after success
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      // Optionally revert UI state here if needed
     }
   };
 
@@ -56,7 +67,7 @@ export default function PlaceDetailScreen() {
       includeBase64: false,
     };
 
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.errorCode) {
@@ -70,21 +81,46 @@ export default function PlaceDetailScreen() {
     });
   };
 
-  const handleSubmit = () => {
-    console.log('Review submitted:', {
-      stars: selectedStar,
-      reviewText,
-      date: selectedDate,
-      image,
-    });
+  const handleSubmit = async () => {
+    if (!selectedStar || !reviewText || !selectedDate) {
+      alert('Please fill in all required fields.');
+      return;
+    }
 
-    setModalVisible(false);
-    setSelectedStar(0);
-    setReviewText('');
-    setImage(null);
-    setSelectedDate('');
+    try {
+      let imageUrl = '';
+
+      // Upload image if selected
+      if (image) {
+        imageUrl = await uploadImageToCloudinary(image);
+      }
+
+      // Submit review data
+      const res = await axios.post('http://10.0.2.2:5000/reviews', {
+        rate: selectedStar,
+        review: reviewText,
+        image: imageUrl || null,
+        date: selectedDate,
+        userId: user._id,
+        placeId: place._id,
+      });
+
+      if (res.data.success) {
+        alert('Review submitted successfully!');
+        setSelectedStar(0);
+        setReviewText('');
+        setImage(null);
+        setSelectedDate('');
+      } else {
+        alert('Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      console.error('Submit error:', err);
+      alert('Submission failed. Please check your network or try again later.');
+    }
   };
 
+<<<<<<< Updated upstream
 
   const {place} = route.params; // assuming place was passed to this screen too
 
@@ -99,11 +135,32 @@ export default function PlaceDetailScreen() {
                   <Text style={styles.title}>{place.name} {id}</Text>
                 </View>
               
+=======
+  useEffect(() => {
+    const existsInFavorites = user.favoritePlaces?.some(fav => fav === id);
+    if (existsInFavorites) {
+      setIsFavourite(true);
+    } else {
+      setIsFavourite(false);
+    }
+  }, []);
+  return (
+    <>
+      <ScrollView style={styles.container}>
+        <View style={styles.headerTitleRow}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Entypo name="chevron-left" size={34} color="#000" />
+          </TouchableOpacity>
+          <Text style={styles.title}>{place.businessName}</Text>
+        </View>
+
+>>>>>>> Stashed changes
         <View style={styles.headerImageContainer}>
           <Image
-            source={require('../../assets/images/jbeil.jpeg')}
+            source={{ uri: place.profileImage }}
             style={styles.headerImage}
           />
+<<<<<<< Updated upstream
           <TouchableOpacity style={styles.mapButton} onPress={()=>navigation.navigate('Map', {
               latitude: 37.78825,
   longitude: -122.4324,
@@ -112,35 +169,62 @@ export default function PlaceDetailScreen() {
       // lng: place.longitude,
       // title: place.name,
     })}>
+=======
+          <TouchableOpacity
+            style={styles.mapButton}
+            onPress={() =>
+              navigation.navigate('Map', { location: place.location })
+            }
+          >
+>>>>>>> Stashed changes
             <Text style={styles.mapButtonText}>View on map</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.galleryRow}>
-          {sampleImages.map((img, index) => (
-            <Image key={index} source={img} style={styles.galleryImage} />
+          {place.referenceImages.map((img, index) => (
+            <Image
+              key={index}
+              source={{ uri: img }}
+              style={styles.galleryImage}
+            />
           ))}
         </View>
 
         <Text style={styles.sectionTitle}>Description</Text>
+<<<<<<< Updated upstream
         <Text style={styles.descriptionText}>
          {place.description}.
         </Text>
+=======
+        <Text style={styles.descriptionText}>{place.description}</Text>
+>>>>>>> Stashed changes
 
         <View style={styles.actionsRow}>
-          <TouchableOpacity style={styles.actionButton} onPress={handleFavouriteToggle}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={handleFavouriteToggle}
+          >
             <Text style={styles.actionText}>Add To Favourite</Text>
             <AntDesign
               name={isFavourite ? 'heart' : 'hearto'}
               size={20}
               color={isFavourite ? '#FAC75C' : 'black'}
-                style={{ marginTop: 50 }}
+              style={{ marginTop: 50 }}
             />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.actionButton} onPress={() => setModalVisible(true)}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => setModalVisible(true)}
+          >
             <Text style={styles.actionText}>Rating & Review</Text>
-            <Entypo name="chevron-right" size={20} color="black"   style={{ marginTop: 50 }} />
+            <Entypo
+              name="chevron-right"
+              size={20}
+              color="black"
+              style={{ marginTop: 50 }}
+            />
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -154,13 +238,16 @@ export default function PlaceDetailScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeX}>
+            <TouchableOpacity
+              onPress={() => setModalVisible(false)}
+              style={styles.closeX}
+            >
               <Text style={styles.xText}>✕</Text>
             </TouchableOpacity>
 
             <View style={styles.profileSection}>
               <Image
-                source={{ uri: 'https://your-image-url.com/image.jpg' }}
+                source={{ uri: place.profileImage }}
                 style={styles.avatar}
               />
               <View>
@@ -169,11 +256,23 @@ export default function PlaceDetailScreen() {
               </View>
             </View>
 
-            <Text style={styles.label}>How would you rate your experience?</Text>
+            <Text style={styles.label}>
+              How would you rate your experience?
+            </Text>
             <View style={styles.stars}>
-              {starArray.map((star) => (
-                <TouchableOpacity key={star} onPress={() => setSelectedStar(star)}>
-                  <Text style={[styles.star, star <= selectedStar && styles.filledStar]}>★</Text>
+              {starArray.map(star => (
+                <TouchableOpacity
+                  key={star}
+                  onPress={() => setSelectedStar(star)}
+                >
+                  <Text
+                    style={[
+                      styles.star,
+                      star <= selectedStar && styles.filledStar,
+                    ]}
+                  >
+                    ★
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -186,13 +285,20 @@ export default function PlaceDetailScreen() {
               onChangeText={setReviewText}
               maxLength={200}
             />
-            <Text style={styles.charCount}>{reviewText.length}/200 characters</Text>
+            <Text style={styles.charCount}>
+              {reviewText.length}/200 characters
+            </Text>
 
             <Text style={styles.label}>Upload a photo (Optional)</Text>
-            <TouchableOpacity style={styles.uploadButton} onPress={handleImagePick}>
+            <TouchableOpacity
+              style={styles.uploadButton}
+              onPress={handleImagePick}
+            >
               <Text style={styles.uploadText}>Upload</Text>
             </TouchableOpacity>
-            {image && <Image source={{ uri: image }} style={styles.previewImage} />}
+            {image && (
+              <Image source={{ uri: image }} style={styles.previewImage} />
+            )}
 
             <Text style={styles.label}>When did you visit?</Text>
             <TextInput
@@ -206,7 +312,10 @@ export default function PlaceDetailScreen() {
               <TouchableOpacity style={styles.saveButton}>
                 <Text style={styles.saveText}>Save</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={handleSubmit}
+              >
                 <Text style={styles.submitText}>Submit</Text>
               </TouchableOpacity>
             </View>
@@ -221,13 +330,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    marginTop:30,
+    marginTop: 30,
   },
   title: {
     fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 18,
-    marginLeft:20,
+    marginLeft: 20,
   },
   headerImageContainer: {
     position: 'relative',
@@ -271,9 +380,9 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   actionsRow: {
-flexDirection: 'column',
-gap: 12,         
-alignItems: 'center',
+    flexDirection: 'column',
+    gap: 12,
+    alignItems: 'center',
   },
   actionButton: {
     flexDirection: 'row',
@@ -282,13 +391,12 @@ alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 10,
-    marginTop:10,
-  
+    marginTop: 10,
   },
   actionText: {
     fontSize: 16,
-    marginRight:200,
-    marginTop:50,
+    marginRight: 200,
+    marginTop: 50,
   },
 
   // Modal styles
@@ -340,7 +448,7 @@ alignItems: 'center',
   star: {
     fontSize: 54,
     color: '#ccc',
-    textAlign:'center',
+    textAlign: 'center',
     marginHorizontal: 10,
   },
   filledStar: {
@@ -354,7 +462,7 @@ alignItems: 'center',
     marginBottom: 10,
     height: 100,
   },
-    modalInput: {
+  modalInput: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 10,
@@ -373,10 +481,9 @@ alignItems: 'center',
     padding: 10,
     borderRadius: 15,
     alignItems: 'center',
-    width:90,
-    marginTop:20,
-    borderWidth:1,
- 
+    width: 90,
+    marginTop: 20,
+    borderWidth: 1,
   },
   uploadText: {
     color: '#333',
@@ -397,7 +504,7 @@ alignItems: 'center',
     padding: 12,
     borderRadius: 50,
     flex: 1,
-    borderWidth:1,
+    borderWidth: 1,
     marginRight: 8,
     alignItems: 'center',
   },
@@ -406,7 +513,7 @@ alignItems: 'center',
     padding: 12,
     borderRadius: 50,
     flex: 1,
-      borderWidth:1,
+    borderWidth: 1,
     marginLeft: 8,
     alignItems: 'center',
   },
@@ -417,10 +524,8 @@ alignItems: 'center',
     color: '#fff',
     fontWeight: 'bold',
   },
-    headerTitleRow: {
+  headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-
-  
   },
 });

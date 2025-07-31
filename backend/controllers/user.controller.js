@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import { Review } from "../models/review.model.js";
+import Client from "../models/client.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -98,13 +99,15 @@ export const userLogin = async (req, res) => {
   }
 };
 
+
+// Done + should edit userId
 export const createReview = async (req, res) => {
   try {
-    const { place_name, place_city, rate, review, data } = req.body;
-    const userId = req.user.id;
+    const { placeId,userId, rate, review, date ,image } = req.body;
+    // const userId = req.user.id;
 
     // Validate required fields
-    if (!place_name || !place_city || !rate || !review) {
+    if (!placeId || !rate || !review || !userId || !date) {
       return res
         .status(400)
         .json({ success: false, message: "All fields are required" });
@@ -112,12 +115,12 @@ export const createReview = async (req, res) => {
 
     // Create new review
     const newReview = new Review({
-      place_name,
-      place_city,
+      placeId,
+      userId,
       rate,
       review,
-      userId,
-      visitedDate: data ? new Date(data) : new Date(),
+      image,
+      visitedDate: date ? new Date(date) : new Date(),
     });
 
     await newReview.save();
@@ -131,6 +134,15 @@ export const createReview = async (req, res) => {
     }
     user.review.push(newReview._id);
     await user.save();
+
+    const place = await Client.findById(placeId);
+    if (!place) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Place not found" });
+    }
+    place.reviews.push(newReview._id);
+    await place.save();
 
     return res.status(201).json({
       success: true,
@@ -172,5 +184,16 @@ export const getReviews = async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const getUser = async (req, res) => { 
+  const {id} = req.body;
+  try {
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
   }
 };
