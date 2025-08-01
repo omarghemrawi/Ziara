@@ -1,0 +1,14 @@
+{
+    "serviceType": "restaurant , shop, hotel, activity",
+    "businessName": "...",
+    "phone": "....",
+    "email": "....",
+    "password": "123456",
+    "location": "...",
+    "city":"...",
+    "profileImage": "A",
+    "referenceImages":[1,2,3,4,5],
+    "description": "....",
+    "facebook": "....",
+    "instagram": "...."
+}

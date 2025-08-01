@@ -9,7 +9,8 @@ import {
   getRestaurants,
   getTouristAttractions,
   getReligiousPlaces,
-  log,
+  getAllPlaces,
+
 } from "../controllers/allPlaces.controller.js";
 
 import {
@@ -28,25 +29,26 @@ import express from "express";
 const placeRouter = express.Router();
 
 // Nearby Places
-placeRouter.post("/nearby/nearbyPlaces", getNearbyPlaces);
-placeRouter.post("/nearby/nearbyRestaurant", getNearbyRestaurants);
-placeRouter.post("/nearby/nearbyTourist", getNearbyTouristicPlaces);
-placeRouter.post("/nearby/nearbyReligious", getNearbyReligiousPlaces);
+placeRouter.get("/nearby/nearbyPlaces", getNearbyPlaces);
+placeRouter.get("/nearby/nearbyRestaurant", getNearbyRestaurants);
+placeRouter.get("/nearby/nearbyTourist", getNearbyTouristicPlaces);
+placeRouter.get("/nearby/nearbyReligious", getNearbyReligiousPlaces);
 
 // all place + send city by query
-placeRouter.post("/all/restaurant", getRestaurants);
-placeRouter.post("/all/tourist", getTouristAttractions);
-placeRouter.post("/all/religious", getReligiousPlaces);
+placeRouter.get("/all/restaurant", getRestaurants);
+placeRouter.get("/all/tourist", getTouristAttractions);
+placeRouter.get("/all/religious", getReligiousPlaces);
+placeRouter.get("/all/places",getAllPlaces )
 // placeRouter.post("/all/login", log);
 
 // Favorites Places
 placeRouter.get("/favorite/getAllFavorites", getFavoritePlaces);
 placeRouter.post("/favorite/add", addToFav);
-placeRouter.post("/favorite/delete/:place_id", deleteFav);
+placeRouter.post("/favorite/delete", deleteFav);
 
 // Visited Places
 placeRouter.get("/visited/getAllVisited", getVisitedPlaces);
-placeRouter.post("visited/add/:place_id", addToVisited);
+placeRouter.post("visited/add", addToVisited);
 
 // Get Single Place with send its field [favoritePlaces or visitedPlaces]
 placeRouter.get("/getSinglePlace", getPlace);
