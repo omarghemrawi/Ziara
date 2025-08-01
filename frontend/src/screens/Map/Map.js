@@ -1,14 +1,17 @@
-
 import React from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 export default function MapScreen({ route }) {
-  console.log('Received route params:', route?.params); 
+  console.log('Received route params:', route?.params);
   const { latitude, longitude, title } = route?.params || {};
 
   if (!latitude || !longitude) {
-    return <View><Text>Invalid location data</Text></View>;
+    return (
+      <View>
+        <Text>Invalid location data</Text>
+      </View>
+    );
   }
 
   return (

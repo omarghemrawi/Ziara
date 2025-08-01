@@ -65,17 +65,14 @@ export default function Visited() {
             key={index}
             style={[styles.grid, { backgroundColor: theme.background }]}
           >
-            <Image
-              style={styles.imageItem}
-              source={{ uri: place.profileImage }}
-            />
+            <Image style={styles.imageItem} source={{ uri: place.profile }} />
 
             <View style={styles.textContainer}>
               <Text style={[styles.placeName, { color: theme.text }]}>
-                {place.businessName}
+                {place.name}
               </Text>
               <Text style={[styles.placeLocation, { color: theme.text }]}>
-                {place.city}
+                {place.city || 'Not Found'}
               </Text>
             </View>
           </View>

@@ -22,8 +22,6 @@ export const addToVisited = async (req, res) => {
   // const userId = req.user.id;
   const { userId, place_id } = req.body;
 
-  console.log(req.body);
-
   if (!place_id) {
     return res
       .status(400)

@@ -126,3 +126,23 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ message: "Server error. Please try again later." });
   }
 };
+export const getUser = async (req,res)=>{
+  try {
+    const {id} = req.params;
+    if(!id){
+      return res.status(400).json({ message: "User ID is required." });
+    }
+    const user = await User.findById(id)
+
+    if(!user){
+      return res.status(404).json({ message: "User Not Found." });
+    }
+     res.status(200).json({
+      user: user,
+    });
+    
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({success:false , message : "server error. Please try again later to get user. "})
+  }
+}

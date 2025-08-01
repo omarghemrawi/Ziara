@@ -10,6 +10,6 @@ const favRouter = express.Router();
 
 favRouter.get("/", getFavoritePlaces);
 favRouter.post("/", addToFav);
-favRouter.delete("/:id", deleteFav);
+favRouter.delete("/", deleteFav);
 
 export default favRouter;

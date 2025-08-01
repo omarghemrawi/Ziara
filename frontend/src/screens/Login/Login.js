@@ -17,13 +17,12 @@ export default function Login({ navigation }) {
       .email('Please enter a valid email')
       .required('Email is required'),
     password: Yup.string()
-
-      .required('Password is required'),
+    .required('Password is required'),
   });
 
   const handleLogin = async values => {
     try {
-      const response = await axios.post('http://10.0.2.2:5000/user/login', {
+      const response = await axios.post('http://10.0.2.2:5000/api/user/login', {
         email: values.email,
         password: values.password,
       });
@@ -72,7 +71,9 @@ export default function Login({ navigation }) {
               keyboardType="email-address"
               autoCapitalize="none"
             />
-            {touched.email && errors.email && <Text style={styles.errorText2} >*{errors.email}</Text>}
+            {touched.email && errors.email && (
+              <Text style={styles.errorText2}>*{errors.email}</Text>
+            )}
 
             <TextInput
               style={styles.input}
@@ -83,7 +84,7 @@ export default function Login({ navigation }) {
               onBlur={handleBlur('password')}
             />
             {touched.password && errors.password && (
-              <Text style={styles.errorText2} >*{errors.password}</Text>
+              <Text style={styles.errorText2}>*{errors.password}</Text>
             )}
 
             <View style={styles.row}>

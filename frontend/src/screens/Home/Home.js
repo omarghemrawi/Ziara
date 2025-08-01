@@ -3,11 +3,9 @@
 // import { useNavigation } from '@react-navigation/native';
 // import { useTheme } from '../Theme/Theme';
 // import React, { useEffect, useState } from 'react';
-
 // import Geolocation from 'react-native-geolocation-service';
-
 // export default function Home() {
-//   const [location, setLocation] = useState(null);
+// const [location, setLocation] = useState(null);
 import React, { useEffect } from 'react';
 import {
   View,
@@ -65,14 +63,16 @@ export default function Home() {
 
   const getData = async (searchTerm = '') => {
     try {
-      const res = await axios.get(
-        'http://192.168.0.103:5000/place/all/places',
-        {
-          params: { city: searchTerm },
-        },
-      );
-      if (res.data.places) {
-        dispatch({ type: 'SET_PLACES', payload: res.data.places });
+      const staticRes = await axios.get('http://10.0.2.2:5000/api/static');
+      const clientRes = await axios.get('http://10.0.2.2:5000/api/client');
+
+      const staticPlaces = staticRes.data.places || [];
+      const clientPlaces = clientRes.data.places || [];
+
+      const allPlaces = [...staticPlaces, ...clientPlaces];
+
+      if (allPlaces.length > 0) {
+        dispatch({ type: 'SET_PLACES', payload: allPlaces });
       } else {
         console.error('No restaurants found');
         dispatch({ type: 'SET_PLACES', payload: null });

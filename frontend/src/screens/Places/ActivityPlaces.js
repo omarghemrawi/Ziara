@@ -10,9 +10,7 @@ const ActivityPlaces = () => {
 
   const getActivityPlaces = async (searchTerm = '') => {
     try {
-      const filtered = data.filter(
-        item => item.serviceType === 'activityPlace',
-      );
+      const filtered = data.filter(item => item.type === 'activity');
       setActivityPlaces(filtered);
       dispatch({
         type: 'SET_ACTIVITY_PLACES',

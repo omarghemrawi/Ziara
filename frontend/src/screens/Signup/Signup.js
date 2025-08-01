@@ -23,7 +23,7 @@ export default function Signup({ navigation }) {
 
   const handleSignUp = async values => {
     try {
-      const resp = await axios.post('http://10.0.2.2:3000/user/signup', {
+      const resp = await axios.post('http://10.0.2.2:3000/api/user/signup', {
         username: values.username,
         email: values.email,
         password: values.password,
@@ -79,7 +79,7 @@ export default function Signup({ navigation }) {
           return (
             <>
               {/* Username */}
-              
+
               <TextInput
                 style={styles.input}
                 placeholder="Enter your username"
@@ -92,7 +92,7 @@ export default function Signup({ navigation }) {
               )}
 
               {/* Email */}
-           
+
               <TextInput
                 style={styles.input}
                 placeholder="Enter your email"
@@ -107,10 +107,7 @@ export default function Signup({ navigation }) {
               )}
 
               {/* Password */}
-       
-           
-           
-              
+
               <TextInput
                 style={styles.input}
                 placeholder="Enter your password"
@@ -133,17 +130,14 @@ export default function Signup({ navigation }) {
                     marginLeft: 10,
                     marginBottom: 5,
                   }}
-                >
-               
-                </Text>
+                ></Text>
               )}
-          <Text style={[styles.req, { fontSize: 10, color: '#666' }]}>
-
-                  *Min 8 chars, uppercase, lowercase, number, special characters
-                </Text>
+              <Text style={[styles.req, { fontSize: 10, color: '#666' }]}>
+                *Min 8 chars, uppercase, lowercase, number, special characters
+              </Text>
 
               {/* Confirm Password */}
-             
+
               <TextInput
                 style={styles.input}
                 placeholder="Confirm your password"
