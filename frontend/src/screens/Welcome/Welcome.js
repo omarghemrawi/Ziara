@@ -8,12 +8,8 @@ export default function Home({ navigation }) {
     <View style={styles.container}>
     
 
-      <Text style={styles.title}>Welcome</Text>
 
-      <Image
-        source={require('../../assets/images/Welcome.jpeg')}
-        style={styles.image}
-      />
+      <Text style={styles.text}>Ziara</Text>
 
       {/* Buttons container */}
       <View style={styles.LoginSignupConatiner}>
