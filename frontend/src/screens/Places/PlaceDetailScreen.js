@@ -120,22 +120,6 @@ export default function PlaceDetailScreen() {
     }
   };
 
-<<<<<<< Updated upstream
-
-  const {place} = route.params; // assuming place was passed to this screen too
-
-  return (
-    <>
-      <ScrollView style={styles.container}>
-    
-             <View style={styles.headerTitleRow}>
-                  <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-                    <Entypo name="chevron-left" size={34} color="#000" />
-                  </TouchableOpacity>
-                  <Text style={styles.title}>{place.name} {id}</Text>
-                </View>
-              
-=======
   useEffect(() => {
     const existsInFavorites = user.favoritePlaces?.some(fav => fav === id);
     if (existsInFavorites) {
@@ -154,29 +138,18 @@ export default function PlaceDetailScreen() {
           <Text style={styles.title}>{place.businessName}</Text>
         </View>
 
->>>>>>> Stashed changes
         <View style={styles.headerImageContainer}>
           <Image
             source={{ uri: place.profileImage }}
             style={styles.headerImage}
           />
-<<<<<<< Updated upstream
-          <TouchableOpacity style={styles.mapButton} onPress={()=>navigation.navigate('Map', {
-              latitude: 37.78825,
-  longitude: -122.4324,
-  title: 'Place Title'
-      // lat: place.latitude,
-      // lng: place.longitude,
-      // title: place.name,
-    })}>
-=======
+
           <TouchableOpacity
             style={styles.mapButton}
             onPress={() =>
               navigation.navigate('Map', { location: place.location })
             }
           >
->>>>>>> Stashed changes
             <Text style={styles.mapButtonText}>View on map</Text>
           </TouchableOpacity>
         </View>
@@ -192,13 +165,8 @@ export default function PlaceDetailScreen() {
         </View>
 
         <Text style={styles.sectionTitle}>Description</Text>
-<<<<<<< Updated upstream
-        <Text style={styles.descriptionText}>
-         {place.description}.
-        </Text>
-=======
+
         <Text style={styles.descriptionText}>{place.description}</Text>
->>>>>>> Stashed changes
 
         <View style={styles.actionsRow}>
           <TouchableOpacity

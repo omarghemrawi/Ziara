@@ -2,6 +2,8 @@ apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
 apply plugin: "com.facebook.react"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
+
 
 
 /**
@@ -86,6 +88,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        // Added By Omar
+        buildConfigField "String", "UPLOAD_PRESET", "\"${project.env.get("UPLOAD_PRESET") ?: ""}\""
+        buildConfigField "String", "CLOUD_NAME", "\"${project.env.get("CLOUD_NAME") ?: ""}\""
     }
     signingConfigs {
         debug {

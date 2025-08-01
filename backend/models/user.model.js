@@ -13,6 +13,8 @@ const userSchema = new mongoose.Schema({
   profileImage: String,
   review: [reviewSchema],
   currentCity: String,
+},{
+  timestamps:true
 });
 
 const User = mongoose.model("User", userSchema);

@@ -1,16 +1,13 @@
-<<<<<<< Updated upstream
+// import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView , PermissionsAndroid, Platform } from 'react-native';
+// import EvilIcons from 'react-native-vector-icons/EvilIcons';
+// import { useNavigation } from '@react-navigation/native';
+// import { useTheme } from '../Theme/Theme';
+// import React, { useEffect, useState } from 'react';
 
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView , PermissionsAndroid, Platform } from 'react-native';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '../Theme/Theme';
-import React, { useEffect, useState } from 'react';
+// import Geolocation from 'react-native-geolocation-service';
 
-import Geolocation from 'react-native-geolocation-service';
-
-export default function Home() {
-  const [location, setLocation] = useState(null);
-=======
+// export default function Home() {
+//   const [location, setLocation] = useState(null);
 import React, { useEffect } from 'react';
 import {
   View,
@@ -28,46 +25,41 @@ import axios from 'axios';
 
 export default function Home() {
   const dispatch = useDispatch();
->>>>>>> Stashed changes
 
   const navigation = useNavigation();
   const handleProfilePress = () => {
     navigation.navigate('Profile');
   };
-<<<<<<< Updated upstream
-    const { theme } = useTheme();
-  useEffect(() => {
-    const requestPermission = async () => {
-      if (Platform.OS === 'android') {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Location Permission',
-              message: 'App needs access to your location.',
-              buttonNeutral: 'Ask Me Later',
-              buttonNegative: 'Cancel',
-              buttonPositive: 'OK',
-            },
-          );
+  //   const { theme } = useTheme();
+  // useEffect(() => {
+  //   const requestPermission = async () => {
+  //     if (Platform.OS === 'android') {
+  //       try {
+  //         const granted = await PermissionsAndroid.request(
+  //           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //           {
+  //             title: 'Location Permission',
+  //             message: 'App needs access to your location.',
+  //             buttonNeutral: 'Ask Me Later',
+  //             buttonNegative: 'Cancel',
+  //             buttonPositive: 'OK',
+  //           },
+  //         );
 
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            console.log('Location permission granted');
-          } else {
-            console.log('Location permission denied');
-          }
-        } catch (err) {
-          console.warn('Permission request error:', err);
-        }
-      }
-    };
+  //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //           console.log('Location permission granted');
+  //         } else {
+  //           console.log('Location permission denied');
+  //         }
+  //       } catch (err) {
+  //         console.warn('Permission request error:', err);
+  //       }
+  //     }
+  //   };
 
-    requestPermission();
-  }, []);
+  //   requestPermission();
+  // }, []);
 
-
-
-=======
   const { theme } = useTheme();
 
   const getData = async (searchTerm = '') => {
@@ -89,7 +81,6 @@ export default function Home() {
   useEffect(() => {
     getData();
   }, []);
->>>>>>> Stashed changes
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -114,11 +105,6 @@ export default function Home() {
         style={styles.horizontalScroll}
         contentContainerStyle={styles.horizontalContent}
       >
-<<<<<<< Updated upstream
-        <OptionBox label="Nearby" image={require('../../assets/images/map.png') } />
-        <OptionBox label="Popular Foods" image={require('../../assets/images/Hummus.png')} isBrown />
-        <OptionBox label="Popular Places" image={require('../../assets/images/window1.png')} />
-=======
         <OptionBox
           label="Nearby"
           image={require('../../assets/images/map.png')}
@@ -132,7 +118,6 @@ export default function Home() {
           label="Popular Places"
           image={require('../../assets/images/window1.png')}
         />
->>>>>>> Stashed changes
       </ScrollView>
 
       {/* Vertical Scroll Section */}
@@ -176,15 +161,9 @@ const OptionBox = ({ label, image, isBrown }) => {
 
   // map label → screen name
   const screenMap = {
-<<<<<<< Updated upstream
-    'Nearby':'NearBy',
-    'Popular Foods':'PopularFoods',
-    'Popular Places':'PopularPlaces',
-=======
     Nearby: 'Nearby',
     'Popular Foods': 'PopularFoods',
     'Popular Places': 'PopularPlaces',
->>>>>>> Stashed changes
   };
 
   return (

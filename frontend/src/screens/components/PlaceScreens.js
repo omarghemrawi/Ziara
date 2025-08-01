@@ -66,16 +66,12 @@ const PlacesSection = ({
           <TouchableOpacity
             key={index}
             style={styles.card}
-<<<<<<< Updated upstream
-            onPress={() => navigation.navigate('PlaceDetails', { place: item })}
-=======
             onPress={() =>
               navigation.navigate('PlaceDetails', {
                 id: item._id,
                 serviceType: item.serviceType,
               })
             }
->>>>>>> Stashed changes
             activeOpacity={0.8}
           >
             <Image

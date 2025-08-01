@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import PlacesSection from '../components/PlaceScreens';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 const Hotels = () => {
   const [searchValue, setSearchValue] = useState('');
   const [hotels, setHotels] = useState([]);
   const data = useSelector(state => state.places.all);
+  const dispatch = useDispatch();
 
   const getHotel = async (searchTerm = '') => {
     try {
-      setHotels(data.filter(item => item.serviceType === 'hotel'));
+      const filtered = data.filter(item => item.serviceType === 'hotel');
+      setHotels(filtered);
+      dispatch({
+        type: 'SET_HOTELS',
+        payload: filtered,
+      });
     } catch (error) {
       console.log('Error fetching Hotels:', error);
     }
   };
+
   useEffect(() => {
     getHotel();
   }, []);

@@ -6,26 +6,47 @@ import {
   Switch,
   TouchableOpacity,
   StyleSheet,
-  ScrollView
+  ScrollView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
-
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
   const { isLightMode, toggleTheme, theme } = useTheme();
 
   const settingsItems = [
-    { key: 'languages', label: 'Languages', icon: 'language', screen: 'Languages' },
-    { key: 'howToUse', label: 'How to use', icon: 'info-outline', screen: 'HowToUse' },
-    { key: 'helpSupport', label: 'Help and Support', icon: 'help-outline', screen: 'HelpSupport' },
-    { key: 'privacyPolicy', label: 'Privacy policy', icon: 'security', screen: 'PrivacyPolicy' },
+    {
+      key: 'languages',
+      label: 'Languages',
+      icon: 'language',
+      screen: 'Languages',
+    },
+    {
+      key: 'howToUse',
+      label: 'How to use',
+      icon: 'info-outline',
+      screen: 'HowToUse',
+    },
+    {
+      key: 'helpSupport',
+      label: 'Help and Support',
+      icon: 'help-outline',
+      screen: 'HelpSupport',
+    },
+    {
+      key: 'privacyPolicy',
+      label: 'Privacy policy',
+      icon: 'security',
+      screen: 'PrivacyPolicy',
+    },
   ];
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: theme.background }]}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Icon name="arrow-back-ios" size={24} color={theme.text} />
@@ -41,7 +62,6 @@ const SettingsScreen = () => {
         </View>
       </View>
 
-
       <ScrollView>
         {settingsItems.map(item => (
           <TouchableOpacity
@@ -49,8 +69,15 @@ const SettingsScreen = () => {
             style={[styles.item, { borderBottomColor: theme.border }]}
             onPress={() => navigation.navigate(item.screen)}
           >
-            <Icon name={item.icon} size={24} color={theme.text} style={styles.itemIcon} />
-            <Text style={[styles.itemLabel, { color: theme.text }]}>{item.label}</Text>
+            <Icon
+              name={item.icon}
+              size={24}
+              color={theme.text}
+              style={styles.itemIcon}
+            />
+            <Text style={[styles.itemLabel, { color: theme.text }]}>
+              {item.label}
+            </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -62,7 +89,13 @@ export default SettingsScreen;
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 20, paddingTop: 20 },
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 30 },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 30,
+    marginTop: 20,
+  },
   title: { fontSize: 22, fontWeight: 'bold' },
   switchContainer: { flexDirection: 'row', alignItems: 'center' },
   switchLabel: { marginLeft: 8, fontSize: 14 },

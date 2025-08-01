@@ -48,7 +48,7 @@ placeRouter.post("/favorite/delete", deleteFav);
 
 // Visited Places
 placeRouter.get("/visited/getAllVisited", getVisitedPlaces);
-placeRouter.post("visited/add/:place_id", addToVisited);
+placeRouter.post("visited/add", addToVisited);
 
 // Get Single Place with send its field [favoritePlaces or visitedPlaces]
 placeRouter.get("/getSinglePlace", getPlace);

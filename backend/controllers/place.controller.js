@@ -125,9 +125,10 @@ export const getVisitedPlaces = async (req, res) => {
   }
 };
 
+// Edit userId + Done
 export const addToVisited = async (req, res) => {
-  const userId = req.user.id;
-  const { place_id } = req.params;
+  // const userId = req.user.id;
+  const {userId, place_id } = req.body;
 
   if (!place_id) {
     return res

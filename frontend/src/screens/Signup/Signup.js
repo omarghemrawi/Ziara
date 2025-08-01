@@ -18,7 +18,10 @@ export default function Signup({ navigation }) {
       .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
       .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
       .matches(/[0-9]/, 'Password must contain at least one number')
-      .matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
+      .matches(
+        /[^A-Za-z0-9]/,
+        'Password must contain at least one special character',
+      ),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref('password'), null], 'Passwords must match')
@@ -27,12 +30,7 @@ export default function Signup({ navigation }) {
 
   const handleSignUp = async values => {
     try {
-<<<<<<< Updated upstream
-      const resp = await axios.post('http://10.0.2.2:3000/user/signup', {
-=======
-      console.log(values);
       const resp = await axios.post('http://10.0.2.2:5000/user/signup', {
->>>>>>> Stashed changes
         username: values.username,
         email: values.email,
         password: values.password,
@@ -48,7 +46,6 @@ export default function Signup({ navigation }) {
     }
   };
 
-<<<<<<< Updated upstream
   const checkPasswordRules = password => ({
     hasUpper: /[A-Z]/.test(password),
     hasLower: /[a-z]/.test(password),
@@ -58,14 +55,11 @@ export default function Signup({ navigation }) {
   });
 
   const RequirementText = ({ met, text }) => (
-   <Text style={[styles.req, { color: met ? 'green' : 'red', fontSize: 12 }]}>
-  • {text}
-</Text>
-
+    <Text style={[styles.req, { color: met ? 'green' : 'red', fontSize: 12 }]}>
+      • {text}
+    </Text>
   );
 
-=======
->>>>>>> Stashed changes
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
@@ -87,7 +81,6 @@ export default function Signup({ navigation }) {
           values,
           errors,
           touched,
-<<<<<<< Updated upstream
         }) => {
           const rules = checkPasswordRules(passwordInput);
           return (
@@ -109,11 +102,10 @@ export default function Signup({ navigation }) {
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
-             
-                          
-{touched.email && errors.email && (
-  <Text style={styles.errorText2}>*{errors.email}</Text>
-)}
+
+              {touched.email && errors.email && (
+                <Text style={styles.errorText2}>*{errors.email}</Text>
+              )}
 
               <TextInput
                 style={styles.input}
@@ -121,7 +113,7 @@ export default function Signup({ navigation }) {
                 secureTextEntry
                 value={values.password}
                 onBlur={handleBlur('password')}
-                onChangeText={(text) => {
+                onChangeText={text => {
                   handleChange('password')(text);
                   setPasswordInput(text);
                 }}
@@ -131,11 +123,26 @@ export default function Signup({ navigation }) {
               )}
 
               <View style={{ marginVertical: 5, marginLeft: 10 }}>
-                <RequirementText met={rules.hasUpper} text="At least one uppercase letter" />
-                <RequirementText met={rules.hasLower} text="At least one lowercase letter" />
-                <RequirementText met={rules.hasNumber} text="At least one number" />
-                <RequirementText met={rules.hasSpecial} text="At least one special character" />
-                <RequirementText met={rules.hasLength} text="Minimum 8 characters" />
+                <RequirementText
+                  met={rules.hasUpper}
+                  text="At least one uppercase letter"
+                />
+                <RequirementText
+                  met={rules.hasLower}
+                  text="At least one lowercase letter"
+                />
+                <RequirementText
+                  met={rules.hasNumber}
+                  text="At least one number"
+                />
+                <RequirementText
+                  met={rules.hasSpecial}
+                  text="At least one special character"
+                />
+                <RequirementText
+                  met={rules.hasLength}
+                  text="Minimum 8 characters"
+                />
               </View>
 
               <TextInput
@@ -155,54 +162,52 @@ export default function Signup({ navigation }) {
             </>
           );
         }}
-=======
-        }) => (
-          <>
-            <TextInput
-              style={styles.input}
-              placeholder="Username"
-              value={values.username}
-              onBlur={handleBlur('username')}
-              onChangeText={handleChange('username')}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Email"
-              value={values.email}
-              onBlur={handleBlur('email')}
-              onChangeText={handleChange('email')}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-            {touched.email && errors.email && <Text>{errors.email}</Text>}
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry
-              value={values.password}
-              onBlur={handleBlur('password')}
-              onChangeText={handleChange('password')}
-            />
-            {touched.password && errors.password && (
-              <Text>{errors.password}</Text>
-            )}
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm Password"
-              secureTextEntry
-              value={values.confirmPassword}
-              onBlur={handleBlur('confirmPassword')}
-              onChangeText={handleChange('confirmPassword')}
-            />
-            {touched.confirmPassword && errors.confirmPassword && (
-              <Text>{errors.confirmPassword}</Text>
-            )}
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Signup</Text>
-            </TouchableOpacity>
-          </>
-        )}
->>>>>>> Stashed changes
+        {/* }) => (
+        <>
+          <TextInput
+            style={styles.input}
+            placeholder="Username"
+            value={values.username}
+            onBlur={handleBlur('username')}
+            onChangeText={handleChange('username')}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={values.email}
+            onBlur={handleBlur('email')}
+            onChangeText={handleChange('email')}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          {touched.email && errors.email && <Text>{errors.email}</Text>}
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            value={values.password}
+            onBlur={handleBlur('password')}
+            onChangeText={handleChange('password')}
+          />
+          {touched.password && errors.password && (
+            <Text>{errors.password}</Text>
+          )}
+          <TextInput
+            style={styles.input}
+            placeholder="Confirm Password"
+            secureTextEntry
+            value={values.confirmPassword}
+            onBlur={handleBlur('confirmPassword')}
+            onChangeText={handleChange('confirmPassword')}
+          />
+          {touched.confirmPassword && errors.confirmPassword && (
+            <Text>{errors.confirmPassword}</Text>
+          )}
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Signup</Text>
+          </TouchableOpacity>
+        </>
+        )} */}
       </Formik>
     </View>
   );

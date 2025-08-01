@@ -12,24 +12,44 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
+import { useSelector } from 'react-redux';
 
 export default function ProfileScreen() {
-     const navigation = useNavigation();
-      const { theme } = useTheme();
+  const navigation = useNavigation();
+  const { theme } = useTheme();
+  const user = useSelector(state => state.user.user);
+  console.log(user);
   return (
-    <ScrollView contentContainerStyle={[styles.container,{backgroundColor:theme.background}]}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: theme.background },
+      ]}
+    >
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity  onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <Entypo name="chevron-left" size={24} color={theme.text} />
         </TouchableOpacity>
-      <Text style={[styles.headerTitle,{color:theme.text}]}>Profile</Text>
-        <View style={[styles.headerIcons,{color:theme.text}]}>
+        <Text style={[styles.headerTitle, { color: theme.text }]}>Profile</Text>
+        <View style={[styles.headerIcons, { color: theme.text }]}>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-            <MaterialIcons name="edit" size={30} color="#000" style={[styles.icon,,{color:theme.text}]} />
+            <MaterialIcons
+              name="edit"
+              size={30}
+              color="#000"
+              style={[styles.icon, , { color: theme.text }]}
+            />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
-            <FontAwesome name="cog" size={30} color="#000" style={[styles.icon,,{color:theme.text}]} />
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SettingsScreen')}
+          >
+            <FontAwesome
+              name="cog"
+              size={30}
+              color="#000"
+              style={[styles.icon, , { color: theme.text }]}
+            />
           </TouchableOpacity>
         </View>
       </View>
@@ -37,30 +57,46 @@ export default function ProfileScreen() {
       {/* User Info */}
       <View style={styles.profileSection}>
         <Image
-          source={require('../../assets/images/pizza.png')} // User profile picture
+          source={{ uri: user.profileImage || null }} // User profile picture
           style={styles.avatar}
         />
         <View style={styles.user}>
-        <Text style={[styles.userName,{color:theme.text}]}>Rama T</Text>
-        <Text style={[styles.joinedText,,{color:theme.text}]}>Joined in 2025</Text>
-      </View>
+          <Text style={[styles.userName, { color: theme.text }]}>
+            {user.username}
+          </Text>
+          <Text style={[styles.joinedText, , { color: theme.text }]}>
+            Joined in {new Date(user.createdAt).getFullYear()}
+          </Text>
+        </View>
       </View>
 
       {/* Photos Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle,{color:theme.text}]}>0 photos</Text>
-        <Text style={[styles.sectionSubtitle,{color:theme.text}]}>You have no photos yet</Text>
-        <TouchableOpacity style={[styles.button,{borderColor:theme.text}]}>
-          <Text style={[styles.buttonText,{color:theme.text}]}>Upload a Photo</Text>
+        <Text style={[styles.sectionTitle, { color: theme.text }]}>
+          0 photos
+        </Text>
+        <Text style={[styles.sectionSubtitle, { color: theme.text }]}>
+          You have no photos yet
+        </Text>
+        <TouchableOpacity style={[styles.button, { borderColor: theme.text }]}>
+          <Text style={[styles.buttonText, { color: theme.text }]}>
+            Upload a Photo
+          </Text>
         </TouchableOpacity>
       </View>
 
       {/* Reviews Section */}
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle,{color:theme.text}]}>0 reviews</Text>
-        <Text style={[styles.sectionSubtitle,{color:theme.text}]}>You have no reviews yet</Text>
-        <TouchableOpacity style={[styles.button,{borderColor:theme.text}]}>
-          <Text style={[styles.buttonText,{color:theme.text}]}>Write a review</Text>
+        <Text style={[styles.sectionTitle, { color: theme.text }]}>
+          0 reviews
+        </Text>
+        <Text style={[styles.sectionSubtitle, { color: theme.text }]}>
+          You have no reviews yet
+        </Text>
+        <TouchableOpacity style={[styles.button, { borderColor: theme.text }]}>
+          <Text style={[styles.buttonText, { color: theme.text }]}>
+            Write a review
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -74,6 +110,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   header: {
+    marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -90,11 +127,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   profileSection: {
-     flexDirection: 'row',
+    flexDirection: 'row',
     marginVertical: 60,
   },
   avatar: {
-  
     width: 70,
     height: 70,
     borderRadius: 35,
@@ -112,38 +148,33 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 30,
-     alignItems: 'flex-start',
-   
+    alignItems: 'flex-start',
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-  
   },
   sectionSubtitle: {
     color: '#666',
     fontSize: 14,
     marginVertical: 10,
- textAlign: 'center', 
-  width: '100%',
+    textAlign: 'center',
+    width: '100%',
   },
   button: {
     borderWidth: 1,
- 
+
     borderRadius: 30,
     paddingHorizontal: 105,
     paddingVertical: 15,
-    alignItems:'center',
-      width: '100%',
+    alignItems: 'center',
+    width: '100%',
   },
   buttonText: {
     fontSize: 14,
     fontWeight: '500',
   },
-  user :{
-    
+  user: {
     marginLeft: 15,
- 
-    
   },
 });

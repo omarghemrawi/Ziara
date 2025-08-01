@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,30 +10,44 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Modal from 'react-native-modal';
-import { favoritePlaces } from './FavoriteStorage';
 import { useTheme } from '../Theme/Theme';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import { refreshUser } from '../../redux/actions/user.action';
 
 export default function Favourites() {
   const navigation = useNavigation();
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedPlaceIndex, setSelectedPlaceIndex] = useState(null);
-   const { theme } = useTheme();
+  const [idSelectedPlace, setIdSelectedPlace] = useState(null);
+  const [favoritePlaces, setFavoritePlaces] = useState([]);
+  const { theme } = useTheme();
+  const user = useSelector(state => state.user.user);
+  const places = useSelector(state => state.places.all);
+  const dispatch = useDispatch();
 
-  const handleDotsPress = (index) => {
-    setSelectedPlaceIndex(index);
+  const getFavoritePLaces = () => {
+    setFavoritePlaces(
+      places.filter(place => user.favoritePlaces.includes(place._id)),
+    );
+  };
+  const handleDotsPress = id => {
+    setIdSelectedPlace(id);
     setModalVisible(true);
   };
+  //************************************************** */
 
-  const closeModal = () => {
-    setModalVisible(false);
-  };
+  const handleMoveToVisited = async () => {
+    try {
+      await axios.post('http://10.0.2.2:5000/place/visited/add', {
+        userId: user._id,
+        place_id: idSelectedPlace,
+      });
 
-  const handleMoveToVisited = () => {
-    const place = favoritePlaces[selectedPlaceIndex];
-    //  remove from favorites
-    // favoritePlaces.splice(selectedPlaceIndex, 1);
-    navigation.navigate('Visited', { place });
-    closeModal();
+      dispatch(refreshUser(user._id));
+      setModalVisible(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDelete = () => {
@@ -41,8 +55,14 @@ export default function Favourites() {
     setModalVisible(false);
   };
 
+  useEffect(() => {
+    getFavoritePLaces();
+  }, []);
+
   return (
-    <ScrollView style={[styles.container,{backgroundColor:theme.background}]}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: theme.background }]}
+    >
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
@@ -51,7 +71,7 @@ export default function Favourites() {
             style={styles.visitedButton}
             onPress={() => navigation.navigate('Visited')}
           >
-            <Text style={[styles.visitedButtonText,]}>Go to Visited</Text>
+            <Text style={[styles.visitedButtonText]}>Go to Visited</Text>
           </TouchableOpacity>
         </View>
 
@@ -63,18 +83,31 @@ export default function Favourites() {
 
       {/* Favorite Places List */}
       {favoritePlaces.length === 0 ? (
-        <Text style={{ padding: 20, fontSize: 16,color:theme.text,textAlign:'center',marginTop:20 }}>No favourites added yet.</Text>
+        <Text
+          style={{
+            padding: 20,
+            fontSize: 16,
+            color: theme.text,
+            textAlign: 'center',
+            marginTop: 20,
+          }}
+        >
+          No favourites added yet.
+        </Text>
       ) : (
         favoritePlaces.map((place, index) => (
           <View key={index} style={styles.grid}>
-            <Image style={styles.imageItem} source={place.image} />
+            <Image
+              style={styles.imageItem}
+              source={{ uri: place.profileImage }}
+            />
             <View style={styles.textContainer}>
-              <Text style={styles.placeName}>{place.name}</Text>
-              <Text style={styles.placeLocation}>ID: {place.id}</Text>
+              <Text style={styles.placeName}>{place.businessName}</Text>
+              <Text style={styles.placeLocation}>City: {place.city}</Text>
             </View>
             <TouchableOpacity
               style={styles.iconContainer}
-              onPress={() => handleDotsPress(index)}
+              onPress={() => handleDotsPress(place._id)}
             >
               <Entypo name="dots-three-vertical" size={18} color="#000" />
             </TouchableOpacity>
@@ -85,14 +118,17 @@ export default function Favourites() {
       {/* Modal Bottom Sheet */}
       <Modal
         isVisible={isModalVisible}
-        onBackdropPress={closeModal}
+        onBackdropPress={() => setModalVisible(false)}
         style={styles.modal}
       >
         <View style={styles.modalContent}>
           <TouchableOpacity style={styles.modalOption}>
             <Text>Edit Favorite</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.modalOption} onPress={handleMoveToVisited}>
+          <TouchableOpacity
+            style={styles.modalOption}
+            onPress={handleMoveToVisited}
+          >
             <Text>✓ Move to Visited</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.modalOption} onPress={handleDelete}>

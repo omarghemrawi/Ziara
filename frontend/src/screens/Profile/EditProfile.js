@@ -11,17 +11,72 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { useSelector, useDispatch } from 'react-redux';
+import { uploadImageToCloudinary } from '../../utils/cloudinaryUpload';
+import { useNavigation } from '@react-navigation/native';
+import Config from 'react-native-config';
+import axios from 'axios';
+import { refreshUser } from '../../redux/actions/user.action';
 
 export default function EditProfileScreen({ navigation }) {
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
   const [about, setAbout] = useState('');
   const [profileImage, setProfileImage] = useState(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigation();
+
+  const user = useSelector(state => state.user.user);
+
+  // console.log(process.env.CLOUD_NAME);
+  console.log(Config.UPLOAD_PRESET);
+
+  const handleEdit = async () => {
+    if (!name) {
+      alert('Please Enter a Name');
+      return;
+    }
+    try {
+      let imageUrl = '';
+      if (profileImage) {
+        imageUrl = await uploadImageToCloudinary(profileImage);
+      }
+      const res = await axios.post('http://10.0.2.2:5000/user/edit-profile', {
+        profileImage: imageUrl,
+        userId: user._id,
+        about,
+        username: name,
+      });
+      dispatch(refreshUser(user._id));
+      navigate.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleImagePick = () => {
-    launchImageLibrary({ mediaType: 'photo' }, (response) => {
-      if (response.assets && response.assets.length > 0) {
-        setProfileImage(response.assets[0].uri);
+    // launchImageLibrary({ mediaType: 'photo' }, response => {
+    //   if (response.assets && response.assets.length > 0) {
+    //     setProfileImage(response.assets[0].uri);
+    //   }
+    // });
+
+    const options = {
+      mediaType: 'photo',
+      quality: 1,
+      includeBase64: false,
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.errorCode) {
+        console.log('ImagePicker Error: ', response.errorMessage);
+      } else {
+        const asset = response.assets && response.assets[0];
+        if (asset) {
+          setProfileImage(asset.uri);
+        }
       }
     });
   };
@@ -29,7 +84,10 @@ export default function EditProfileScreen({ navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Back Button */}
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+      <TouchableOpacity
+        onPress={() => navigation.goBack()}
+        style={styles.backButton}
+      >
         <Entypo name="chevron-left" size={28} color="#000" />
       </TouchableOpacity>
 
@@ -39,11 +97,12 @@ export default function EditProfileScreen({ navigation }) {
       {/* Profile Image with Camera Icon */}
       <View style={styles.profileContainer}>
         <Image
-          source={
-            profileImage
-              ? { uri: profileImage }
-              : require('../../assets/images/pizza.png')
-          }
+          source={{
+            uri:
+              profileImage ||
+              user.profileImage ||
+              'https://example.com/default.jpg',
+          }}
           style={styles.profileImage}
         />
         <TouchableOpacity onPress={handleImagePick} style={styles.cameraIcon}>
@@ -55,13 +114,12 @@ export default function EditProfileScreen({ navigation }) {
       <Text style={styles.label}>Name</Text>
       <TextInput
         style={styles.input}
-        placeholder="Rama T"
+        placeholder={'Current ' + user.username}
         placeholderTextColor="#777"
         value={name}
         onChangeText={setName}
       />
 
-   
       <Text style={styles.label}>About you</Text>
       <TextInput
         style={styles.textarea}
@@ -72,6 +130,10 @@ export default function EditProfileScreen({ navigation }) {
         multiline
         numberOfLines={4}
       />
+
+      <TouchableOpacity onPress={handleEdit}>
+        <Text style={styles.button}>Save Edit</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
@@ -87,6 +149,7 @@ const styles = StyleSheet.create({
     top: 30,
     left: 20,
     zIndex: 1,
+    marginTop: 10,
   },
   title: {
     fontSize: 18,
@@ -106,7 +169,7 @@ const styles = StyleSheet.create({
   cameraIcon: {
     position: 'absolute',
     bottom: 0,
-    right: 130, 
+    right: 130,
     backgroundColor: '#000',
     padding: 5,
     borderRadius: 15,
@@ -130,5 +193,12 @@ const styles = StyleSheet.create({
     height: 100,
     textAlignVertical: 'top',
     fontSize: 14,
+  },
+  button: {
+    backgroundColor: 'yellow',
+    width: 100,
+    textAlign: 'center',
+    padding: 10,
+    margin: 10,
   },
 });

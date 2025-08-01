@@ -197,3 +197,36 @@ export const getUser = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const editProfile = async (req, res) => {
+  try {
+    const { userId, username, about, profileImage } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        username,
+        about,
+        profileImage,
+      },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json({
+      message: 'Profile updated successfully.',
+      user: updatedUser,
+    });
+
+  } catch (error) {
+    console.error('Edit profile error:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+};

@@ -1,7 +1,8 @@
 import axios from 'axios';
+import Config from 'react-native-config';
 
-const CLOUD_NAME = process.env.CLOUD_NAME;
-const UPLOAD_PRESET = process.env.UPLOAD_PRESET;
+const CLOUD_NAME = Config.CLOUD_NAME;
+const UPLOAD_PRESET = Config.UPLOAD_PRESET;
 
 export const uploadImageToCloudinary = async imageUri => {
   try {
