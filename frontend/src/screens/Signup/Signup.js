@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // <-- Add useState
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import * as yup from 'yup';
@@ -7,6 +7,7 @@ import axios from 'axios';
 
 export default function Signup({ navigation }) {
   const [passwordInput, setPasswordInput] = useState('');
+  const [confirmPassFocused, setConfirmPassFocused] = useState(false);
 
   const userSchema = yup.object({
     username: yup.string().required('Username is required'),
@@ -15,10 +16,7 @@ export default function Signup({ navigation }) {
       .string()
       .required('Password is required')
       .min(8, '')
-      .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-      .matches(/[0-9]/, 'Password must contain at least one number')
-      .matches(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
+,
     confirmPassword: yup
       .string()
       .oneOf([yup.ref('password'), null], 'Passwords must match')
@@ -52,10 +50,9 @@ export default function Signup({ navigation }) {
   });
 
   const RequirementText = ({ met, text }) => (
-   <Text style={[styles.req, { color: met ? 'green' : 'red', fontSize: 12 }]}>
-  • {text}
-</Text>
-
+    <Text style={[styles.req, { color: met ? 'green' : 'red', fontSize: 12 }]}>
+      • {text}
+    </Text>
   );
 
   return (
@@ -81,6 +78,8 @@ export default function Signup({ navigation }) {
           touched,
         }) => {
           const rules = checkPasswordRules(passwordInput);
+          const showRequirements = passwordInput !== '' && confirmPassFocused;
+
           return (
             <>
               <TextInput
@@ -100,11 +99,9 @@ export default function Signup({ navigation }) {
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
-             
-                          
-{touched.email && errors.email && (
-  <Text style={styles.errorText2}>*{errors.email}</Text>
-)}
+              {touched.email && errors.email && (
+                <Text style={styles.errorText2}>*{errors.email}</Text>
+              )}
 
               <TextInput
                 style={styles.input}
@@ -112,7 +109,7 @@ export default function Signup({ navigation }) {
                 secureTextEntry
                 value={values.password}
                 onBlur={handleBlur('password')}
-                onChangeText={(text) => {
+                onChangeText={text => {
                   handleChange('password')(text);
                   setPasswordInput(text);
                 }}
@@ -121,13 +118,15 @@ export default function Signup({ navigation }) {
                 <Text style={styles.errorText1}>*{errors.password}</Text>
               )}
 
-              <View style={{ marginVertical: 5, marginLeft: 10 }}>
-                <RequirementText met={rules.hasUpper} text="At least one uppercase letter" />
-                <RequirementText met={rules.hasLower} text="At least one lowercase letter" />
-                <RequirementText met={rules.hasNumber} text="At least one number" />
-                <RequirementText met={rules.hasSpecial} text="At least one special character" />
-                <RequirementText met={rules.hasLength} text="Minimum 8 characters" />
-              </View>
+              {showRequirements && (
+                <View style={{ marginVertical: 5, marginLeft: 10 }}>
+                  <RequirementText met={rules.hasUpper} text="At least one uppercase letter" />
+                  <RequirementText met={rules.hasLower} text="At least one lowercase letter" />
+                  <RequirementText met={rules.hasNumber} text="At least one number" />
+                  <RequirementText met={rules.hasSpecial} text="At least one special character" />
+                  <RequirementText met={rules.hasLength} text="Minimum 8 characters" />
+                </View>
+              )}
 
               <TextInput
                 style={styles.input}
@@ -135,11 +134,13 @@ export default function Signup({ navigation }) {
                 secureTextEntry
                 value={values.confirmPassword}
                 onBlur={handleBlur('confirmPassword')}
+                onFocus={() => setConfirmPassFocused(true)}
                 onChangeText={handleChange('confirmPassword')}
               />
               {touched.confirmPassword && errors.confirmPassword && (
                 <Text style={styles.errorText}>*{errors.confirmPassword}</Text>
               )}
+
               <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                 <Text style={styles.buttonText}>Signup</Text>
               </TouchableOpacity>

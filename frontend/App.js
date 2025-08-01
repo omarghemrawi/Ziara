@@ -40,7 +40,7 @@ import HelpSupportScreen   from './src/screens/Profile/HelpSupportScreen';
 import PrivacyPolicyScreen from './src/screens/Profile/PrivacyPolicyScreen';
 
 import NearbyScreen           from './src/screens/nearby/NearbyScreen';
-import PopularFoodsScreen     from './src/screens/generalInformation/PopularFoodsScreen';
+
 import PopularPlacesScreen    from './src/screens/generalInformation/PopularPlacesScreen';
 import ChatScreen             from './src/screens/AiSupport/ChatScreen';
 import PlaceDetailScreen      from './src/screens/Places/PlaceDetailScreen';
