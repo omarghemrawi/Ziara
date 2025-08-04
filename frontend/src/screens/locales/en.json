@@ -1,5 +1,28 @@
 {
   "welcome": "Welcome",
   "select_language": "Select Language",
-   "languages": "Languages"
+   "languages": "Languages",
+     "language_english": "English",
+  "language_arabic": "Arabic",
+    "how_to_use": "How to Use",
+  "help_and_support": "Help and Support",
+  "privacy_policy": "Privacy Policy",
+   "settings": "Settings",
+     "light_mode": "Light Mode",
+  "dark_mode": "Dark Mode",
+  "your_reviews": "Your Reviews",
+   "joined_in": "Joined in {{year}}",
+    "profile": "Profile",
+      "edit_profile": "Edit Profile",
+  "name": "Name",
+  "about_you": "About You",
+  "save": "Save Edit",
+  "edit": "Edit",
+    "step1": "📱 Open the app and create your account or log in.",
+  "step2": "🧭 Use the bottom tabs to navigate easily through features.",
+  "step3": "🔍 Search for places to explore new locations.",
+  "step4": "⭐ Tap on a place to view details and save it to favorites.",
+  "step5": "🌗 Switch between dark and light mode in Settings.",
+  "step6": "💬 Contact support for help from the Settings page."
+
 }

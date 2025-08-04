@@ -5,7 +5,8 @@ import I18n from '../locales/i18n';
 export const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState(I18n.locale);
+ 
+   const [language, setLanguage] = useState('en');
 
   useEffect(() => {
     const loadLanguage = async () => {
