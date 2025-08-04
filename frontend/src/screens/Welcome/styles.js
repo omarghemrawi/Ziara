@@ -19,8 +19,14 @@ export default StyleSheet.create({
 
   },
   skipButton:{
- marginTop:20,
+ marginTop:70,
   
+  },
+    text: {
+    fontSize: 86,
+    color: '#333',
+    fontFamily: 'RampartOne-Regular',
+    textAlign:'center'
   },
   title: {
     fontSize: 28,

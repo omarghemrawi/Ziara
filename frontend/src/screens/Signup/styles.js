@@ -37,7 +37,9 @@ bottom:10,
   },
   req:{
 position:'relative',
-right:80,
+right:10,
+bottom:10,
+
   },
   subtitle: {
     marginTop: 8,

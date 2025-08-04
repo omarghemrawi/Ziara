@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     left: 20,
     zIndex: 1,
     marginTop: 10,
+  
   },
   title: {
     fontSize: 18,
@@ -197,10 +198,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   button: {
-    backgroundColor: 'yellow',
+    backgroundColor: '#FAC75C',
     width: 100,
     textAlign: 'center',
     padding: 10,
     margin: 10,
+    borderRadius:30,
+      color:'white',
+      
   },
 });

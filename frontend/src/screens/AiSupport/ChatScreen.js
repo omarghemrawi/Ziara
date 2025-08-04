@@ -38,7 +38,7 @@ setInputText('');
 try {
  // Make sure this IP address is accessible from your mobile device/emulator
 // If running on a real device, 127.0.0.1 won't work. Use your computer's actual IP address (e.g., 192.168.1.X)
- const response = await fetch('http://192.168.0.103:5000/chat', { // THIS IS YOUR FLASK BACKEND URL
+ const response = await fetch('http://192.168.0.103:8000/chat', { // THIS IS YOUR FLASK BACKEND URL
  method: 'POST',
  headers: {
 'Content-Type': 'application/json',

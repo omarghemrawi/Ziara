@@ -22,6 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import i18n from '../locales/i18n';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -64,9 +65,12 @@ export default function Home() {
 
   const getData = async (searchTerm = '') => {
     try {
-      const res = await axios.get('http://10.0.2.2:5000/place/all/places', {
-        params: { city: searchTerm },
-      });
+      const res = await axios.get(
+        'http://192.168.0.103:5000/place/all/places',
+        {
+          params: { city: searchTerm },
+        },
+      );
       if (res.data.places) {
         dispatch({ type: 'SET_PLACES', payload: res.data.places });
       } else {
@@ -95,7 +99,7 @@ export default function Home() {
 
       {/* Header Text */}
       <Text style={[styles.headerText, { color: theme.text }]}>
-        Find Your Destination
+        {i18n.t('findYourDestination')}
       </Text>
 
       {/* Horizontal Scroll Section */}
@@ -106,16 +110,16 @@ export default function Home() {
         contentContainerStyle={styles.horizontalContent}
       >
         <OptionBox
-          label="Nearby"
+          labelKey="nearby"
           image={require('../../assets/images/map.png')}
         />
         <OptionBox
-          label="Popular Foods"
+          labelKey="popularFoods"
           image={require('../../assets/images/Hummus.png')}
           isBrown
         />
         <OptionBox
-          label="Popular Places"
+          labelKey="popularPlaces"
           image={require('../../assets/images/window1.png')}
         />
       </ScrollView>
@@ -126,27 +130,27 @@ export default function Home() {
         style={styles.verticalScroll}
       >
         <DetailBox
-          label="Touristic Places"
+          labelKey="touristicPlaces"
           image={require('../../assets/images/touristicPlaces.png')}
         />
         <DetailBox
-          label="Religious Places"
           image={require('../../assets/images/religious.png')}
+          labelKey="religiousPlaces"
           isBrown
           imageStyle={{ width: 200, height: 200 }}
         />
         <DetailBox
-          label="Restaurants"
+          labelKey="restaurants"
           image={require('../../assets/images/pizza.png')}
         />
         <DetailBox
-          label="Activity "
+          labelKey="activity"
           image={require('../../assets/images/activity.png')}
           isBrown
           imageStyle={{ width: 130, height: 130, marginLeft: 30 }}
         />
         <DetailBox
-          label="Hotels"
+          labelKey="hotels"
           image={require('../../assets/images/hotel.png')}
           imageStyle={{ width: 130, height: 130, marginLeft: 30 }}
         />
@@ -156,45 +160,45 @@ export default function Home() {
 }
 
 // Small horizontal square box
-const OptionBox = ({ label, image, isBrown }) => {
+const OptionBox = ({ labelKey, image, isBrown }) => {
   const navigation = useNavigation();
 
   // map label → screen name
   const screenMap = {
-    NearBy: 'NearBy',
-    'Popular Foods': 'PopularFoods',
-    'Popular Places': 'PopularPlaces',
+    nearby: 'NearBy',
+    popularFoods: 'PopularFoods',
+    popularPlaces: 'PopularPlaces',
   };
 
   return (
     <TouchableOpacity
       onPress={() => {
-        const screen = screenMap[label];
-        if (screen) navigation.navigate(`${screen}`);
-        else console.warn(`No screen for ${label}`);
+        const screen = screenMap[labelKey];
+        if (screen) navigation.navigate(screen);
+        else console.warn(`No screen for ${labelKey}`);
       }}
       style={[styles.optionBox, isBrown && styles.brownBox]}
     >
       <Image source={image} style={styles.optionImage} />
-      <Text style={styles.optionText}>{label}</Text>
+      <Text style={styles.optionText}>{i18n.t(labelKey)}</Text>
     </TouchableOpacity>
   );
 };
 
 // Big vertical box
-const DetailBox = ({ label, image, isBrown, imageStyle }) => {
+const DetailBox = ({ labelKey, image, isBrown, imageStyle }) => {
   const navigation = useNavigation();
   const { theme } = useTheme();
 
   const screenMap = {
-    'Touristic Places': 'TouristicPlaces',
-    'Religious Places': 'ReligiousPlaces',
-    Restaurants: 'Restaurants',
-    'Activity ': 'Activity',
-    Hotels: 'Hotels',
+    touristicPlaces: 'TouristicPlaces',
+    religiousPlaces: 'ReligiousPlaces',
+    restaurants: 'Restaurants',
+    activity: 'Activity',
+    hotels: 'Hotels',
   };
 
-  const screenName = screenMap[label];
+  const screenName = screenMap[labelKey];
 
   return (
     <TouchableOpacity
@@ -202,7 +206,7 @@ const DetailBox = ({ label, image, isBrown, imageStyle }) => {
         if (screenName) {
           navigation.navigate(screenName);
         } else {
-          console.warn(`No screen found for label: ${label}`);
+          console.warn(`No screen found for labelKey: ${labelKey}`);
         }
       }}
       style={[styles.detailBox, isBrown && styles.brownBox]}
@@ -211,11 +215,11 @@ const DetailBox = ({ label, image, isBrown, imageStyle }) => {
       <Text
         style={[
           styles.detailText,
-          label === 'Restaurants' && { marginLeft: 200 },
+          labelKey === 'Restaurants' && { marginLeft: 200 },
           { color: theme.subtitle1 },
         ]}
       >
-        {label}
+        {i18n.t(labelKey)}
       </Text>
       <EvilIcons
         name="chevron-right"

@@ -59,6 +59,13 @@ export default StyleSheet.create({
     position:'relative',
     left:12,
   },
+        errorText2:{
+fontSize:10,
+color:'red',
+position:'relative',
+right:110,
+bottom:10,
+  },
   button: {
     width: width * 0.9,
     height: 50,

@@ -18,6 +18,46 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const { theme } = useTheme();
   const user = useSelector(state => state.user.user);
+  //dummy data for reviews
+  user.reviews = [
+  {
+    placeName: "Raouche Rock",
+    comment: "Amazing view and clean place!",
+    rating: 5,
+    photoUrl: "https://example.com/raouche.jpg"
+  },
+    {
+    placeName: "Raouche Rock",
+    comment: "Amazing view and clean place!",
+    rating: 5,
+    photoUrl: "https://example.com/raouche.jpg"
+  },
+    {
+    placeName: "Raouche Rock",
+    comment: "Amazing view and clean place!",
+    rating: 5,
+    photoUrl: "https://example.com/raouche.jpg"
+  },
+  {
+    placeName: "Beirut Souks",
+    comment: "Nice shops but a bit crowded.",
+    rating: 3,
+    photoUrl: null
+  },
+   {
+    placeName: "Beirut Souks",
+    comment: "Nice shops but a bit crowded.",
+    rating: 3,
+    photoUrl: null
+  },
+   {
+    placeName: "Beirut Souks",
+    comment: "Nice shops but a bit crowded.",
+    rating: 3,
+    photoUrl: null
+  }
+];
+
   console.log(user);
   return (
     <ScrollView
@@ -70,35 +110,56 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Photos Section */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: theme.text }]}>
-          0 photos
-        </Text>
-        <Text style={[styles.sectionSubtitle, { color: theme.text }]}>
-          You have no photos yet
-        </Text>
-        <TouchableOpacity style={[styles.button, { borderColor: theme.text }]}>
-          <Text style={[styles.buttonText, { color: theme.text }]}>
-            Upload a Photo
-          </Text>
-        </TouchableOpacity>
-      </View>
+     
+{/* User Reviews Section */}
+<View style={{ marginBottom: 30 }}>
+  <Text style={[styles.sectionTitle, { color: theme.text, marginBottom: 10 }]}>
+    Your Reviews
+  </Text>
 
-      {/* Reviews Section */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: theme.text }]}>
-          0 reviews
-        </Text>
-        <Text style={[styles.sectionSubtitle, { color: theme.text }]}>
-          You have no reviews yet
-        </Text>
-        <TouchableOpacity style={[styles.button, { borderColor: theme.text }]}>
-          <Text style={[styles.buttonText, { color: theme.text }]}>
-            Write a review
+  {/* Example Review Item */}
+    <ScrollView
+    style={[styles.reviewTextContainer,{ maxHeight: 300 }]} // Adjust height as needed
+    nestedScrollEnabled={true}
+    showsVerticalScrollIndicator={false}
+  >
+    {user.reviews.map((review, index) => (
+      <View key={index} style={styles.reviewCard}>
+        {review.photoUrl && (
+          <Image
+            source={{ uri: review.photoUrl }}
+            style={styles.reviewImage}
+          />
+        )}
+        <View style={styles.reviewTextContainer}>
+          <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
+            {review.placeName}
           </Text>
-        </TouchableOpacity>
+            <View style={styles.starContainer}>
+            {[...Array(review.rating)].map((_, i) => (
+              <FontAwesome key={i} name="star" size={16} color="#FFD700" />
+            ))}
+          </View>
+          <Text style={[styles.reviewText, { color: theme.text }]}>
+            {review.comment}
+          </Text>
+        
+        </View>
       </View>
+    ))}
+  </ScrollView>
+  </View>
+{/* <TouchableOpacity
+  onPress={() => navigation.navigate('AllReviewsScreen')}
+  style={[styles.button, { borderColor: theme.text, marginTop: 10 }]}
+>
+  <Text style={[styles.buttonText, { color: theme.text }]}>
+    See All Reviews
+  </Text>
+</TouchableOpacity> */}
+
+
+   
     </ScrollView>
   );
 }
@@ -177,4 +238,36 @@ const styles = StyleSheet.create({
   user: {
     marginLeft: 15,
   },
+  reviewCard: {
+  flexDirection: 'row',
+  marginBottom: 20,
+  backgroundColor: '#f0f0f0',
+  borderRadius: 10,
+  padding: 10,
+},
+reviewImage: {
+  width: 80,
+  height: 80,
+  borderRadius: 10,
+  marginRight: 10,
+  backgroundColor: '#ccc',
+},
+reviewTextContainer: {
+  flex: 1,
+},
+reviewPlaceName: {
+  fontWeight: 'bold',
+  fontSize: 16,
+  marginBottom: 4,
+},
+reviewText: {
+  fontSize: 14,
+  marginBottom: 4,
+  marginTop:10,
+},
+starContainer: {
+  flexDirection: 'row',
+},
+
+
 });

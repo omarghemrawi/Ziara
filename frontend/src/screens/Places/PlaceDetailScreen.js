@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
+  Button,
   TextInput,
 } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -32,6 +34,8 @@ export default function PlaceDetailScreen() {
   const data = useSelector(state => state.places[serviceType]);
   const user = useSelector(state => state.user.user);
   const dispatch = useDispatch();
+     const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
 
   const place = data.find(item => item._id === id);
 
@@ -40,6 +44,7 @@ export default function PlaceDetailScreen() {
   const handleFavouriteToggle = async () => {
     const newValue = !isFavourite;
     setIsFavourite(newValue);
+   
 
     try {
       if (newValue) {
@@ -96,7 +101,7 @@ export default function PlaceDetailScreen() {
       }
 
       // Submit review data
-      const res = await axios.post('http://10.0.2.2:5000/reviews', {
+      const res = await axios.post('http:// 192.168.0.103:5000/reviews', {
         rate: selectedStar,
         review: reviewText,
         image: imageUrl || null,
@@ -133,7 +138,7 @@ export default function PlaceDetailScreen() {
       <ScrollView style={styles.container}>
         <View style={styles.headerTitleRow}>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <Entypo name="chevron-left" size={34} color="#000" />
+            <Entypo name="chevron-left" size={20} color="#000" />
           </TouchableOpacity>
           <Text style={styles.title}>{place.businessName}</Text>
         </View>
@@ -153,16 +158,17 @@ export default function PlaceDetailScreen() {
             <Text style={styles.mapButtonText}>View on map</Text>
           </TouchableOpacity>
         </View>
-
+<ScrollView  horizontal={true} showsHorizontalScrollIndicator={false}>
         <View style={styles.galleryRow}>
           {place.referenceImages.map((img, index) => (
-            <Image
+            <Image 
               key={index}
               source={{ uri: img }}
               style={styles.galleryImage}
             />
           ))}
         </View>
+        </ScrollView>
 
         <Text style={styles.sectionTitle}>Description</Text>
 
@@ -269,12 +275,25 @@ export default function PlaceDetailScreen() {
             )}
 
             <Text style={styles.label}>When did you visit?</Text>
-            <TextInput
-              style={[styles.modalInput, { marginBottom: 0 }]}
-              placeholder="Enter visit date (e.g. July 2025)"
-              value={selectedDate}
-              onChangeText={setSelectedDate}
-            />
+                 <TouchableOpacity
+              style={styles.uploadButton}
+              onPress={() => setOpen(true)}
+            >
+              <Text style={styles.uploadText}>Date {'>'}</Text>
+    
+            </TouchableOpacity>  
+      <DatePicker
+        modal
+        open={open}
+        date={date}
+        onConfirm={(date) => {
+          setOpen(false)
+          setDate(date)
+        }}
+        onCancel={() => {
+          setOpen(false)
+        }}
+      />
 
             <View style={styles.buttonRow}>
               <TouchableOpacity style={styles.saveButton}>
@@ -301,9 +320,9 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   title: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 18,
+    marginBottom: 10,
     marginLeft: 20,
   },
   headerImageContainer: {
@@ -407,7 +426,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 20,
   },
   stars: {
     flexDirection: 'row',
@@ -453,8 +472,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 1,
   },
+   
   uploadText: {
     color: '#333',
+  },
+    uploadText1: {
+    color: '#333',
+    padding:10,
   },
   previewImage: {
     width: '100%',

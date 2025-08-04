@@ -29,14 +29,14 @@ import HowToUseScreen from './src/screens/Profile/HowToUseScreen';
 import HelpSupportScreen from './src/screens/Profile/HelpSupportScreen';
 import PrivacyPolicyScreen from './src/screens/Profile/PrivacyPolicyScreen';
 
-import NearbyScreen from './src/screens/nearby/NearbyScreen';
-import PopularFoodsScreen from './src/screens/generalInformation/PopularFoodsScreen';
-import PopularPlacesScreen from './src/screens/generalInformation/PopularPlacesScreen';
-import ChatScreen from './src/screens/AiSupport/ChatScreen';
-import PlaceDetailScreen from './src/screens/Places/PlaceDetailScreen';
-import Favourites from './src/screens/Favorites/Favorites';
-import Hotels from './src/screens/Places/Hotels';
-import ActivityPlaces from './src/screens/Places/ActivityPlaces';
+import NearbyScreen           from './src/screens/nearby/NearbyScreen';
+import PopularFoodsScreen     from './src/screens/generalInformation/PopularFoodsScreen';
+import PopularPlacesScreen    from './src/screens/generalInformation/PopularPlacesScreen';
+import ChatScreen             from './src/screens/AiSupport/ChatScreen';
+import PlaceDetailScreen      from './src/screens/Places/PlaceDetailScreen';
+import Favourites            from './src/screens/Favorites/Favorites';
+import Hotels                from './src/screens/Places/Hotels';
+import ActivityPlaces        from './src/screens/Places/ActivityPlaces';
 import MapScreen from './src/screens/Map/Map';
 
 const Stack = createNativeStackNavigator();

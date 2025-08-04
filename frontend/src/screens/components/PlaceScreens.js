@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme } from '../Theme/Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -26,6 +27,29 @@ const PlacesSection = ({
   const navigation = useNavigation();
 
   const { theme } = useTheme();
+  //fill the stars depending on the rate of the place
+  const renderStars = (rating) => {
+  const stars = [];
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const totalStars = 5;
+
+  for (let i = 0; i < fullStars; i++) {
+    stars.push(<Ionicons key={`full-${i}`} name="star" size={16} color="#FAC75C" />);
+  }
+
+  if (hasHalfStar) {
+    stars.push(<Ionicons key="half" name="star-half" size={16} color="#FAC75C" />);
+  }
+
+  const remaining = totalStars - stars.length;
+  for (let i = 0; i < remaining; i++) {
+    stars.push(<Ionicons key={`empty-${i}`} name="star-outline" size={16} color="#FAC75C" />);
+  }
+
+  return stars;
+};
+
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -80,6 +104,10 @@ const PlacesSection = ({
               resizeMode="cover"
             />
             <Text style={styles.cardTitle}>{item.businessName}</Text>
+<View style={styles.ratingContainer}>
+  {renderStars(item.rate)}
+  <Text style={styles.ratingText}> {item.rate} / 5</Text>
+</View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -159,7 +187,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 15,
     overflow: 'hidden',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFAFA',
   },
   imageItem: {
     width: '100%',
@@ -171,9 +199,22 @@ const styles = StyleSheet.create({
     padding: 10,
     textAlign: 'center',
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 13,
     color: '#333',
   },
+  ratingContainer: {
+  marginTop: 4,
+  flexDirection: 'row',
+  alignItems: 'center',
+ marginLeft:30,
+},
+ratingText: {
+  fontSize: 10,
+  marginLeft: 5,
+  color: '#555',
+
+},
+
 });
 
 export default PlacesSection;
