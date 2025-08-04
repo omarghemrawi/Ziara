@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import {
   SafeAreaView,
   View,
@@ -12,45 +12,57 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import I18n from '../locales/i18n'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LanguageContext } from '../locales/LanguageContext';
 
 const languages = [
   { code: 'en', label: 'English' },
   { code: 'ar', label: 'العربية' },
 ];
 
+
 const LanguagesScreen = () => {
+  const { language, changeLanguage } = useContext(LanguageContext);
   const { theme } = useTheme();
   const navigation = useNavigation();
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
+  const [selectedLanguage, setSelectedLanguage] = useState(language || 'en');
 
 
-  useEffect(() => {
-    const loadLanguage = async () => {
-      const savedLang = await AsyncStorage.getItem('selectedLanguage');
-      if (savedLang) {
-        setSelectedLanguage(savedLang);
-        I18n.locale = savedLang;
-      }
-    };
-    loadLanguage();
-  }, []);
+  // useEffect(() => {
+  //   // const loadLanguage = async () => {
+  //   //   const savedLang = await AsyncStorage.getItem('selectedLanguage');
+  //   //   if (savedLang) {
+  //   //     setSelectedLanguage(savedLang);
+  //   //     I18n.locale = savedLang;
+  //   //   }
+  //   // };
+  //   // loadLanguage();
+  //   setSelectedLanguage(language);
+  // }, []);
+    useEffect(() => {
+    setSelectedLanguage(language); // update selected language when context language changes
+  }, [language]);
 
 
   const selectLanguage = async (code) => {
     setSelectedLanguage(code);
+      await changeLanguage(code);
     await AsyncStorage.setItem('selectedLanguage', code);
     I18n.locale = code;
   };
 
   const renderItem = ({ item }) => {
-    const isSelected = item.code === selectedLanguage;
+const isSelected = item.code === language;
+
     return (
       <TouchableOpacity
         style={[
           styles.item,
           { backgroundColor: isSelected ? theme.icon : theme.card },
         ]}
-        onPress={() => selectLanguage(item.code)}
+      onPress={() => {
+  selectLanguage(item.code);
+ // alert(item.code);
+}}
       >
         <Text style={[styles.label, { color: theme.text }]}>{item.label}</Text>
         {isSelected && <Icon name="checkmark" size={20} color="#fff" />}

@@ -1,4 +1,4 @@
-import React from 'react';
+import {useContext} from 'react';
 import {
   SafeAreaView,
   View,
@@ -11,15 +11,21 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
+import i18n from '../locales/i18n';
+import { useLanguage } from '../locales/LanguageContext';
+
+
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
   const { isLightMode, toggleTheme, theme } = useTheme();
 
+const { language } = useLanguage(); 
+console.log(language);
   const settingsItems = [
     {
       key: 'languages',
-      label: 'Languages',
+      label: i18n.t('welcome'),
       icon: 'language',
       screen: 'Languages',
     },
