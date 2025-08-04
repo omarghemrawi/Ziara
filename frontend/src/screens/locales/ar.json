@@ -53,6 +53,11 @@
   "popularPlaces": "أماكن مشهورة",
    "NearBy": "بالقرب منك",
   "PopularFoods": "أطعمة شائعة",
-  "PopularPlaces": "أماكن مشهورة"
+  "PopularPlaces": "أماكن مشهورة",
+   "home": "الرئيسية",
+  "search": "بحث",
+  "favorites": "المفضلة",
+  "shops": "المتاجر",
+  "aiSupport": "الدعم الذكي"
   
 }

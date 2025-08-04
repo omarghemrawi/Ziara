@@ -48,12 +48,12 @@ export default function PlaceDetailScreen() {
 
     try {
       if (newValue) {
-        await axios.post('http://10.0.2.2:5000/place/favorite/add', {
+        await axios.post('http://192.168.0.103:5000/place/favorite/add', {
           placeId: id,
           userId: user._id,
         });
       } else {
-        await axios.post('http://10.0.2.2:5000/place/favorite/delete', {
+        await axios.post('http://192.168.0.103:5000/place/favorite/delete', {
           placeId: id,
           userId: user._id,
         });

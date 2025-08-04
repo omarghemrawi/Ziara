@@ -13,6 +13,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
 import { useSelector } from 'react-redux';
+import i18n from '../locales/i18n';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -59,6 +60,7 @@ export default function ProfileScreen() {
 ];
 
   console.log(user);
+   const year = new Date(user.createdAt).getFullYear();
   return (
     <ScrollView
       contentContainerStyle={[
@@ -71,7 +73,7 @@ export default function ProfileScreen() {
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <Entypo name="chevron-left" size={24} color={theme.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: theme.text }]}>Profile</Text>
+        <Text style={[styles.headerTitle, { color: theme.text }]}>{i18n.t('profile')}</Text>
         <View style={[styles.headerIcons, { color: theme.text }]}>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <MaterialIcons
@@ -105,7 +107,8 @@ export default function ProfileScreen() {
             {user.username}
           </Text>
           <Text style={[styles.joinedText, , { color: theme.text }]}>
-            Joined in {new Date(user.createdAt).getFullYear()}
+          
+            {i18n.t('joined_in', { year })}
           </Text>
         </View>
       </View>
@@ -114,7 +117,7 @@ export default function ProfileScreen() {
 {/* User Reviews Section */}
 <View style={{ marginBottom: 30 }}>
   <Text style={[styles.sectionTitle, { color: theme.text, marginBottom: 10 }]}>
-    Your Reviews
+   {i18n.t('your_reviews')}
   </Text>
 
   {/* Example Review Item */}

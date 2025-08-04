@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
+import i18n from '../locales/i18n';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -21,7 +22,7 @@ const Search = () => {
 
   return (
     <PlacesSection
-      title="Search"
+      title={i18n.t('search')}
       headerColor="#9a370e"
       headerImage={require('../../assets/images/Search.png')}
       data={data}

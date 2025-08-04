@@ -13,11 +13,9 @@ import { useNavigation } from '@react-navigation/native';
 import I18n from '../locales/i18n'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LanguageContext } from '../locales/LanguageContext';
+import i18n from '../locales/i18n';
 
-const languages = [
-  { code: 'en', label: 'English' },
-  { code: 'ar', label: 'العربية' },
-];
+
 
 
 const LanguagesScreen = () => {
@@ -25,6 +23,10 @@ const LanguagesScreen = () => {
   const { theme } = useTheme();
   const navigation = useNavigation();
   const [selectedLanguage, setSelectedLanguage] = useState(language || 'en');
+  const languages = [
+  { code: 'en', label: i18n.t('language_english') },
+  { code: 'ar', label:  i18n.t('language_arabic')  },
+];
 
 
   // useEffect(() => {
@@ -76,7 +78,7 @@ const isSelected = item.code === language;
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="chevron-back" size={28} color={theme.text} />
         </TouchableOpacity>
-        <Text style={[styles.title, { color: theme.text }]}>Languages</Text>
+        <Text style={[styles.title, { color: theme.text }]}>{i18n.t('languages')}</Text>
       </View>
 
       <FlatList

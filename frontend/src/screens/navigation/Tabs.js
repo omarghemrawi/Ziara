@@ -12,6 +12,7 @@ import Favorites from '../Favorites/Favorites';
 import Shops from '../Shops/Shops';
 import AiSupport from '../AiSupport/aiSupport';
 import { useTheme } from '../Theme/Theme';
+import i18n from '../locales/i18n';
 
 const Tab = createBottomTabNavigator();
 
@@ -50,19 +51,19 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
         const color = isFocused ? activeColor : inactiveColor;
 
         switch (route.name) {
-          case 'Home':
+          case i18n.t('home'):
             icon = <Ionicons name="home-outline" size={24} color={color} />;
             break;
-          case 'Search':
+          case i18n.t('search'):
             icon = <Ionicons name="search-outline" size={24} color={color} />;
             break;
-          case 'Favorites':
+          case i18n.t('favorites'):
             icon = <Ionicons name="heart-outline" size={24} color={color} />;
             break;
-          case 'Shops':
+          case i18n.t('shops'):
             icon = <Fontisto name="shopping-store" size={24} color={color} />;
             break;
-          case 'AI Support':
+          case i18n.t('aiSupport'):
             icon = <MaterialDesignIcons name="robot-outline" size={24} color={color} />;
             break;
           default:
@@ -99,11 +100,11 @@ export default function MyTabs() {
       tabBar={(props) => <CustomTabBar {...props} />}
       
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Search" component={Search} />
-      <Tab.Screen name="Favorites" component={Favorites} />
-      <Tab.Screen name="Shops" component={Shops} />
-      <Tab.Screen name="AI Support" component={AiSupport} />
+      <Tab.Screen name={i18n.t('home')} component={Home} />
+      <Tab.Screen name={i18n.t('search')}  component={Search} />
+      <Tab.Screen name={i18n.t('favorites')}  component={Favorites} />
+      <Tab.Screen name={i18n.t('shops')}  component={Shops} />
+      <Tab.Screen name={i18n.t('aiSupport')}  component={AiSupport} />
     </Tab.Navigator>
   );
 }

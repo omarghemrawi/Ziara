@@ -1,11 +1,15 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import {useEffect,useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LanguageProvider } from './src/screens/locales/LanguageContext';
 import { ThemeProvider } from './src/screens/Theme/Theme';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
+import { I18n } from 'i18n-js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 // Screens
 import OnboardingScreen from './src/screens/Onboarding/OnboardingScreen';
@@ -38,11 +42,25 @@ import Favourites            from './src/screens/Favorites/Favorites';
 import Hotels                from './src/screens/Places/Hotels';
 import ActivityPlaces        from './src/screens/Places/ActivityPlaces';
 import MapScreen from './src/screens/Map/Map';
+import AllReviewsScreen from './src/screens/Reviews/Reviews';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+    const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const loadLanguage = async () => {
+      const savedLang = await AsyncStorage.getItem('selectedLanguage');
+      if (savedLang) {
+        I18n.locale = savedLang;
+      }
+      setIsReady(true);
+    };
+    loadLanguage();
+  }, []);
   return (
+       <LanguageProvider>
     <Provider store={store}>
       <ThemeProvider>
         <NavigationContainer>
@@ -50,6 +68,7 @@ export default function App() {
             initialRouteName="Onboarding"
             screenOptions={{ headerShown: false }}
           >
+
             {/* Onboarding & Splash */}
             <Stack.Screen name="Onboarding" component={OnboardingScreen} />
             <Stack.Screen name="Launching" component={LaunchingScreen} />
@@ -87,7 +106,8 @@ export default function App() {
             {/* Others */}
             <Stack.Screen name="Map" component={MapScreen} />
             <Stack.Screen name="NearBy" component={NearbyScreen} />
-            {/* <Stack.Screen name="PopularFoods" component={PopularFoodsScreen} /> */}
+            <Stack.Screen name="PopularFoods" component={PopularFoodsScreen} /> 
+             <Stack.Screen name="AllReviewsScreen" component={AllReviewsScreen} /> 
             <Stack.Screen
               name="PopularPlaces"
               component={PopularPlacesScreen}
@@ -101,5 +121,6 @@ export default function App() {
         </NavigationContainer>
       </ThemeProvider>
     </Provider>
+    </LanguageProvider>
   );
 }

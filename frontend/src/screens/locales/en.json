@@ -52,6 +52,11 @@
   "popularPlaces": "Popular Places",
     "NearBy": "Nearby",
   "PopularFoods": "Popular Foods",
-  "PopularPlaces": "Popular Places"
+  "PopularPlaces": "Popular Places",
+   "home": "Home",
+  "search": "Search",
+  "favorites": "Favorites",
+  "shops": "Shops",
+  "aiSupport": "AI Support"
 
 }
