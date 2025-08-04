@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,13 +10,27 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function Visited() {
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(false);
-   const { theme } = useTheme();
+  const [visitedPlaces, setVisitedPLaces] = useState([]);
+  const { theme } = useTheme();
 
+  const user = useSelector(state => state.user.user);
+  const places = useSelector(state => state.places.all);
+  const dispatch = useDispatch();
 
+  const getVisitedPlaces = () => {
+    setVisitedPLaces(
+      places.filter(place => user.visitedPlaces.includes(place._id)),
+    );
+  };
+
+  useEffect(() => {
+    getVisitedPlaces();
+  }, [user.visitedPlaces]);
 
   return (
     <ScrollView style={styles.container}>
@@ -24,7 +38,6 @@ export default function Visited() {
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
           <Text style={styles.title}>Visited</Text>
-  
         </View>
 
         <Image
@@ -34,17 +47,40 @@ export default function Visited() {
       </View>
 
       {/* Place Item */}
-      <View style={[styles.grid,{backgroundColor:theme.background}]}>
-        <Image
-          style={styles.imageItem}
-          source={require('../../assets/images/jbeil.jpeg')}
-        />
+      {visitedPlaces.length === 0 ? (
+        <Text
+          style={{
+            padding: 20,
+            fontSize: 16,
+            color: theme.text,
+            textAlign: 'center',
+            marginTop: 20,
+          }}
+        >
+          No visited added yet.
+        </Text>
+      ) : (
+        visitedPlaces.map((place, index) => (
+          <View
+            key={index}
+            style={[styles.grid, { backgroundColor: theme.background }]}
+          >
+            <Image
+              style={styles.imageItem}
+              source={{ uri: place.profileImage }}
+            />
 
-        <View style={styles.textContainer}>
-          <Text style={[styles.placeName,{color:theme.text}]}>Al-Amin Mosque</Text>
-          <Text style={[styles.placeLocation,{color:theme.text}]}>Beirut</Text>
-        </View>
-      </View>
+            <View style={styles.textContainer}>
+              <Text style={[styles.placeName, { color: theme.text }]}>
+                {place.businessName}
+              </Text>
+              <Text style={[styles.placeLocation, { color: theme.text }]}>
+                {place.city}
+              </Text>
+            </View>
+          </View>
+        ))
+      )}
     </ScrollView>
   );
 }

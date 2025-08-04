@@ -34,30 +34,41 @@ export default function Favourites() {
     setIdSelectedPlace(id);
     setModalVisible(true);
   };
-  //************************************************** */
 
   const handleMoveToVisited = async () => {
     try {
-      await axios.post('http://10.0.2.2:5000/place/visited/add', {
+      const res = await axios.post('http://10.0.2.2:5000/place/visited/add', {
         userId: user._id,
         place_id: idSelectedPlace,
       });
-
       dispatch(refreshUser(user._id));
+      getFavoritePLaces();
       setModalVisible(false);
     } catch (error) {
       console.log(error);
     }
   };
+  //************************************************** */
 
-  const handleDelete = () => {
-    favoritePlaces.splice(selectedPlaceIndex, 1);
+  const handleDelete = async () => {
+    try {
+      await axios.post('http://10.0.2.2:5000/place/favorite/delete', {
+        placeId: idSelectedPlace,
+        userId: user._id,
+      });
+      dispatch(refreshUser(user._id));
+      getFavoritePLaces();
+      setModalVisible(false);
+    } catch (error) {
+      console.log(error);
+    }
+
     setModalVisible(false);
   };
 
   useEffect(() => {
     getFavoritePLaces();
-  }, []);
+  }, [user.favoritePlaces]);
 
   return (
     <ScrollView

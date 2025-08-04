@@ -161,7 +161,7 @@ const OptionBox = ({ label, image, isBrown }) => {
 
   // map label → screen name
   const screenMap = {
-    Nearby: 'Nearby',
+    NearBy: 'NearBy',
     'Popular Foods': 'PopularFoods',
     'Popular Places': 'PopularPlaces',
   };
@@ -170,7 +170,7 @@ const OptionBox = ({ label, image, isBrown }) => {
     <TouchableOpacity
       onPress={() => {
         const screen = screenMap[label];
-        if (screen) navigation.navigate(screen);
+        if (screen) navigation.navigate(`${screen}`);
         else console.warn(`No screen for ${label}`);
       }}
       style={[styles.optionBox, isBrown && styles.brownBox]}
