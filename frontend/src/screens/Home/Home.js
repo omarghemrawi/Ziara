@@ -65,9 +65,12 @@ export default function Home() {
 
   const getData = async (searchTerm = '') => {
     try {
-      const res = await axios.get('http://192.168.0.103:5000/place/all/places', {
-        params: { city: searchTerm },
-      });
+      const res = await axios.get(
+        'http://192.168.0.103:5000/place/all/places',
+        {
+          params: { city: searchTerm },
+        },
+      );
       if (res.data.places) {
         dispatch({ type: 'SET_PLACES', payload: res.data.places });
       } else {
@@ -96,7 +99,7 @@ export default function Home() {
 
       {/* Header Text */}
       <Text style={[styles.headerText, { color: theme.text }]}>
-{i18n.t('findYourDestination')}
+        {i18n.t('findYourDestination')}
       </Text>
 
       {/* Horizontal Scroll Section */}
@@ -107,19 +110,16 @@ export default function Home() {
         contentContainerStyle={styles.horizontalContent}
       >
         <OptionBox
-          
-           labelKey="nearby"
+          labelKey="nearby"
           image={require('../../assets/images/map.png')}
         />
         <OptionBox
-         
-           labelKey="popularFoods"
+          labelKey="popularFoods"
           image={require('../../assets/images/Hummus.png')}
           isBrown
         />
         <OptionBox
-        
-           labelKey="popularPlaces"
+          labelKey="popularPlaces"
           image={require('../../assets/images/window1.png')}
         />
       </ScrollView>
@@ -130,33 +130,27 @@ export default function Home() {
         style={styles.verticalScroll}
       >
         <DetailBox
-      
-           labelKey="touristicPlaces"
+          labelKey="touristicPlaces"
           image={require('../../assets/images/touristicPlaces.png')}
         />
         <DetailBox
-
           image={require('../../assets/images/religious.png')}
-           labelKey="religiousPlaces"
+          labelKey="religiousPlaces"
           isBrown
           imageStyle={{ width: 200, height: 200 }}
         />
         <DetailBox
-        
           labelKey="restaurants"
           image={require('../../assets/images/pizza.png')}
         />
         <DetailBox
-         
           labelKey="activity"
-          
           image={require('../../assets/images/activity.png')}
           isBrown
           imageStyle={{ width: 130, height: 130, marginLeft: 30 }}
         />
         <DetailBox
-        
-          labelKey="hotels" 
+          labelKey="hotels"
           image={require('../../assets/images/hotel.png')}
           imageStyle={{ width: 130, height: 130, marginLeft: 30 }}
         />
@@ -172,15 +166,14 @@ const OptionBox = ({ labelKey, image, isBrown }) => {
   // map label → screen name
   const screenMap = {
     nearby: 'NearBy',
-     popularFoods: 'PopularFoods',
-       popularPlaces: 'PopularPlaces',
+    popularFoods: 'PopularFoods',
+    popularPlaces: 'PopularPlaces',
   };
-   
 
   return (
     <TouchableOpacity
       onPress={() => {
-       const screen = screenMap[labelKey];
+        const screen = screenMap[labelKey];
         if (screen) navigation.navigate(screen);
         else console.warn(`No screen for ${labelKey}`);
       }}
@@ -198,11 +191,11 @@ const DetailBox = ({ labelKey, image, isBrown, imageStyle }) => {
   const { theme } = useTheme();
 
   const screenMap = {
-      touristicPlaces: 'TouristicPlaces',
-      religiousPlaces: 'ReligiousPlaces',
+    touristicPlaces: 'TouristicPlaces',
+    religiousPlaces: 'ReligiousPlaces',
     restaurants: 'Restaurants',
-     activity: 'Activity',
-      hotels: 'Hotels',
+    activity: 'Activity',
+    hotels: 'Hotels',
   };
 
   const screenName = screenMap[labelKey];
@@ -210,7 +203,7 @@ const DetailBox = ({ labelKey, image, isBrown, imageStyle }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-             if (screenName) {
+        if (screenName) {
           navigation.navigate(screenName);
         } else {
           console.warn(`No screen found for labelKey: ${labelKey}`);
@@ -226,7 +219,7 @@ const DetailBox = ({ labelKey, image, isBrown, imageStyle }) => {
           { color: theme.subtitle1 },
         ]}
       >
-       {i18n.t(labelKey)}
+        {i18n.t(labelKey)}
       </Text>
       <EvilIcons
         name="chevron-right"

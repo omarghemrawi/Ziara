@@ -39,8 +39,10 @@ export default function EditProfileScreen({ navigation }) {
     }
     try {
       let imageUrl = '';
-      if (profileImage) {
+      if (profileImage !== null) {
         imageUrl = await uploadImageToCloudinary(profileImage);
+      } else {
+        imageUrl = user.profileImage;
       }
       const res = await axios.post('http://10.0.2.2:5000/user/edit-profile', {
         profileImage: imageUrl,

@@ -57,6 +57,14 @@
   "search": "Search",
   "favorites": "Favorites",
   "shops": "Shops",
-  "aiSupport": "AI Support"
+  "aiSupport": "AI Support",
+    "AIChatDescription": "Chat with our AI assistant for help and guidance.",
+    "OpenAIChat": "Open AI Chat",
+      "AISupport": "AI Support",
+       "AIIntroMessage": "Hello! I'm your AI guide for Lebanon. I can tell you about tourist places, religious sites, restaurants, and food in Lebanon. What would you like to know?",
+       "AskAboutLebanon": "Ask me about Lebanon...",
+       "ShopsAndSouvenirs": "Shops & Souvenirs",
+        "PopularLebaneseDishes": "Popular Lebanese Dishes"
+ 
 
 }

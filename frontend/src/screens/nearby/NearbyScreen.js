@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
+import i18n from '../locales/i18n';
 
 const dummyData = {
   touristic: [
@@ -60,7 +61,7 @@ export default function NearbyScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
-          <Text style={styles.title}>Nearby Places</Text>
+          <Text style={styles.title}>{i18n.t('nearby')}</Text>
         </View>
 
         {location && (

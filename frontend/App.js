@@ -106,8 +106,10 @@ export default function App() {
             {/* Others */}
             <Stack.Screen name="Map" component={MapScreen} />
             <Stack.Screen name="NearBy" component={NearbyScreen} />
+
             <Stack.Screen name="PopularFoods" component={PopularFoodsScreen} /> 
              <Stack.Screen name="AllReviewsScreen" component={AllReviewsScreen} /> 
+
             <Stack.Screen
               name="PopularPlaces"
               component={PopularPlacesScreen}

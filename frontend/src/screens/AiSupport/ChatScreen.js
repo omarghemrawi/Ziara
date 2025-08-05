@@ -11,10 +11,11 @@ Platform,
  ActivityIndicator, 
 } from 'react-native';
 import { useTheme } from '../Theme/Theme';
+import i18n from '../locales/i18n';
 
 const ChatScreen = () => {
 const [messages, setMessages] = useState([
- { id: '1', text: "Hello! I'm your AI guide for Lebanon. I can tell you about tourist places, religious sites, restaurants, and food in Lebanon. What would you like to know?", sender: 'ai' },
+ { id: '1', text:i18n.t('AIIntroMessage'), sender: 'ai' },
 ]); const [inputText, setInputText] = useState('');
  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
  const flatListRef = useRef(null);
@@ -89,7 +90,7 @@ const renderItem = ({ item }) => (
  <View style={styles.inputContainer}>
 <TextInput
 style={styles.textInput}
-placeholder="Ask me about Lebanon..."
+placeholder={i18n.t('AskAboutLebanon')}
 value={inputText}
  onChangeText={setInputText}
  onSubmitEditing={sendMessage} // Allows sending by pressing enter on keyboard
@@ -97,7 +98,7 @@ value={inputText}
 blurOnSubmit={false}
  />
  <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-<Text style={styles.sendButtonText}>Send</Text>
+<Text style={styles.sendButtonText}>{i18n.t('send')}</Text>
  </TouchableOpacity>
 </View>
  </KeyboardAvoidingView>

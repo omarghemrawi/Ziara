@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
+import i18n from '../locales/i18n';
 
 const ReligiousPlaces = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -21,7 +22,7 @@ const ReligiousPlaces = () => {
 
   return (
     <PlacesSection
-      title="Religious Places"
+      title={i18n.t('religiousPlaces')}
       headerColor="#9a370e"
       headerImage={require('../../assets/images/religious.png')}
       data={data}
