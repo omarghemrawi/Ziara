@@ -65,7 +65,25 @@
     "AIIntroMessage": "مرحبًا! أنا دليلك الذكي للبنان. يمكنني إخبارك عن الأماكن السياحية، المواقع الدينية، المطاعم، والطعام في لبنان. ماذا تود أن تعرف؟",
     "AskAboutLebanon": "اسألني عن لبنان...",
      "ShopsAndSouvenirs": "المتاجر والتذكارات",
-      "PopularLebaneseDishes": "الأطباق اللبنانية الشهيرة"
+   
+        "Description": "الوصف",
+  "AddToFavourite": "أضف إلى المفضلة",
+  "RatingAndReview": "التقييم والمراجعة",
+    "ViewOnMap": "عرض على الخريطة",
+      "UsersReviews": "مراجعات المستخدمين",
+        "LoadMoreReviews": "تحميل المزيد من المراجعات",
+          "YouAlsoVisited": "هل زرت هذا المكان أيضًا؟ اكتب مراجعتك",
+            "HowWouldYouRateYourExperience": "كيف تقيم تجربتك؟",
+             "WriteYourReview": "اكتب مراجعتك...",
+              "CharactersLimit": "/200 حرف",
+                "UploadPhotoOptional": "تحميل صورة (اختياري)",
+                  "Save": "حفظ",
+  "Submit": "إرسال",
+  "Upload": "تحميل",
+    "Visit Us": "زورونا"
+
+
+
  
   
 }
