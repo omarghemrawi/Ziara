@@ -1,11 +1,9 @@
 import User from "../models/user.model.js";
-import { Review } from "../models/review.model.js";
-import Client from "../models/client.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-// Status Code : 200 = OK , 201= created , 400= bad request (invalid input) , 401= Unauthorized (wrong credentials), 500 = internal server Error
-
+// ? Status Code : 200 = OK , 201= created , 400= bad request (invalid input) , 401= Unauthorized (wrong credentials), 500 = internal server Error
+// ?? Done
 export const userSignUp = async (req, res) => {
   try {
     const { email, password, username } = req.body;
@@ -53,7 +51,6 @@ export const userSignUp = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
-
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -98,112 +95,12 @@ export const userLogin = async (req, res) => {
       .json({ success: false, message: "Invalid Credentials" });
   }
 };
-
-
-// Done + should edit userId
-export const createReview = async (req, res) => {
+export const updateProfile = async (req, res) => {
   try {
-    const { placeId,userId, rate, review, date ,image } = req.body;
-    // const userId = req.user.id;
-
-    // Validate required fields
-    if (!placeId || !rate || !review || !userId || !date) {
-      return res
-        .status(400)
-        .json({ success: false, message: "All fields are required" });
-    }
-
-    // Create new review
-    const newReview = new Review({
-      placeId,
-      userId,
-      rate,
-      review,
-      image,
-      visitedDate: date ? new Date(date) : new Date(),
-    });
-
-    await newReview.save();
-
-    // Add review to user's reviews array
-    const user = await User.findById(userId);
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-    user.review.push(newReview._id);
-    await user.save();
-
-    const place = await Client.findById(placeId);
-    if (!place) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Place not found" });
-    }
-    place.reviews.push(newReview._id);
-    await place.save();
-
-    return res.status(201).json({
-      success: true,
-      message: "Review created successfully",
-      review: newReview,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
-};
-
-export const getUserReviews = async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const user = await User.findById(userId).populate("review");
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-    return res.status(200).json({
-      success: true,
-      reviews: user.review,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
-};
-
-export const getReviews = async (req, res) => {
-  try {
-    const reviews = await Review.find();
-    return res.status(200).json({
-      success: true,
-      reviews: reviews,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
-};
-
-export const getUser = async (req, res) => { 
-  const {id} = req.body;
-  try {
-    const user = await User.findById(id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.status(200).json(user);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-export const editProfile = async (req, res) => {
-  try {
-    const { userId, username, about, profileImage } = req.body;
+    const { userId, username, about, profile } = req.body;
 
     if (!userId) {
-      return res.status(400).json({ message: 'User ID is required.' });
+      return res.status(400).json({ message: "User ID is required." });
     }
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -211,22 +108,21 @@ export const editProfile = async (req, res) => {
       {
         username,
         about,
-        profileImage,
+        profile,
       },
       { new: true } // Return the updated document
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found.' });
+      return res.status(404).json({ message: "User not found." });
     }
 
     res.status(200).json({
-      message: 'Profile updated successfully.',
+      message: "Profile updated successfully.",
       user: updatedUser,
     });
-
   } catch (error) {
-    console.error('Edit profile error:', error);
-    res.status(500).json({ message: 'Server error. Please try again later.' });
+    console.error("Edit profile error:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
   }
 };

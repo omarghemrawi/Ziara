@@ -1,25 +1,33 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-import userRouter from "./routes/user.route.js";
-import placeRouter from "./routes/place.route.js";
-import connectCloudinary from "./config/cloudinary.js";
+import dotenv from "dotenv";
+import { connectCloudinary } from "./config/cloudinary.js";
+import userRouter from "./routes/users.route.js";
+import staticPlaceRouter from "./routes/staticPlace.route.js";
+import clientRouter from "./routes/clientplace.route.js";
+import favRouter from "./routes/favorite.route.js";
+import visitedRouter from "./routes/visited.route.js";
+import reviewRouter from "./routes/reviews.route.js";
 
 dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT ||5000;
-//Middleware
-app.use(express.json());
+const PORT = 5000;
+
 app.use(cors());
+app.use(express.json());
 
-app.use("/user", userRouter);
-app.use("/place", placeRouter);
+app.use("/api/user", userRouter);
+app.use("/api/client", clientRouter);
+app.use("/api/static", staticPlaceRouter);
+app.use("/api/favorite", favRouter);
+app.use("/api/visited", visitedRouter);
+app.use("/api/review", reviewRouter);
 
-//Start Server
 app.listen(PORT, () => {
-  connectCloudinary();
   connectDB();
-  console.log(`Server running at http://localhost:${PORT}`);
+  connectCloudinary();
+  console.log(`Server running on port ${PORT}`);
 });
+
+export default app;
