@@ -11,8 +11,9 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
+
 import { useTheme } from '../Theme/Theme';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const PlacesSection = ({
   title,
@@ -27,6 +28,7 @@ const PlacesSection = ({
 
   const { theme } = useTheme();
   //fill the stars depending on the rate of the place
+
   const renderStars = rating => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -112,10 +114,11 @@ const PlacesSection = ({
               style={styles.imageItem}
               resizeMode="cover"
             />
-            <Text style={styles.cardTitle}>{item.name}</Text>
+
+            <Text style={styles.cardTitle}>{item.businessName}</Text>
             <View style={styles.ratingContainer}>
               {renderStars(item.rate)}
-              <Text style={styles.ratingText}> {item.rate || 3} / 5</Text>
+              <Text style={styles.ratingText}> {item.rate} / 5</Text>
             </View>
           </TouchableOpacity>
         ))}
