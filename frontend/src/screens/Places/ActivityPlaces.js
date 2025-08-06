@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PlacesSection from '../components/PlaceScreens';
 import { useSelector, useDispatch } from 'react-redux';
+import i18n from '../locales/i18n';
 
 const ActivityPlaces = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -10,7 +11,9 @@ const ActivityPlaces = () => {
 
   const getActivityPlaces = async (searchTerm = '') => {
     try {
-      const filtered = data.filter(item => item.type === 'activity');
+      const filtered = data.filter(
+        item => item.serviceType === 'activityPlace',
+      );
       setActivityPlaces(filtered);
       dispatch({
         type: 'SET_ACTIVITY_PLACES',
@@ -26,7 +29,7 @@ const ActivityPlaces = () => {
   }, []);
   return (
     <PlacesSection
-      title="Activity"
+      title={i18n.t('activity')}
       headerColor="#9a370e"
       headerImage={require('../../assets/images/activity.png')}
       data={activityPlaces}

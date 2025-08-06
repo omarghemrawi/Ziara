@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
 import { useSelector, useDispatch } from 'react-redux';
+import i18n from '../locales/i18n';
 
 const Restaurants = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -10,7 +11,7 @@ const Restaurants = () => {
 
   const getRestaurant = async (searchTerm = '') => {
     try {
-      const filtered = data.filter(item => item.type === 'restaurant');
+      const filtered = data.filter(item => item.serviceType === 'restaurant');
       setRestaurants(filtered);
       dispatch({
         type: 'SET_RESTAURANTS',
@@ -30,7 +31,7 @@ const Restaurants = () => {
 
   return (
     <PlacesSection
-      title="Restaurants"
+      title={i18n.t('restaurants')}
       headerColor="#FAC75C"
       headerImage={require('../../assets/images/pizza.png')}
       data={restaurants}

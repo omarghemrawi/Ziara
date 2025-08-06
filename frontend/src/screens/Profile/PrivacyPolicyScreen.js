@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
+import i18n from '../locales/i18n';
 
 const PrivacyPolicyScreen = () => {
   const navigation = useNavigation();
@@ -24,73 +25,62 @@ const PrivacyPolicyScreen = () => {
           <Icon name="chevron-back" size={28} color={theme.text} />
         </TouchableOpacity>
         <Text style={[styles.title, { color: theme.text }]}>
-          Privacy Policy
+          {i18n.t('privacy_policy')}
         </Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={[styles.paragraph, { color: theme.text }]}>
-          We respect your privacy and are committed to protecting your personal
-          data. This privacy policy explains how we collect, use, and safeguard
-          your information when you use our app.
+       {i18n.t('intro')}
         </Text>
 
         <Text style={[styles.heading, { color: theme.text }]}>
-          1. Information We Collect
+       {i18n.t('section1')}
         </Text>
         <Text style={[styles.paragraph, { color: theme.text }]}>
-          We may collect personal information such as your name, email address,
-          and usage data when you register or interact with the app.
+     {i18n.t('text1')}
         </Text>
 
         <Text style={[styles.heading, { color: theme.text }]}>
-          2. How We Use Your Information
+           {i18n.t('section2')}
         </Text>
         <Text style={[styles.paragraph, { color: theme.text }]}>
-          Your information helps us provide, improve, and personalize our
-          services, respond to your requests, and send important updates.
+            {i18n.t('text2')}
         </Text>
 
         <Text style={[styles.heading, { color: theme.text }]}>
-          3. Data Sharing and Security
+         {i18n.t('section3')}
         </Text>
         <Text style={[styles.paragraph, { color: theme.text }]}>
-          We do not sell or rent your personal data. We may share information
-          with trusted service providers who assist us in operating the app. We
-          implement reasonable security measures to protect your data.
+          {i18n.t('text3')}
         </Text>
 
         <Text style={[styles.heading, { color: theme.text }]}>
-          4. Your Choices
+       {i18n.t('section4')}
         </Text>
         <Text style={[styles.paragraph, { color: theme.text }]}>
-          You can manage your personal information and communication preferences
-          within the app settings. You can also contact us to request deletion
-          of your data.
+               {i18n.t('text4')}
         </Text>
 
         <Text style={[styles.heading, { color: theme.text }]}>
-          5. Children’s Privacy
+            {i18n.t('section5')}
         </Text>
         <Text style={[styles.paragraph, { color: theme.text }]}>
-          Our app is not intended for children under 13 years old. We do not
-          knowingly collect data from children without parental consent.
+        {i18n.t('text5')}
         </Text>
 
         <Text style={[styles.heading, { color: theme.text }]}>
-          6. Changes to This Policy
+      {i18n.t('section6')}
         </Text>
         <Text style={[styles.paragraph, { color: theme.text }]}>
-          We may update this privacy policy periodically. We encourage you to
-          review it regularly for any changes.
+                {i18n.t('text6')}
         </Text>
 
         <Text style={[styles.heading, { color: theme.text }]}>
-          7. Contact Us
+       {i18n.t('section7')}
         </Text>
         <Text style={[styles.paragraph, { color: theme.text }]}>
-          If you have any questions or concerns about this policy, please
-          contact us at support@example.com.
+          {i18n.t('text7')}
         </Text>
       </ScrollView>
     </SafeAreaView>

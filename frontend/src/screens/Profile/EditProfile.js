@@ -17,6 +17,7 @@ import { useNavigation } from '@react-navigation/native';
 import Config from 'react-native-config';
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
+import i18n from '../locales/i18n';
 
 export default function EditProfileScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -41,10 +42,10 @@ export default function EditProfileScreen({ navigation }) {
       if (profileImage !== null) {
         imageUrl = await uploadImageToCloudinary(profileImage);
       } else {
-        imageUrl = user.profile;
+        imageUrl = user.profileImage;
       }
-      const res = await axios.put('http://10.0.2.2:5000/api/user', {
-        profile: imageUrl,
+      const res = await axios.post('http://10.0.2.2:5000/user/edit-profile', {
+        profileImage: imageUrl,
         userId: user._id,
         about,
         username: name,
@@ -94,14 +95,16 @@ export default function EditProfileScreen({ navigation }) {
       </TouchableOpacity>
 
       {/* Title */}
-      <Text style={styles.title}>Edit profile</Text>
+      <Text style={styles.title}>{i18n.t('edit_profile')}</Text>
 
       {/* Profile Image with Camera Icon */}
       <View style={styles.profileContainer}>
         <Image
           source={{
             uri:
-              profileImage || user.profile || 'https://example.com/default.jpg',
+              profileImage ||
+              user.profileImage ||
+              'https://example.com/default.jpg',
           }}
           style={styles.profileImage}
         />
@@ -111,16 +114,16 @@ export default function EditProfileScreen({ navigation }) {
       </View>
 
       {/* Input Fields */}
-      <Text style={styles.label}>Name</Text>
+      <Text style={styles.label}>{i18n.t('name')}</Text>
       <TextInput
         style={styles.input}
         placeholder={'Current ' + user.username}
         placeholderTextColor="#777"
-        value={user}
+        value={name}
         onChangeText={setName}
       />
 
-      <Text style={styles.label}>About you</Text>
+      <Text style={styles.label}>{i18n.t('about_you')}</Text>
       <TextInput
         style={styles.textarea}
         placeholder="Write some details about yourself"
@@ -132,7 +135,7 @@ export default function EditProfileScreen({ navigation }) {
       />
 
       <TouchableOpacity onPress={handleEdit}>
-        <Text style={styles.button}>Save Edit</Text>
+        <Text style={styles.button}>{i18n.t('save')}</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -150,6 +153,7 @@ const styles = StyleSheet.create({
     left: 20,
     zIndex: 1,
     marginTop: 10,
+  
   },
   title: {
     fontSize: 18,
@@ -200,7 +204,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 10,
     margin: 10,
-    borderRadius: 30,
-    color: 'white',
+    borderRadius:30,
+      color:'white',
+      
   },
 });
