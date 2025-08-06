@@ -1,0 +1,19 @@
+# Node modules
+node_modules/
+
+# React Native
+android/
+ios/
+*.keystore
+!gradle-wrapper.jar
+/build
+/dist
+
+# IDEs
+.vscode/
+*.suo
+*.user
+*.iml
+
+# macOS
+.DS_Store

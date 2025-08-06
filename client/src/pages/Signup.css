@@ -1,0 +1,126 @@
+/* src/pages/Signup.css */
+
+/* — page layout */
+.signup-page {
+  padding-top: 80px;
+  display: flex;
+  justify-content: center;
+}
+.signup-container {
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+/* — left illustration */
+.signup-image {
+  flex: 0 0 380px;
+  background: #FAC75C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.signup-image img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* — right form */
+.signup-form {
+  flex: 1;
+  padding: 40px 30px;
+}
+.signup-form h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.signup-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.signup-form input,
+.signup-form select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* inline error messages */
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin: 4px 0 12px;
+}
+
+/* submit button */
+.signup-submit {
+  width: 100%;
+  background: #FAC75C;
+  color: #1C2D44;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 24px;
+}
+
+/* Spinner label */
+.business-label {
+  margin-top: 16px;
+  font-weight: 600;
+}
+
+/* — responsive */
+@media (max-width: 768px) {
+  .signup-container {
+    flex-direction: column;
+  }
+  .signup-image,
+  .signup-form {
+    width: 100%;
+    padding: 20px;
+  }
+}
+/* ─── ProfilePage.css adjustments ──────────────────────── */
+
+/* 1. Shrink the cover strip and switch to contain */
+.profile-page .cover-image {
+  height: 120px;                    /* smaller banner height */
+  background-size: contain;         /* make the logo fit without cropping */
+  background-repeat: no-repeat;     /* no tiling */
+  background-position: center;      /* center it horizontally & vertically */
+}
+
+/* 2. Pull header‐card up less, matching the new banner height */
+.profile-page .header-card {
+  margin-top: -40px;                /* half of avatar (60px) + a bit */
+  padding-top: 60px;                /* space for the avatar */
+}
+
+/* 3. Reposition the avatar to overlap correctly under the smaller banner */
+.profile-page .header-card .avatar-area {
+  top: 80px;                        /* banner (120px) - half avatar (60px) */
+}
+
+/* 4. (Optional) If your avatar is still too small, bump it: */
+.profile-page .header-card .avatar-img,
+.profile-page .header-card .avatar-placeholder {
+  width: 100px;
+  height: 100px;
+  border-width: 3px;                /* slightly thinner white ring */
+}
+
+/* 5. Ensure the info‐area still clears the avatar */
+.profile-page .header-card .info-area {
+  margin-left: 140px;               /* avatar width (100px) + gap (≈40px) */
+}

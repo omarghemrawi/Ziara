@@ -3,7 +3,9 @@ const initialState = {
   restaurant: [],
   shop: [],
   hotel: [],
-  acticityPlace: [],
+  acticity: [],
+  religious: [],
+  touristic: [],
 };
 export default function places(state = initialState, action) {
   switch (action.type) {
@@ -30,7 +32,17 @@ export default function places(state = initialState, action) {
     case 'SET_ACTIVITY_PLACES':
       return {
         ...state,
-        acticityPlace: action.payload,
+        acticity: action.payload,
+      };
+    case 'SET_RELIGIOUS_PALCES':
+      return {
+        ...state,
+        religious: action.payload,
+      };
+    case 'SET_TOURISTIC_PLACES':
+      return {
+        ...state,
+        touristic: action.payload,
       };
     default:
       return state;

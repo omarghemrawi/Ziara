@@ -171,4 +171,3 @@ fontSize: 16,
 });
 
 export default ChatScreen;
-

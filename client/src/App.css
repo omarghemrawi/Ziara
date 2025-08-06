@@ -1,0 +1,9 @@
+/* src/App.css */
+.main-content {
+  /* push the content below the 60px‑high navbar */
+  padding-top: 60px;
+
+  /* optional: some side padding so the text isn’t flush to the edge */
+  padding-left: 20px;
+  padding-right: 20px;
+}

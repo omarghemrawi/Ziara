@@ -1,0 +1,56 @@
+/* src/pages/AdditionalInfo.css */
+
+.info-page {
+  padding-top: 80px;
+  display: flex;
+  justify-content: center;
+}
+
+.info-form {
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.info-form h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.info-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.info-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* رسائل الخطأ الحمراء */
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin: 4px 0 12px;
+}
+
+.info-submit {
+  width: 100%;
+  background: #FAC75C;
+  color: #1C2D44;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 24px;
+}

@@ -37,7 +37,7 @@ export default function Favourites() {
 
   const handleMoveToVisited = async () => {
     try {
-      const res = await axios.post('http://10.0.2.2:5000/place/visited/add', {
+      const res = await axios.post('http://10.0.2.2:5000/api/visited', {
         userId: user._id,
         place_id: idSelectedPlace,
       });
@@ -108,12 +108,9 @@ export default function Favourites() {
       ) : (
         favoritePlaces.map((place, index) => (
           <View key={index} style={styles.grid}>
-            <Image
-              style={styles.imageItem}
-              source={{ uri: place.profileImage }}
-            />
+            <Image style={styles.imageItem} source={{ uri: place.profile }} />
             <View style={styles.textContainer}>
-              <Text style={styles.placeName}>{place.businessName}</Text>
+              <Text style={styles.placeName}>{place.name}</Text>
               <Text style={styles.placeLocation}>City: {place.city}</Text>
             </View>
             <TouchableOpacity

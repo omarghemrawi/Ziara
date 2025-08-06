@@ -1,0 +1,93 @@
+/* src/components/Carousel.css */
+
+/* ─── Carousel Container ───────────────────────────────── */
+.carousel {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─── Slide as 2-column grid ──────────────────────────── */
+.carousel .slide {
+  position: relative;    /* ← تأكد من وجود هذا */
+  display: grid;
+  grid-template-columns: 50% 50%;
+  align-items: center;
+  height: 500px;
+  box-sizing: border-box;
+  background-color: var(--slide-bg, #faf0e6);
+}
+
+/* ─── الصورة في العمود الأيسر ─────────────────────────── */
+.carousel .slide img {
+  justify-self: center;
+  max-height: 80%;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ─── صندوق النص مُقمَع بين منتصف الشريحة و10px عن اليمين ─── */
+.carousel .slide .slide-content {
+  position: absolute;      /* أهم سطر */
+  top: 50%;                /* يوسّطه عموديّاً */
+  left: 50%;               /* يضع الحد الأيسر عند منتصف الشريحة */
+  right: 10px;             /* يضمن بقاء الحد الأيمن 10px من الصفحة */
+  transform: translateY(-50%);
+  text-align: left;
+  padding-left: 20px;      /* المسافة بين الصورة والنص */
+}
+
+/* ─── تنسيقات العنوان والوصف ──────────────────────────── */
+.carousel .slide .slide-content h2 {
+  font-size: 2.5rem;
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.carousel .slide .slide-content p {
+  font-size: 1.2rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ─── Pagination Dots ─────────────────────────────────── */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.active {
+  background: #1c2d44;
+}
+
+/* ─── Responsive ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .carousel .slide {
+    grid-template-columns: 1fr;
+    height: auto;
+    padding: 20px 0;
+  }
+
+  .carousel .slide img {
+    max-height: 200px;
+    margin: 0 auto 16px;
+  }
+
+  .carousel .slide .slide-content {
+    position: static;       /* بدل absolute للشاشات الصغيرة */
+    padding: 0 10%;
+    transform: none;
+    left: auto;
+    right: auto;
+  }
+}

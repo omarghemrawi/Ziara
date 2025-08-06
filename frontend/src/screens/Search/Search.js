@@ -1,33 +1,43 @@
-
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
-import i18n from '../locales/i18n';
+import { useSelector } from 'react-redux';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
-  
-  const data = [
-    { image: require('../../assets/images/baytna.jpg') },
- 
-    // More images
-  ];
+  const [data, setData] = useState([]);
 
-  const handleDiscover = () => {
-    console.log('Discover clicked');
+  // Get all places from Redux store
+  const allPlaces = useSelector(state => state?.places?.all || []);
+
+  // Filter places by city based on searchValue
+  const getSearchedPlaces = (searchTerm = '') => {
+    if (!searchTerm) {
+      // If search is empty, show all
+      setData(allPlaces);
+    } else {
+      const filtered = allPlaces.filter(place =>
+        place.location?.city?.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      setData(filtered);
+    }
   };
 
-  const handleSave = () => {
-    console.log('Save clicked');
-  };
+  // Run filtering when searchValue changes
+  useEffect(() => {
+    getSearchedPlaces(searchValue);
+  }, [searchValue, allPlaces]);
+
+  // Initial load
+  useEffect(() => {
+    setData(allPlaces);
+  }, [allPlaces]);
 
   return (
     <PlacesSection
-      title={i18n.t('search')}
+      title="Search"
       headerColor="#9a370e"
       headerImage={require('../../assets/images/Search.png')}
       data={data}
-      onDiscover={handleDiscover}
-      onSave={handleSave}
       searchValue={searchValue}
       onSearchChange={setSearchValue}
     />

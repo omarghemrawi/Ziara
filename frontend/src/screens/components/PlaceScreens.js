@@ -14,7 +14,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme } from '../Theme/Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
-import i18n from '../locales/i18n';
 
 const PlacesSection = ({
   title,
@@ -29,28 +28,39 @@ const PlacesSection = ({
 
   const { theme } = useTheme();
   //fill the stars depending on the rate of the place
-  const renderStars = (rating) => {
-  const stars = [];
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
-  const totalStars = 5;
 
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(<Ionicons key={`full-${i}`} name="star" size={16} color="#FAC75C" />);
-  }
+  const renderStars = rating => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const totalStars = 5;
 
-  if (hasHalfStar) {
-    stars.push(<Ionicons key="half" name="star-half" size={16} color="#FAC75C" />);
-  }
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(
+        <Ionicons key={`full-${i}`} name="star" size={16} color="#FAC75C" />,
+      );
+    }
 
-  const remaining = totalStars - stars.length;
-  for (let i = 0; i < remaining; i++) {
-    stars.push(<Ionicons key={`empty-${i}`} name="star-outline" size={16} color="#FAC75C" />);
-  }
+    if (hasHalfStar) {
+      stars.push(
+        <Ionicons key="half" name="star-half" size={16} color="#FAC75C" />,
+      );
+    }
 
-  return stars;
-};
+    const remaining = totalStars - stars.length;
+    for (let i = 0; i < remaining; i++) {
+      stars.push(
+        <Ionicons
+          key={`empty-${i}`}
+          name="star-outline"
+          size={16}
+          color="#FAC75C"
+        />,
+      );
+    }
 
+    return stars;
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -76,7 +86,7 @@ const PlacesSection = ({
         <View style={styles.searchInputContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder={i18n.t('search')}
+            placeholder="Search..."
             value={searchValue}
             onChangeText={onSearchChange}
           />
@@ -94,22 +104,22 @@ const PlacesSection = ({
             onPress={() =>
               navigation.navigate('PlaceDetails', {
                 id: item._id,
-                serviceType: item.serviceType,
+                type: item.type,
               })
             }
             activeOpacity={0.8}
           >
             <Image
-              source={{ uri: item.profileImage }}
+              source={{ uri: item.profile }}
               style={styles.imageItem}
               resizeMode="cover"
             />
+
             <Text style={styles.cardTitle}>{item.businessName}</Text>
-             <Text style={styles.cardTitle1}>{item.city}</Text>
-<View style={styles.ratingContainer}>
-  {renderStars(item.rate)}
-  <Text style={styles.ratingText}> {item.rate} / 5</Text>
-</View>
+            <View style={styles.ratingContainer}>
+              {renderStars(item.rate)}
+              <Text style={styles.ratingText}> {item.rate} / 5</Text>
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -202,28 +212,19 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600',
     fontSize: 13,
-    color: '#57564F',
-  },
-    cardTitle1: {
-    padding: 1,
-    textAlign: 'center',
-    fontWeight: '600',
-    fontSize: 13,
-    color: '#7A7A73',
+    color: '#333',
   },
   ratingContainer: {
-  marginTop: 4,
-  flexDirection: 'row',
-  alignItems: 'center',
- marginLeft:30,
-},
-ratingText: {
-  fontSize: 10,
-  marginLeft: 5,
-  color: '#555',
-
-},
-
+    marginTop: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 30,
+  },
+  ratingText: {
+    fontSize: 10,
+    marginLeft: 5,
+    color: '#555',
+  },
 });
 
 export default PlacesSection;
