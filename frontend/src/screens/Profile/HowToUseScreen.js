@@ -10,20 +10,18 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme'; 
-import i18n from '../locales/i18n';
 
 const HowToUseScreen = () => {
   const navigation = useNavigation();
   const { theme } = useTheme();
 
   const instructions = [
- i18n.t('step1'),
-  i18n.t('step2'),
-   i18n.t('step3'),
-    i18n.t('step4'),
-     i18n.t('step5'),
-      i18n.t('step6'),
-
+    '📱 Open the app and create your account or log in.',
+    '🧭 Use the bottom tabs to navigate easily through features.',
+    '🔍 Search for places to explore new locations.',
+    '⭐ Tap on a place to view details and save it to favorites.',
+    '🌗 Switch between dark and light mode in Settings.',
+    '💬 Contact support for help from the Settings page.',
   ];
 
   return (
@@ -32,7 +30,7 @@ const HowToUseScreen = () => {
         <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
           <Icon name="chevron-back" size={28} color={theme.text} />
         </TouchableOpacity>
-        <Text style={[styles.title, { color: theme.text }]}>{i18n.t('how_to_use')}</Text>
+        <Text style={[styles.title, { color: theme.text }]}>How to Use</Text>
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>

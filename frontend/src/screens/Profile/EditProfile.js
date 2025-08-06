@@ -17,7 +17,6 @@ import { useNavigation } from '@react-navigation/native';
 import Config from 'react-native-config';
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
-import i18n from '../locales/i18n';
 
 export default function EditProfileScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -95,7 +94,7 @@ export default function EditProfileScreen({ navigation }) {
       </TouchableOpacity>
 
       {/* Title */}
-      <Text style={styles.title}>{i18n.t('edit_profile')}</Text>
+      <Text style={styles.title}>Edit profile</Text>
 
       {/* Profile Image with Camera Icon */}
       <View style={styles.profileContainer}>
@@ -112,7 +111,7 @@ export default function EditProfileScreen({ navigation }) {
       </View>
 
       {/* Input Fields */}
-      <Text style={styles.label}>{i18n.t('name')}</Text>
+      <Text style={styles.label}>Name</Text>
       <TextInput
         style={styles.input}
         placeholder={'Current ' + user.username}
@@ -121,7 +120,7 @@ export default function EditProfileScreen({ navigation }) {
         onChangeText={setName}
       />
 
-      <Text style={styles.label}>{i18n.t('about_you')}</Text>
+      <Text style={styles.label}>About you</Text>
       <TextInput
         style={styles.textarea}
         placeholder="Write some details about yourself"
@@ -133,7 +132,7 @@ export default function EditProfileScreen({ navigation }) {
       />
 
       <TouchableOpacity onPress={handleEdit}>
-        <Text style={styles.button}>{i18n.t('save')}</Text>
+        <Text style={styles.button}>Save Edit</Text>
       </TouchableOpacity>
     </ScrollView>
   );

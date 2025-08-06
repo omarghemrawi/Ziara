@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import PlacesSection from '../components/PlaceScreens';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import i18n from '../locales/i18n';
 
 const TouristicPlaces = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -37,7 +36,7 @@ const TouristicPlaces = () => {
 
   return (
     <PlacesSection
-      title={i18n.t('touristicPlaces')}
+      title="Touristic Places"
       headerColor="#FAC75C"
       headerImage={require('../../assets/images/touristicPlaces.png')}
       data={touristics}

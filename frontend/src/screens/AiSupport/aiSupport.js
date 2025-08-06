@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
-import i18n from '../locales/i18n';
 
 export default function AiSupport() {
   const navigation = useNavigation();
@@ -10,16 +9,16 @@ export default function AiSupport() {
 
   return (
     <View style={[styles.container,{backgroundColor:theme.background}]}>
-      <Text style={[styles.title,{color:theme.subtitle}]}>{i18n.t('AISupport')}</Text>
+      <Text style={[styles.title,{color:theme.subtitle}]}>AI Support</Text>
       <Text style={[styles.description,{color:theme.subtitle}]}>
-     {i18n.t('AIChatDescription')}
+        Chat with our AI assistant for help and guidance.
       </Text>
 
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate('ChatScreen')}
       >
-        <Text style={styles.buttonText}>{i18n.t('OpenAIChat')}</Text>
+        <Text style={styles.buttonText}>Open AI Chat</Text>
       </TouchableOpacity>
     </View>
   );

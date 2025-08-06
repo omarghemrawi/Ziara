@@ -25,25 +25,25 @@ console.log(language);
   const settingsItems = [
     {
       key: 'languages',
-      label: i18n.t('languages'),
+      label: i18n.t('welcome'),
       icon: 'language',
       screen: 'Languages',
     },
     {
       key: 'howToUse',
-      label: i18n.t('how_to_use'),
+      label: 'How to use',
       icon: 'info-outline',
       screen: 'HowToUse',
     },
     {
       key: 'helpSupport',
-      label:  i18n.t('help_and_support'),
+      label: 'Help and Support',
       icon: 'help-outline',
       screen: 'HelpSupport',
     },
     {
       key: 'privacyPolicy',
-      label: i18n.t('privacy_policy'),
+      label: 'Privacy policy',
       icon: 'security',
       screen: 'PrivacyPolicy',
     },
@@ -58,12 +58,12 @@ console.log(language);
           <Icon name="arrow-back-ios" size={24} color={theme.text} />
         </TouchableOpacity>
 
-        <Text style={[styles.title, { color: theme.text }]}>{i18n.t('settings')}</Text>
+        <Text style={[styles.title, { color: theme.text }]}>Settings</Text>
 
         <View style={styles.switchContainer}>
           <Switch value={!isLightMode} onValueChange={toggleTheme} />
           <Text style={[styles.switchLabel, { color: theme.text }]}>
-            {isLightMode ? i18n.t('light_mode') : i18n.t('dark_mode')}
+            {isLightMode ? 'Light Mode' : 'Dark Mode'}
           </Text>
         </View>
       </View>

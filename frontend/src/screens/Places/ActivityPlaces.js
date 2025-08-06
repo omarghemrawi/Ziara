@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PlacesSection from '../components/PlaceScreens';
 import { useSelector, useDispatch } from 'react-redux';
-import i18n from '../locales/i18n';
 
 const ActivityPlaces = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -27,7 +26,7 @@ const ActivityPlaces = () => {
   }, []);
   return (
     <PlacesSection
-      title={i18n.t('activity')}
+      title="Activity"
       headerColor="#9a370e"
       headerImage={require('../../assets/images/activity.png')}
       data={activityPlaces}

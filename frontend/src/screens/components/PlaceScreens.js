@@ -14,7 +14,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { useTheme } from '../Theme/Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
-import i18n from '../locales/i18n';
 
 const PlacesSection = ({
   title,
@@ -87,7 +86,7 @@ const PlacesSection = ({
         <View style={styles.searchInputContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder={i18n.t('search')}
+            placeholder="Search..."
             value={searchValue}
             onChangeText={onSearchChange}
           />
@@ -117,11 +116,10 @@ const PlacesSection = ({
             />
 
             <Text style={styles.cardTitle}>{item.businessName}</Text>
-             <Text style={styles.cardTitle1}>{item.city}</Text>
-<View style={styles.ratingContainer}>
-  {renderStars(item.rate)}
-  <Text style={styles.ratingText}> {item.rate} / 5</Text>
-</View>
+            <View style={styles.ratingContainer}>
+              {renderStars(item.rate)}
+              <Text style={styles.ratingText}> {item.rate} / 5</Text>
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -214,14 +212,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600',
     fontSize: 13,
-    color: '#57564F',
-  },
-    cardTitle1: {
-    padding: 1,
-    textAlign: 'center',
-    fontWeight: '600',
-    fontSize: 13,
-    color: '#7A7A73',
+    color: '#333',
   },
   ratingContainer: {
     marginTop: 4,

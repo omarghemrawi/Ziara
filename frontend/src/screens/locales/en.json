@@ -52,37 +52,6 @@
   "popularPlaces": "Popular Places",
     "NearBy": "Nearby",
   "PopularFoods": "Popular Foods",
-  "PopularPlaces": "Popular Places",
-   "home": "Home",
-  "search": "Search",
-  "favorites": "Favorites",
-  "shops": "Shops",
-  "aiSupport": "AI Support",
-    "AIChatDescription": "Chat with our AI assistant for help and guidance.",
-    "OpenAIChat": "Open AI Chat",
-      "AISupport": "AI Support",
-       "AIIntroMessage": "Hello! I'm your AI guide for Lebanon. I can tell you about tourist places, religious sites, restaurants, and food in Lebanon. What would you like to know?",
-       "AskAboutLebanon": "Ask me about Lebanon...",
-       "ShopsAndSouvenirs": "Shops & Souvenirs",
-        "PopularLebaneseDishes": "Popular Lebanese Dishes",
-          "Description": "Description",
-  "AddToFavourite": "Add To Favourite",
-  "RatingAndReview": "Rating & Review",
-   "ViewOnMap": "View on map",
-    "UsersReviews": "Users Reviews",
-      "LoadMoreReviews": "Load More Reviews",
-        "YouAlsoVisited": "You also visited this place? Write your review",
-         "HowWouldYouRateYourExperience": "How would you rate your experience?",
-           "WriteYourReview": "Write your review...",
-            "CharactersLimit": "/200 characters",
-              "UploadPhotoOptional": "Upload a photo (Optional)",
-                "Save": "Save",
-  "Submit": "Submit",
-  "Upload": "Upload",
-    "Visit Us": "Visit Us"
-  
-
-
- 
+  "PopularPlaces": "Popular Places"
 
 }

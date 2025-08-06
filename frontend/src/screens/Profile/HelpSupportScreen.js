@@ -14,7 +14,6 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
-import i18n from '../locales/i18n';
 
 const SUPPORT_EMAIL = 'support@example.com'; // change to support email
 
@@ -56,12 +55,12 @@ const HelpSupportScreen = () => {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Icon name="chevron-back" size={28} color={theme.text} />
           </TouchableOpacity>
-          <Text style={[styles.title, { color: theme.text }]}>{i18n.t('help_and_support')}</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Help and Support</Text>
         </View>
 
         <View style={styles.content}>
           <Text style={[styles.label, { color: theme.text }]}>
-          {i18n.t('contact_support_message')}
+            Write your message below and tap Send to contact our support team.
           </Text>
 
           <TextInput
@@ -75,7 +74,7 @@ const HelpSupportScreen = () => {
           />
 
           <TouchableOpacity style={[styles.button, { backgroundColor: theme.icon }]} onPress={sendEmail}>
-            <Text style={styles.buttonText}>{i18n.t('send')}</Text>
+            <Text style={styles.buttonText}>Send</Text>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
-import i18n from '../locales/i18n';
+import { useSelector } from 'react-redux';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -34,7 +34,7 @@ const Search = () => {
 
   return (
     <PlacesSection
-      title={i18n.t('search')}
+      title="Search"
       headerColor="#9a370e"
       headerImage={require('../../assets/images/Search.png')}
       data={data}

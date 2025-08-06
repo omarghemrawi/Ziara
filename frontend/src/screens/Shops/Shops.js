@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PlacesSection from '../components/PlaceScreens';
-import i18n from '../locales/i18n';
 
 const Shops = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -32,7 +31,7 @@ const Shops = () => {
 
   return (
     <PlacesSection
-      title={i18n.t('ShopsAndSouvenirs')}
+      title="Shops & Souvenirs"
       headerColor="#9a370e"
       headerImage={require('../../assets/images/kasset.png')}
       data={shops}

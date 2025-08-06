@@ -8,7 +8,6 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import i18n from '../locales/i18n';
 
 const popularPlaces = [
   {
@@ -55,7 +54,7 @@ export default function PopularPlacesScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>{i18n.t('PopularPlaces')}</Text>
+        <Text style={styles.title}>Popular Places</Text>
       </View>
       <FlatList
         data={popularPlaces}
