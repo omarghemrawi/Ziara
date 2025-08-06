@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PlacesSection from '../components/PlaceScreens';
 import { useSelector } from 'react-redux';
+import i18n from '../locales/i18n';
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
