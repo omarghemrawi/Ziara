@@ -19,6 +19,7 @@ import { favoritePlaces } from '../Favorites/FavoriteStorage';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
+import i18n from '../locales/i18n';
 
 export default function PlaceDetailScreen() {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -155,7 +156,7 @@ export default function PlaceDetailScreen() {
               navigation.navigate('Map', { location: place.location || null })
             }
           >
-            <Text style={styles.mapButtonText}>View on map</Text>
+            <Text style={styles.mapButtonText}>{i18n.t('ViewOnMap')}</Text>
           </TouchableOpacity>
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -170,15 +171,28 @@ export default function PlaceDetailScreen() {
           </View>
         </ScrollView>
 
-        <Text style={styles.sectionTitle}>Description</Text>
+        <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
         <Text style={styles.descriptionText}>{place.description}</Text>
+                           <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
+          {/* <SocialIcons
+    facebookLink={place.facebook}
+    instagramLink={place.instagram}
+    isResto={serviceType === 'resto'}
+    menuLink={place.menuLink}
+  /> */}
+     <SocialIcons
+      facebookLink={place1.facebook}
+      instagramLink={place1.instagram}
+      isResto={serviceType1 === 'resto'}
+      menuLink={place1.menuLink}
+    />
 
         <View style={styles.actionsRow}>
           <TouchableOpacity
             style={styles.actionButton}
             onPress={() => handleFavouriteToggle()}
           >
-            <Text style={styles.actionText}>Add To Favourite</Text>
+            <Text style={styles.actionText}>{i18n.t('AddToFavourite')}</Text>
             <AntDesign
               name={isFavourite ? 'heart' : 'hearto'}
               size={20}
@@ -191,7 +205,7 @@ export default function PlaceDetailScreen() {
             style={styles.actionButton}
             onPress={() => setModalVisible(true)}
           >
-            <Text style={styles.actionText}>Rating & Review</Text>
+            <Text style={styles.actionText}>{i18n.t('RatingAndReview')}</Text>
             <Entypo
               name="chevron-right"
               size={20}
@@ -230,7 +244,7 @@ export default function PlaceDetailScreen() {
             </View>
 
             <Text style={styles.label}>
-              How would you rate your experience?
+          {i18n.t('HowWouldYouRateYourExperience')}
             </Text>
             <View style={styles.stars}>
               {starArray.map(star => (
@@ -252,22 +266,22 @@ export default function PlaceDetailScreen() {
 
             <TextInput
               style={styles.modalInput1}
-              placeholder="Write your review..."
+              placeholder={i18n.t('WriteYourReview')}
               multiline
               value={reviewText}
               onChangeText={setReviewText}
               maxLength={200}
             />
             <Text style={styles.charCount}>
-              {reviewText.length}/200 characters
+              {reviewText.length}{i18n.t('CharactersLimit')}
             </Text>
 
-            <Text style={styles.label}>Upload a photo (Optional)</Text>
+            <Text style={styles.label}>{i18n.t('UploadPhotoOptional')}</Text>
             <TouchableOpacity
               style={styles.uploadButton}
               onPress={handleImagePick}
             >
-              <Text style={styles.uploadText}>Upload</Text>
+              <Text style={styles.uploadText}>{i18n.t('Upload')}</Text>
             </TouchableOpacity>
             {image && (
               <Image source={{ uri: image }} style={styles.previewImage} />
@@ -295,13 +309,13 @@ export default function PlaceDetailScreen() {
 
             <View style={styles.buttonRow}>
               <TouchableOpacity style={styles.saveButton}>
-                <Text style={styles.saveText}>Save</Text>
+                <Text style={styles.saveText}>{i18n.t('Save')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.submitButton}
                 onPress={handleSubmit}
               >
-                <Text style={styles.submitText}>Submit</Text>
+                <Text style={styles.submitText}>{i18n.t('Submit')}</Text>
               </TouchableOpacity>
             </View>
           </View>

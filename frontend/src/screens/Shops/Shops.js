@@ -31,7 +31,7 @@ const Shops = () => {
 
   return (
     <PlacesSection
-      title="Shops & Souvenirs"
+      title={i18n.t('ShopsAndSouvenirs')}
       headerColor="#9a370e"
       headerImage={require('../../assets/images/kasset.png')}
       data={shops}

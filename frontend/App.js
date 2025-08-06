@@ -43,6 +43,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
+    <LanguageProvider>
     <Provider store={store}>
       <ThemeProvider>
         <NavigationContainer>
@@ -101,5 +102,6 @@ export default function App() {
         </NavigationContainer>
       </ThemeProvider>
     </Provider>
+    </LanguageProvider>
   );
 }

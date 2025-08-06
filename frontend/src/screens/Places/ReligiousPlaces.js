@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PlacesSection from '../components/PlaceScreens';
 import { useSelector, useDispatch } from 'react-redux';
+import i18n from '../locales/i18n';
 
 const ReligiousPlaces = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -33,7 +34,7 @@ const ReligiousPlaces = () => {
   }, []);
   return (
     <PlacesSection
-      title="Religious Places"
+      title={i18n.t('religiousPlaces')}
       headerColor="#9a370e"
       headerImage={require('../../assets/images/religious.png')}
       data={religious}

@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import i18n from '../locales/i18n';
 
 const popularDishes = [
   {
@@ -61,7 +62,7 @@ export default function PopularDishesScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Popular Lebanese Dishes</Text>
+        <Text style={styles.title}>{i18n.t('PopularLebaneseDishes')}</Text>
       </View>
       <FlatList
         data={popularDishes}
