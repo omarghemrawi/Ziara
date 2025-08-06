@@ -11,6 +11,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
 import { useSelector, useDispatch } from 'react-redux';
+import i18n from '../locales/i18n';
 
 export default function Visited() {
   const navigation = useNavigation();
@@ -37,7 +38,7 @@ export default function Visited() {
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
-          <Text style={styles.title}>Visited</Text>
+          <Text style={styles.title}>{i18n.t('visited')}</Text>
         </View>
 
         <Image

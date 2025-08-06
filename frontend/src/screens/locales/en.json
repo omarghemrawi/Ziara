@@ -79,7 +79,10 @@
                 "Save": "Save",
   "Submit": "Submit",
   "Upload": "Upload",
-    "Visit Us": "Visit Us"
+    "Visit Us": "Visit Us",
+     "goToVisited": "Go to Visited",
+      "noFavourites": "No favourites added yet.",
+        "visited": "Visited"
   
 
 

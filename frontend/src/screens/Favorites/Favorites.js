@@ -14,6 +14,7 @@ import { useTheme } from '../Theme/Theme';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
+import i18n from '../locales/i18n';
 
 export default function Favourites() {
   const navigation = useNavigation();
@@ -77,12 +78,12 @@ export default function Favourites() {
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
-          <Text style={styles.title}>Favourites</Text>
+          <Text style={styles.title}>{i18n.t('favorites')}</Text>
           <TouchableOpacity
             style={styles.visitedButton}
             onPress={() => navigation.navigate('Visited')}
           >
-            <Text style={[styles.visitedButtonText]}>Go to Visited</Text>
+            <Text style={[styles.visitedButtonText]}>{i18n.t('goToVisited')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -103,7 +104,7 @@ export default function Favourites() {
             marginTop: 20,
           }}
         >
-          No favourites added yet.
+         {i18n.t('noFavourites')}
         </Text>
       ) : (
         favoritePlaces.map((place, index) => (
