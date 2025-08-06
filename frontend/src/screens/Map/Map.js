@@ -1,7 +1,7 @@
 
 import React from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 export default function MapScreen({ route }) {
   console.log('Received route params:', route?.params); 

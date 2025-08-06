@@ -266,7 +266,9 @@ const renderReview = (review, index) => (
           <TouchableOpacity
             style={styles.mapButton}
             onPress={() =>
-              navigation.navigate('Map', { location: place.location })
+              navigation.navigate('Map', {   latitude: 34.4381,       // Dummy coordinates
+      longitude: 35.8308,
+      title: 'Dummy Place', })
             }
           >
             <Text style={styles.mapButtonText}>{i18n.t('ViewOnMap')}</Text>
