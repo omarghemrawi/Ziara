@@ -21,46 +21,46 @@ export default function ProfileScreen() {
   const user = useSelector(state => state.user.user);
   //dummy data for reviews
   user.reviews = [
-  {
-    placeName: "Raouche Rock",
-    comment: "Amazing view and clean place!",
-    rating: 5,
-    photoUrl: "https://example.com/raouche.jpg"
-  },
     {
-    placeName: "Raouche Rock",
-    comment: "Amazing view and clean place!",
-    rating: 5,
-    photoUrl: "https://example.com/raouche.jpg"
-  },
+      placeName: 'Raouche Rock',
+      comment: 'Amazing view and clean place!',
+      rating: 5,
+      photoUrl: 'https://example.com/raouche.jpg',
+    },
     {
-    placeName: "Raouche Rock",
-    comment: "Amazing view and clean place!",
-    rating: 5,
-    photoUrl: "https://example.com/raouche.jpg"
-  },
-  {
-    placeName: "Beirut Souks",
-    comment: "Nice shops but a bit crowded.",
-    rating: 3,
-    photoUrl: null
-  },
-   {
-    placeName: "Beirut Souks",
-    comment: "Nice shops but a bit crowded.",
-    rating: 3,
-    photoUrl: null
-  },
-   {
-    placeName: "Beirut Souks",
-    comment: "Nice shops but a bit crowded.",
-    rating: 3,
-    photoUrl: null
-  }
-];
+      placeName: 'Raouche Rock',
+      comment: 'Amazing view and clean place!',
+      rating: 5,
+      photoUrl: 'https://example.com/raouche.jpg',
+    },
+    {
+      placeName: 'Raouche Rock',
+      comment: 'Amazing view and clean place!',
+      rating: 5,
+      photoUrl: 'https://example.com/raouche.jpg',
+    },
+    {
+      placeName: 'Beirut Souks',
+      comment: 'Nice shops but a bit crowded.',
+      rating: 3,
+      photoUrl: null,
+    },
+    {
+      placeName: 'Beirut Souks',
+      comment: 'Nice shops but a bit crowded.',
+      rating: 3,
+      photoUrl: null,
+    },
+    {
+      placeName: 'Beirut Souks',
+      comment: 'Nice shops but a bit crowded.',
+      rating: 3,
+      photoUrl: null,
+    },
+  ];
 
   console.log(user);
-   const year = new Date(user.createdAt).getFullYear();
+  const year = new Date(user.createdAt).getFullYear();
   return (
     <ScrollView
       contentContainerStyle={[
@@ -73,7 +73,9 @@ export default function ProfileScreen() {
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <Entypo name="chevron-left" size={24} color={theme.text} />
         </TouchableOpacity>
-        <Text style={[styles.headerTitle, { color: theme.text }]}>{i18n.t('profile')}</Text>
+        <Text style={[styles.headerTitle, { color: theme.text }]}>
+          {i18n.t('profile')}
+        </Text>
         <View style={[styles.headerIcons, { color: theme.text }]}>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <MaterialIcons
@@ -99,7 +101,7 @@ export default function ProfileScreen() {
       {/* User Info */}
       <View style={styles.profileSection}>
         <Image
-          source={{ uri: user.profileImage || null }} // User profile picture
+          source={{ uri: user.profile || null }} // User profile picture
           style={styles.avatar}
         />
         <View style={styles.user}>
@@ -107,52 +109,56 @@ export default function ProfileScreen() {
             {user.username}
           </Text>
           <Text style={[styles.joinedText, , { color: theme.text }]}>
-          
             {i18n.t('joined_in', { year })}
           </Text>
         </View>
       </View>
 
-     
-{/* User Reviews Section */}
-<View style={{ marginBottom: 30 }}>
-  <Text style={[styles.sectionTitle, { color: theme.text, marginBottom: 10 }]}>
-   {i18n.t('your_reviews')}
-  </Text>
+      {/* User Reviews Section */}
+      <View style={{ marginBottom: 30 }}>
+        <Text
+          style={[styles.sectionTitle, { color: theme.text, marginBottom: 10 }]}
+        >
+          {i18n.t('your_reviews')}
+        </Text>
 
-  {/* Example Review Item */}
-    <ScrollView
-    style={[styles.reviewTextContainer,{ maxHeight: 300 }]} // Adjust height as needed
-    nestedScrollEnabled={true}
-    showsVerticalScrollIndicator={false}
-  >
-    {user.reviews.map((review, index) => (
-      <View key={index} style={styles.reviewCard}>
-        {review.photoUrl && (
-          <Image
-            source={{ uri: review.photoUrl }}
-            style={styles.reviewImage}
-          />
-        )}
-        <View style={styles.reviewTextContainer}>
-          <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
-            {review.placeName}
-          </Text>
-            <View style={styles.starContainer}>
-            {[...Array(review.rating)].map((_, i) => (
-              <FontAwesome key={i} name="star" size={16} color="#FFD700" />
-            ))}
-          </View>
-          <Text style={[styles.reviewText, { color: theme.text }]}>
-            {review.comment}
-          </Text>
-        
-        </View>
+        {/* Example Review Item */}
+        <ScrollView
+          style={[styles.reviewTextContainer, { maxHeight: 300 }]} // Adjust height as needed
+          nestedScrollEnabled={true}
+          showsVerticalScrollIndicator={false}
+        >
+          {user.reviews.map((review, index) => (
+            <View key={index} style={styles.reviewCard}>
+              {review.photoUrl && (
+                <Image
+                  source={{ uri: review.photoUrl }}
+                  style={styles.reviewImage}
+                />
+              )}
+              <View style={styles.reviewTextContainer}>
+                <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
+                  {review.placeName}
+                </Text>
+                <View style={styles.starContainer}>
+                  {[...Array(review.rating)].map((_, i) => (
+                    <FontAwesome
+                      key={i}
+                      name="star"
+                      size={16}
+                      color="#FFD700"
+                    />
+                  ))}
+                </View>
+                <Text style={[styles.reviewText, { color: theme.text }]}>
+                  {review.comment}
+                </Text>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
       </View>
-    ))}
-  </ScrollView>
-  </View>
-{/* <TouchableOpacity
+      {/* <TouchableOpacity
   onPress={() => navigation.navigate('AllReviewsScreen')}
   style={[styles.button, { borderColor: theme.text, marginTop: 10 }]}
 >
@@ -160,9 +166,6 @@ export default function ProfileScreen() {
     See All Reviews
   </Text>
 </TouchableOpacity> */}
-
-
-   
     </ScrollView>
   );
 }
@@ -242,35 +245,33 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   reviewCard: {
-  flexDirection: 'row',
-  marginBottom: 20,
-  backgroundColor: '#f0f0f0',
-  borderRadius: 10,
-  padding: 10,
-},
-reviewImage: {
-  width: 80,
-  height: 80,
-  borderRadius: 10,
-  marginRight: 10,
-  backgroundColor: '#ccc',
-},
-reviewTextContainer: {
-  flex: 1,
-},
-reviewPlaceName: {
-  fontWeight: 'bold',
-  fontSize: 16,
-  marginBottom: 4,
-},
-reviewText: {
-  fontSize: 14,
-  marginBottom: 4,
-  marginTop:10,
-},
-starContainer: {
-  flexDirection: 'row',
-},
-
-
+    flexDirection: 'row',
+    marginBottom: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    padding: 10,
+  },
+  reviewImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    marginRight: 10,
+    backgroundColor: '#ccc',
+  },
+  reviewTextContainer: {
+    flex: 1,
+  },
+  reviewPlaceName: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  reviewText: {
+    fontSize: 14,
+    marginBottom: 4,
+    marginTop: 10,
+  },
+  starContainer: {
+    flexDirection: 'row',
+  },
 });
