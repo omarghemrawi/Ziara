@@ -44,8 +44,8 @@ export default function EditProfileScreen({ navigation }) {
       } else {
         imageUrl = user.profile;
       }
-      const res = await axios.post('http://10.0.2.2:5000/user/edit-profile', {
-        profileImage: imageUrl,
+      const res = await axios.put('http://10.0.2.2:5000/api/user', {
+        profile: imageUrl,
         userId: user._id,
         about,
         username: name,
@@ -58,12 +58,6 @@ export default function EditProfileScreen({ navigation }) {
   };
 
   const handleImagePick = () => {
-    // launchImageLibrary({ mediaType: 'photo' }, response => {
-    //   if (response.assets && response.assets.length > 0) {
-    //     setProfileImage(response.assets[0].uri);
-    //   }
-    // });
-
     const options = {
       mediaType: 'photo',
       quality: 1,
