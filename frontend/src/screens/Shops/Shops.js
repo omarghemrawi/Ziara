@@ -11,7 +11,7 @@ const Shops = () => {
 
   const getHotel = async (searchTerm = '') => {
     try {
-      const filtered = data.filter(item => item.serviceType === 'shop');
+      const filtered = data.filter(item => item.type === 'shop');
       setShops(filtered);
       dispatch({
         type: 'SET_SHOPS',

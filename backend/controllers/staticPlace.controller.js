@@ -4,7 +4,7 @@ import StaticPlace from "../models/staticPlace.model.js";
 export const getAllPlaces = async (req, res) => {
   try {
     const places = await StaticPlace.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: places });
+    res.json({ success: true, places: places });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
   }

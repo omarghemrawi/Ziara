@@ -29,28 +29,39 @@ const PlacesSection = ({
 
   const { theme } = useTheme();
   //fill the stars depending on the rate of the place
-  const renderStars = (rating) => {
-  const stars = [];
-  const fullStars = Math.floor(rating);
-  const hasHalfStar = rating % 1 >= 0.5;
-  const totalStars = 5;
 
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(<Ionicons key={`full-${i}`} name="star" size={16} color="#FAC75C" />);
-  }
+  const renderStars = rating => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const totalStars = 5;
 
-  if (hasHalfStar) {
-    stars.push(<Ionicons key="half" name="star-half" size={16} color="#FAC75C" />);
-  }
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(
+        <Ionicons key={`full-${i}`} name="star" size={16} color="#FAC75C" />,
+      );
+    }
 
-  const remaining = totalStars - stars.length;
-  for (let i = 0; i < remaining; i++) {
-    stars.push(<Ionicons key={`empty-${i}`} name="star-outline" size={16} color="#FAC75C" />);
-  }
+    if (hasHalfStar) {
+      stars.push(
+        <Ionicons key="half" name="star-half" size={16} color="#FAC75C" />,
+      );
+    }
 
-  return stars;
-};
+    const remaining = totalStars - stars.length;
+    for (let i = 0; i < remaining; i++) {
+      stars.push(
+        <Ionicons
+          key={`empty-${i}`}
+          name="star-outline"
+          size={16}
+          color="#FAC75C"
+        />,
+      );
+    }
 
+    return stars;
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -94,16 +105,17 @@ const PlacesSection = ({
             onPress={() =>
               navigation.navigate('PlaceDetails', {
                 id: item._id,
-                serviceType: item.serviceType,
+                type: item.type,
               })
             }
             activeOpacity={0.8}
           >
             <Image
-              source={{ uri: item.profileImage }}
+              source={{ uri: item.profile }}
               style={styles.imageItem}
               resizeMode="cover"
             />
+
             <Text style={styles.cardTitle}>{item.businessName}</Text>
              <Text style={styles.cardTitle1}>{item.city}</Text>
 <View style={styles.ratingContainer}>
@@ -212,18 +224,16 @@ const styles = StyleSheet.create({
     color: '#7A7A73',
   },
   ratingContainer: {
-  marginTop: 4,
-  flexDirection: 'row',
-  alignItems: 'center',
- marginLeft:30,
-},
-ratingText: {
-  fontSize: 10,
-  marginLeft: 5,
-  color: '#555',
-
-},
-
+    marginTop: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 30,
+  },
+  ratingText: {
+    fontSize: 10,
+    marginLeft: 5,
+    color: '#555',
+  },
 });
 
 export default PlacesSection;

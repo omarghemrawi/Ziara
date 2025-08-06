@@ -11,7 +11,7 @@ const Restaurants = () => {
 
   const getRestaurant = async (searchTerm = '') => {
     try {
-      const filtered = data.filter(item => item.serviceType === 'restaurant');
+      const filtered = data.filter(item => item.type === 'restaurant');
       setRestaurants(filtered);
       dispatch({
         type: 'SET_RESTAURANTS',

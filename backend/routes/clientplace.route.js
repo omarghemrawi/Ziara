@@ -14,19 +14,11 @@ import upload from "../middleware/multer.js";
 const clientRouter = express.Router();
 
 // Get all places
-clientRouter.get("/places", getAllPlaces);
-
-// Get specific place
+clientRouter.get("/", getAllPlaces);
 clientRouter.get("/place", getPlace);
 // ********************************* WebSite ********************//
-
-// SignUp Client
 clientRouter.post("/signup", SignUp);
-
-// Login Client
 clientRouter.post("/login", logIn);
-
-// update Client Profile
 clientRouter.put(
   "/update-profile",
   upload.fields([
@@ -35,11 +27,7 @@ clientRouter.put(
   ]),
   updateProfile
 );
-// Subscribe Client
 clientRouter.put("/subscribe", submitPayment);
-
-// Deactive subscribe
-
 clientRouter.put("/deactive-subscribe", deactivePayment);
 
 export default clientRouter;

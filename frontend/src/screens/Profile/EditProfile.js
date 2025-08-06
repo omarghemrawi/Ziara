@@ -42,10 +42,10 @@ export default function EditProfileScreen({ navigation }) {
       if (profileImage !== null) {
         imageUrl = await uploadImageToCloudinary(profileImage);
       } else {
-        imageUrl = user.profileImage;
+        imageUrl = user.profile;
       }
-      const res = await axios.post('http://10.0.2.2:5000/user/edit-profile', {
-        profileImage: imageUrl,
+      const res = await axios.put('http://10.0.2.2:5000/api/user', {
+        profile: imageUrl,
         userId: user._id,
         about,
         username: name,
@@ -102,9 +102,7 @@ export default function EditProfileScreen({ navigation }) {
         <Image
           source={{
             uri:
-              profileImage ||
-              user.profileImage ||
-              'https://example.com/default.jpg',
+              profileImage || user.profile || 'https://example.com/default.jpg',
           }}
           style={styles.profileImage}
         />
@@ -119,7 +117,7 @@ export default function EditProfileScreen({ navigation }) {
         style={styles.input}
         placeholder={'Current ' + user.username}
         placeholderTextColor="#777"
-        value={name}
+        value={user}
         onChangeText={setName}
       />
 
@@ -153,7 +151,6 @@ const styles = StyleSheet.create({
     left: 20,
     zIndex: 1,
     marginTop: 10,
-  
   },
   title: {
     fontSize: 18,
@@ -204,8 +201,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 10,
     margin: 10,
-    borderRadius:30,
-      color:'white',
-      
+    borderRadius: 30,
+    color: 'white',
   },
 });

@@ -9,8 +9,7 @@ import {
   Modal,
   TextInput,
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialIcons from 'react-native-vector-icons/FontAwesome';
+
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -81,9 +80,9 @@ const openReviewsModal = () => {
 
 
   const route = useRoute();
-  const { id, serviceType } = route.params;
+  const { id, type } = route.params;
   const navigation = useNavigation();
-  const data = useSelector(state => state.places[serviceType]);
+  const data = useSelector(state => state.places[type]);
   const user = useSelector(state => state.user.user);
   const dispatch = useDispatch();
    
@@ -95,23 +94,26 @@ const openReviewsModal = () => {
   const handleFavouriteToggle = async () => {
     const newValue = !isFavourite;
     setIsFavourite(newValue);
-   
 
     try {
+      console.log(id, user._id);
       if (newValue) {
-        await axios.post('http://192.168.0.103:5000/place/favorite/add', {
+        await axios.post('http://10.0.2.2:5000/api/favorite/', {
           placeId: id,
           userId: user._id,
         });
       } else {
-        await axios.post('http://192.168.0.103:5000/place/favorite/delete', {
-          placeId: id,
-          userId: user._id,
+        await axios.delete('http://10.0.2.2:5000/api/favorite', {
+          data: {
+            placeId: id,
+            userId: user._id,
+          },
         });
       }
       dispatch(refreshUser(user._id)); // Refresh after success
     } catch (error) {
       console.error('Error toggling favorite:', error);
+      setIsFavourite(newValue);
       // Optionally revert UI state here if needed
     }
   };
@@ -258,32 +260,27 @@ const renderReview = (review, index) => (
         </View>
 
         <View style={styles.headerImageContainer}>
-          <Image
-            source={{ uri: place.profileImage }}
-            style={styles.headerImage}
-          />
+          <Image source={{ uri: place.profile }} style={styles.headerImage} />
 
           <TouchableOpacity
             style={styles.mapButton}
             onPress={() =>
-              navigation.navigate('Map', {   latitude: 34.4381,       // Dummy coordinates
-      longitude: 35.8308,
-      title: 'Dummy Place', })
+              navigation.navigate('Map', { location: place.location || null })
             }
           >
             <Text style={styles.mapButtonText}>{i18n.t('ViewOnMap')}</Text>
           </TouchableOpacity>
         </View>
-<ScrollView  horizontal={true} showsHorizontalScrollIndicator={false}>
-        <View style={styles.galleryRow}>
-          {place.referenceImages.map((img, index) => (
-            <Image 
-              key={index}
-              source={{ uri: img }}
-              style={styles.galleryImage}
-            />
-          ))}
-        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <View style={styles.galleryRow}>
+            {place.referenceImages.map((img, index) => (
+              <Image
+                key={index}
+                source={{ uri: img }}
+                style={styles.galleryImage}
+              />
+            ))}
+          </View>
         </ScrollView>
 
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
@@ -306,7 +303,7 @@ const renderReview = (review, index) => (
         <View style={styles.actionsRow}>
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={handleFavouriteToggle}
+            onPress={() => handleFavouriteToggle()}
           >
             <Text style={styles.actionText}>{i18n.t('AddToFavourite')}</Text>
             <AntDesign
@@ -642,13 +639,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 1,
   },
-   
+
   uploadText: {
     color: '#333',
   },
-    uploadText1: {
+  uploadText1: {
     color: '#333',
-    padding:10,
+    padding: 10,
   },
   previewImage: {
     width: '100%',
