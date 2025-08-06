@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import i18n from '../locales/i18n';
 
 const popularPlaces = [
   {
