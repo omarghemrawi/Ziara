@@ -1,0 +1,263 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-family: "Poppins", sans-serif;
+  z-index: 1000;
+}
+
+.navbar .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 20px;
+}
+
+/* Logo + text */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;     /* pushes the rest to the right */
+}
+
+.navbar__logo img {
+  width: 40px;            /* smaller logo */
+  height: auto;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FAC75C;
+}
+
+/* Navigation links */
+.navbar__links {
+  display: flex;
+  list-style: none;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar__links a {
+  text-decoration: none;
+  color: #333333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navbar__links a:hover {/* reset any default page margins */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  font-family: "Poppins", sans-serif;
+  z-index: 1000;
+}
+
+.navbar .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* start from left */
+  padding: 0 20px;
+}
+
+/* — Logo + “Ziara” */
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;           /* push everything else to the right */
+}
+
+.logo-img {
+  width: 36px;                  /* smaller logo size */
+  height: auto;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FAC75C;
+}
+
+/* — Nav Links */
+.navbar__links {
+  display: flex;
+  list-style: none;
+  gap: 32px;                    /* consistent spacing */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar__links a {
+  text-decoration: none;
+  color: #333333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.navbar__links a:hover {
+  color: #1C2D44;
+  text-decoration: underline;
+}
+
+/* — Buttons & Language */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  
+}
+
+.btn.login {
+  background: transparent;
+  border: none;
+  color: #333333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn.login:hover {
+  color: #1C2D44;
+}
+
+.btn.signup {
+  background: #FAC75C;
+  color: #1C2D44;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn.signup:hover {
+  opacity: 0.8;
+}
+
+.language-switch {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #333333;
+  font-size: 0.9rem;
+}
+
+.language-switch:hover {
+  color: #1C2D44;
+}
+
+  color: #1C2D44;
+  text-decoration: underline;
+}
+
+/* Buttons and language switch */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.btn.login {
+  background: transparent;
+  border: none;
+  color: #333333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn.login:hover {
+  color: #1C2D44;
+}
+
+.btn.signup {
+  background: #FAC75C;
+  color: #1C2D44;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.btn.signup:hover {
+  opacity: 0.8;
+}
+
+.language-switch {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #333333;
+}
+
+.language-switch:hover {
+  color: #1C2D44;
+}
+
+/* this governs the gap between links/buttons */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;       /* ↳ bump this up from 24px if you want more space */
+}
+
+/* make login/signup use the same font-size as your links */
+.btn.login,
+.btn.signup {
+  font-size: 1rem;      /* match your .navbar__links a { font-size: 1rem; } */
+  line-height: 1;       /* optional: tighten up the line-height */
+}
+
+/* if you want extra breathing room between "Contact" and the actions group, */
+/* you can add margin-left on .navbar__actions instead: */
+.navbar__actions {
+  margin-left: 32px;    /* pushes the whole group further right */
+}
+/* style logout the same as signup */
+.btn.logout {
+  background: #FAC75C;
+  color: #1C2D44;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.btn.logout:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}

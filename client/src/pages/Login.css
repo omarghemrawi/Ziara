@@ -1,0 +1,80 @@
+/* Container under the navbar */
+.login-page {
+  padding-top: 80px;          /* leave space for navbar */
+  display: flex;
+  justify-content: center;
+}
+
+/* Split‑screen card */
+.login-container {
+  display: flex;
+  width: 100%;
+  max-width: 900px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+/* Form on the left */
+.login-form {
+  flex: 1;
+  padding: 40px 30px;
+}
+.login-form h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.login-form label {
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.login-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Submit button */
+.login-submit {
+  width: 100%;
+  background: #FAC75C;
+  color: #1C2D44;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 24px;
+}
+
+/* Illustration on the right */
+.login-image {
+  flex: 1;
+  background: #FAC75C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Responsive: stack vertically on small screens */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+  }
+  .login-form,
+  .login-image {
+    width: 100%;
+    padding: 20px;
+  }
+}
