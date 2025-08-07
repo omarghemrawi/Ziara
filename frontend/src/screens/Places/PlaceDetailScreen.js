@@ -21,6 +21,7 @@ import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
 import SocialIcons from '../components/SocialIcons';
+import { uploadImageToCloudinary } from '../../utils/cloudinaryUpload';
 
 export default function PlaceDetailScreen() {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -28,7 +29,6 @@ export default function PlaceDetailScreen() {
   const [reviewText, setReviewText] = useState('');
   const [selectedStar, setSelectedStar] = useState(0);
   const [image, setImage] = useState(null);
-  const [selectedDate, setSelectedDate] = useState('');
 
   const route = useRoute();
   const { id, type } = route.params;
@@ -36,25 +36,22 @@ export default function PlaceDetailScreen() {
   const data = useSelector(state => state.places[type]);
   const user = useSelector(state => state.user.user);
   const dispatch = useDispatch();
-  const [date, setDate] = useState(new Date());
-  const [open, setOpen] = useState(false);
   //just testing with dummy data
-const place1 = {
-  name: 'Test Resto',
-  description: 'A dummy place for testing.',
-  facebook: 'https://facebook.com/testPage',
-  instagram: 'https://instagram.com/testPage',
-  menuLink: 'https://example.com/menu.pdf',
-};
-//testing with dummy data
-const serviceType1 = 'resto'; 
-  const openLink = (url) => {
+  const place1 = {
+    name: 'Test Resto',
+    description: 'A dummy place for testing.',
+    facebook: 'https://facebook.com/testPage',
+    instagram: 'https://instagram.com/testPage',
+    menuLink: 'https://example.com/menu.pdf',
+  };
+  //testing with dummy data
+  const serviceType1 = 'resto';
+  const openLink = url => {
     if (!url) return;
     Linking.canOpenURL(url).then(supported => {
       if (supported) Linking.openURL(url);
     });
   };
-
 
   const place = data.find(item => item._id === id);
 
@@ -109,27 +106,30 @@ const serviceType1 = 'resto';
   };
 
   const handleSubmit = async () => {
-    if (!selectedStar || !reviewText || !selectedDate) {
+    if (!selectedStar || !reviewText) {
       alert('Please fill in all required fields.');
       return;
     }
 
     try {
       let imageUrl = '';
-
       // Upload image if selected
       if (image) {
         imageUrl = await uploadImageToCloudinary(image);
       }
-
+      // specific model type
+      const staticTypes = ['religious', 'touristic'];
+      const modelType = staticTypes.includes(place.type)
+        ? 'StaticPlace'
+        : 'ClientPlace';
       // Submit review data
-      const res = await axios.post('http:// 192.168.0.103:5000/reviews', {
-        rate: selectedStar,
-        review: reviewText,
+      const res = await axios.post('http://10.0.2.2:5000/api/review', {
+        rating: selectedStar,
+        comment: reviewText,
         image: imageUrl || null,
-        date: selectedDate,
         userId: user._id,
         placeId: place._id,
+        placeModel: modelType,
       });
 
       if (res.data.success) {
@@ -137,13 +137,15 @@ const serviceType1 = 'resto';
         setSelectedStar(0);
         setReviewText('');
         setImage(null);
-        setSelectedDate('');
       } else {
         alert('Something went wrong. Please try again.');
       }
     } catch (err) {
       console.error('Submit error:', err);
-      alert('Submission failed. Please check your network or try again later.');
+      alert(
+        Done,
+        'Submission failed. Please check your network or try again later.',
+      );
     }
   };
 
@@ -155,28 +157,26 @@ const serviceType1 = 'resto';
       setIsFavourite(false);
     }
   }, []);
+
   //fetching reviews of a specific place
-const fetchReviews = async (placeId, pageNumber = 1) => {
-  try {
-    const res = await axios.get(`http://192.168.0.103:5000/reviews/place/${placeId}?page=${pageNumber}&limit=10`);//adjust this :)
-    if (res.data.success) {
-      if (pageNumber === 1) {
+  const fetchReviews = async placeId => {
+    try {
+      const res = await axios.get(
+        `http://10.0.2.2:5000/api/review/place/${placeId}`,
+      );
+      console.log(res.data);
+      if (res.data.success) {
         setReviews(res.data.reviews);
-      } else {
-        setReviews(prev => [...prev, ...res.data.reviews]);
       }
-      setHasMoreReviews(res.data.hasMore); // You must return this from backend(optional)
-      setPage(pageNumber);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
     }
-  } catch (error) {
-    console.error('Error fetching reviews:', error);
-  }
-};
-  
+  };
+
   const [visibleReviews, setVisibleReviews] = useState(3); // Start by showing 3 reviews
   const [showModal, setShowModal] = useState(false);
   const [reviews, setReviews] = useState([]);
-    const [reviewModalVisible, setReviewModalVisible] = useState(false);
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
 
   // Example data
   const allReviews = [
@@ -195,50 +195,58 @@ const fetchReviews = async (placeId, pageNumber = 1) => {
 
   useEffect(() => {
     // Simulate API call
-    setReviews(allReviews);
+    // fetchReviews();
   }, []);
 
   const loadMoreReviews = () => {
     setVisibleReviews(prev => prev + 3);
   };
 
-const renderReview = (review, index) => (
-  <View key={index} style={styles.reviewCard}>
-    <View style={styles.reviewHeader}>
-      <Image
-        source={{ uri: review.userImage || 'https://via.placeholder.com/50' }}
-        style={styles.reviewAvatar}
-      />
-      <View style={{ marginLeft: 10 }}>
-        <Text style={styles.reviewerName}>{review.name}</Text>
-        <View style={styles.starsRow}>
-          {[1, 2, 3, 4, 5].map(star => (
-            <Text
-              key={star}
-              style={[
-                styles.star1,
-                star <= review.rate ? styles.filledStar : styles.unfilledStar,
-              ]}
-            >
-              ★
-            </Text>
-          ))}
+  const renderReview = (review, index) => (
+    <View key={index} style={styles.reviewCard}>
+      <View style={styles.reviewHeader}>
+        <Image
+          source={{
+            uri: review.userId.profileImage || 'https://via.placeholder.com/50',
+          }}
+          style={styles.reviewAvatar}
+        />
+        <View style={{ marginLeft: 10 }}>
+          <Text style={styles.reviewerName}>{review.name}</Text>
+          <View style={styles.starsRow}>
+            {[1, 2, 3, 4, 5].map(
+              (
+                star, // !!! now you have a variable named rating instead of that array
+              ) => (
+                <Text
+                  key={star}
+                  style={[
+                    styles.star1,
+                    star <= review.rate
+                      ? styles.filledStar
+                      : styles.unfilledStar,
+                  ]}
+                >
+                  ★
+                </Text>
+              ),
+            )}
+          </View>
         </View>
       </View>
+
+      <Text style={styles.comment}>{review.comment}</Text>
+
+      {review.image && (
+        <Image source={{ uri: review.image }} style={styles.reviewImage} />
+      )}
     </View>
+  );
 
-    <Text style={styles.comment}>{review.comment}</Text>
-
-    {review.image && (
-      <Image source={{ uri: review.image }} style={styles.reviewImage} />
-    )}
-  </View>
-);
-
-const openReviewsModal = () => {
-  fetchReviews(id, 1);
-  setReviewModalVisible(true);
-};
+  const openReviewsModal = () => {
+    fetchReviews(id);
+    setReviewModalVisible(true);
+  };
   return (
     <>
       <ScrollView style={styles.container}>
@@ -276,12 +284,7 @@ const openReviewsModal = () => {
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
         <Text style={styles.descriptionText}>{place.description}</Text>
         <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
-        {/* <SocialIcons
-    facebookLink={place.facebook}
-    instagramLink={place.instagram}
-    isResto={serviceType === 'resto'}
-    menuLink={place.menuLink}
-  /> */}
+
         <SocialIcons
           facebookLink={place.facebook}
           instagramLink={place.instagram}
@@ -305,10 +308,7 @@ const openReviewsModal = () => {
 
           <TouchableOpacity
             style={styles.actionButton}
-          
-                           
-  onPress={openReviewsModal}
-            
+            onPress={openReviewsModal}
           >
             <Text style={styles.actionText}>{i18n.t('RatingAndReview')}</Text>
             <Entypo
@@ -338,13 +338,10 @@ const openReviewsModal = () => {
             </TouchableOpacity>
 
             <View style={styles.profileSection}>
-              <Image
-                source={{ uri: place.profileImage }}
-                style={styles.avatar}
-              />
+              <Image source={{ uri: place.profile }} style={styles.avatar} />
               <View>
-                <Text style={styles.name}>Baytna</Text>
-                <Text style={styles.location}>Tripoli</Text>
+                <Text style={styles.name}>{place.name}</Text>
+                <Text style={styles.location}>{place.city} || Tripoli</Text>
               </View>
             </View>
 
@@ -393,26 +390,6 @@ const openReviewsModal = () => {
               <Image source={{ uri: image }} style={styles.previewImage} />
             )}
 
-            <Text style={styles.label}>When did you visit?</Text>
-            <TouchableOpacity
-              style={styles.uploadButton}
-              onPress={() => setOpen(true)}
-            >
-              <Text style={styles.uploadText}>Date {'>'}</Text>
-            </TouchableOpacity>
-            <DatePicker
-              modal
-              open={open}
-              date={date}
-              onConfirm={date => {
-                setOpen(false);
-                setDate(date);
-              }}
-              onCancel={() => {
-                setOpen(false);
-              }}
-            />
-
             <View style={styles.buttonRow}>
               <TouchableOpacity style={styles.saveButton}>
                 <Text style={styles.saveText}>{i18n.t('Save')}</Text>
@@ -427,45 +404,51 @@ const openReviewsModal = () => {
           </View>
         </View>
       </Modal>
-          {/* Modal Sheet1 */}
-     <Modal
-  animationType="slide"
-  transparent
-  visible={reviewModalVisible}
-  onRequestClose={() => setReviewModalVisible(false)}
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContent}>
-      <TouchableOpacity
-        onPress={() => setReviewModalVisible(false)}
-        style={styles.closeX}
+      {/* Modal Sheet1 */}
+      <Modal
+        animationType="slide"
+        transparent
+        visible={reviewModalVisible}
+        onRequestClose={() => setReviewModalVisible(false)}
       >
-        <Text style={styles.xText}>✕</Text>
-      </TouchableOpacity>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <TouchableOpacity
+              onPress={() => setReviewModalVisible(false)}
+              style={styles.closeX}
+            >
+              <Text style={styles.xText}>✕</Text>
+            </TouchableOpacity>
 
-      <Text style={styles.sectionTitle}>{i18n.t('UsersReviews')}</Text>
-      <ScrollView>
-            {reviews.slice(0, visibleReviews).map(renderReview)}
+            <Text style={styles.sectionTitle}>{i18n.t('UsersReviews')}</Text>
+            <ScrollView>
+              {reviews.slice(0, visibleReviews).map(renderReview)}
 
-            {visibleReviews < reviews.length && (
-              <TouchableOpacity style={styles.loadMoreButton} onPress={loadMoreReviews}>
-                <Text style={styles.loadMoreText}>{i18n.t('LoadMoreReviews')}</Text>
-              </TouchableOpacity>
-            )}
-          </ScrollView>
-    
-      <TouchableOpacity
-       
-        onPress={() => {
-          setReviewModalVisible(false);
-          setModalVisible(true);
-        }}
-      >
-        <Text style={{ color: '#333',fontSize:10 }}>{i18n.t('YouAlsoVisited')}</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-</Modal>
+              {visibleReviews < reviews.length && (
+                <TouchableOpacity
+                  style={styles.loadMoreButton}
+                  onPress={loadMoreReviews}
+                >
+                  <Text style={styles.loadMoreText}>
+                    {i18n.t('LoadMoreReviews')}
+                  </Text>
+                </TouchableOpacity>
+              )}
+            </ScrollView>
+
+            <TouchableOpacity
+              onPress={() => {
+                setReviewModalVisible(false);
+                setModalVisible(true);
+              }}
+            >
+              <Text style={{ color: '#333', fontSize: 10 }}>
+                {i18n.t('YouAlsoVisited')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -518,7 +501,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     marginBottom: 6,
-    marginTop:10,
+    marginTop: 10,
   },
   descriptionText: {
     fontSize: 14,
@@ -547,7 +530,7 @@ const styles = StyleSheet.create({
   // Modal styles
   modalOverlay: {
     flex: 1,
-    marginTop:30,
+    marginTop: 30,
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'flex-end',
   },
@@ -627,13 +610,13 @@ const styles = StyleSheet.create({
     marginTop: 20,
     borderWidth: 1,
   },
-   
+
   uploadText: {
     color: '#333',
   },
-    uploadText1: {
+  uploadText1: {
     color: '#333',
-    padding:10,
+    padding: 10,
   },
   previewImage: {
     width: '100%',
@@ -675,18 +658,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-    loadMoreButton: {
+  loadMoreButton: {
     backgroundColor: '#FAC75C',
     padding: 10,
     borderRadius: 6,
     alignItems: 'center',
     marginVertical: 10,
   },
-    loadMoreText: {
+  loadMoreText: {
     color: '#fff',
     fontWeight: 'bold',
   },
-    writeReviewLink: {
+  writeReviewLink: {
     marginTop: 25,
     alignItems: 'center',
   },
@@ -695,55 +678,55 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontWeight: '600',
   },
- 
+
   rating: {
     marginTop: 4,
     color: '#444',
   },
- reviewCard: {
-  backgroundColor: '#fff',
-  borderRadius: 10,
-  padding: 15,
-  marginBottom: 20,
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.1,
-  shadowRadius: 4,
-  elevation: 2,
-},
+  reviewCard: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 15,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
 
-reviewHeader: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  marginBottom: 10,
-},
+  reviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
 
-reviewAvatar: {
-  width: 50,
-  height: 50,
-  borderRadius: 25,
-  backgroundColor: '#ccc',
-},
+  reviewAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#ccc',
+  },
   avatar: {
     width: 50,
     height: 50,
     borderRadius: 25,
   },
 
-reviewerName: {
-  fontSize: 16,
-  fontWeight: 'bold',
-},
+  reviewerName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 
-starsRow: {
-  flexDirection: 'row',
-  marginTop: 2,
-},
+  starsRow: {
+    flexDirection: 'row',
+    marginTop: 2,
+  },
 
-star1: {
-  fontSize: 16,
-  marginRight: 2,
-},
+  star1: {
+    fontSize: 16,
+    marginRight: 2,
+  },
   star: {
     fontSize: 54,
     color: '#ccc',
@@ -751,27 +734,27 @@ star1: {
     marginHorizontal: 10,
   },
 
-filledStar: {
-  color: '#f1c40f',
-},
+  filledStar: {
+    color: '#f1c40f',
+  },
 
-unfilledStar: {
-  color: '#ccc',
-},
+  unfilledStar: {
+    color: '#ccc',
+  },
 
-comment: {
-  fontSize: 14,
-  color: '#333',
-},
+  comment: {
+    fontSize: 14,
+    color: '#333',
+  },
 
-reviewImage: {
-  width: '100%',
-  height: 150,
-  borderRadius: 10,
-  marginTop: 10,
-},
+  reviewImage: {
+    width: '100%',
+    height: 150,
+    borderRadius: 10,
+    marginTop: 10,
+  },
 
-    iconRow: {
+  iconRow: {
     flexDirection: 'row',
     gap: 20,
     marginVertical: 10,

@@ -4,13 +4,20 @@ import User from "../models/user.model.js";
 // Create review
 export const createReview = async (req, res) => {
   try {
-    const { placeId, rating, comment, userName } = req.body;
+    const { placeId, rating, comment,  userId , image , placeModel } = req.body;
+    // console.log(placeId , rating , comment  ,userName , userId , image , date)
+
+     if (!placeId || !rating || !comment  || !userId ) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
     const review = new Review({
       placeId,
       rating,
       comment,
-      userName,
+      userId,
+      image,
+      placeModel
     });
 
     await review.save();
@@ -40,10 +47,10 @@ export const deleteReview = async (req, res) => {
 // Get all reviews for a place
 export const getPlaceReviews = async (req, res) => {
   try {
-    const reviews = await Review.find({ placeId: req.params.placeId }).sort({
-      createdAt: -1,
-    });
-    res.json({ success: true, data: reviews });
+    const reviews = await Review.find({ placeId: req.params.placeId })  // get all reviews for the place
+  .populate('userId', 'username profileImage')                    // load name + profileImage from User
+  .sort({ createdAt: -1 });    
+    res.json({ success: true,  reviews });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
   }
@@ -52,16 +59,21 @@ export const getPlaceReviews = async (req, res) => {
 // Get all reviews for a user
 export const getUserReviews = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const user = await User.findById(userId).populate("review");
-    if (!user) {
+    const userId = req.params.userId;
+
+    if (!userId) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
+
+    const reviews = await Review.find({ userId })
+      .populate("placeId", "name profile") 
+      .sort({ createdAt: -1 });
+
     return res.status(200).json({
       success: true,
-      reviews: user.review,
+      reviews,
     });
   } catch (error) {
     console.error(error);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,53 +14,75 @@ import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
 import { useSelector } from 'react-redux';
 import i18n from '../locales/i18n';
+import axios from 'axios';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const { theme } = useTheme();
   const user = useSelector(state => state.user.user);
+  const [reviews, setReviews] = useState([]);
   //dummy data for reviews
-  user.reviews = [
-    {
-      placeName: 'Raouche Rock',
-      comment: 'Amazing view and clean place!',
-      rating: 5,
-      photoUrl: 'https://example.com/raouche.jpg',
-    },
-    {
-      placeName: 'Raouche Rock',
-      comment: 'Amazing view and clean place!',
-      rating: 5,
-      photoUrl: 'https://example.com/raouche.jpg',
-    },
-    {
-      placeName: 'Raouche Rock',
-      comment: 'Amazing view and clean place!',
-      rating: 5,
-      photoUrl: 'https://example.com/raouche.jpg',
-    },
-    {
-      placeName: 'Beirut Souks',
-      comment: 'Nice shops but a bit crowded.',
-      rating: 3,
-      photoUrl: null,
-    },
-    {
-      placeName: 'Beirut Souks',
-      comment: 'Nice shops but a bit crowded.',
-      rating: 3,
-      photoUrl: null,
-    },
-    {
-      placeName: 'Beirut Souks',
-      comment: 'Nice shops but a bit crowded.',
-      rating: 3,
-      photoUrl: null,
-    },
-  ];
+  // user.reviews = [
+  //   {
+  //     placeName: 'Raouche Rock',
+  //     comment: 'Amazing view and clean place!',
+  //     rating: 5,
+  //     photoUrl: 'https://example.com/raouche.jpg',
+  //   },
+  //   {
+  //     placeName: 'Raouche Rock',
+  //     comment: 'Amazing view and clean place!',
+  //     rating: 5,
+  //     photoUrl: 'https://example.com/raouche.jpg',
+  //   },
+  //   {
+  //     placeName: 'Raouche Rock',
+  //     comment: 'Amazing view and clean place!',
+  //     rating: 5,
+  //     photoUrl: 'https://example.com/raouche.jpg',
+  //   },
+  //   {
+  //     placeName: 'Beirut Souks',
+  //     comment: 'Nice shops but a bit crowded.',
+  //     rating: 3,
+  //     photoUrl: null,
+  //   },
+  //   {
+  //     placeName: 'Beirut Souks',
+  //     comment: 'Nice shops but a bit crowded.',
+  //     rating: 3,
+  //     photoUrl: null,
+  //   },
+  //   {
+  //     placeName: 'Beirut Souks',
+  //     comment: 'Nice shops but a bit crowded.',
+  //     rating: 3,
+  //     photoUrl: null,
+  //   },
+  // ];
 
-  console.log(user);
+  const fetchReviews = async () => {
+    const userId = user._id;
+    try {
+      const res = await axios.get(
+        `http://10.0.2.2:5000/api/review/user/${userId}`,
+      );
+      if (res.data.success) {
+        setReviews(res.data.reviews); // your state update function
+      } else {
+        console.error('Failed to fetch user reviews:', res.data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching user reviews:', error);
+    }
+  };
+  console.log(reviews);
+
   const year = new Date(user.createdAt).getFullYear();
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
   return (
     <ScrollView
       contentContainerStyle={[
@@ -128,17 +150,17 @@ export default function ProfileScreen() {
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
         >
-          {user.reviews.map((review, index) => (
+          {reviews.map((review, index) => (
             <View key={index} style={styles.reviewCard}>
-              {review.photoUrl && (
+              {review.placeId.profile && (
                 <Image
-                  source={{ uri: review.photoUrl }}
+                  source={{ uri: review.placeId.profile }}
                   style={styles.reviewImage}
                 />
               )}
               <View style={styles.reviewTextContainer}>
                 <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
-                  {review.placeName}
+                  {review.placeId.name}
                 </Text>
                 <View style={styles.starContainer}>
                   {[...Array(review.rating)].map((_, i) => (
