@@ -6,6 +6,8 @@ import StaticPlace from "./pages/static/StaticPlace";
 import AddStaticPlace from "./pages/static/AddStaticPlace";
 import EditStaticPage from "./pages/static/EditStaticPage";
 import ClientPage from "./pages/client/ClientPage";
+import Report from "./pages/report/Report";
+
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
           }
         />
         <Route path="/editStaticPlace/:id" element={<EditStaticPage />} />
+        <Route path="/report" element={<Report />} />
       </Routes>
     </Router>
   );

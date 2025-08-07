@@ -30,6 +30,14 @@ const Dashboard = () => {
           <h2>Static Places</h2>
           <p>Manage static places in the system.</p>
         </div>
+         <div
+          className="dashboard-card"
+          onClick={() => navigate("/report")}
+          style={{ cursor: "pointer" }}
+        >
+          <h2>Reports</h2>
+          <p>view reports and manage them.</p>
+        </div>
       </section>
     </div>
   );

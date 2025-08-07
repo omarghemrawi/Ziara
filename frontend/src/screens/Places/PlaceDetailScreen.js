@@ -20,6 +20,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
+import SocialIcons from '../components/SocialIcons';
 
 export default function PlaceDetailScreen() {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -173,19 +174,19 @@ export default function PlaceDetailScreen() {
 
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
         <Text style={styles.descriptionText}>{place.description}</Text>
-                           <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
-          {/* <SocialIcons
+        <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
+        {/* <SocialIcons
     facebookLink={place.facebook}
     instagramLink={place.instagram}
     isResto={serviceType === 'resto'}
     menuLink={place.menuLink}
   /> */}
-     <SocialIcons
-      facebookLink={place1.facebook}
-      instagramLink={place1.instagram}
-      isResto={serviceType1 === 'resto'}
-      menuLink={place1.menuLink}
-    />
+        <SocialIcons
+          facebookLink={place.facebook}
+          instagramLink={place.instagram}
+          isResto={place.type === 'restaurant'}
+          menuLink={place.menuLink}
+        />
 
         <View style={styles.actionsRow}>
           <TouchableOpacity
@@ -244,7 +245,7 @@ export default function PlaceDetailScreen() {
             </View>
 
             <Text style={styles.label}>
-          {i18n.t('HowWouldYouRateYourExperience')}
+              {i18n.t('HowWouldYouRateYourExperience')}
             </Text>
             <View style={styles.stars}>
               {starArray.map(star => (
@@ -273,7 +274,8 @@ export default function PlaceDetailScreen() {
               maxLength={200}
             />
             <Text style={styles.charCount}>
-              {reviewText.length}{i18n.t('CharactersLimit')}
+              {reviewText.length}
+              {i18n.t('CharactersLimit')}
             </Text>
 
             <Text style={styles.label}>{i18n.t('UploadPhotoOptional')}</Text>

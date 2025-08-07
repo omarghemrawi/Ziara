@@ -13,9 +13,10 @@ const StaticPlace = () => {
   const fetchPlaces = async () => {
     try {
       const response = await axios.get(API_URL);
+
       if (response.data.success) {
-        setPlaces(response.data.data);
-      } else {
+        setPlaces(response.data.places);
+        } else {
         console.log("Failed to fetch places");
       }
     } catch (error) {
