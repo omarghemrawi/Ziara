@@ -26,7 +26,7 @@ export default function ProfileScreen() {
       placeName: 'Raouche Rock',
       comment: 'Amazing view and clean place!',
       rating: 5,
-      photoUrl: 'https://example.com/raouche.jpg',
+      photoUrl: 'https://img.travelnaut.com/web/db/photose/location/as/lb/beirut/ca999c3e3255d08cae6473dc7376ba7d.jpeg?format=webp&width=750&quality=75',
     },
     {
       placeName: 'Raouche Rock',
@@ -62,6 +62,19 @@ export default function ProfileScreen() {
     const [reviews, setReviews] = useState(user.reviews);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedReviewIndex, setSelectedReviewIndex] = useState(null);
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+const [selectedImageUri, setSelectedImageUri] = useState(null);
+const openImageModal = (uri) => {
+  setSelectedImageUri(uri);
+  setImageModalVisible(true);
+};
+
+const closeImageModal = () => {
+  setImageModalVisible(false);
+  setSelectedImageUri(null);
+};
+
+
   const handleDeletePress = (index) => {
     setSelectedReviewIndex(index);
     setModalVisible(true);
@@ -150,12 +163,14 @@ export default function ProfileScreen() {
         >
           {user.reviews.map((review, index) => (
             <View key={index} style={styles.reviewCard}>
-              {review.photoUrl && (
-                <Image
-                  source={{ uri: review.photoUrl }}
-                  style={styles.reviewImage}
-                />
-              )}
+         {review.photoUrl && (
+  <TouchableOpacity onPress={() => openImageModal(review.photoUrl)}>
+    <Image
+      source={{ uri: review.photoUrl }}
+      style={styles.reviewImage}
+    />
+  </TouchableOpacity>
+)}
               <View style={styles.reviewTextContainer}>
            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
   <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
@@ -214,6 +229,20 @@ export default function ProfileScreen() {
           </View>
         </View>
       </Modal>
+<Modal
+  visible={imageModalVisible}
+  transparent={true}
+  animationType="fade"
+  onRequestClose={closeImageModal}
+>
+  <View style={styles.fullscreenImageOverlay}>
+    <TouchableOpacity style={styles.fullscreenCloseArea} onPress={closeImageModal} />
+    <Image source={{ uri: selectedImageUri }} style={styles.fullscreenImage} resizeMode="contain" />
+    <TouchableOpacity style={styles.fullscreenCloseButton} onPress={closeImageModal}>
+      <MaterialIcons name="close" size={30} color="#fff" />
+    </TouchableOpacity>
+  </View>
+</Modal>
 
     </View>
   );
@@ -358,4 +387,33 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  fullscreenImageOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.9)',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'relative',
+},
+
+fullscreenCloseArea: {
+   position: 'absolute',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+},
+
+fullscreenImage: {
+  width: '90%',
+  height: '70%',
+  borderRadius: 10,
+},
+
+fullscreenCloseButton: {
+  position: 'absolute',
+  top: 40,
+  right: 20,
+  padding: 10,
+},
+
 });
