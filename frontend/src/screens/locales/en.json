@@ -85,7 +85,18 @@
         "visited": "Visited",
           "deleteReviewConfirmation": "Are you sure you want to delete your review?",
   "no": "No",
-  "yes": "Yes"
+  "yes": "Yes",
+    "submitReport": "Submit Report",
+  "errorNoReason": "Please select at least one reason.",
+  "reportSubmitted": "Report Submitted",
+  "thankYouFeedback": "Thank you for your feedback.",
+     "hateSpeech": "Hate Speech",
+    "offensiveLanguage": "Offensive Language",
+    "inappropriateContent": "Inappropriate Content",
+    "misleadingContent": "Misleading Content",
+      "reportPlace": "Report This Place",
+  "selectReason": "Please select the reason(s) for reporting this place.",
+   "tooltipReport": "Any problem? Report it!"
   
 
 

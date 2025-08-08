@@ -86,7 +86,18 @@
           "visited": "تمت الزيارة",
             "deleteReviewConfirmation": "هل أنت متأكد أنك تريد حذف مراجعتك؟",
   "no": "لا",
-  "yes": "نعم"
+  "yes": "نعم",
+    "submitReport": "إرسال الإبلاغ",
+  "errorNoReason": "يرجى تحديد سبب واحد على الأقل.",
+  "reportSubmitted": "تم الإبلاغ",
+  "thankYouFeedback": "شكرًا لملاحظاتك.",
+      "hateSpeech": "خطاب الكراهية",
+    "offensiveLanguage": "لغة مسيئة",
+    "inappropriateContent": "محتوى غير مناسب",
+    "misleadingContent": "محتوى مضلل",
+      "reportPlace": "الإبلاغ عن هذا المكان",
+  "selectReason": "يرجى تحديد السبب (الأسباب) للإبلاغ عن هذا المكان.",
+    "tooltipReport": "هل توجد مشكلة؟ أبلغ عنها!"
 
 
 

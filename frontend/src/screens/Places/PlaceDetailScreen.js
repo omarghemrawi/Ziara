@@ -15,6 +15,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { favoritePlaces } from '../Favorites/FavoriteStorage';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -29,6 +30,7 @@ export default function PlaceDetailScreen() {
   const [reviewText, setReviewText] = useState('');
   const [selectedStar, setSelectedStar] = useState(0);
   const [image, setImage] = useState(null);
+const [showTooltip, setShowTooltip] = useState(true);
 
   const route = useRoute();
   const { id, type } = route.params;
@@ -156,7 +158,13 @@ export default function PlaceDetailScreen() {
     } else {
       setIsFavourite(false);
     }
+      const timer = setTimeout(() => {
+    setShowTooltip(false);
+  }, 4000); // Hide after 4 seconds
+  return () => clearTimeout(timer);
   }, []);
+
+
 
   //fetching reviews of a specific place
   const fetchReviews = async placeId => {
@@ -254,7 +262,20 @@ export default function PlaceDetailScreen() {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Entypo name="chevron-left" size={20} color="#000" />
           </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' ,  width: '90%',}}>
           <Text style={styles.title}>{place.name}</Text>
+     <View style={{ alignItems: 'center' }}>
+  {showTooltip && (
+    <View style={styles.tooltipContainer}>
+      <Text style={styles.tooltipText}>{i18n.t('tooltipReport')}</Text>
+      <View style={styles.tooltipArrow} />
+    </View>
+  )}
+  <TouchableOpacity onPress={() => navigation.navigate('ReportPlaceScreen')}>
+    <MaterialIcons name="report" size={29} color="#FAC75C" />
+  </TouchableOpacity>
+</View>
+          </View>
         </View>
 
         <View style={styles.headerImageContainer}>
@@ -762,4 +783,32 @@ const styles = StyleSheet.create({
   icon: {
     padding: 6,
   },
+  tooltipContainer: {
+  backgroundColor: '#FAC75C',
+  paddingVertical: 4,
+  paddingHorizontal: 8,
+  borderRadius: 20,
+  marginBottom: 6,
+  position: 'relative',
+},
+tooltipText: {
+  color: '#fff',
+  fontSize: 12,
+  fontWeight: '500',
+},
+tooltipArrow: {
+  position: 'absolute',
+  bottom: -6,
+  left: '60%',
+  marginLeft: -6,
+  width: 0,
+  height: 0,
+  borderLeftWidth: 6,
+  borderRightWidth: 6,
+  borderTopWidth: 6,
+  borderLeftColor: 'transparent',
+  borderRightColor: 'transparent',
+  borderTopColor: '#FAC75C',
+},
+
 });

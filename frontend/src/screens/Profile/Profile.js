@@ -193,14 +193,16 @@ const closeImageModal = () => {
     />
   </TouchableOpacity>
               <View style={styles.reviewTextContainer}>
-                <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
-                  {review.placeId.name}
-                </Text>
-                
+                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+  <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
+    {review.placeName}
+  </Text>
+
   {/* Delete Icon */}
   <TouchableOpacity onPress={() => handleDeletePress(index)}>
     <MaterialIcons name="delete" size={20} color="#e0e0e0" />
   </TouchableOpacity>
+</View>
                 <View style={styles.starContainer}>
                   {[...Array(review.rating)].map((_, i) => (
                     <FontAwesome
