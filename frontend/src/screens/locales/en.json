@@ -82,7 +82,10 @@
     "Visit Us": "Visit Us",
      "goToVisited": "Go to Visited",
       "noFavourites": "No favourites added yet.",
-        "visited": "Visited"
+        "visited": "Visited",
+          "deleteReviewConfirmation": "Are you sure you want to delete your review?",
+  "no": "No",
+  "yes": "Yes"
   
 
 

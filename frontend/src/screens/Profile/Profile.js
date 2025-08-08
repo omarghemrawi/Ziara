@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Modal
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -21,6 +22,39 @@ export default function ProfileScreen() {
   const { theme } = useTheme();
   const user = useSelector(state => state.user.user);
   const [reviews, setReviews] = useState([]);
+ 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedReviewIndex, setSelectedReviewIndex] = useState(null);
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+const [selectedImageUri, setSelectedImageUri] = useState(null);
+const openImageModal = (uri) => {
+  setSelectedImageUri(uri);
+  setImageModalVisible(true);
+};
+
+const closeImageModal = () => {
+  setImageModalVisible(false);
+  setSelectedImageUri(null);
+};
+
+
+  const handleDeletePress = (index) => {
+    setSelectedReviewIndex(index);
+    setModalVisible(true);
+  };
+
+  const confirmDelete = () => {
+    const updatedReviews = [...reviews];
+    updatedReviews.splice(selectedReviewIndex, 1);
+    setReviews(updatedReviews);
+    setModalVisible(false);
+    setSelectedReviewIndex(null);
+  };
+
+  const cancelDelete = () => {
+    setModalVisible(false);
+    setSelectedReviewIndex(null);
+  };
   //dummy data for reviews
   // user.reviews = [
   //   {
@@ -84,7 +118,7 @@ export default function ProfileScreen() {
     fetchReviews();
   }, []);
   return (
-    <ScrollView
+    <View
       contentContainerStyle={[
         styles.container,
         { backgroundColor: theme.background },
@@ -152,16 +186,21 @@ export default function ProfileScreen() {
         >
           {reviews.map((review, index) => (
             <View key={index} style={styles.reviewCard}>
-              {review.placeId.profile && (
-                <Image
-                  source={{ uri: review.placeId.profile }}
-                  style={styles.reviewImage}
-                />
-              )}
+           <TouchableOpacity onPress={() => openImageModal(review.photoUrl)}>
+    <Image
+      source={{ uri: review.photoUrl }}
+      style={styles.reviewImage}
+    />
+  </TouchableOpacity>
               <View style={styles.reviewTextContainer}>
                 <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
                   {review.placeId.name}
                 </Text>
+                
+  {/* Delete Icon */}
+  <TouchableOpacity onPress={() => handleDeletePress(index)}>
+    <MaterialIcons name="delete" size={20} color="#e0e0e0" />
+  </TouchableOpacity>
                 <View style={styles.starContainer}>
                   {[...Array(review.rating)].map((_, i) => (
                     <FontAwesome
@@ -188,13 +227,48 @@ export default function ProfileScreen() {
     See All Reviews
   </Text>
 </TouchableOpacity> */}
-    </ScrollView>
+ <Modal
+        transparent
+        visible={modalVisible}
+        animationType="fade"
+        onRequestClose={cancelDelete}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalText}>{i18n.t('deleteReviewConfirmation')}</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity style={[styles.modalButton, { backgroundColor: '#FAC75C' }]} onPress={confirmDelete}>
+                <Text style={styles.modalButtonText}>{i18n.t('yes')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.modalButton, { backgroundColor: 'gray' }]} onPress={cancelDelete}>
+                <Text style={styles.modalButtonText}>{i18n.t('no')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+<Modal
+  visible={imageModalVisible}
+  transparent={true}
+  animationType="fade"
+  onRequestClose={closeImageModal}
+>
+  <View style={styles.fullscreenImageOverlay}>
+    <TouchableOpacity style={styles.fullscreenCloseArea} onPress={closeImageModal} />
+    <Image source={{ uri: selectedImageUri }} style={styles.fullscreenImage} resizeMode="contain" />
+    <TouchableOpacity style={styles.fullscreenCloseButton} onPress={closeImageModal}>
+      <MaterialIcons name="close" size={30} color="#fff" />
+    </TouchableOpacity>
+  </View>
+</Modal>
+
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 30,
     backgroundColor: '#fff',
     flexGrow: 1,
   },
@@ -211,6 +285,7 @@ const styles = StyleSheet.create({
   headerIcons: {
     flexDirection: 'row',
     gap: 10,
+    marginRight:10,
   },
   icon: {
     marginLeft: 10,
@@ -218,6 +293,7 @@ const styles = StyleSheet.create({
   profileSection: {
     flexDirection: 'row',
     marginVertical: 60,
+    marginHorizontal:30,
   },
   avatar: {
     width: 70,
@@ -242,6 +318,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginLeft:20,
   },
   sectionSubtitle: {
     color: '#666',
@@ -272,6 +349,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     padding: 10,
+    marginLeft:10,
   },
   reviewImage: {
     width: 80,
@@ -296,4 +374,64 @@ const styles = StyleSheet.create({
   starContainer: {
     flexDirection: 'row',
   },
+   modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBox: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  modalButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  fullscreenImageOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.9)',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'relative',
+},
+
+fullscreenCloseArea: {
+   position: 'absolute',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+},
+
+fullscreenImage: {
+  width: '90%',
+  height: '70%',
+  borderRadius: 10,
+},
+
+fullscreenCloseButton: {
+  position: 'absolute',
+  top: 40,
+  right: 20,
+  padding: 10,
+},
+
 });
