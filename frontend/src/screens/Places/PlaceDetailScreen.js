@@ -243,7 +243,7 @@ const openReviewsModal = () => {
     <>
       <ScrollView style={styles.container}>
         <View style={styles.headerTitleRow}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Entypo name="chevron-left" size={20} color="#000" />
           </TouchableOpacity>
           <Text style={styles.title}>{place.name}</Text>
