@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Modal
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -58,11 +59,30 @@ export default function ProfileScreen() {
       photoUrl: null,
     },
   ];
+    const [reviews, setReviews] = useState(user.reviews);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedReviewIndex, setSelectedReviewIndex] = useState(null);
+  const handleDeletePress = (index) => {
+    setSelectedReviewIndex(index);
+    setModalVisible(true);
+  };
 
+  const confirmDelete = () => {
+    const updatedReviews = [...reviews];
+    updatedReviews.splice(selectedReviewIndex, 1);
+    setReviews(updatedReviews);
+    setModalVisible(false);
+    setSelectedReviewIndex(null);
+  };
+
+  const cancelDelete = () => {
+    setModalVisible(false);
+    setSelectedReviewIndex(null);
+  };
   console.log(user);
   const year = new Date(user.createdAt).getFullYear();
   return (
-    <ScrollView
+    <View
       contentContainerStyle={[
         styles.container,
         { backgroundColor: theme.background },
@@ -124,7 +144,7 @@ export default function ProfileScreen() {
 
         {/* Example Review Item */}
         <ScrollView
-          style={[styles.reviewTextContainer, { maxHeight: 300 }]} // Adjust height as needed
+          style={[styles.reviewTextContainer, { minHeight: 500 }]} // Adjust height as needed
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
         >
@@ -137,9 +157,16 @@ export default function ProfileScreen() {
                 />
               )}
               <View style={styles.reviewTextContainer}>
-                <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
-                  {review.placeName}
-                </Text>
+           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+  <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
+    {review.placeName}
+  </Text>
+
+  {/* Delete Icon */}
+  <TouchableOpacity onPress={() => handleDeletePress(index)}>
+    <MaterialIcons name="delete" size={20} color="#e0e0e0" />
+  </TouchableOpacity>
+</View>
                 <View style={styles.starContainer}>
                   {[...Array(review.rating)].map((_, i) => (
                     <FontAwesome
@@ -153,6 +180,7 @@ export default function ProfileScreen() {
                 <Text style={[styles.reviewText, { color: theme.text }]}>
                   {review.comment}
                 </Text>
+         
               </View>
             </View>
           ))}
@@ -166,13 +194,34 @@ export default function ProfileScreen() {
     See All Reviews
   </Text>
 </TouchableOpacity> */}
-    </ScrollView>
+  <Modal
+        transparent
+        visible={modalVisible}
+        animationType="fade"
+        onRequestClose={cancelDelete}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalBox}>
+            <Text style={styles.modalText}>{i18n.t('deleteReviewConfirmation')}</Text>
+            <View style={styles.modalButtons}>
+              <TouchableOpacity style={[styles.modalButton, { backgroundColor: '#FAC75C' }]} onPress={confirmDelete}>
+                <Text style={styles.modalButtonText}>{i18n.t('yes')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.modalButton, { backgroundColor: 'gray' }]} onPress={cancelDelete}>
+                <Text style={styles.modalButtonText}>{i18n.t('no')}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    padding: 30,
     backgroundColor: '#fff',
     flexGrow: 1,
   },
@@ -189,6 +238,7 @@ const styles = StyleSheet.create({
   headerIcons: {
     flexDirection: 'row',
     gap: 10,
+    marginRight:10,
   },
   icon: {
     marginLeft: 10,
@@ -196,6 +246,7 @@ const styles = StyleSheet.create({
   profileSection: {
     flexDirection: 'row',
     marginVertical: 60,
+    marginHorizontal:30,
   },
   avatar: {
     width: 70,
@@ -220,6 +271,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
+    marginLeft:20,
   },
   sectionSubtitle: {
     color: '#666',
@@ -250,6 +302,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     padding: 10,
+    marginLeft:10,
   },
   reviewImage: {
     width: 80,
@@ -273,5 +326,36 @@ const styles = StyleSheet.create({
   },
   starContainer: {
     flexDirection: 'row',
+  },
+   modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalBox: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  modalButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 });
