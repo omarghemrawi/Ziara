@@ -7,6 +7,7 @@ import Login  from "./pages/Login";
 import AdditionalInfo from "./pages/AdditionalInfo";
 import ProfilePage from "./pages/ProfilePage";
  import Plan             from "./pages/plan/Plan"; 
+ import ReviewsPage from "./pages/ReviewsPage";
 import "./App.css";
 
 function App() {
@@ -25,6 +26,9 @@ function App() {
           <Route path="/additional-info" element={<AdditionalInfo />} />
 
            <Route path="/profile" element={<ProfilePage />} />
+
+         {/* صفحة المراجعات لكل business */}
+         <Route path="/reviews/:placeId" element={<ReviewsPage />} />
 
           {/* Signup page on "/login" */}
           <Route path="/login" element={<Login />} />
