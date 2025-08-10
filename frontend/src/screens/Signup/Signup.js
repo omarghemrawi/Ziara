@@ -23,7 +23,7 @@ export default function Signup({ navigation }) {
 
   const handleSignUp = async values => {
     try {
-      const resp = await axios.post('http://192.168.0.103:3000/api/user/signup', {
+      const resp = await axios.post('http://10.0.2.2:3000/api/user/signup', {
         username: values.username,
         email: values.email,
         password: values.password,

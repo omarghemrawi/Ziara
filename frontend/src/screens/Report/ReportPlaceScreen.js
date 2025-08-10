@@ -5,27 +5,31 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert
+  Alert,
 } from 'react-native';
 import { useTheme } from '../Theme/Theme';
 import { useNavigation } from '@react-navigation/native';
 import i18n from '../locales/i18n';
 import Entypo from 'react-native-vector-icons/Entypo';
+import { useRoute } from '@react-navigation/native';
+import axios from 'axios';
 
 export default function ReportPlaceScreen() {
   const { theme } = useTheme();
   const navigation = useNavigation();
+  const route = useRoute();
+  const { placeId, userId } = route.params;
 
   const reasonsList = [
-   i18n.t('hateSpeech'),
-     i18n.t('offensiveLanguage'),
-        i18n.t('inappropriateContent'),
-  i18n.t('misleadingContent'),
+    i18n.t('hateSpeech'),
+    i18n.t('offensiveLanguage'),
+    i18n.t('inappropriateContent'),
+    i18n.t('misleadingContent'),
   ];
 
   const [selectedReasons, setSelectedReasons] = useState([]);
 
-  const toggleReason = (reason) => {
+  const toggleReason = reason => {
     if (selectedReasons.includes(reason)) {
       setSelectedReasons(selectedReasons.filter(r => r !== reason));
     } else {
@@ -33,27 +37,44 @@ export default function ReportPlaceScreen() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (selectedReasons.length === 0) {
       Alert.alert('Error', 'Please select at least one reason.');
       return;
     }
 
-    // Connect to your API here
-    console.log('Selected reasons:', selectedReasons);
+    try {
+      const response = await axios.post('http://10.0.2.2:5000/api/report', {
+        type: 'Client',
+        complainant: 'User',
+        targetId: placeId,
+        reportedBy: userId,
+        reason: selectedReasons,
+      });
 
-    Alert.alert('Report Submitted', 'Thank you for your feedback.');
-    navigation.goBack();
+      if (response.data.success) {
+        Alert.alert('Report Submitted', 'Thank you for your feedback.');
+        navigation.goBack();
+      } else {
+        Alert.alert('Error', 'Failed to submit the report. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      Alert.alert('Error', 'Something went wrong. Please try again.');
+    }
   };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Entypo name="chevron-left" size={20} color="#000" />
-                  </TouchableOpacity>
-      <Text style={[styles.title, { color: theme.text }]}> {i18n.t('reportPlace')}</Text>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
+        <Entypo name="chevron-left" size={20} color="#000" />
+      </TouchableOpacity>
+      <Text style={[styles.title, { color: theme.text }]}>
+        {' '}
+        {i18n.t('reportPlace')}
+      </Text>
       <Text style={[styles.subtitle, { color: theme.text }]}>
-       {i18n.t('selectReason')}
+        {i18n.t('selectReason')}
       </Text>
 
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -64,17 +85,19 @@ export default function ReportPlaceScreen() {
               key={index}
               style={[
                 styles.reasonBox,
-                { 
+                {
                   backgroundColor: selected ? '#FAC75C' : '#f0f0f0',
-                  borderColor: selected ? '#e0a500' : '#ccc'
-                }
+                  borderColor: selected ? '#e0a500' : '#ccc',
+                },
               ]}
               onPress={() => toggleReason(reason)}
             >
-              <Text style={[
-                styles.reasonText,
-                { color: selected ? '#fff' : theme.text }
-              ]}>
+              <Text
+                style={[
+                  styles.reasonText,
+                  { color: selected ? '#fff' : theme.text },
+                ]}
+              >
                 {reason}
               </Text>
             </TouchableOpacity>
@@ -127,5 +150,5 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
-  }
+  },
 });

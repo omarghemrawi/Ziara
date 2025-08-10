@@ -9,66 +9,41 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useTheme } from '../Theme/Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { useSelector, useDispatch } from 'react-redux';
+import { useTheme } from '../Theme/Theme';
+import { useSelector } from 'react-redux';
 
-const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
+const SearchSection = ({ title, headerColor, headerImage }) => {
   const navigation = useNavigation();
   const [searchValue, setSearchValue] = useState('');
   const { theme } = useTheme();
   const [places, setPlaces] = useState([]);
   const data = useSelector(state => state.places.all);
-  const dispatch = useDispatch();
-
-  const actionTypeMap = {
-    restaurant: 'SET_RESTAURANTS',
-    shop: 'SET_SHOPS',
-    hotel: 'SET_HOTELS',
-    activity: 'SET_ACTIVITY_PLACES',
-    religious: 'SET_RELIGIOUS_PALCES',
-    touristic: 'SET_TOURISTIC_PLACES',
-  };
 
   const getPlaces = (searchTerm = '') => {
     try {
       const lowerSearch = searchTerm.toLowerCase();
 
       const filtered = data.filter(item => {
-        // Match type first
-        if (item.type !== typePlace) return false;
-
-        // If search is empty, show all
         if (!lowerSearch) return true;
 
-        // Check if name or city contains the search term
         const nameMatch = item.name?.toLowerCase().includes(lowerSearch);
         const cityMatch = item.city?.toLowerCase().includes(lowerSearch);
 
-        return cityMatch || nameMatch;
+        return nameMatch || cityMatch;
       });
 
       setPlaces(filtered);
     } catch (error) {
-      console.log(`Error filtering ${typePlace}:`, error);
+      console.log('Error filtering places:', error);
     }
   };
 
   useEffect(() => {
-    const typeFiltered = data.filter(item => item.type === typePlace);
-
-    const actionType = actionTypeMap[typePlace] || 'SET_PLACES';
-    dispatch({
-      type: actionType,
-      payload: typeFiltered,
-    });
-  }, []);
-
-  useEffect(() => {
+    console.log('Redux places data:', data);
     getPlaces(searchValue);
-  }, [searchValue, data, typePlace]);
+  }, [searchValue, data]);
 
   //fill the stars depending on the rate of the place
   const renderStars = rating => {
@@ -109,12 +84,7 @@ const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
       <View style={[styles.header, { backgroundColor: headerColor }]}>
         <Image
           source={headerImage}
-          style={[
-            styles.headerImage,
-            title === 'Search' && { width: 110 },
-            title === 'Activity' && { width: 130, height: 160 },
-            title === 'Hotels' && { width: 130, height: 140 },
-          ]}
+          style={[styles.headerImage, title === 'Search' && { width: 110 }]}
         />
         <View style={styles.headerTitleRow}>
           <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -128,39 +98,45 @@ const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
         <View style={styles.searchInputContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder="Search..."
+            placeholder="Search by name or city..."
             value={searchValue}
             onChangeText={setSearchValue}
+            autoCorrect={false}
+            autoCapitalize="none"
           />
         </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.grid}>
-        {places.map((item, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.card}
-            onPress={() =>
-              navigation.navigate('PlaceDetails', {
-                id: item._id,
-                type: item.type,
-              })
-            }
-            activeOpacity={0.8}
-          >
-            <Image
-              source={{ uri: item.profile }}
-              style={styles.imageItem}
-              resizeMode="cover"
-            />
+        {places.length === 0 ? (
+          <Text style={styles.noResultsText}>No results found</Text>
+        ) : (
+          places.map(item => (
+            <TouchableOpacity
+              key={item._id || item.id}
+              style={styles.card}
+              onPress={() =>
+                navigation.navigate('PlaceDetails', {
+                  id: item._id,
+                  type: item.type,
+                })
+              }
+              activeOpacity={0.8}
+            >
+              <Image
+                source={{ uri: item.profile }}
+                style={styles.imageItem}
+                resizeMode="cover"
+              />
 
-            <Text style={styles.cardTitle}>{item.name}</Text>
-            <View style={styles.ratingContainer}>
-              {renderStars(item.rate)}
-              <Text style={styles.ratingText}> {item.rate} / 5</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+              <Text style={styles.cardTitle}>{item.name}</Text>
+              <View style={styles.ratingContainer}>
+                {renderStars(item.rate)}
+                <Text style={styles.ratingText}> {item.rate} / 5</Text>
+              </View>
+            </TouchableOpacity>
+          ))
+        )}
       </ScrollView>
     </View>
   );
@@ -177,7 +153,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 70,
     borderBottomRightRadius: 70,
     padding: 20,
-
     justifyContent: 'flex-end',
   },
   headerImage: {
@@ -190,7 +165,6 @@ const styles = StyleSheet.create({
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-
     marginBottom: 90,
   },
   title: {
@@ -216,15 +190,9 @@ const styles = StyleSheet.create({
     marginTop: 80,
     marginBottom: 30,
   },
-
   searchInput: {
     flex: 1,
     fontSize: 16,
-  },
-  sendIcon: {
-    marginLeft: 10,
-    padding: 8,
-    borderRadius: 10,
   },
   grid: {
     flexDirection: 'row',
@@ -264,6 +232,14 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     color: '#555',
   },
+  noResultsText: {
+    flex: 1,
+    textAlign: 'center',
+    marginTop: 40,
+    fontSize: 16,
+    color: '#888',
+    width: '100%',
+  },
 });
 
-export default PlacesSection;
+export default SearchSection;
