@@ -1,7 +1,9 @@
 // src/pages/AdditionalInfo.jsx
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import "./AdditionalInfo.css";
+
 
 export default function AdditionalInfo() {
   // بيانات صفحة التسجيل
@@ -25,7 +27,7 @@ export default function AdditionalInfo() {
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {};
@@ -48,9 +50,17 @@ export default function AdditionalInfo() {
     }
 
     // دمج البيانات ثم التنقل
-    const fullProfile = { ...signupData, ...info };
-    console.log("Full profile:", fullProfile);
-    navigate("/profile", { state: fullProfile });
+    
+    try {
+    const response = await axios.post("http://localhost:5000/api/client/update-profile", info);
+
+    console.log("Profile updated:", response.data);
+
+    navigate("/profile", { state: info });
+  } catch (error) {
+    console.error("Profile update failed:", error.response?.data || error.message);
+  }
+
   };
 
   return (

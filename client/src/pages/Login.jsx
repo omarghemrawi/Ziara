@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import {setUser} from "../redux/userActions"
+import { useDispatch } from 'react-redux';
 import './Login.css';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [credentials, setCredentials] = useState({
     email: '',
     password: ''
@@ -12,10 +18,23 @@ export default function Login() {
     setCredentials(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    // TODO: call your login API here
-    console.log('Logging in with:', credentials);
+   try {
+      const response = await axios.post("http://localhost:5000/api/client/login", credentials);
+      const user = response.data.user;
+
+      // Dispatch user data to Redux store
+      dispatch(setUser(user));
+
+      console.log("Logged in user:", user);
+
+      // Redirect or other logic here, e.g.,
+       navigate("/profile")
+    } catch (err) {
+      console.error(err);
+      alert("Login Faild")
+    }
   };
 
   return (
