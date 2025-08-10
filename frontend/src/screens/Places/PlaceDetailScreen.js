@@ -30,7 +30,7 @@ export default function PlaceDetailScreen() {
   const [reviewText, setReviewText] = useState('');
   const [selectedStar, setSelectedStar] = useState(0);
   const [image, setImage] = useState(null);
-const [showTooltip, setShowTooltip] = useState(true);
+  const [showTooltip, setShowTooltip] = useState(true);
 
   const route = useRoute();
   const { id, type } = route.params;
@@ -38,22 +38,8 @@ const [showTooltip, setShowTooltip] = useState(true);
   const data = useSelector(state => state.places[type]);
   const user = useSelector(state => state.user.user);
   const dispatch = useDispatch();
-  //just testing with dummy data
-  const place1 = {
-    name: 'Test Resto',
-    description: 'A dummy place for testing.',
-    facebook: 'https://facebook.com/testPage',
-    instagram: 'https://instagram.com/testPage',
-    menuLink: 'https://example.com/menu.pdf',
-  };
-  //testing with dummy data
-  const serviceType1 = 'resto';
-  const openLink = url => {
-    if (!url) return;
-    Linking.canOpenURL(url).then(supported => {
-      if (supported) Linking.openURL(url);
-    });
-  };
+
+  console.log(data);
 
   const place = data.find(item => item._id === id);
 
@@ -66,12 +52,12 @@ const [showTooltip, setShowTooltip] = useState(true);
     try {
       console.log(id, user._id);
       if (newValue) {
-        await axios.post('http://192.168.0.103:5000/api/favorite/', {
+        await axios.post('http://10.0.2.2:5000/api/favorite/', {
           placeId: id,
           userId: user._id,
         });
       } else {
-        await axios.delete('http://192.168.0.103:5000/api/favorite', {
+        await axios.delete('http://10.0.2.2:5000/api/favorite', {
           data: {
             placeId: id,
             userId: user._id,
@@ -158,13 +144,11 @@ const [showTooltip, setShowTooltip] = useState(true);
     } else {
       setIsFavourite(false);
     }
-      const timer = setTimeout(() => {
-    setShowTooltip(false);
-  }, 4000); // Hide after 4 seconds
-  return () => clearTimeout(timer);
+    const timer = setTimeout(() => {
+      setShowTooltip(false);
+    }, 4000); // Hide after 4 seconds
+    return () => clearTimeout(timer);
   }, []);
-
-
 
   //fetching reviews of a specific place
   const fetchReviews = async placeId => {
@@ -185,26 +169,6 @@ const [showTooltip, setShowTooltip] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
-
-  // Example data
-  const allReviews = [
-    { id: 1, name: 'John', rating: 4, comment: 'Amazing place!' },
-    { id: 2, name: 'Jane', rating: 5, comment: 'Best experience ever.' },
-    { id: 3, name: 'Ali', rating: 3, comment: 'It was okay.' },
-    { id: 4, name: 'Sara', rating: 5, comment: 'Highly recommended!' },
-    { id: 5, name: 'Mike', rating: 4, comment: 'Enjoyed a lot!' },
-    { id: 6, name: 'Lina', rating: 2, comment: 'Not worth it.' },
-    { id: 7, name: 'Nour', rating: 3, comment: 'Just fine.' },
-    { id: 8, name: 'Tony', rating: 5, comment: 'Superb vibes.' },
-    { id: 9, name: 'Maya', rating: 4, comment: 'Loved the atmosphere!' },
-    { id: 10, name: 'Sam', rating: 5, comment: 'Exceptional hospitality!' },
-    { id: 11, name: 'George', rating: 3, comment: 'Could be better.' },
-  ];
-
-  useEffect(() => {
-    // Simulate API call
-    // fetchReviews();
-  }, []);
 
   const loadMoreReviews = () => {
     setVisibleReviews(prev => prev + 3);
@@ -262,19 +226,35 @@ const [showTooltip, setShowTooltip] = useState(true);
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Entypo name="chevron-left" size={20} color="#000" />
           </TouchableOpacity>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' ,  width: '90%',}}>
-          <Text style={styles.title}>{place.name}</Text>
-     <View style={{ alignItems: 'center' }}>
-  {showTooltip && (
-    <View style={styles.tooltipContainer}>
-      <Text style={styles.tooltipText}>{i18n.t('tooltipReport')}</Text>
-      <View style={styles.tooltipArrow} />
-    </View>
-  )}
-  <TouchableOpacity onPress={() => navigation.navigate('ReportPlaceScreen')}>
-    <MaterialIcons name="report" size={29} color="#FAC75C" />
-  </TouchableOpacity>
-</View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '90%',
+            }}
+          >
+            <Text style={styles.title}>{place.name}</Text>
+            <View style={{ alignItems: 'center' }}>
+              {showTooltip && (
+                <View style={styles.tooltipContainer}>
+                  <Text style={styles.tooltipText}>
+                    {i18n.t('tooltipReport')}
+                  </Text>
+                  <View style={styles.tooltipArrow} />
+                </View>
+              )}
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('ReportPlaceScreen', {
+                    placeId: id,
+                    userId: user._id,
+                  })
+                }
+              >
+                <MaterialIcons name="report" size={29} color="#FAC75C" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
@@ -784,31 +764,30 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   tooltipContainer: {
-  backgroundColor: '#FAC75C',
-  paddingVertical: 4,
-  paddingHorizontal: 8,
-  borderRadius: 20,
-  marginBottom: 6,
-  position: 'relative',
-},
-tooltipText: {
-  color: '#fff',
-  fontSize: 12,
-  fontWeight: '500',
-},
-tooltipArrow: {
-  position: 'absolute',
-  bottom: -6,
-  left: '60%',
-  marginLeft: -6,
-  width: 0,
-  height: 0,
-  borderLeftWidth: 6,
-  borderRightWidth: 6,
-  borderTopWidth: 6,
-  borderLeftColor: 'transparent',
-  borderRightColor: 'transparent',
-  borderTopColor: '#FAC75C',
-},
-
+    backgroundColor: '#FAC75C',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 20,
+    marginBottom: 6,
+    position: 'relative',
+  },
+  tooltipText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  tooltipArrow: {
+    position: 'absolute',
+    bottom: -6,
+    left: '60%',
+    marginLeft: -6,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 6,
+    borderRightWidth: 6,
+    borderTopWidth: 6,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FAC75C',
+  },
 });

@@ -44,7 +44,7 @@ export default function EditProfileScreen({ navigation }) {
       } else {
         imageUrl = user.profile;
       }
-      const res = await axios.put('http://192.168.0.103:5000/api/user', {
+      const res = await axios.put('http://10.0.2.2:5000/api/user', {
         profile: imageUrl,
         userId: user._id,
         about,

@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Modal
+  Modal,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -22,78 +22,38 @@ export default function ProfileScreen() {
   const { theme } = useTheme();
   const user = useSelector(state => state.user.user);
   const [reviews, setReviews] = useState([]);
- 
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedReviewIndex, setSelectedReviewIndex] = useState(null);
   const [imageModalVisible, setImageModalVisible] = useState(false);
-const [selectedImageUri, setSelectedImageUri] = useState(null);
-const openImageModal = (uri) => {
-  setSelectedImageUri(uri);
-  setImageModalVisible(true);
-};
+  const [selectedImageUri, setSelectedImageUri] = useState(null);
+  const openImageModal = uri => {
+    setSelectedImageUri(uri);
+    setImageModalVisible(true);
+  };
 
-const closeImageModal = () => {
-  setImageModalVisible(false);
-  setSelectedImageUri(null);
-};
+  const closeImageModal = () => {
+    setImageModalVisible(false);
+    setSelectedImageUri(null);
+  };
 
-
-  const handleDeletePress = (index) => {
-    setSelectedReviewIndex(index);
-    setModalVisible(true);
+  const handleDeletePress = index => {
+    // setSelectedReviewIndex(index);
+    // setModalVisible(true);
   };
 
   const confirmDelete = () => {
-    const updatedReviews = [...reviews];
-    updatedReviews.splice(selectedReviewIndex, 1);
-    setReviews(updatedReviews);
-    setModalVisible(false);
-    setSelectedReviewIndex(null);
+    // const updatedReviews = [...reviews];
+    // updatedReviews.splice(selectedReviewIndex, 1);
+    // setReviews(updatedReviews);
+    // setModalVisible(false);
+    // setSelectedReviewIndex(null);
   };
 
   const cancelDelete = () => {
-    setModalVisible(false);
-    setSelectedReviewIndex(null);
+    // setModalVisible(false);
+    // setSelectedReviewIndex(null);
   };
-  //dummy data for reviews
-  // user.reviews = [
-  //   {
-  //     placeName: 'Raouche Rock',
-  //     comment: 'Amazing view and clean place!',
-  //     rating: 5,
-  //     photoUrl: 'https://example.com/raouche.jpg',
-  //   },
-  //   {
-  //     placeName: 'Raouche Rock',
-  //     comment: 'Amazing view and clean place!',
-  //     rating: 5,
-  //     photoUrl: 'https://example.com/raouche.jpg',
-  //   },
-  //   {
-  //     placeName: 'Raouche Rock',
-  //     comment: 'Amazing view and clean place!',
-  //     rating: 5,
-  //     photoUrl: 'https://example.com/raouche.jpg',
-  //   },
-  //   {
-  //     placeName: 'Beirut Souks',
-  //     comment: 'Nice shops but a bit crowded.',
-  //     rating: 3,
-  //     photoUrl: null,
-  //   },
-  //   {
-  //     placeName: 'Beirut Souks',
-  //     comment: 'Nice shops but a bit crowded.',
-  //     rating: 3,
-  //     photoUrl: null,
-  //   },
-  //   {
-  //     placeName: 'Beirut Souks',
-  //     comment: 'Nice shops but a bit crowded.',
-  //     rating: 3,
-  //     photoUrl: null,
-  //   },
-  // ];
 
   const fetchReviews = async () => {
     const userId = user._id;
@@ -110,12 +70,12 @@ const closeImageModal = () => {
       console.error('Error fetching user reviews:', error);
     }
   };
-  console.log(reviews);
 
   const year = new Date(user.createdAt).getFullYear();
 
   useEffect(() => {
     fetchReviews();
+    console.log(reviews);
   }, []);
   return (
     <View
@@ -184,41 +144,55 @@ const closeImageModal = () => {
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
         >
-          {reviews.map((review, index) => (
-            <View key={index} style={styles.reviewCard}>
-           <TouchableOpacity onPress={() => openImageModal(review.photoUrl)}>
-    <Image
-      source={{ uri: review.photoUrl }}
-      style={styles.reviewImage}
-    />
-  </TouchableOpacity>
-              <View style={styles.reviewTextContainer}>
-                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-  <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
-    {review.placeName}
-  </Text>
-
-  {/* Delete Icon */}
-  <TouchableOpacity onPress={() => handleDeletePress(index)}>
-    <MaterialIcons name="delete" size={20} color="#e0e0e0" />
-  </TouchableOpacity>
-</View>
-                <View style={styles.starContainer}>
-                  {[...Array(review.rating)].map((_, i) => (
-                    <FontAwesome
-                      key={i}
-                      name="star"
-                      size={16}
-                      color="#FFD700"
-                    />
-                  ))}
+          {reviews.length > 0 ? (
+            reviews.map((review, index) => (
+              <View key={index} style={styles.reviewCard}>
+                <TouchableOpacity onPress={() => openImageModal(review.image)}>
+                  <Image
+                    source={{
+                      uri: review.image || 'https://via.placeholder.com/80',
+                    }}
+                    style={styles.reviewImage}
+                  />
+                </TouchableOpacity>
+                <View style={styles.reviewTextContainer}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <Text
+                      style={[styles.reviewPlaceName, { color: theme.text }]}
+                    >
+                      {review.placeId?.name || 'Unknown Place'}
+                    </Text>
+                    <TouchableOpacity onPress={() => handleDeletePress(index)}>
+                      <MaterialIcons name="delete" size={20} color="#e0e0e0" />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.starContainer}>
+                    {[...Array(review.rating)].map((_, i) => (
+                      <FontAwesome
+                        key={i}
+                        name="star"
+                        size={16}
+                        color="#FFD700"
+                      />
+                    ))}
+                  </View>
+                  <Text style={[styles.reviewText, { color: theme.text }]}>
+                    {review.comment}
+                  </Text>
                 </View>
-                <Text style={[styles.reviewText, { color: theme.text }]}>
-                  {review.comment}
-                </Text>
               </View>
+            ))
+          ) : (
+            <View>
+              <Text style={{ color: theme.text }}>No reviews yet</Text>
             </View>
-          ))}
+          )}
         </ScrollView>
       </View>
       {/* <TouchableOpacity
@@ -229,7 +203,7 @@ const closeImageModal = () => {
     See All Reviews
   </Text>
 </TouchableOpacity> */}
- <Modal
+      <Modal
         transparent
         visible={modalVisible}
         animationType="fade"
@@ -237,33 +211,50 @@ const closeImageModal = () => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
-            <Text style={styles.modalText}>{i18n.t('deleteReviewConfirmation')}</Text>
+            <Text style={styles.modalText}>
+              {i18n.t('deleteReviewConfirmation')}
+            </Text>
             <View style={styles.modalButtons}>
-              <TouchableOpacity style={[styles.modalButton, { backgroundColor: '#FAC75C' }]} onPress={confirmDelete}>
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: '#FAC75C' }]}
+                onPress={confirmDelete}
+              >
                 <Text style={styles.modalButtonText}>{i18n.t('yes')}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.modalButton, { backgroundColor: 'gray' }]} onPress={cancelDelete}>
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: 'gray' }]}
+                onPress={cancelDelete}
+              >
                 <Text style={styles.modalButtonText}>{i18n.t('no')}</Text>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
-<Modal
-  visible={imageModalVisible}
-  transparent={true}
-  animationType="fade"
-  onRequestClose={closeImageModal}
->
-  <View style={styles.fullscreenImageOverlay}>
-    <TouchableOpacity style={styles.fullscreenCloseArea} onPress={closeImageModal} />
-    <Image source={{ uri: selectedImageUri }} style={styles.fullscreenImage} resizeMode="contain" />
-    <TouchableOpacity style={styles.fullscreenCloseButton} onPress={closeImageModal}>
-      <MaterialIcons name="close" size={30} color="#fff" />
-    </TouchableOpacity>
-  </View>
-</Modal>
-
+      <Modal
+        visible={imageModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeImageModal}
+      >
+        <View style={styles.fullscreenImageOverlay}>
+          <TouchableOpacity
+            style={styles.fullscreenCloseArea}
+            onPress={closeImageModal}
+          />
+          <Image
+            source={{ uri: selectedImageUri }}
+            style={styles.fullscreenImage}
+            resizeMode="contain"
+          />
+          <TouchableOpacity
+            style={styles.fullscreenCloseButton}
+            onPress={closeImageModal}
+          >
+            <MaterialIcons name="close" size={30} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -287,7 +278,7 @@ const styles = StyleSheet.create({
   headerIcons: {
     flexDirection: 'row',
     gap: 10,
-    marginRight:10,
+    marginRight: 10,
   },
   icon: {
     marginLeft: 10,
@@ -295,7 +286,7 @@ const styles = StyleSheet.create({
   profileSection: {
     flexDirection: 'row',
     marginVertical: 60,
-    marginHorizontal:30,
+    marginHorizontal: 30,
   },
   avatar: {
     width: 70,
@@ -320,7 +311,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft:20,
+    marginLeft: 20,
   },
   sectionSubtitle: {
     color: '#666',
@@ -351,7 +342,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     padding: 10,
-    marginLeft:10,
+    marginLeft: 10,
   },
   reviewImage: {
     width: 80,
@@ -376,7 +367,7 @@ const styles = StyleSheet.create({
   starContainer: {
     flexDirection: 'row',
   },
-   modalOverlay: {
+  modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
@@ -408,32 +399,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   fullscreenImageOverlay: {
-  flex: 1,
-  backgroundColor: 'rgba(0,0,0,0.9)',
-  justifyContent: 'center',
-  alignItems: 'center',
-  position: 'relative',
-},
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
 
-fullscreenCloseArea: {
-   position: 'absolute',
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-},
+  fullscreenCloseArea: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
 
-fullscreenImage: {
-  width: '90%',
-  height: '70%',
-  borderRadius: 10,
-},
+  fullscreenImage: {
+    width: '90%',
+    height: '70%',
+    borderRadius: 10,
+  },
 
-fullscreenCloseButton: {
-  position: 'absolute',
-  top: 40,
-  right: 20,
-  padding: 10,
-},
-
+  fullscreenCloseButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    padding: 10,
+  },
 });

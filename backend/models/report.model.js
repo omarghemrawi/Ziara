@@ -7,7 +7,6 @@ const reportSchema = new mongoose.Schema({
     enum: ['Client', 'User'], 
     required: true,
   },
-
   targetId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -16,22 +15,25 @@ const reportSchema = new mongoose.Schema({
   reportedBy: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
-    refPath: 'clientType' 
+    refPath: 'complainant' 
   },
-  clientType: {
+  complainant: {
     type: String,
     enum: ['User', 'Client'],
     required: true
   },
   reason: {
-    type: String,
+    type: [String],
     enum: [
+
+      'Offensive Language', // for Each
+
       // reasons user might report a place
-      'false content',
-      'spam',
-      'offensive language',
-      
+      'Hate Speech',
+      'Inappropriate Content',
+      'Misleading Content',
       // reasons owner might report a user
+      'Spam',
     ],
     required: true
   },
