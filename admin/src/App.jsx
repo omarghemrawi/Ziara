@@ -1,3 +1,5 @@
+// admin/src/App.jsx
+
 import "./App.css";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Login from "./pages/login/login";
@@ -6,7 +8,12 @@ import StaticPlace from "./pages/static/StaticPlace";
 import AddStaticPlace from "./pages/static/AddStaticPlace";
 import EditStaticPage from "./pages/static/EditStaticPage";
 import ClientPage from "./pages/client/ClientPage";
-import Report from "./pages/report/Report";
+
+// --- CHANGE THIS LINE ---
+// Import 'ReportPage' because that's what Report.jsx exports by default
+import ReportPage from "./pages/report/Report"; 
+// Also, import the CSS for the ReportPage here, so it's applied when the component mounts
+import "./pages/report/report.css";
 
 
 function App() {
@@ -28,7 +35,8 @@ function App() {
           }
         />
         <Route path="/editStaticPlace/:id" element={<EditStaticPage />} />
-        <Route path="/report" element={<Report />} />
+        {/* This line is now correct, as ReportPage is imported with the right name */}
+        <Route path="/report" element={<ReportPage />} /> 
       </Routes>
     </Router>
   );
