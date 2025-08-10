@@ -29,7 +29,7 @@ const ClientPage = () => {
 
   const getPlaces = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/client/places");
+      const res = await axios.get("http://localhost:5000/api/client");
       setClientPlaces(res.data.places);
     } catch (error) {
       console.error("Error fetching client places:", error);

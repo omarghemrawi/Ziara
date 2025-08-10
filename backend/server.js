@@ -9,6 +9,7 @@ import clientRouter from "./routes/clientplace.route.js";
 import favRouter from "./routes/favorite.route.js";
 import visitedRouter from "./routes/visited.route.js";
 import reviewRouter from "./routes/reviews.route.js";
+import reportRouter from "./routes/report.route.js";
 
 dotenv.config();
 const app = express();
@@ -23,6 +24,7 @@ app.use("/api/static", staticPlaceRouter);
 app.use("/api/favorite", favRouter);
 app.use("/api/visited", visitedRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/report", reportRouter);
 
 app.listen(PORT, () => {
   connectDB();

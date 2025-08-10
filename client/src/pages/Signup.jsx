@@ -1,6 +1,7 @@
 // src/pages/Signup.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./Signup.css";
 
 export default function Signup() {
@@ -44,7 +45,7 @@ export default function Signup() {
     setErrors((err) => ({ ...err, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newErrors = {};
@@ -77,8 +78,27 @@ export default function Signup() {
       return;
     }
 
-    // otherwise proceed
+    try {
+    // remove `confirm` before sending
+    const { confirm, ...payload } = form;
+
+    const response = await axios.post("http://localhost:5000/api/client/signup", {
+      name : payload.businessName,
+      type: payload.business,
+      email: payload.email,
+      password: payload.password
+    });
+    console.log("Signup successful:", response.data);
+    
+    // Navigate on success
     navigate("/additional-info", { state: form });
+  } catch (error) {
+    console.error("Signup error:", error.response?.data || error.message);
+  }
+
+
+
+    // otherwise proceed
   };
 
   return (

@@ -7,6 +7,7 @@ import { ThemeProvider } from './src/screens/Theme/Theme';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 
+
 // Screens
 import OnboardingScreen from './src/screens/Onboarding/OnboardingScreen';
 import LaunchingScreen from './src/screens/Launching';
@@ -38,6 +39,7 @@ import Favourites            from './src/screens/Favorites/Favorites';
 import Hotels                from './src/screens/Places/Hotels';
 import ActivityPlaces        from './src/screens/Places/ActivityPlaces';
 import MapScreen from './src/screens/Map/Map';
+import ReportPlaceScreen from './src/screens/Report/ReportPlaceScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,7 +65,11 @@ export default function App() {
 
             {/* Intro */}
             <Stack.Screen name="Intro" component={IntroPage} />
+<Stack.Screen
+  name="ReportPlaceScreen"
+  component={ReportPlaceScreen}
 
+/>
             {/* Main tabs */}
             <Stack.Screen name="Home" component={MyTabs} />
 

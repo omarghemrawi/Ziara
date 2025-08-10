@@ -217,7 +217,7 @@ export const deactivePayment = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
+  
 // !!!
 export const getPlace = async (req, res) => {
   try {

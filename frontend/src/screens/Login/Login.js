@@ -16,13 +16,12 @@ export default function Login({ navigation }) {
     email: Yup.string()
       .email('Please enter a valid email')
       .required('Email is required'),
-    password: Yup.string()
-    .required('Password is required'),
+    password: Yup.string().required('Password is required'),
   });
 
   const handleLogin = async values => {
     try {
-      const response = await axios.post('http://192.168.0.103:5000/api/user/login', {
+      const response = await axios.post('http://10.0.2.2:5000/api/user/login', {
         email: values.email,
         password: values.password,
       });
