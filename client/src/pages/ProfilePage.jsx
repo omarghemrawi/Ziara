@@ -6,6 +6,7 @@ import EditProfileModal from "../components/EditProfileModal";
 import EditDescriptionModal from "../components/EditDescriptionModal";
 import EditLinksModal from "../components/EditLinksModal";
 
+
 import "./ProfilePage.css";
 
 function SectionCard({ title, children }) {
@@ -57,6 +58,13 @@ export default function ProfilePage() {
   };
   const handleEditLinks = () => setShowLinksModal(true);
   //const handleEditRating = () => {};
+
+    // دالة للانتقال إلى صفحة المراجعات
+  const handleViewReviews = () => {
+    // نفترض أن profile._id هو معرف الـ business
+    navigate(`/reviews/${profile._id}`);
+  };
+  
   const handleEditPlan = () => navigate("/plan");
 
   const toggleSelectMode = () => {
@@ -280,14 +288,13 @@ const handlePhotoUpload = (e) => {
 
 
       <SectionCard title="Rating & Review">
-      {null/*  <button
-          type="button"
-          className="edit-section"
-          title="Edit Rating"
-          onClick={handleEditRating}
-        >
-          ✎
-        </button> */}
+      <button
+         type="button"
+        className="edit-section"
+         title="View All Reviews"
+         onClick={handleViewReviews}
+      >         View All
+      </button>
         <div className="reviews-row">
           <span>{reviews.count} Reviews</span>
           <span>{reviews.rating} Rating</span>

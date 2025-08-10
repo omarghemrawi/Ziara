@@ -5,14 +5,14 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const [lang, setLang] = useState("EN");
-  const { pathname } = useLocation();
-  const navigate  = useNavigate();
+  const { pathname, state } = useLocation(); // ← added `state`
+  const navigate = useNavigate();
 
   const toggleLang = () => {
     const next = lang === "EN" ? "ع" : "EN";
     setLang(next);
     document.documentElement.lang = next === "EN" ? "en" : "ar";
-    document.documentElement.dir  = next === "EN" ? "ltr" : "rtl";
+    document.documentElement.dir = next === "EN" ? "ltr" : "rtl";
   };
 
   const handleLogout = () => {
@@ -20,17 +20,21 @@ export default function Navbar() {
     navigate("/"); // send them back home
   };
 
+  // ───────── تحديد نوع الصفحة الحالية ─────────
+  const isProfilePage = pathname === "/profile";
+  const isReviewPage = pathname.startsWith("/reviews");
+
   return (
     <nav className="navbar">
       <div className="container">
 
         {/* — Logo + Site Name */}
         <div className="navbar__logo">
-      <img
-        src="/image/navbar__logo.png"
-        alt="Ziara logo"
-        className="logo-img"
-      />
+          <img
+            src="/image/navbar__logo.png"
+            alt="Ziara logo"
+            className="logo-img"
+          />
           <span className="logo-text">Ziara</span>
         </div>
 
@@ -42,20 +46,27 @@ export default function Navbar() {
           <li><Link to="/#contact">Contact</Link></li>
         </ul>
 
-        {/* — Actions: Login / Sign Up / Logout / Language */}
+        {/* — Actions: Profile / Logout / Auth / Language */}
         <div className="navbar__actions">
-          {pathname === "/profile" ? (
-            // On profile route: show only Logout
+          {isProfilePage ? (
+            // فقط في صفحة البروفايل: عرض زر تسجيل الخروج
             <button className="btn logout" onClick={handleLogout}>
               Logout
             </button>
+          ) : isReviewPage ? (
+            // فقط في صفحة المراجعات: عرض زر Profile
+            <Link to="/profile" className="btn signup" state={state}>
+              Profile
+            </Link>
           ) : (
-            // Everywhere else: Login + Sign Up
+            // باقي الصفحات: عرض Login + Sign Up
             <>
-              <Link to="/login"  className="btn login">  Login  </Link>
-              <Link to="/signup" className="btn signup"> Sign Up </Link>
+              <Link to="/login" className="btn login">Login</Link>
+              <Link to="/signup" className="btn signup">Sign Up</Link>
             </>
           )}
+
+          {/* — Language toggle: دائمًا ظاهر */}
           <button className="language-switch" onClick={toggleLang}>
             {lang} <span>▼</span>
           </button>
