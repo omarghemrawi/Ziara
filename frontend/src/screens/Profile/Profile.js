@@ -73,7 +73,6 @@ export default function ProfileScreen() {
       console.log('API response:', res.data);
 
       if (res.data.success && Array.isArray(res.data.reviews)) {
-        // Normalize reviews for consistent rendering
         const normalizedReviews = res.data.reviews.map(r => ({
           _id: r._id,
           placeName: r.placeId?.name || 'Unknown Place',
@@ -95,7 +94,6 @@ export default function ProfileScreen() {
   // Get year user joined
   const year = user?.createdAt ? new Date(user.createdAt).getFullYear() : '';
 
-  // Fetch reviews when user changes or on mount
   useEffect(() => {
     if (user?._id) {
       fetchReviews();
@@ -169,36 +167,41 @@ export default function ProfileScreen() {
           {reviews.length > 0 ? (
             reviews.map((review, index) => (
               <View key={review._id || index} style={styles.reviewCard}>
-                {review.photoUrl && (
+                       {review.photoUrl && (
                   <TouchableOpacity onPress={() => openImageModal(review.photoUrl)}>
                     <Image
                       source={{ uri: review.photoUrl }}
                       style={styles.reviewImage}
                     />
                   </TouchableOpacity>
-                )}
-                <View style={styles.reviewTextContainer}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}
-                  >
+                )} 
+
+                <View style={styles.reviewContent}>
+                  <View style={styles.topRow}>
                     <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
                       {review.placeName}
                     </Text>
                     <TouchableOpacity onPress={() => handleDeletePress(index)}>
-                      <MaterialIcons name="delete" size={20} color="#e0e0e0" />
+                      <MaterialIcons name="delete" size={22} color="black" />
                     </TouchableOpacity>
                   </View>
-                  <View style={styles.starContainer}>
-                    {[...Array(review.rating)].map((_, i) => (
-                      <FontAwesome key={i} name="star" size={16} color="#FFD700" />
+
+                  <View style={styles.starsRow}>
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <Text
+                        key={star}
+                        style={[
+                          styles.star1,
+                          star <= review.rating ? styles.filledStar : styles.unfilledStar,
+                        ]}
+                      >
+                        ★
+                      </Text>
                     ))}
                   </View>
+
                   <Text style={[styles.reviewText, { color: theme.text }]}>
-                    {review.comment}
+                    {review.comment || i18n.t('no_comment')}
                   </Text>
                 </View>
               </View>
@@ -291,7 +294,7 @@ const styles = StyleSheet.create({
   headerIcons: {
     flexDirection: 'row',
     gap: 10,
-    marginRight:10,
+    marginRight: 10,
   },
   icon: {
     marginLeft: 10,
@@ -299,7 +302,7 @@ const styles = StyleSheet.create({
   profileSection: {
     flexDirection: 'row',
     marginVertical: 60,
-    marginHorizontal:30,
+    marginHorizontal: 30,
   },
   avatar: {
     width: 70,
@@ -317,71 +320,61 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 4,
   },
-  section: {
-    marginBottom: 30,
-    alignItems: 'flex-start',
-  },
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft:20,
-  },
-  sectionSubtitle: {
-    color: '#666',
-    fontSize: 14,
-    marginVertical: 10,
-    textAlign: 'center',
-    width: '100%',
-  },
-  button: {
-    borderWidth: 1,
-
-    borderRadius: 30,
-    paddingHorizontal: 105,
-    paddingVertical: 15,
-    alignItems: 'center',
-    width: '100%',
-  },
-  buttonText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  user: {
-    marginLeft: 15,
+    marginLeft: 20,
   },
   reviewCard: {
     flexDirection: 'row',
-    marginBottom: 20,
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     padding: 10,
-    marginLeft:10,
-    
+    marginBottom: 20,
+    marginHorizontal: 10,
+    alignItems: 'flex-start',
   },
   reviewImage: {
     width: 80,
     height: 80,
     borderRadius: 10,
-    marginRight: 10,
     backgroundColor: '#ccc',
+    marginRight: 15,
   },
-  reviewTextContainer: {
+  reviewContent: {
     flex: 1,
+    flexDirection: 'column',
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
   },
   reviewPlaceName: {
     fontWeight: 'bold',
     fontSize: 16,
-    marginBottom: 4,
+    flexShrink: 1,
+  },
+  starsRow: {
+    flexDirection: 'row',
+    marginBottom: 6,
+  },
+  star1: {
+    fontSize: 16,
+    marginRight: 2,
+  },
+  filledStar: {
+    color: '#FAC75C',
+  },
+  unfilledStar: {
+    color: '#ccc',
   },
   reviewText: {
     fontSize: 14,
-    marginBottom: 4,
-    marginTop: 10,
+    flexWrap: 'wrap',
   },
-  starContainer: {
-    flexDirection: 'row',
-  },
-   modalOverlay: {
+  modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
@@ -413,29 +406,28 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   fullscreenImageOverlay: {
-  flex: 1,
-  backgroundColor: 'rgba(0,0,0,0.9)',
-  justifyContent: 'center',
-  alignItems: 'center',
-  position: 'relative',
-},
-fullscreenCloseArea: {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-},
-fullscreenImage: {
-  width: '90%',
-  height: '70%',
-  borderRadius: 12,
-},
-fullscreenCloseButton: {
-  position: 'absolute',
-  top: 40,
-  right: 20,
-  zIndex: 10,
-},
-
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  fullscreenCloseArea: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  fullscreenImage: {
+    width: '90%',
+    height: '70%',
+    borderRadius: 12,
+  },
+  fullscreenCloseButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 10,
+  },
 });
