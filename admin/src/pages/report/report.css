@@ -195,6 +195,35 @@ main {
     color: #e74c3c; /* Red for errors */
     font-weight: bold;
 }
+.action-taken-btn , .details-btn {
+  margin-left: 12px;
+  padding: 8px 10px;
+  background-color: #28a745; /* green */
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.action-taken-btn:hover,.details-btn:hover{
+  background-color: #218838;
+}
+.diactive-btn {
+  background-color: #dc3545; 
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.diactive-btn:hover {
+  background-color: #a71d2a; 
+}
+
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -218,4 +247,117 @@ main {
     .report-detail, .report-description {
         font-size: 0.9em;
     }
+}
+
+
+/* report style */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.25); 
+  backdrop-filter: blur(6px);           
+  z-index: 999;                          
+}
+.details-block {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 75vw;
+  width: 75%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+  text-align: left; 
+  overflow-y: auto;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.details-block h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #004085;
+  text-align: left; 
+}
+
+.details-block p {
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.details-block__profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 2px solid #007bff;
+  align-self: flex-start; 
+}
+
+.details-block__profile-image {
+  width: 140px;           
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 25px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  border: 3px solid #007bff;  
+  image-rendering: auto;       
+  filter: none;               
+}
+
+.details-block__reference-image {
+  width: 120px;              
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  image-rendering: auto;
+  filter: none;
+}
+
+
+.details-block__reference-image:hover {
+  transform: scale(1.05);
+}
+
+/* زر الغلق بالوسط */
+.details-block__close-btn {
+  cursor: pointer;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(0,123,255,0.6);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  align-self: center;  /* زر في الوسط */
+  margin-top: auto;    /* يدفع الزر لأسفل */
+}
+
+.details-block__close-btn:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 18px rgba(0,86,179,0.8);
 }

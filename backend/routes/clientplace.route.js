@@ -15,7 +15,7 @@ const clientRouter = express.Router();
 
 // Get all places
 clientRouter.get("/", getAllPlaces);
-clientRouter.get("/place", getPlace);
+clientRouter.get("/place/:place_id", getPlace);
 // ********************************* WebSite ********************//
 clientRouter.post("/signup", SignUp);
 clientRouter.post("/login", logIn);
