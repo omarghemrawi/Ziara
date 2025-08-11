@@ -1,89 +1,80 @@
 import React, { useState, useEffect } from 'react';
-// If you are using a standard Create React App setup or similar,
-// you might import your CSS like this:
-// import './report.css'; // Make sure report.css is in the same directory or adjust path
+import axios from "axios"
 
-// --- Embedded Report Data (formerly from geninfo.py) ---
-// IMPORTANT: Changes made to report statuses here will NOT be persistent
-// if you refresh the browser, as they are only in memory.
-const initialReportsData = [
-    {
-        "id": "R001",
-        "timestamp": "2025-07-28T14:30:00Z",
-        "reportedBy": "user_101 (client_app)",
-        "type": "place",
-        "targetId": "Baalbek",
-        "description": "The information about Baalbek's opening hours is incorrect on the app. It's currently closed on Mondays, but the app says it's open daily.",
-        "status": "pending"
-    },
-    {
-        "id": "R002",
-        "timestamp": "2025-07-29T09:15:00Z",
-        "reportedBy": "user_202 (mobile_user)",
-        "type": "review",
-        "targetId": "review_45678",
-        "description": "A review for 'Em Sherif Restaurant' contains inappropriate language. Please moderate.",
-        "status": "pending"
-    },
-    {
-        "id": "R003",
-        "timestamp": "2025-07-29T16:00:00Z",
-        "reportedBy": "admin_test (internal)",
-        "type": "hotel",
-        "targetId": "Phoenicia Hotel Beirut",
-        "description": "Phoenicia Hotel's contact number needs to be verified; it might have changed.",
-        "status": "action taken"
-    },
-    {
-        "id": "R004",
-        "timestamp": "2025-07-30T10:00:00Z",
-        "reportedBy": "user_303 (client_app)",
-        "type": "activity",
-        "targetId": "Jeita Grotto",
-        "description": "The cable car at Jeita Grotto was not operational today, but the app didn't mention it.",
-        "status": "pending"
-    },
-    {
-        "id": "R005",
-        "timestamp": "2025-07-31T08:00:00Z",
-        "reportedBy": "user_404 (mobile_user)",
-        "type": "shop",
-        "targetId": "ABC Verdun",
-        "description": "The contact number for ABC Verdun is outdated.",
-        "status": "pending"
-    },
-    {
-        "id": "R006",
-        "timestamp": "2025-08-01T11:45:00Z",
-        "reportedBy": "client_505 (client_app)",
-        "type": "restaurant",
-        "targetId": "Al Sultan Brahim",
-        "description": "Al Sultan Brahim's location on the map is slightly off.",
-        "status": "pending"
-    }
-];
+// const initialReportsData = [
+//     {
+//         "id": "R001",
+//         "timestamp": "2025-07-28T14:30:00Z",
+//         "reportedBy": "user_101 (client_app)",
+//         "type": "place",
+//         "targetId": "Baalbek",
+//         "description": "The information about Baalbek's opening hours is incorrect on the app. It's currently closed on Mondays, but the app says it's open daily.",
+//         "status": "pending"
+//     },
+//     {
+//         "id": "R002",
+//         "timestamp": "2025-07-29T09:15:00Z",
+//         "reportedBy": "user_202 (mobile_user)",
+//         "type": "review",
+//         "targetId": "review_45678",
+//         "description": "A review for 'Em Sherif Restaurant' contains inappropriate language. Please moderate.",
+//         "status": "pending"
+//     },
+//     {
+//         "id": "R003",
+//         "timestamp": "2025-07-29T16:00:00Z",
+//         "reportedBy": "admin_test (internal)",
+//         "type": "hotel",
+//         "targetId": "Phoenicia Hotel Beirut",
+//         "description": "Phoenicia Hotel's contact number needs to be verified; it might have changed.",
+//         "status": "action taken"
+//     },
+//     {
+//         "id": "R004",
+//         "timestamp": "2025-07-30T10:00:00Z",
+//         "reportedBy": "user_303 (client_app)",
+//         "type": "activity",
+//         "targetId": "Jeita Grotto",
+//         "description": "The cable car at Jeita Grotto was not operational today, but the app didn't mention it.",
+//         "status": "pending"
+//     },
+//     {
+//         "id": "R005",
+//         "timestamp": "2025-07-31T08:00:00Z",
+//         "reportedBy": "user_404 (mobile_user)",
+//         "type": "shop",
+//         "targetId": "ABC Verdun",
+//         "description": "The contact number for ABC Verdun is outdated.",
+//         "status": "pending"
+//     },
+//     {
+//         "id": "R006",
+//         "timestamp": "2025-08-01T11:45:00Z",
+//         "reportedBy": "client_505 (client_app)",
+//         "type": "restaurant",
+//         "targetId": "Al Sultan Brahim",
+//         "description": "Al Sultan Brahim's location on the map is slightly off.",
+//         "status": "pending"
+//     }
+// ];
 
 function ReportPage() {
     const [reports, setReports] = useState([]);
     const [filterType, setFilterType] = useState('all');
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
-    // Simulate fetching data (now from local array)
-    useEffect(() => {
-        setLoading(true);
-        setError(null);
-        try {
-            // Simulate a small delay for "loading" effect
-            setTimeout(() => {
-                setReports(initialReportsData);
-                setLoading(false);
-            }, 500); // 0.5 second delay
-        } catch (err) {
-            setError("Failed to load initial report data.");
-            setLoading(false);
+    const getReports = async ()=>{
+        const res = await axios.get("http://localhost:5000/api/report")
+        if(res.data.success){
+            setReports(res.data.reports)
         }
-    }, []); // Empty dependency array means this runs once on mount
+    }
+      console.log(reports)
+
+    useEffect(() => {
+      getReports()
+      
+    }, []); 
+
 
     const handleFilterChange = (event) => {
         setFilterType(event.target.value);
@@ -124,21 +115,7 @@ function ReportPage() {
 
     const filteredReports = getFilteredReports();
 
-    if (loading) {
-        return (
-            <div className="reports-container">
-                <p className="loading-message">Loading reports...</p>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="reports-container">
-                <p className="error-message">{error}</p>
-            </div>
-        );
-    }
+    
 
     return (
         <>
@@ -161,12 +138,12 @@ function ReportPage() {
                         <p className="loading-message">No reports found for the selected filter.</p>
                     ) : (
                         filteredReports.map(report => (
-                            <div className="report-card" key={report.id}>
-                                <h3>Report ID: {report.id} <span style={{ fontSize: '0.8em', color: '#666' }}>({new Date(report.timestamp).toLocaleString()})</span></h3>
+                            <div className="report-card" key={report._id}>
+                                <h3>Report ID: {report._id} <span style={{ fontSize: '0.8em', color: '#666' }}>({new Date(report.createdAt).toLocaleString()})</span></h3>
                                 <div className="report-detail"><strong>Reported By:</strong> {report.reportedBy}</div>
                                 <div className="report-detail"><strong>Type:</strong> {report.type}</div>
                                 <div className="report-detail"><strong>Target ID:</strong> {report.targetId}</div>
-                                <div className="report-description"><strong>Description:</strong><br/>{report.description}</div>
+                                <div className="report-description"><strong>Description:</strong><br/>{report.reason.join(', ')}</div>
                                 <div className="report-status-section">
                                     <label htmlFor={`status-${report.id}`}><strong>Status:</strong></label>
                                     <select 

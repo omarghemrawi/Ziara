@@ -33,3 +33,13 @@ export const createReport = async (req, res) => {
     res.status(500).json({   message: 'Server error',  success:false });
   }
 };
+
+export const getReports = async(req,res)=>{
+  try {
+    const allReport  = await Report.find()
+    res.status(201).json({success:true , reports: allReport})
+  } catch (error) {
+    res.status(500).json({success:false , message:error.message})
+    console.log(error)
+  }
+}

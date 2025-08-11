@@ -4,7 +4,7 @@ const reportSchema = new mongoose.Schema({
   // What is being reported
   type: {
     type: String,
-    enum: ['Client', 'User'], 
+    enum: ['ClientPlace', 'User'], 
     required: true,
   },
   targetId: {
@@ -19,8 +19,12 @@ const reportSchema = new mongoose.Schema({
   },
   complainant: {
     type: String,
-    enum: ['User', 'Client'],
+    enum: ['User', 'ClientPlace'],
     required: true
+  },
+  reviewReported:{
+    type : mongoose.Schema.Types.ObjectId,
+    refer:"Review"
   },
   reason: {
     type: [String],
