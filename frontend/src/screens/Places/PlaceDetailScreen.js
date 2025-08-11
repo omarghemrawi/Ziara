@@ -294,8 +294,8 @@ export default function PlaceDetailScreen() {
 
           <TouchableOpacity
             style={styles.mapButton}
-            onPress={() =>
-              navigation.navigate('Map', { location: place.location || null })
+        onPress={() =>
+              navigation.navigate('Map', { locationUrl: place.location || null })
             }
           >
             <Text style={styles.mapButtonText}>{i18n.t('ViewOnMap')}</Text>
