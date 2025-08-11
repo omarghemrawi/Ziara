@@ -2,12 +2,12 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Carousel from "./components/Carousel";
-import Signup from "./pages/Signup";
-import Login  from "./pages/Login";
+import Signup from "./pages/signup/Signup";
+import Login  from "./pages/login/Login";
 import AdditionalInfo from "./pages/AdditionalInfo";
-import ProfilePage from "./pages/ProfilePage";
+import ProfilePage from "./pages/profile/ProfilePage";
  import Plan             from "./pages/plan/Plan"; 
- import ReviewsPage from "./pages/ReviewsPage";
+ import ReviewsPage from "./pages/review/ReviewsPage";
 import "./App.css";
 
 function App() {

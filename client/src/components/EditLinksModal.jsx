@@ -35,14 +35,6 @@ export default function EditLinksModal({
           placeholder="Enter your Facebook link"
         />
 
-        <label className="input-label">Edit TikTok</label>
-        <input
-          type="text"
-          value={links.tiktok || ""}
-          onChange={(e) => handleChange("tiktok", e.target.value)}
-          placeholder="Enter your TikTok link"
-        />
-
         <label className="input-label">Edit Location</label>
         <input
           type="text"

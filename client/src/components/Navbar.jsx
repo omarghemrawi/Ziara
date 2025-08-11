@@ -1,12 +1,15 @@
 // src/components/Navbar.jsx
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [lang, setLang] = useState("EN");
   const { pathname, state } = useLocation(); // ← added `state`
+  const dispatch =useDispatch()
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const toggleLang = () => {
     const next = lang === "EN" ? "ع" : "EN";
@@ -16,12 +19,17 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    // TODO: clear any stored auth/session state here
-    navigate("/"); // send them back home
-  };
+  // Clear Redux state
+  dispatch({ type: "CLEAR_USER" });
+
+  // Clear localStorage
+  localStorage.removeItem("user");
+
+  // Navigate back to home
+  navigate("/");
+};
 
   // ───────── تحديد نوع الصفحة الحالية ─────────
-  const isProfilePage = pathname === "/profile";
   const isReviewPage = pathname.startsWith("/reviews");
 
   return (
@@ -48,11 +56,15 @@ export default function Navbar() {
 
         {/* — Actions: Profile / Logout / Auth / Language */}
         <div className="navbar__actions">
-          {isProfilePage ? (
+          {user ? (
             // فقط في صفحة البروفايل: عرض زر تسجيل الخروج
-            <button className="btn logout" onClick={handleLogout}>
+            <><button className="btn logout" onClick={handleLogout}>
               Logout
             </button>
+              <Link to="/profile">Profile</Link>
+            </>
+            
+
           ) : isReviewPage ? (
             // فقط في صفحة المراجعات: عرض زر Profile
             <Link to="/profile" className="btn signup" state={state}>
