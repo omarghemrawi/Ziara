@@ -219,22 +219,45 @@ export const deactivePayment = async (req, res) => {
 };
   
 // !!!
+// export const getPlace = async (req, res) => {
+//   try {
+//     const { place_id, field } = req.query;
+//     const userId = req.user.id;
+//     if (!place_id || !field) {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "Place ID or field is required " });
+//     }
+//     const user = await User.findById(userId).select(field);
+//     if (!user) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "User not found" });
+//     }
+//     const place = user.favoritePlaces.find((fav) => fav.place_id === place_id);
+//     if (!place) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "Place not found in favorites" });
+//     }
+//     return res.status(200).json({ success: true, place });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ success: false, message: "Server error" });
+//   }
+// };
+
+// ! this done for admin
 export const getPlace = async (req, res) => {
   try {
-    const { place_id, field } = req.query;
-    const userId = req.user.id;
-    if (!place_id || !field) {
+    const { place_id} = req.params;
+    if (!place_id ) {
       return res
         .status(400)
-        .json({ success: false, message: "Place ID or field is required " });
+        .json({ success: false, message: "Place ID is required " });
     }
-    const user = await User.findById(userId).select(field);
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-    const place = user.favoritePlaces.find((fav) => fav.place_id === place_id);
+   
+    const place = await ClientPlace.findById(place_id)
     if (!place) {
       return res
         .status(404)

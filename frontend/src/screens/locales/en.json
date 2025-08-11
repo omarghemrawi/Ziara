@@ -96,7 +96,15 @@
     "misleadingContent": "Misleading Content",
       "reportPlace": "Report This Place",
   "selectReason": "Please select the reason(s) for reporting this place.",
-   "tooltipReport": "Any problem? Report it!"
+  
+   "tooltipReport": "Any problem? Report it!",
+      "no_reviews_yet": "No reviews yet",
+        "search_by_name_or_city": "Search by name or city...",
+         "edit_favorite": "Edit Favorite",
+  "move_to_visited": "Move to Visited",
+  "delete": "Delete",
+  "city": "City"
+
   
 
 

@@ -14,6 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useTheme } from '../Theme/Theme';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useSelector, useDispatch } from 'react-redux';
+import i18n from '../locales/i18n';
 
 const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
   const navigation = useNavigation();
@@ -128,7 +129,7 @@ const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
         <View style={styles.searchInputContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder="Search..."
+            placeholder={i18n.t('search')}
             value={searchValue}
             onChangeText={setSearchValue}
           />

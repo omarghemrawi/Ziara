@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useTheme } from '../Theme/Theme';
 import { useSelector } from 'react-redux';
+import i18n from '../locales/i18n';
 
 const SearchSection = ({ title, headerColor, headerImage }) => {
   const navigation = useNavigation();
@@ -84,10 +85,10 @@ const SearchSection = ({ title, headerColor, headerImage }) => {
       <View style={[styles.header, { backgroundColor: headerColor }]}>
         <Image
           source={headerImage}
-          style={[styles.headerImage, title === 'Search' && { width: 110 }]}
+          style={[styles.headerImage, title === i18n.t('search') && { width: 110 }]}
         />
         <View style={styles.headerTitleRow}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Entypo name="chevron-left" size={24} color="#fff" />
           </TouchableOpacity>
           <Text style={styles.title}>{title}</Text>
@@ -98,7 +99,7 @@ const SearchSection = ({ title, headerColor, headerImage }) => {
         <View style={styles.searchInputContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder="Search by name or city..."
+            placeholder={i18n.t('search_by_name_or_city')}
             value={searchValue}
             onChangeText={setSearchValue}
             autoCorrect={false}

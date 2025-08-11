@@ -27,61 +27,86 @@ export default function ProfileScreen() {
   const [selectedReviewIndex, setSelectedReviewIndex] = useState(null);
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [selectedImageUri, setSelectedImageUri] = useState(null);
+
+  // Open image modal to show full image
   const openImageModal = uri => {
     setSelectedImageUri(uri);
     setImageModalVisible(true);
   };
 
+  // Close image modal
   const closeImageModal = () => {
     setImageModalVisible(false);
     setSelectedImageUri(null);
   };
 
+  // When user clicks delete icon on a review
   const handleDeletePress = index => {
-    // setSelectedReviewIndex(index);
-    // setModalVisible(true);
+    setSelectedReviewIndex(index);
+    setModalVisible(true);
   };
 
+  // Confirm deletion of review
   const confirmDelete = () => {
-    // const updatedReviews = [...reviews];
-    // updatedReviews.splice(selectedReviewIndex, 1);
-    // setReviews(updatedReviews);
-    // setModalVisible(false);
-    // setSelectedReviewIndex(null);
+    if (selectedReviewIndex === null) return;
+    const updatedReviews = [...reviews];
+    updatedReviews.splice(selectedReviewIndex, 1);
+    setReviews(updatedReviews);
+    setModalVisible(false);
+    setSelectedReviewIndex(null);
   };
 
+  // Cancel deletion modal
   const cancelDelete = () => {
-    // setModalVisible(false);
-    // setSelectedReviewIndex(null);
+    setModalVisible(false);
+    setSelectedReviewIndex(null);
   };
 
+  // Fetch user reviews from API and normalize data
   const fetchReviews = async () => {
-    const userId = user._id;
+    if (!user?._id) return;
+
     try {
       const res = await axios.get(
-        `http://10.0.2.2:5000/api/review/user/${userId}`,
+        `http://192.168.0.103:5000/api/review/user/${user._id}`,
       );
-      if (res.data.success) {
-        setReviews(res.data.reviews); // your state update function
+      console.log('API response:', res.data);
+
+      if (res.data.success && Array.isArray(res.data.reviews)) {
+        // Normalize reviews for consistent rendering
+        const normalizedReviews = res.data.reviews.map(r => ({
+          _id: r._id,
+          placeName: r.placeId?.name || 'Unknown Place',
+          comment: r.comment || '',
+          rating: r.rating || 0,
+          photoUrl: r.image || null,
+        }));
+        setReviews(normalizedReviews);
       } else {
         console.error('Failed to fetch user reviews:', res.data.message);
+        setReviews([]);
       }
     } catch (error) {
       console.error('Error fetching user reviews:', error);
+      setReviews([]);
     }
   };
 
-  const year = new Date(user.createdAt).getFullYear();
+  // Get year user joined
+  const year = user?.createdAt ? new Date(user.createdAt).getFullYear() : '';
 
+  // Fetch reviews when user changes or on mount
   useEffect(() => {
-    fetchReviews();
-    console.log(reviews);
-  }, []);
+    if (user?._id) {
+      fetchReviews();
+    }
+  }, [user]);
+
   return (
     <View
-      contentContainerStyle={[
+      style={[
         styles.container,
-        { backgroundColor: theme.background },
+        { backgroundColor: theme.background, flex: 1 },
       ]}
     >
       {/* Header */}
@@ -92,23 +117,21 @@ export default function ProfileScreen() {
         <Text style={[styles.headerTitle, { color: theme.text }]}>
           {i18n.t('profile')}
         </Text>
-        <View style={[styles.headerIcons, { color: theme.text }]}>
+        <View style={styles.headerIcons}>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <MaterialIcons
               name="edit"
               size={30}
-              color="#000"
-              style={[styles.icon, , { color: theme.text }]}
+              color={theme.text}
+              style={styles.icon}
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('SettingsScreen')}
-          >
+          <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
             <FontAwesome
               name="cog"
               size={30}
-              color="#000"
-              style={[styles.icon, , { color: theme.text }]}
+              color={theme.text}
+              style={styles.icon}
             />
           </TouchableOpacity>
         </View>
@@ -117,44 +140,43 @@ export default function ProfileScreen() {
       {/* User Info */}
       <View style={styles.profileSection}>
         <Image
-          source={{ uri: user.profile || null }} // User profile picture
+          source={{ uri: user?.profile || 'https://via.placeholder.com/70' }}
           style={styles.avatar}
         />
         <View style={styles.user}>
           <Text style={[styles.userName, { color: theme.text }]}>
-            {user.username}
+            {user?.username || ''}
           </Text>
-          <Text style={[styles.joinedText, , { color: theme.text }]}>
-            {i18n.t('joined_in', { year })}
+          <Text style={[styles.joinedText, { color: theme.text }]}>
+            {year ? i18n.t('joined_in', { year }) : ''}
           </Text>
         </View>
       </View>
 
       {/* User Reviews Section */}
-      <View style={{ marginBottom: 30 }}>
+      <View style={{ marginBottom: 30, flex: 1 }}>
         <Text
           style={[styles.sectionTitle, { color: theme.text, marginBottom: 10 }]}
         >
           {i18n.t('your_reviews')}
         </Text>
 
-        {/* Example Review Item */}
         <ScrollView
-          style={[styles.reviewTextContainer, { maxHeight: 300 }]} // Adjust height as needed
+          style={{ flex: 1 }}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
         >
           {reviews.length > 0 ? (
             reviews.map((review, index) => (
-              <View key={index} style={styles.reviewCard}>
-                <TouchableOpacity onPress={() => openImageModal(review.image)}>
-                  <Image
-                    source={{
-                      uri: review.image || 'https://via.placeholder.com/80',
-                    }}
-                    style={styles.reviewImage}
-                  />
-                </TouchableOpacity>
+              <View key={review._id || index} style={styles.reviewCard}>
+                {review.photoUrl && (
+                  <TouchableOpacity onPress={() => openImageModal(review.photoUrl)}>
+                    <Image
+                      source={{ uri: review.photoUrl }}
+                      style={styles.reviewImage}
+                    />
+                  </TouchableOpacity>
+                )}
                 <View style={styles.reviewTextContainer}>
                   <View
                     style={{
@@ -163,10 +185,8 @@ export default function ProfileScreen() {
                       justifyContent: 'space-between',
                     }}
                   >
-                    <Text
-                      style={[styles.reviewPlaceName, { color: theme.text }]}
-                    >
-                      {review.placeId?.name || 'Unknown Place'}
+                    <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
+                      {review.placeName}
                     </Text>
                     <TouchableOpacity onPress={() => handleDeletePress(index)}>
                       <MaterialIcons name="delete" size={20} color="#e0e0e0" />
@@ -174,12 +194,7 @@ export default function ProfileScreen() {
                   </View>
                   <View style={styles.starContainer}>
                     {[...Array(review.rating)].map((_, i) => (
-                      <FontAwesome
-                        key={i}
-                        name="star"
-                        size={16}
-                        color="#FFD700"
-                      />
+                      <FontAwesome key={i} name="star" size={16} color="#FFD700" />
                     ))}
                   </View>
                   <Text style={[styles.reviewText, { color: theme.text }]}>
@@ -189,20 +204,16 @@ export default function ProfileScreen() {
               </View>
             ))
           ) : (
-            <View>
-              <Text style={{ color: theme.text }}>No reviews yet</Text>
+            <View style={{ padding: 20, alignItems: 'center' }}>
+              <Text style={{ color: theme.text, fontSize: 16 }}>
+                {i18n.t('no_reviews_yet')}
+              </Text>
             </View>
           )}
         </ScrollView>
       </View>
-      {/* <TouchableOpacity
-  onPress={() => navigation.navigate('AllReviewsScreen')}
-  style={[styles.button, { borderColor: theme.text, marginTop: 10 }]}
->
-  <Text style={[styles.buttonText, { color: theme.text }]}>
-    See All Reviews
-  </Text>
-</TouchableOpacity> */}
+
+      {/* Delete Confirmation Modal */}
       <Modal
         transparent
         visible={modalVisible}
@@ -231,6 +242,8 @@ export default function ProfileScreen() {
           </View>
         </View>
       </Modal>
+
+      {/* Image Fullscreen Modal */}
       <Modal
         visible={imageModalVisible}
         transparent={true}
@@ -278,7 +291,7 @@ const styles = StyleSheet.create({
   headerIcons: {
     flexDirection: 'row',
     gap: 10,
-    marginRight: 10,
+    marginRight:10,
   },
   icon: {
     marginLeft: 10,
@@ -286,7 +299,7 @@ const styles = StyleSheet.create({
   profileSection: {
     flexDirection: 'row',
     marginVertical: 60,
-    marginHorizontal: 30,
+    marginHorizontal:30,
   },
   avatar: {
     width: 70,
@@ -311,7 +324,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginLeft: 20,
+    marginLeft:20,
   },
   sectionSubtitle: {
     color: '#666',
@@ -342,7 +355,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 10,
     padding: 10,
-    marginLeft: 10,
+    marginLeft:10,
+    
   },
   reviewImage: {
     width: 80,
@@ -367,7 +381,7 @@ const styles = StyleSheet.create({
   starContainer: {
     flexDirection: 'row',
   },
-  modalOverlay: {
+   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
     justifyContent: 'center',
@@ -397,33 +411,5 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: '#fff',
     fontWeight: 'bold',
-  },
-  fullscreenImageOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.9)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative',
-  },
-
-  fullscreenCloseArea: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-  },
-
-  fullscreenImage: {
-    width: '90%',
-    height: '70%',
-    borderRadius: 10,
-  },
-
-  fullscreenCloseButton: {
-    position: 'absolute',
-    top: 40,
-    right: 20,
-    padding: 10,
   },
 });
