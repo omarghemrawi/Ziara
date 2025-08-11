@@ -31,6 +31,18 @@ export default function PlaceDetailScreen() {
   const [selectedStar, setSelectedStar] = useState(0);
   const [image, setImage] = useState(null);
   const [showTooltip, setShowTooltip] = useState(true);
+    const [imageModalVisible, setImageModalVisible] = useState(false);
+    const [selectedImageUri, setSelectedImageUri] = useState(null);
+      const openImageModal = uri => {
+    setSelectedImageUri(uri);
+    setImageModalVisible(true);
+  };
+
+  // Close image modal
+  const closeImageModal = () => {
+    setImageModalVisible(false);
+    setSelectedImageUri(null);
+  };
 
   const route = useRoute();
   const { id, type } = route.params;
@@ -211,16 +223,19 @@ export default function PlaceDetailScreen() {
         </View>
       </View>
  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+  
   {review.image && (
-    <Image
-      source={{ uri: review.image }}
-      style={{
-        width: 100,
-        height: 100,
-        borderRadius: 10,
-        marginRight: 20,
-      }}
-    />
+    <TouchableOpacity onPress={() => openImageModal(review.image)}>
+            <Image
+              source={{ uri: review.image  }}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 10,
+                marginRight: 20,
+              }}
+            />
+          </TouchableOpacity>
   )}
   <Text style={{ flex: 1, fontSize: 15, color: '#333' }}>
     {review.comment}
@@ -250,7 +265,7 @@ export default function PlaceDetailScreen() {
               width: '90%',
             }}
           >
-            <Text style={styles.title}>{place.name}</Text>
+         <Text style={styles.title}>{place?.name || 'Loading...'}</Text>
             <View style={{ alignItems: 'center' }}>
               {showTooltip && (
                 <View style={styles.tooltipContainer}>
@@ -466,6 +481,30 @@ export default function PlaceDetailScreen() {
           </View>
         </View>
       </Modal>
+        <Modal
+              visible={imageModalVisible}
+              transparent={true}
+              animationType="fade"
+              onRequestClose={closeImageModal}
+            >
+              <View style={styles.fullscreenImageOverlay}>
+                <TouchableOpacity
+                  style={styles.fullscreenCloseArea}
+                  onPress={closeImageModal}
+                />
+                <Image
+                  source={{ uri: selectedImageUri }}
+                  style={styles.fullscreenImage}
+                  resizeMode="contain"
+                />
+                <TouchableOpacity
+                  style={styles.fullscreenCloseButton}
+                  onPress={closeImageModal}
+                >
+                  <MaterialIcons name="close" size={30} color="#fff" />
+                </TouchableOpacity>
+              </View>
+            </Modal>
     </>
   );
 }
@@ -805,4 +844,30 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderTopColor: '#FAC75C',
   },
+  fullscreenImageOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.9)',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'relative',
+},
+fullscreenCloseArea: {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+},
+fullscreenImage: {
+  width: '90%',
+  height: '70%',
+  borderRadius: 12,
+},
+fullscreenCloseButton: {
+  position: 'absolute',
+  top: 40,
+  right: 20,
+  zIndex: 10,
+},
+
 });

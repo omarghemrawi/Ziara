@@ -412,4 +412,30 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  fullscreenImageOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0,0,0,0.9)',
+  justifyContent: 'center',
+  alignItems: 'center',
+  position: 'relative',
+},
+fullscreenCloseArea: {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+},
+fullscreenImage: {
+  width: '90%',
+  height: '70%',
+  borderRadius: 12,
+},
+fullscreenCloseButton: {
+  position: 'absolute',
+  top: 40,
+  right: 20,
+  zIndex: 10,
+},
+
 });
