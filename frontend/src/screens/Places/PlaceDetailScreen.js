@@ -184,7 +184,10 @@ export default function PlaceDetailScreen() {
           style={styles.reviewAvatar}
         />
         <View style={{ marginLeft: 10 }}>
-          <Text style={styles.reviewerName}>{review.name}</Text>
+          
+         <Text style={styles.reviewerName}>
+  {review.userId?.name || review.userId?.username || 'Anonymous'}
+</Text>
           <View style={styles.starsRow}>
             {[1, 2, 3, 4, 5].map(
               (
@@ -194,7 +197,7 @@ export default function PlaceDetailScreen() {
                   key={star}
                   style={[
                     styles.star1,
-                    star <= review.rate
+                    star <= review.rating
                       ? styles.filledStar
                       : styles.unfilledStar,
                   ]}
@@ -203,15 +206,28 @@ export default function PlaceDetailScreen() {
                 </Text>
               ),
             )}
+
           </View>
         </View>
       </View>
+ <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
+  {review.image && (
+    <Image
+      source={{ uri: review.image }}
+      style={{
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+        marginRight: 20,
+      }}
+    />
+  )}
+  <Text style={{ flex: 1, fontSize: 15, color: '#333' }}>
+    {review.comment}
+  </Text>
+</View>
 
-      <Text style={styles.comment}>{review.comment}</Text>
-
-      {review.image && (
-        <Image source={{ uri: review.image }} style={styles.reviewImage} />
-      )}
+   
     </View>
   );
 
@@ -717,6 +733,8 @@ const styles = StyleSheet.create({
   reviewerName: {
     fontSize: 16,
     fontWeight: 'bold',
+    color:'black',
+   
   },
 
   starsRow: {
@@ -743,14 +761,11 @@ const styles = StyleSheet.create({
     color: '#ccc',
   },
 
-  comment: {
-    fontSize: 14,
-    color: '#333',
-  },
+
 
   reviewImage: {
-    width: '100%',
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 10,
     marginTop: 10,
   },
