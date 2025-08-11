@@ -20,10 +20,8 @@ import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
 
 export default function EditProfileScreen({ navigation }) {
-  const [name, setName] = useState('');
-  const [city, setCity] = useState('');
-  const [about, setAbout] = useState('');
-  const [profileImage, setProfileImage] = useState(null);
+
+ 
   const dispatch = useDispatch();
   const navigate = useNavigation();
 
@@ -32,30 +30,36 @@ export default function EditProfileScreen({ navigation }) {
   // console.log(process.env.CLOUD_NAME);
   console.log(Config.UPLOAD_PRESET);
 
-  const handleEdit = async () => {
-    if (!name) {
-      alert('Please Enter a Name');
-      return;
+ const [name, setName] = useState(user?.username || '');
+const [about, setAbout] = useState(user?.about || '');
+const [profileImage, setProfileImage] = useState(null);
+
+const handleEdit = async () => {
+  // Optional: only alert if no name anywhere
+  if (!name && !user.username) {
+    alert('Please Enter a Name');
+    return;
+  }
+  try {
+    let imageUrl = '';
+    if (profileImage !== null) {
+      imageUrl = await uploadImageToCloudinary(profileImage);
+    } else {
+      imageUrl = user.profile;
     }
-    try {
-      let imageUrl = '';
-      if (profileImage !== null) {
-        imageUrl = await uploadImageToCloudinary(profileImage);
-      } else {
-        imageUrl = user.profile;
-      }
-      const res = await axios.put('http://10.0.2.2:5000/api/user', {
-        profile: imageUrl,
-        userId: user._id,
-        about,
-        username: name,
-      });
-      dispatch(refreshUser(user._id));
-      navigate.goBack();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    await axios.put('http://192.168.0.103:5000/api/user', {
+      profile: imageUrl,
+      userId: user._id,
+      about,
+      username: name || user.username,
+    });
+    dispatch(refreshUser(user._id));
+    navigation.goBack();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 
   const handleImagePick = () => {
     const options = {
