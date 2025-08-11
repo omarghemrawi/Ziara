@@ -24,14 +24,13 @@ const reportSchema = new mongoose.Schema({
   },
   reviewReported:{
     type : mongoose.Schema.Types.ObjectId,
-    refer:"Review"
+    ref:"Review"
   },
   reason: {
     type: [String],
     enum: [
-
       'Offensive Language', // for Each
-
+      
       // reasons user might report a place
       'Hate Speech',
       'Inappropriate Content',

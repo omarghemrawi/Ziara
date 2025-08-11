@@ -6,5 +6,6 @@ const reportRouter = express.Router()
 //? Create Report
 reportRouter.post("/",createReport)
 reportRouter.get("/",getReports)
+reportRouter.delete("/:reportId",getReports)
 
 export default reportRouter
