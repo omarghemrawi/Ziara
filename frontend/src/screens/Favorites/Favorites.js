@@ -78,6 +78,9 @@ export default function Favourites() {
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
+             <TouchableOpacity onPress={() => navigation.goBack()}>
+                      <Entypo name="chevron-left" size={24} color="#fff" />
+                    </TouchableOpacity>
           <Text style={styles.title}>{i18n.t('favorites')}</Text>
           <TouchableOpacity
             style={styles.visitedButton}
@@ -112,7 +115,7 @@ export default function Favourites() {
             <Image style={styles.imageItem} source={{ uri: place.profile }} />
             <View style={styles.textContainer}>
               <Text style={styles.placeName}>{place.name}</Text>
-              <Text style={styles.placeLocation}>City: {place.city}</Text>
+              <Text style={styles.placeLocation}> {i18n.t('city')}: {place.city}</Text>
             </View>
             <TouchableOpacity
               style={styles.iconContainer}
@@ -132,16 +135,16 @@ export default function Favourites() {
       >
         <View style={styles.modalContent}>
           <TouchableOpacity style={styles.modalOption}>
-            <Text>Edit Favorite</Text>
+            <Text>{i18n.t('edit_favorite')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.modalOption}
             onPress={handleMoveToVisited}
           >
-            <Text>✓ Move to Visited</Text>
+            <Text>✓ {i18n.t('move_to_visited')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.modalOption} onPress={handleDelete}>
-            <Text style={{ color: 'red' }}>🗑 Delete</Text>
+            <Text style={{ color: 'red' }}>🗑 {i18n.t('delete')}</Text>
           </TouchableOpacity>
         </View>
       </Modal>

@@ -52,12 +52,12 @@ export default function PlaceDetailScreen() {
     try {
       console.log(id, user._id);
       if (newValue) {
-        await axios.post('http://10.0.2.2:5000/api/favorite/', {
+        await axios.post('http://192.168.0.103/api/favorite/', {
           placeId: id,
           userId: user._id,
         });
       } else {
-        await axios.delete('http://10.0.2.2:5000/api/favorite', {
+        await axios.delete('http://192.168.0.103:5000/api/favorite', {
           data: {
             placeId: id,
             userId: user._id,
@@ -111,7 +111,7 @@ export default function PlaceDetailScreen() {
         ? 'StaticPlace'
         : 'ClientPlace';
       // Submit review data
-      const res = await axios.post('http://10.0.2.2:5000/api/review', {
+      const res = await axios.post('http://192.168.0.103:5000/api/review', {
         rating: selectedStar,
         comment: reviewText,
         image: imageUrl || null,
@@ -154,7 +154,7 @@ export default function PlaceDetailScreen() {
   const fetchReviews = async placeId => {
     try {
       const res = await axios.get(
-        `http://10.0.2.2:5000/api/review/place/${placeId}`,
+        `http://192.168.0.103:5000/api/review/place/${placeId}`,
       );
       console.log(res.data);
       if (res.data.success) {

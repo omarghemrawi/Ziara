@@ -97,7 +97,13 @@
     "misleadingContent": "محتوى مضلل",
       "reportPlace": "الإبلاغ عن هذا المكان",
   "selectReason": "يرجى تحديد السبب (الأسباب) للإبلاغ عن هذا المكان.",
-    "tooltipReport": "هل توجد مشكلة؟ أبلغ عنها!"
+    "tooltipReport": "هل توجد مشكلة؟ أبلغ عنها!",
+        "no_reviews_yet": "لا توجد تقييمات بعد",
+          "search_by_name_or_city": "ابحث بالاسم أو المدينة...",
+           "edit_favorite": "تعديل المفضلة",
+  "move_to_visited": "نقل إلى تمت الزيارة",
+  "delete": "حذف",
+  "city": "المدينة"
 
 
 
