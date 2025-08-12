@@ -7,9 +7,7 @@ const EditProfileModal = ({
   setTempName,
   setTempCity,
   onSave,
-  onCancel,
-  setProfileFile,
-  setReferenceFiles,
+  onCancel
 }) => {
   return (
     <div className="modal-overlay">
@@ -18,21 +16,6 @@ const EditProfileModal = ({
           <h2>Edit Profile</h2>
           <button className="close-btn" onClick={onCancel}>✕</button>
         </div>
-
-        <label>Upload Profile Image:</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setProfileFile(e.target.files[0])}
-        />
-
-        <label>Upload Reference Images (up to 5):</label>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={(e) => setReferenceFiles(Array.from(e.target.files))}
-        />
 
         <label className="input-label">Edit your business name</label>
         <input
