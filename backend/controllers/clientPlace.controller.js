@@ -91,18 +91,26 @@ export const updateProfile = async (req, res) => {
   try {
     const updates = req.body;
     console.log(updates);
+    
+    const oldVersion = await ClientPlace.findById(updates.userId);
+    
+    if (!oldVersion) {
+      return res.status(404).json({ message: "Client not found" });
+    }
+    
+    let updatedReferenceImages = oldVersion.referenceImages || [];
 
+    
+    if (req.files?.referenceImages) {
+  const newImages = req.files.referenceImages.map(img => img.path);
+  updatedReferenceImages = updatedReferenceImages.concat(newImages);
+}
+
+updates.referenceImages = updatedReferenceImages;
     // Handle single image upload
 
     if (req.files?.profile?.[0]) {
       updates.profile = req.files.profile[0].path;
-    }
-
-    // Handle multiple image upload
-    if (req.files?.referenceImages) {
-      updates.referenceImages = req.files.referenceImages.map(
-        (img) => img.path
-      );
     }
     const updatedUser = await ClientPlace.findByIdAndUpdate(
       // req.userId,

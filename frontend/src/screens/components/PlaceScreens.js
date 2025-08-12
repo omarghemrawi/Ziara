@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Linking
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -145,6 +146,9 @@ const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
               navigation.navigate('PlaceDetails', {
                 id: item._id,
                 type: item.type,
+         
+  locationUrl: 'https://maps.app.goo.gl/rdKAvxEkCvEvRPY56', 
+  title: 'Place Name',
               })
             }
             activeOpacity={0.8}

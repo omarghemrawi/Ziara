@@ -18,15 +18,11 @@ const clientSchema = new mongoose.Schema({
     required: true,
   },
   location: {
-    city: {
+    type:String
+   },
+     city: {
       type: String,
-      // required: true
     },
-    coordinates: {
-      latitude: Number,
-      longitude: Number,
-    },
-  },
   description: {
     type: String,
   },

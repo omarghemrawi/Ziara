@@ -14,23 +14,30 @@
   margin: 24px auto;
   border: 1px dashed #ccc;
   border-radius: 8px;
-  overflow: visible;     /* allow avatar to overflow */
-  padding: 0;            /* we’ll handle spacing in the parts */
+  overflow: visible;
+  /* allow avatar to overflow */
+  padding: 0;
+  /* we’ll handle spacing in the parts */
 }
 
 /* ─── TWO “PARTS” ─────────────────────────────────── */
 .header-part {
   width: 100%;
 }
+
 .header-part--top {
-  height: 140px;               /* whatever height you like */
-  background-color: #fac75c;   /* your “brown” color */
+  height: 140px;
+  /* whatever height you like */
+  background-color: #fac75c;
+  /* your “brown” color */
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
+
 .header-part--bottom {
   background: #fff;
-  padding: 80px 20px 24px;     /* top padding ≈ avatar radius*1.1 */
+  padding: 80px 20px 24px;
+  /* top padding ≈ avatar radius*1.1 */
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   text-align: center;
@@ -41,51 +48,63 @@
 .avatar-area {
   position: absolute;
   /* move down so that half of 150px overlaps the seam */
-  top: calc(140px - 75px);   /* كان 10px - 75px */
-  overflow: visible;     
+  top: calc(140px - 75px);
+  /* كان 10px - 75px */
+  overflow: visible;
   /* pin 24px from the left edge of the header card */
   left: 24px;
-  transform: none;            /* remove the old translateX(-50%) centering */
-  
-  width: 150px;               /* bump from 120→150 */
+  transform: none;
+  /* remove the old translateX(-50%) centering */
+
+  width: 150px;
+  /* bump from 120→150 */
   height: 150px;
   border: 4px solid #fff;
   border-radius: 50%;
   background: #eee;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .avatar-clip {
   position: absolute;
-   inset: 0;   
+  inset: 0;
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  overflow: hidden;   
-    display: grid;
-  place-items: center;       /* القصّ هون بدل .avatar-area */
-    z-index: 1;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  /* القصّ هون بدل .avatar-area */
+  z-index: 1;
 }
-.avatar-area > img {
+
+.avatar-area>img {
   width: 100%;
   height: 100%;
-   object-position: center;    /* يركّز الصورة داخل الدائرة */
-  object-fit: cover ;
-   display: block ;        /* لإزالة الفراغات الافتراضية */
+  object-position: center;
+  /* يركّز الصورة داخل الدائرة */
+  object-fit: cover;
+  display: block;
+  /* لإزالة الفراغات الافتراضية */
 }
+
 /* لأنك صرت تستخدم className="avatar-img" داخل .avatar-clip */
 .avatar-clip img,
 .avatar-clip .avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 50%;   /* بالنص تمام */
+  object-position: 50% 50%;
+  /* بالنص تمام */
   display: block;
-  border-radius: 50%;          /* fallback إضافي */
-  transform: scale(1.50) !important;   /* جرّبي 1.06 → 1.12 حسب ما يروح الفراغ تمامًا */
-  transform-origin: center; /* يضلّ التكبير من الوسط */
+  border-radius: 50%;
+  /* fallback إضافي */
+  transform: scale(1.50) !important;
+  /* جرّبي 1.06 → 1.12 حسب ما يروح الفراغ تمامًا */
+  transform-origin: center;
+  /* يضلّ التكبير من الوسط */
 
-   mask-image: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%);
 
 }
@@ -93,7 +112,7 @@
 /* ─── BUMP BOTTOM-PART PADDING to clear the larger avatar ───────────── */
 .header-part--bottom {
   /* top padding must be at least half the avatar height + some breathing room */
-  padding: calc(75px + 16px) 20px 24px;  
+  padding: calc(75px + 16px) 20px 24px;
   /* 75px half of 150px + 16px extra spacing = 91px total top padding */
 }
 
@@ -106,13 +125,14 @@
   border-radius: 50%;
   padding: 4px;
   font-size: 0.9rem;
-  cursor: pointer ;
+  cursor: pointer;
 }
 
 /* 3) خَلّي القلم برّة الإطار شوي (أسفل-يمين) وما ينوضع تحت القصّ */
 .avatar-area .edit-avatar {
   position: absolute;
-  bottom: -8px;   /* -8px لتكون برّة الدائرة، بدّكها ألزق؟ حوّلها لـ 4px */
+  bottom: -8px;
+  /* -8px لتكون برّة الدائرة، بدّكها ألزق؟ حوّلها لـ 4px */
   right: -8px;
   background: #fff;
   border: 1px solid #ccc;
@@ -121,7 +141,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   z-index: 1;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* لو ما في صورة وعم ينعرض 👤 خلّيه بالنص */
@@ -129,15 +149,19 @@
   width: 100%;
   height: 100%;
   display: grid;
-  place-items: center;        /* بالنص */
+  place-items: center;
+  /* بالنص */
   font-size: 22px;
   color: #555;
-  background: transparent;    /* خليه شفاف داخل الرمادي تبع .avatar-area */
+  background: transparent;
+  /* خليه شفاف داخل الرمادي تبع .avatar-area */
 }
+
 /* ——— PROFILE DETAILS ——— */
 .profile-details {
   padding: 20px 0 0 0;
-  margin-left: 40px; /* avatar width (150px) + gap (~50px) */
+  margin-left: 40px;
+  /* avatar width (150px) + gap (~50px) */
   text-align: left;
 }
 
@@ -148,6 +172,7 @@
   margin: 0 0 4px;
   color: #111;
 }
+
 .service-name,
 .city-name {
   margin: 2px 0;
@@ -156,7 +181,8 @@
 }
 
 .header-part--top {
-  position: relative;  /* so the button can absolutely position within it */
+  position: relative;
+  /* so the button can absolutely position within it */
   /* …your brown styles… */
 }
 
@@ -168,7 +194,8 @@
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #fff;         /* or whatever color contrasts your brown */
+  color: #fff;
+  /* or whatever color contrasts your brown */
 }
 
 
@@ -182,6 +209,7 @@
   margin-bottom: 24px;
   position: relative;
 }
+
 .section-card {
   margin-top: 24px;
 }
@@ -192,44 +220,57 @@
   align-items: center;
   margin-bottom: 12px;
 }
+
 .card.section-card {
-  padding-top: 10px !important;     /* كان 16px غالباً؛ عدّلي الرقم اللي بيريحك */
+  padding-top: 10px !important;
+  /* كان 16px غالباً؛ عدّلي الرقم اللي بيريحك */
 }
+
 /* شيل الـ margin العلوي الافتراضي للعنوان */
 .card.section-card .section-title {
-  margin-top: 0;         /* مهم جداً لتخفيف الفراغ فوق العنوان */
+  margin-top: 0;
+  /* مهم جداً لتخفيف الفراغ فوق العنوان */
 }
+
 .section-title {
   font-size: 1.5rem !important;
   font-weight: 600;
   color: #1C2D44 !important;
 }
+
 .section-header-right {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .edit-section {
   background: none;
   border: none;
   font-size: 1rem;
   cursor: pointer;
 }
+
 .section-content {
   margin-top: 0;
 }
+
 .links-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .links-list li {
   margin-bottom: 6px;
 }
+
 .reviews-row {
   display: flex;
   gap: 8px;
+  border: red 2px;
 }
+
 .photo-grid-horizontal {
   display: flex;
   overflow-x: auto;
@@ -238,6 +279,7 @@
   scroll-behavior: smooth;
   align-items: center;
 }
+
 .uploaded-photo {
   width: 140px;
   height: 140px;
@@ -247,10 +289,12 @@
   border: 2px solid transparent;
   transition: 0.3s;
 }
+
 .uploaded-photo.selected {
   border-color: red;
   opacity: 0.7;
 }
+
 .upload-btn {
   padding: 8px 10px;
   background-color: #fac75c;
@@ -261,12 +305,15 @@
   white-space: nowrap;
   border: none;
 }
+
 .upload-btn:hover {
   background-color: #eab94a;
 }
+
 .upload-input-hidden {
   display: none;
 }
+
 .delete-selected-btn {
   margin-top: 10px;
   background-color: #a64c3a;
@@ -278,6 +325,7 @@
   cursor: pointer;
   align-self: flex-start;
 }
+
 .subscribe-btn {
   width: 100%;
   padding: 12px;
@@ -286,6 +334,7 @@
   border-radius: 20px;
   color: #1c2d44;
 }
+
 /* Add these rules to ProfilePage.css */
 
 .upload-hint {
@@ -300,4 +349,77 @@
   justify-content: flex-end;
   gap: 8px;
   margin-top: 10px;
+}
+
+
+/**************  style of reviews list     **************/
+
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.review-item {
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 0;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.review-user-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.review-username {
+  font-weight: 600;
+  color: #222;
+  flex-grow: 1;
+}
+
+.report-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #d9534f;
+  /* red color */
+  transition: color 0.3s ease;
+}
+
+.report-btn:hover {
+  color: #a94442;
+}
+
+.review-rating {
+  color: #f5a623;
+  /* gold stars */
+  margin-bottom: 0.5rem;
+}
+
+.review-text {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.review-image {
+  max-width: 300px;
+  /* max width for the review image */
+  width: 100%;
+  /* scale down on smaller screens */
+  height: auto;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
 }

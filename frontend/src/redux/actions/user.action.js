@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const refreshUser = userId => async dispatch => {
   try {
-    const res = await axios.get(`http://10.0.2.2:5000/api/user/${userId}`);
+    const res = await axios.get(`http://192.168.0.103:5000/api/user/${userId}`);
     dispatch({
       type: 'SET_USER',
       payload: res.data.user,

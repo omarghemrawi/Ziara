@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     height: 140,
     backgroundColor: '#fac75c',
     borderRadius: 30,
-    marginVertical: 8,
+    marginVertical: 9,
     padding: 15,
     position: 'relative',
   },
