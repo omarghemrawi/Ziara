@@ -98,7 +98,28 @@ function ReportPage() {
         
     }
 
-    const takeAction= async()=>{}
+  const takeAction= async()=>{
+          try {
+    const emailData = {
+      to: "ramatobbo5@gmail.com",
+      subject: "Report Resolved",
+      message: "Thank you for your report, we resolved it."
+    };
+
+    const res = await axios.post("http://localhost:5000/api/send-email", emailData);
+
+    if(res.data.success) {
+      toast.success("✅ Email sent successfully.");
+    } else {
+      toast.error("⚠️ Failed to send email.");
+    }
+  } catch (error) {
+    console.error(error);
+    toast.error("❌ An error occurred while sending email.");
+  }
+    }
+
+
 
     useEffect(() => {
         getReports();
@@ -162,7 +183,9 @@ function ReportPage() {
                                     {report.status !== 'action taken' && (
                                         <button
                                             className="action-taken-btn"
-                                            onClick={() => {takeAction(report.reportedBy._id)}}
+                                            onClick={() => {takeAction()}
+                                        // report.reportedBy._id
+                                        }
                                         >
                                             Mark as Action Taken
                                         </button>
