@@ -1,21 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-
+import {  toast } from 'react-toastify';
 function ReportPage() {
     const [reports, setReports] = useState([]);
     const [filterType, setFilterType] = useState('all');
     const [details, setDetails] = useState(null);
-    const [showDetails, setShowDetails] = useState(false);
+    const [showPlaceDetails, setShowPlaceDetails] = useState(false);
+    const [showReviewDetails, setShowReviewDetails] = useState(false);
+    // to know what type of block appear (place or review)
 
-    const fetchTargetDetails = async (place_id) => {
+    const fetchTargetDetails = async (id , type) => {
+        console.log(id)
         try {
-            const res = await axios.get(`http://localhost:5000/api/client/place/${place_id}`);
+            if(type === "place"){
+                const place_id = id
+                const res = await axios.get(`http://localhost:5000/api/client/place/${place_id}`);
             if (res.data.success) {
                 setDetails(res.data.place);
-                setShowDetails(true);
+                setShowPlaceDetails(true);
             } else {
                 alert("Failed to fetch target details");
             }
+            }else{
+                const reviewId = id;
+                const res = await axios.get(`http://localhost:5000/api/review/${reviewId}`);
+            if (res.data.success) {
+                setDetails(res.data.data);
+                setShowReviewDetails(true);
+            } else {
+                alert("Failed to fetch target details");
+            }
+            }
+
+            console.log(details)
+            
         } catch (error) {
             console.error("Error fetching target details:", error);
         }
@@ -37,12 +55,48 @@ function ReportPage() {
     }
   };
 
-    const getReports = async () => {
-        const res = await axios.get("http://localhost:5000/api/report");
-        if (res.data.success) {
-            setReports(res.data.reports);
+  const getReports = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/report");
+
+    if (res.data.success) {
+      setReports(res.data.reports);
+    } else {
+      toast.error("⚠️ Failed to fetch reports", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+    toast.error("❌ An error occurred while fetching reports", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  } 
+};
+
+    const deleteReview = async (reviewId)=>{
+        try {
+             const res = await axios.delete(`http://localhost:5000/api/review/${reviewId}`);
+        if(res.data.success){
+            toast("The review has been deleted.")
+        }else {
+      toast.error("⚠️ Failed to delete review.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
+        } catch (error) {
+            console.error(error);
+    toast.error("❌ An error occurred while deleting the review.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
         }
-    };
+       
+        
+    }
 
     const takeAction= async()=>{}
 
@@ -113,25 +167,35 @@ function ReportPage() {
                                             Mark as Action Taken
                                         </button>
                                     )}
-                                    <button
+
+                                    {report.type === "ClientPlace" ?<button
                                         className="details-btn"
-                                        onClick={() => { fetchTargetDetails(report.targetId._id || report.targetId); }}
+                                        onClick={() => { fetchTargetDetails(report.targetId._id , "place"); }}
                                     >
-                                        Details Of Target
-                                    </button>
+                                        Details Of Client
+                                    </button> : <button
+                                        className="details-btn"
+                                        onClick={() => { fetchTargetDetails(report.reviewReported._id , "review"); }}
+                                    >
+                                        Details Of User
+                                    </button> }
                                     
                                 </div>
+                                {report.type === "ClientPlace" ?
                                 <button className='diactive-btn' onClick={()=>{deactivate(report.targetId._id , report._id)}}>Diactive Place</button>
+                                : 
+                                <button className='diactive-btn' onClick={()=>{deleteReview(report.reviewReported._id)}}>Delete Review</button>
+                                }
                             </div>
                         ))
                     )}
                 </div>
 
-                {showDetails && details && (
+                {showPlaceDetails && details && (
                     <>
                         <div
                             className="modal-backdrop"
-                            onClick={() => setShowDetails(false)}
+                            onClick={() => setShowPlaceDetails(false)}
                         ></div>
                         <div className="details-block">
                             <h2>Target Details</h2>
@@ -161,12 +225,48 @@ function ReportPage() {
 
                             <p><strong>Description:</strong><br />{details.description}</p>
 
-                            <button className="details-block__close-btn" onClick={() => setShowDetails(false)}>
+                            <button className="details-block__close-btn" onClick={() => setShowPlaceDetails(false)}>
                                 Close
                             </button>
                         </div>
                     </>
                 )}
+
+
+                {showReviewDetails && details && (
+  <>
+    <div
+      className="modal-backdrop"
+      onClick={() => setShowReviewDetails(false)}
+    ></div>
+
+    <div className="details-block">
+      <h2>Review Details</h2>
+
+      <p><strong>Username:</strong> {details.userId.username}</p>
+
+      <p><strong>Comment:</strong><br />{details.comment}</p>
+
+      {details.image && (
+        <img
+          className="details-block__profile-image"
+          src={details.image}
+          alt={`${details.username} review`}
+        />
+      )}
+
+      <p><strong>Rating:</strong> {details.rating} / 5</p>
+
+      <button
+        className="details-block__close-btn"
+        onClick={() => setShowReviewDetails(false)}
+      >
+        Close
+      </button>
+    </div>
+  </>
+                    )}
+
             </main>
         </>
     );
