@@ -8,7 +8,7 @@ import StaticPlace from "./pages/static/StaticPlace";
 import AddStaticPlace from "./pages/static/AddStaticPlace";
 import EditStaticPage from "./pages/static/EditStaticPage";
 import ClientPage from "./pages/client/ClientPage";
-
+import { ToastContainer} from 'react-toastify';
 // --- CHANGE THIS LINE ---
 // Import 'ReportPage' because that's what Report.jsx exports by default
 import ReportPage from "./pages/report/Report"; 
@@ -19,7 +19,9 @@ import "./pages/report/report.css";
 function App() {
   return (
     <Router>
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       <Routes>
+        
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/clientPlace" element={<ClientPage />} />
@@ -27,11 +29,7 @@ function App() {
         <Route
           path="/addStaticPlace"
           element={
-            <AddStaticPlace
-            // onAdd={(place) => {
-            //   /* handle add */
-            // }}
-            />
+            <AddStaticPlace/>
           }
         />
         <Route path="/editStaticPlace/:id" element={<EditStaticPage />} />

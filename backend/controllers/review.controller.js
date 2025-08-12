@@ -80,3 +80,30 @@ export const getUserReviews = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+// Get single review
+
+export const getSingleReview = async (req, res) => {
+  try {
+    const { reviewId } = req.params;
+
+    // Validate ID
+    if (!reviewId) {
+      return res.status(400).json({ success: false, message: "Review ID is required" });
+    }
+
+    // Find the review by ID
+    const review = await Review.findById(reviewId)
+      .populate("userId", "username email") // correct field name for User
+      // .populate("placeId", "name profile"); 
+
+    if (!review) {
+      return res.status(404).json({ success: false, message: "Review not found" });
+    }
+
+    res.status(200).json({ success: true, data: review });
+  } catch (error) {
+    console.error("Error fetching review:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

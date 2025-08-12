@@ -4,23 +4,24 @@ import ClientPlace from '../models/clientPlace.model.js';
 
 export const createReport = async (req, res) => {
   try {
-    const { type, complainant, targetId, reportedBy, reason } = req.body;
+    const { type, complainant, targetId, reportedBy, reason , review } = req.body;
 
-    // 1️⃣ Check required fields
-    if (!type || !complainant || !targetId || !reportedBy || !reason) {
+    //  Check required fields 
+    if (!type || !complainant || !targetId || !reportedBy || !reason) { 
     return res.status(400).json({success:false , message: 'All fields are required' });
     }
 
-    // 3️⃣ Always work with an array
+    // Always work with an array
     const reasonsArray = Array.isArray(reason) ? reason : [reason];
 
-    // 5️⃣ Create report
+    //  Create report
     const newReport = new Report({
     type,
     complainant,
     targetId,
     reportedBy,
-    reason: reasonsArray
+    reason: reasonsArray,
+    reviewReported:review || null /*in case if Client create the report */
     });
 
     await newReport.save();

@@ -1,6 +1,6 @@
 export const setUser = ( userData) => ({
   type: "SET_USER",
-  payload: {  userData },
+  payload: userData ,
 });
 
 export const clearUser = () => ({
