@@ -27,7 +27,7 @@ export default function Login() {
       dispatch(setUser(user));
 
       console.log("Logged in user:", user);
-      navigate("/",{ replace: true });
+      navigate("/profile",{ replace: true });
     } catch (err) {
       console.error(err);
       alert("Login Failed");

@@ -28,7 +28,8 @@ function App() {
            <Route path="/profile" element={<ProfilePage />} />
 
          {/* صفحة المراجعات لكل business */}
-         <Route path="/reviews/:placeId" element={<ReviewsPage />} />
+         {/* <Route path="/reviews/:placeId" element={<ReviewsPage />} /> */}
+         <Route path="/reviews" element={<ReviewsPage />} />
 
           {/* Signup page on "/login" */}
           <Route path="/login" element={<Login />} />

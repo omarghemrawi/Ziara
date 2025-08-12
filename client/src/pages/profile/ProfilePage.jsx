@@ -7,6 +7,7 @@ import EditLinksModal from "../../components/EditLinksModal";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/userActions";
 import "./ProfilePage.css";
+import { useNavigate } from "react-router-dom";
 
 function SectionCard({ title, action, children }) {
   return (
@@ -25,6 +26,7 @@ export default function ProfilePage() {
   const user = useSelector((state) => state.user.userData);
   const placeId = user._id
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   // Local state for edits with default empty values
   const [editedLinks, setEditedLinks] = useState({
@@ -250,41 +252,37 @@ useEffect(() => {
         {/* TODO: Add photo upload controls if needed */}
       </SectionCard>
 
-      <SectionCard title="Reviews">
-        <ul className="review-list">
-  {reviews.map((review) => (
-    <li key={review._id} className="review-item">
-      <div className="review-header">
-        <img
-          src={review.userId.profileImage}
-          alt={review.userId.username}
-          className="review-user-image"
-        />
-        <span className="review-username">{review.userId.username}</span>
-        <button
-          className="report-btn"
-          title="Report this review"
-          // onClick={() => handleReportReview(review._id)}
-        >
-          ⚠️
-        </button>
-      </div>
-      <div className="review-rating">
-        {"⭐".repeat(review.rating)}
-      </div>
-      <p className="review-text">{review.comment}</p>
-      {review.image && (
-        <img
-          src={review.image}
-          alt="Review"
-          className="review-image"
-        />
-      )}
-    </li>
-  ))}
-</ul>
-
+      <SectionCard title="Rating & Review">
+      <button
+        type="button"
+        className="edit-section"
+        title="View All Reviews"
+        onClick={() => navigate("/reviews", { state: reviews })}
+      >         View All
+      </button>
+        <div className="reviews-row">
+          <span>{reviews.length} Reviews</span>
+        </div>
       </SectionCard>
+
+      <SectionCard title="Upgrade Your Plan">
+  <button
+    type="button"
+    className="edit-section"
+    title="Edit Plan"
+    // onClick={handleEditPlan}
+  >
+    ✎
+  </button>
+  <button
+    className="subscribe-btn"
+    // onClick={handleEditPlan}
+  >
+    Subscriptions →
+  </button>
+      </SectionCard>
+
+
 
       {/* Modals */}
       {showHeaderModal && (

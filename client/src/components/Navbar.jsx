@@ -61,16 +61,12 @@ export default function Navbar() {
             <><button className="btn logout" onClick={handleLogout}>
               Logout
             </button>
-              <Link to="/profile">Profile</Link>
+               <Link to="/profile" className="btn-profile">
+      Profile
+    </Link>
             </>
             
-
-          ) : isReviewPage ? (
-            // فقط في صفحة المراجعات: عرض زر Profile
-            <Link to="/profile" className="btn signup" state={state}>
-              Profile
-            </Link>
-          ) : (
+          ) :(
             // باقي الصفحات: عرض Login + Sign Up
             <>
               <Link to="/login" className="btn login">Login</Link>
