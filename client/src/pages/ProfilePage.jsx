@@ -5,9 +5,8 @@ import { faPen } from '@fortawesome/free-solid-svg-icons'
 import EditProfileModal from "../components/EditProfileModal";
 import EditDescriptionModal from "../components/EditDescriptionModal";
 import EditLinksModal from "../components/EditLinksModal";
-
-
 import "./ProfilePage.css";
+
 
 function SectionCard({ title, children }) {
   return (

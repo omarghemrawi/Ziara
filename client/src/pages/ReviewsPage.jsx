@@ -1,19 +1,65 @@
 import React, { useEffect, useState } from "react";
- import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./ReviewsPage.css";
 
 export default function ReviewsPage() {
   const { placeId } = useParams();
+  const navigate = useNavigate();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
- 
-  const { state } = useLocation(); // ← فيك تلقط state.profile إذا بدك
- /* eslint-disable-next-line no-unused-vars */
- const profile = state?.profile; // مش إلزامي تستخدمه هون، بس رح ينسحب بالNavbar
+  const onReport = (r) => {
+    console.log("REPORT CLICK", r._id); // لازم تشوفها بالConsole
+    setOpenMenuId(null);
+    navigate("/report-review", {
+      state: {
+        reviewId: r._id,
+        reviewerName: r.userName,
+        reviewComment: r.comment,
+      },
+    });
+  };
 
+  // ───── Menu state (which review’s menu is open) ─────
+  const [openMenuId, setOpenMenuId] = useState(null);
 
-  // ─────── M O C K   D A T A ─────────────────────────────────────────
+  const toggleMenu = (id) => {
+    setOpenMenuId((prev) => (prev === id ? null : id));
+  };
+
+  // close when clicking outside
+  useEffect(() => {
+    function onDocClick(e) {
+      // إذا الكليك ما كان داخل أي عنصر عنده class="menu-wrap"
+      if (!e.target.closest(".menu-wrap")) {
+        setOpenMenuId(null);
+      }
+    }
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  // Actions
+  const onShare = async (r) => {
+    setOpenMenuId(null);
+    const title = `Review by ${r.userName}`;
+    const text =
+      r.comment.slice(0, 120) + (r.comment.length > 120 ? "…" : "");
+    const url = window.location.href + `#review-${r._id}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title, text, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        alert("Link copied to clipboard!");
+      }
+    } catch (_) {
+      /* user dismissed share sheet */
+    }
+  };
+
+  // ─────── M O C K   D A T A ─────────────────────────
   const mockReviews = [
     {
       _id: "1",
@@ -42,11 +88,9 @@ export default function ReviewsPage() {
         "Lovely place with great ambiance. The desserts were a bit sweet for my taste but overall very satisfied!",
       photos: [],
     },
-    // …add more mocks if needed
   ];
-  // ─────────────────────────────────────────────────────────────────────
+  // ────────────────────────────────────────────────────
 
-  // compute summary
   const total = mockReviews.length;
   const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
   mockReviews.forEach((r) => counts[r.rating]++);
@@ -54,33 +98,18 @@ export default function ReviewsPage() {
     mockReviews.reduce((sum, r) => sum + r.rating, 0) / total || 0;
 
   useEffect(() => {
-    // real fetch (commented out)
-    /*
-    fetch(`/api/reviews/${placeId}`)
-      .then(res => res.json())
-      .then(data => {
-        setReviews(data);
-        setLoading(false);
-      })
-      .catch(console.error);
-    */
-    // use mock
     setTimeout(() => {
       setReviews(mockReviews);
       setLoading(false);
     }, 300);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [placeId]);
+  }, [placeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading) return <p className="center">Loading reviews…</p>;
 
   return (
     <div className="reviews-page">
-      {/* 1) TITLE */}
       <h1 className="page-title">Rating & Review</h1>
 
-      {/* 2) REVIEW SUMMARY */}
       <section className="review-summary">
         <div className="summary-header">Review summary</div>
         <div className="summary-body">
@@ -91,10 +120,7 @@ export default function ReviewsPage() {
                 <div key={star} className="bar-row">
                   <span className="bar-label">{star}</span>
                   <div className="bar-bg">
-                    <div
-                      className="bar-fill"
-                      style={{ width: pct + "%" }}
-                    ></div>
+                    <div className="bar-fill" style={{ width: pct + "%" }} />
                   </div>
                   <span className="bar-count">{counts[star]}</span>
                 </div>
@@ -113,10 +139,9 @@ export default function ReviewsPage() {
         </div>
       </section>
 
-      {/* 3) INDIVIDUAL REVIEWS */}
       <ul className="reviews-list">
         {reviews.map((r) => (
-          <li key={r._id} className="review-card">
+          <li id={`review-${r._id}`} key={r._id} className="review-card">
             {/* user row */}
             <div className="user-row">
               <div className="avatar">{r.userName.charAt(0)}</div>
@@ -126,7 +151,29 @@ export default function ReviewsPage() {
                   {r.userReviewCount} reviews · {r.userPhotoCount} photos
                 </div>
               </div>
-              <button className="menu-btn">⋮</button>
+
+              {/* menu button + dropdown */}
+              <div className="menu-wrap">
+                <button
+                  className="menu-btn"
+                  aria-haspopup="menu"
+                  aria-expanded={openMenuId === r._id}
+                  onClick={() => toggleMenu(r._id)}
+                >
+                  ⋮
+                </button>
+
+                {openMenuId === r._id && (
+                  <div className="menu-dropdown" role="menu">
+                    <button className="menu-item" onClick={() => onShare(r)}>
+                      Share review
+                    </button>
+                    <button className="menu-item" onClick={() => onReport(r)}>
+                      Report review
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* stars + time */}
@@ -142,9 +189,7 @@ export default function ReviewsPage() {
             {/* comment */}
             <p className="comment">
               {r.comment}{" "}
-              {r.comment.length > 100 && (
-                <span className="more">More</span>
-              )}
+              {r.comment.length > 100 && <span className="more">More</span>}
             </p>
 
             {/* photos grid */}
