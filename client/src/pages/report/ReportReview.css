@@ -1,0 +1,136 @@
+.rr-shell {
+  background: #fff;
+  min-height: 100vh;
+  color: #202124;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.rr-appbar {
+  position: sticky;
+  top: 0;
+  background: #fff;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-bottom: 1px solid #e7e7e7;
+  z-index: 10;
+}
+.rr-back {
+  border: 0;
+  background: transparent;
+  padding: 6px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.rr-back:hover { background: rgba(0,0,0,0.05); }
+.rr-appbar-title { font-size: 16px; font-weight: 600; }
+
+.rr-card {
+  max-width: 640px;
+  margin: 32px auto;
+  border: 1px solid #e7e7e7;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  padding: 0 0 16px;
+}
+.rr-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 20px 24px 12px;
+}
+
+/* Context (reviewer + comment) */
+.rr-context {
+  margin: 0 24px 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border: 1px solid #ececec;
+  border-radius: 8px;
+}
+.rr-context-name {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.rr-context-comment {
+  font-size: 14px;
+  color: #5f6368;
+}
+
+/* List */
+.rr-list { list-style: none; margin: 8px 0 0; padding: 0; }
+.rr-item { margin: 0; }
+.rr-row {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 14px 16px 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+}
+.rr-row:hover { background: #f8f9fa; }
+.rr-row.is-selected { background: #eef3fe; }
+.rr-text { flex: 1 1 auto; }
+.rr-item-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.rr-item-desc { font-size: 14px; color: #5f6368; line-height: 1.35; }
+.rr-chevron { flex: 0 0 auto; color: #5f6368; }
+.rr-divider { height: 1px; background: #e7e7e7; margin: 0 16px 0 24px; }
+
+/* Notes + Submit */
+.rr-notes {
+  margin: 16px 24px 0;
+  display: grid;
+  gap: 8px;
+}
+.rr-notes textarea {
+  width: 100%;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.rr-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 16px 24px 0;
+}
+
+.rr-submit {
+  border: 0;
+  background: #1a73e8;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.rr-submit[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 680px) {
+  .rr-card { margin: 16px; }
+}
+/* center the big title */
+.rr-title-center { text-align: center; }
+
+/* center the submit area */
+.rr-actions-center { justify-content: center; }
+
+/* gold button color */
+.rr-submit-gold {
+  background: #fac75c !important;
+  color: #000 !important;
+}
+.rr-submit-gold:hover {
+  filter: brightness(0.95);
+}

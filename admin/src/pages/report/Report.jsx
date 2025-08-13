@@ -75,6 +75,23 @@ function ReportPage() {
     });
   } 
 };
+//delete report
+const deleteReport = async (reportId) => {
+  try {
+    await axios.delete(`http://localhost:5000/api/report/${reportId}`);
+    toast.success("🗑️ Report deleted successfully", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+    getReports(); // refresh list after deletion
+  } catch (error) {
+    console.error(error);
+    toast.error("❌ Failed to delete report", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  }
+};
 
     const deleteReview = async (reviewId)=>{
         try {
@@ -98,28 +115,7 @@ function ReportPage() {
         
     }
 
-  const takeAction= async()=>{
-          try {
-    const emailData = {
-      to: "ramatobbo5@gmail.com",
-      subject: "Report Resolved",
-      message: "Thank you for your report, we resolved it."
-    };
-
-    const res = await axios.post("http://localhost:5000/api/send-email", emailData);
-
-    if(res.data.success) {
-      toast.success("✅ Email sent successfully.");
-    } else {
-      toast.error("⚠️ Failed to send email.");
-    }
-  } catch (error) {
-    console.error(error);
-    toast.error("❌ An error occurred while sending email.");
-  }
-    }
-
-
+    const takeAction= async()=>{}
 
     useEffect(() => {
         getReports();
@@ -168,6 +164,13 @@ function ReportPage() {
                     ) : (
                         filteredReports.map((report, index) => (
                             <div className="report-card" key={index}>
+                             {/* button to delete the report */}
+  <button
+    className="delete-report-btn"
+    onClick={() => deleteReport(report._id)}
+  >
+    ✖
+  </button>
                                 <h3>Reported BY: {report.reportedBy.name || report.reportedBy.username}<br />
                                     Email: {report.reportedBy.email}</h3>
 
@@ -183,9 +186,7 @@ function ReportPage() {
                                     {report.status !== 'action taken' && (
                                         <button
                                             className="action-taken-btn"
-                                            onClick={() => {takeAction()}
-                                        // report.reportedBy._id
-                                        }
+                                            onClick={() => {takeAction(report.reportedBy._id)}}
                                         >
                                             Mark as Action Taken
                                         </button>
