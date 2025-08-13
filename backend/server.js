@@ -10,7 +10,6 @@ import favRouter from "./routes/favorite.route.js";
 import visitedRouter from "./routes/visited.route.js";
 import reviewRouter from "./routes/reviews.route.js";
 import reportRouter from "./routes/report.route.js";
-import Emailrouter from "./routes/email.route.js";
 
 dotenv.config();
 const app = express();
@@ -19,6 +18,7 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
+
 app.use("/api/user", userRouter);
 app.use("/api/client", clientRouter);
 app.use("/api/static", staticPlaceRouter);
@@ -26,7 +26,6 @@ app.use("/api/favorite", favRouter);
 app.use("/api/visited", visitedRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/report", reportRouter);
-app.use("/api",Emailrouter);
 
 app.listen(PORT, () => {
   connectDB();
