@@ -39,21 +39,23 @@ function ReportPage() {
         }
     };
 
-    const deactivate = async (placeId , reportId) => {
-    try {
-      const res = await axios.put(
-        "http://localhost:5000/api/client/deactive-subscribe",
-        { userId: placeId }
-      );
-      if (res) {
-        alert("deactive successfly");
-        await axios.delete(`http://localhost:5000/api/report/${reportId}`);
-        getReports();
-      }
-    } catch (error) {
-      console.log(error);
+  const deactivate = async (placeId, reportId) => {
+  try {
+    const res = await axios.put(
+      "http://localhost:5000/api/client/deactive-subscribe",
+      { userId: placeId }
+    );
+    if (res) {
+      await axios.delete(`http://localhost:5000/api/report/${reportId}`);
+      getReports();
+      toast.success("Deactivated successfully");
     }
-  };
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to deactivate");
+  }
+};
+
 
   const getReports = async () => {
   try {
@@ -75,15 +77,18 @@ function ReportPage() {
     });
   } 
 };
+
 //delete report
 const deleteReport = async (reportId) => {
   try {
-    await axios.delete(`http://localhost:5000/api/report/${reportId}`);
+   const resp =  await axios.delete(`http://localhost:5000/api/report/${reportId}`);
     toast.success("🗑️ Report deleted successfully", {
       position: "top-right",
       autoClose: 3000,
     });
+    console.log(resp)
     getReports(); // refresh list after deletion
+  console.log(reportId)
   } catch (error) {
     console.error(error);
     toast.error("❌ Failed to delete report", {
@@ -93,11 +98,12 @@ const deleteReport = async (reportId) => {
   }
 };
 
-    const deleteReview = async (reviewId)=>{
+    const deleteReview = async (reviewId , reportId)=>{
         try {
-             const res = await axios.delete(`http://localhost:5000/api/review/${reviewId}`);
+            const res = await axios.delete(`http://localhost:5000/api/review/${reviewId}`);
         if(res.data.success){
             toast("The review has been deleted.")
+            deleteReport(reportId)
         }else {
       toast.error("⚠️ Failed to delete review.", {
         position: "top-right",
@@ -111,14 +117,12 @@ const deleteReport = async (reportId) => {
       autoClose: 3000,
     });
         }
-       
-        
     }
 
-    const takeAction= async()=>{
+    const takeAction= async(email)=>{
           try {
     const emailData = {
-      to: "ramatobbo5@gmail.com",
+      to: "ghemrawiomar@gmail.com",
       subject: "Report Resolved",
       message: "Thank you for your report, we resolved it."
     };
@@ -128,7 +132,7 @@ const deleteReport = async (reportId) => {
     if(res.data.success) {
       toast.success("✅ Email sent successfully.");
     } else {
-      toast.error("⚠️ Failed to send email.");
+      toast.error("⚠ Failed to send email.");
     }
   } catch (error) {
     console.error(error);
@@ -148,19 +152,13 @@ const deleteReport = async (reportId) => {
         if (filterType === 'all') {
             return reports;
         }
-        return reports.filter(report => {
-            const reportedByLower = report.reportedBy.toLowerCase();
-            if (filterType === 'user') {
-                return reportedByLower.includes('mobile_user');
-            } else if (filterType === 'client') {
-                return reportedByLower.includes('client_app');
-            }
-            return false;
-        });
+        return reports.filter(report =>
+  report.complainant.toLowerCase() === filterType
+);
+        
     };
-
     const filteredReports = getFilteredReports();
-
+    console.log(reports)
     return (
         <>
             <header>
@@ -173,7 +171,7 @@ const deleteReport = async (reportId) => {
                     <select id="reportTypeFilter" value={filterType} onChange={handleFilterChange}>
                         <option value="all">All Reports</option>
                         <option value="user">User Reports</option>
-                        <option value="client">Client Reports</option>
+                        <option value="clientplace">Client Reports</option>
                     </select>
                 </div>
 
@@ -205,9 +203,7 @@ const deleteReport = async (reportId) => {
                                     {report.status !== 'action taken' && (
                                         <button
                                             className="action-taken-btn"
-                                            onClick={() => {takeAction()}
-                                            // report.reportedBy._id
-                                        } 
+                                            onClick={() => {takeAction(report.reportedBy.email)}}
                                         >
                                             Mark as Action Taken
                                         </button>
@@ -229,7 +225,7 @@ const deleteReport = async (reportId) => {
                                 {report.type === "ClientPlace" ?
                                 <button className='diactive-btn' onClick={()=>{deactivate(report.targetId._id , report._id)}}>Diactive Place</button>
                                 : 
-                                <button className='diactive-btn' onClick={()=>{deleteReview(report.reviewReported._id)}}>Delete Review</button>
+                                <button className='diactive-btn' onClick={()=>{deleteReview(report.reviewReported._id , report._id)}}>Delete Review</button>
                                 }
                             </div>
                         ))
