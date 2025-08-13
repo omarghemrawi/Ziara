@@ -8,7 +8,7 @@ import AdditionalInfo from "./pages/AdditionalInfo";
 import ProfilePage from "./pages/profile/ProfilePage";
  import Plan             from "./pages/plan/Plan"; 
  import ReviewsPage from "./pages/review/ReviewsPage";
- import ReportReview from "./pages/profile/report/ReportReview";
+ import ReportReview from "./pages/report/ReportReview";
 import "./App.css";
 
 function App() {

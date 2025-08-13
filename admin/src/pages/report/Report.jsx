@@ -155,7 +155,6 @@ const deleteReport = async (reportId) => {
         return reports.filter(report =>
   report.complainant.toLowerCase() === filterType
 );
-        
     };
     const filteredReports = getFilteredReports();
     console.log(reports)

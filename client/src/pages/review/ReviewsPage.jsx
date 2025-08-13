@@ -30,6 +30,7 @@ export default function ReviewsPage() {
   useEffect(() => {
     fetchReviews();
   }, [fetchReviews]);
+  console.log(reviews)
 
   // normalized list
   const list = useMemo(() => (Array.isArray(reviews) ? reviews : []), [reviews]);
@@ -84,6 +85,7 @@ export default function ReviewsPage() {
         reviewId: r?._id,
         reviewerName,
         reviewComment,
+        userId : r?.userId?._id
       },
     });
   };

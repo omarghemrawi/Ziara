@@ -2,10 +2,13 @@
 import React, { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./ReportReview.css";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function ReportReview() {
   const navigate = useNavigate();
   const { state } = useLocation();
+  const user = useSelector(state => state.user.userData)
 
   // Guard: if opened directly without state, go back
   const reviewId = state?.reviewId;
@@ -57,34 +60,36 @@ export default function ReportReview() {
   const handleSelect = (id) => setSelectedReasonId(id);
 
   const handleSubmit = async () => {
-    if (!selectedReasonId) return;
-    try {
-      setSubmitting(true);
+  if (!selectedReasonId) return;
 
-      // 👉 Replace this URL with your real backend endpoint
-      const res = await fetch("/api/reports", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          reviewId,
-          reviewerName,
-          reviewComment,
-          reasonId: selectedReasonId,
-          notes: "", // removed notes UI; send empty string
-        }),
-      });
+  try {
+    setSubmitting(true);
 
-      if (!res.ok) throw new Error("Failed to submit report");
+    const payload = {
+      type: "User", 
+      targetId: state?.userId, 
+      reportedBy: user._id, 
+      complainant: "ClientPlace", 
+      review: state?.reviewId, 
+      reason: [selectedReasonId] 
+    };
 
-      alert("Report submitted. Thank you.");
-      navigate(-1);
-    } catch (e) {
-      console.error(e);
-      alert("Could not submit report. Please try again.");
-    } finally {
-      setSubmitting(false);
+    const res = await axios.post("http://localhost:5000/api/report", payload);
+
+    if (res.status !== 200 && res.status !== 201) {
+      throw new Error("Failed to submit report");
     }
-  };
+
+    alert("Report submitted. Thank you.");
+    navigate(-1);
+
+  } catch (e) {
+    console.error(e);
+    alert("Could not submit report. Please try again.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="rr-shell">
@@ -114,7 +119,7 @@ export default function ReportReview() {
               <button
                 type="button"
                 className={`rr-row ${selectedReasonId === r.id ? "is-selected" : ""}`}
-                onClick={() => handleSelect(r.id)}
+                onClick={() => handleSelect(r.title)}
                 aria-label={`Choose: ${r.title}`}
               >
                 <div className="rr-text">
