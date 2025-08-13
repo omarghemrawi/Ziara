@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import ClientPlace from "../models/clientPlace.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { sendDeactivationEmail , sendClientRegisterNotfication } from "../utils/emailSender.js";
 
 // ??? Done
 export const getAllPlaces = async (req, res) => {
@@ -44,6 +45,8 @@ export const SignUp = async (req, res) => {
       expiresIn: "1h",
     });
     const { password: _, ...clientData } = newClient.toObject();
+
+    await sendAdminNotification(newClient);
 
     res.status(201).json({
       success: true,
@@ -214,6 +217,7 @@ export const deactivePayment = async (req, res) => {
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
     }
+     await sendDeactivationEmail(client.email, client.name);
 
     return res.status(200).json({
       success: true,
