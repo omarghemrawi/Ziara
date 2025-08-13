@@ -222,6 +222,29 @@ main {
 .diactive-btn:hover {
   background-color: #a71d2a; 
 }
+.delete-report-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.delete-report-btn:hover {
+  color: red;
+}
+.report-card {
+  position: relative; /* Important for absolute positioning */
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: #fff;
+}
 
 
 
@@ -247,6 +270,7 @@ main {
     .report-detail, .report-description {
         font-size: 0.9em;
     }
+    
 }
 
 
