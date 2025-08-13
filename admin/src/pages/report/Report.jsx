@@ -151,9 +151,9 @@ const deleteReport = async (reportId) => {
         return reports.filter(report => {
             const reportedByLower = report.reportedBy.toLowerCase();
             if (filterType === 'user') {
-                return reportedByLower.includes('(mobile_user)');
+                return reportedByLower.includes('mobile_user');
             } else if (filterType === 'client') {
-                return reportedByLower.includes('(client_app)');
+                return reportedByLower.includes('client_app');
             }
             return false;
         });
