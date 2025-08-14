@@ -2,18 +2,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "./AdditionalInfo.css";
 
 export default function AdditionalInfo() {
   const navigate = useNavigate();
   const dispatch = useDispatch(); 
-
-  // ⬇️ from Redux (your userReducer stores userData in localStorage too)
-  const userData = useSelector((state) => state.user.userData);
-  const userId = userData?._id;
-
   const [info, setInfo] = useState({ city: "", phone: "" });
   const [errors, setErrors] = useState({ city: "", phone: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -34,33 +29,25 @@ export default function AdditionalInfo() {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    if (!userId) {
-      alert("User not found. Please sign up again.");
-      navigate("/signup");
-      return;
-    }
-
     setSubmitting(true);
     try {
-      // PUT + multipart/form-data (multer on backend)
-      const form = new FormData();
-      form.append("userId", userId);
-      form.append("city", info.city);
-      form.append("phone", info.phone);
+      const token = localStorage.getItem('token')
+      
 
         const { data } = await axios.put(
-        "http://localhost:5000/api/client/update-profile",
-        form,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        "http://localhost:5000/api/client/complete-register",
+        { city: info.city, phone: info.phone },
+        {
+        headers: { Authorization: `Bearer ${token}` },}
       );
+      console.log(data)
 
-           // حدّث الريدكس بنسخة السيرفر (حتى Profile يشوف city فوراً)
       if (data?.user) {
         dispatch({ type: "SET_USER", payload: data.user });
       }
 
       // go to profile (you can also pass response data if needed)
-      navigate("/profile", { state: { ...info, userId } });
+      navigate("/profile",{replace:true});
     } catch (error) {
       console.error("Profile update failed:", error.response?.data || error.message);
       alert(error.response?.data?.message || "Update failed");

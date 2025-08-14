@@ -96,24 +96,24 @@ function ReportPage() {
 // };
 
 //delete report
-const deleteReport = async (reportId) => {
-  try {
-   const resp =  await axios.delete(`http://localhost:5000/api/report/${reportId}`);
-    toast.success("🗑️ Report deleted successfully", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    console.log(resp)
-    getReports(); // refresh list after deletion
-  console.log(reportId)
-  } catch (error) {
-    console.error(error);
-    toast.error("❌ Failed to delete report", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  }
-};
+// const deleteReport = async (reportId) => {
+//   try {
+//    const resp =  await axios.delete(`http://localhost:5000/api/report/${reportId}`);
+//     toast.success("🗑️ Report deleted successfully", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//     console.log(resp)
+//     getReports(); // refresh list after deletion
+//   console.log(reportId)
+//   } catch (error) {
+//     console.error(error);
+//     toast.error("❌ Failed to delete report", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//   }
+// };
 
     const deleteReview = async (reviewId , reportId)=>{
         try {
@@ -136,10 +136,10 @@ const deleteReport = async (reportId) => {
         }
     }
 
-    const takeAction= async()=>{
+    const takeAction= async(email)=>{
           try {
     const emailData = {
-      to: "ramatobbo5@gmail.com",
+      to: "ghemrawiomar@gmail.com",
       subject: "Report Resolved",
       message: "Thank you for your report, we resolved it."
     };
@@ -149,7 +149,7 @@ const deleteReport = async (reportId) => {
     if(res.data.success) {
       toast.success("✅ Email sent successfully.");
     } else {
-      toast.error("⚠️ Failed to send email.");
+      toast.error("⚠ Failed to send email.");
     }
   } catch (error) {
     console.error(error);
@@ -172,7 +172,6 @@ const deleteReport = async (reportId) => {
         return reports.filter(report =>
   report.complainant.toLowerCase() === filterType
 );
-        
     };
     const filteredReports = getFilteredReports();
     console.log(reports)
@@ -220,9 +219,7 @@ const deleteReport = async (reportId) => {
                                     {report.status !== 'action taken' && (
                                         <button
                                             className="action-taken-btn"
-                                            onClick={() => {takeAction()}
-                                            // report.reportedBy._id
-                                        } 
+                                            onClick={() => {takeAction(report.reportedBy.email)}}
                                         >
                                             Mark as Action Taken
                                         </button>

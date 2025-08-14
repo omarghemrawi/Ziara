@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import ClientPlace from "../models/clientPlace.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { sendDeactivationEmail , sendClientRegisterNotfication } from "../utils/emailSender.js";
 
 // ??? Done
 export const getAllPlaces = async (req, res) => {
@@ -45,11 +46,13 @@ export const SignUp = async (req, res) => {
     });
     const { password: _, ...clientData } = newClient.toObject();
 
+    await sendClientRegisterNotfication(newClient);
+
     res.status(201).json({
       success: true,
       message: "Client registered successfully",
+      user: { id: newClient._id, email: newClient.email, name: newClient.name },
       token,
-      user: clientData,
     });
   } catch (error) {
     console.error("Error during client registration:", error);
@@ -86,13 +89,51 @@ export const logIn = async (req, res) => {
     console.error("Error during client login:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
-};
-export const updateProfile = async (req, res) => {
+};  
+export const completeRegister = async (req, res) => {
   try {
+    // req.userId is set by verifyToken middleware
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { city, phone } = req.body;
+
+    if (!city || !phone) {
+      return res.status(400).json({ message: "City and phone are required" });
+    }
+
+    const user = await ClientPlace.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.city = city;
+    user.phone = phone;
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: {
+        id: updatedUser._id,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        city: updatedUser.city,
+        phone: updatedUser.phone,
+      },
+    });
+  } catch (err) {
+    console.error("Error completing registration:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  try { 
     const updates = req.body;
-    console.log(updates);
-    
-    const oldVersion = await ClientPlace.findById(updates.userId);
+    const oldVersion = await ClientPlace.findById(req.userId);
     
     if (!oldVersion) {
       return res.status(404).json({ message: "Client not found" });
@@ -101,10 +142,18 @@ export const updateProfile = async (req, res) => {
     let updatedReferenceImages = oldVersion.referenceImages || [];
 
     
+    // 1️⃣ Remove images if requested
+    if (updates.referenceImagesToDelete && Array.isArray(updates.referenceImagesToDelete)) {
+      updatedReferenceImages = updatedReferenceImages.filter(
+        (img) => !updates.referenceImagesToDelete.includes(img)
+      );
+    }
+
+    // 2️⃣ Add new images if uploaded
     if (req.files?.referenceImages) {
-  const newImages = req.files.referenceImages.map(img => img.path);
-  updatedReferenceImages = updatedReferenceImages.concat(newImages);
-}
+      const newImages = req.files.referenceImages.map((img) => img.path);
+      updatedReferenceImages = updatedReferenceImages.concat(newImages);
+    }
 
 updates.referenceImages = updatedReferenceImages;
     // Handle single image upload
@@ -113,8 +162,7 @@ updates.referenceImages = updatedReferenceImages;
       updates.profile = req.files.profile[0].path;
     }
     const updatedUser = await ClientPlace.findByIdAndUpdate(
-      // req.userId,
-      updates.userId,
+      req.userId,
       { $set: updates },
       { new: true, runValidators: true } //  new option returns the updated document and runValidators ensures validation rules are applied
     ).select("-password");
@@ -134,57 +182,64 @@ updates.referenceImages = updatedReferenceImages;
 };
 export const submitPayment = async (req, res) => {
   try {
-    const { userId, paymentDetails } = req.body;
-    if (!userId || !paymentDetails) {
-      return res
-        .status(400)
-        .json({ message: "User ID and payment details are required" });
+    const {  planName } = req.body;
+    if ( !planName) {
+      return res.status(400).json({
+        message: " plan name is required",
+      });
     }
 
-    // utility function
-    const calculateExpiryDate = (expireAt) => {
-      const now = new Date();
-      const date = new Date(now);
-
-      switch (expireAt) {
-        case "month":
-          date.setMonth(date.getMonth() + 1);
-          break;
-        case "6month":
-          date.setMonth(date.getMonth() + 6);
-          break;
-        case "year":
-          date.setFullYear(date.getFullYear() + 1);
-          break;
-        default:
-          throw new Error("Invalid expireAt value");
-      }
-
-      return date;
+    // Plan configuration
+    const planConfig = {
+      Standard: { imageLimit: 5, priority: "normal", fee: 10 },
+      Plus: { imageLimit: 10, priority: "boosted", fee: 20 },
+      Pro: { imageLimit: 1000, priority: "top", fee: 50 },
     };
-    const expireDate = paymentDetails.expireAt;
-    paymentDetails.expireAt = calculateExpiryDate(expireDate);
 
+    const selectedPlan = planConfig[planName];
+    if (!selectedPlan) {
+      return res.status(400).json({ message: "Invalid plan name" });
+    }
+
+    // All plans expire in 1 month
+    const expireAtDate = new Date();
+    expireAtDate.setMonth(expireAtDate.getMonth() + 1);
+
+    // Update client plan
     const client = await ClientPlace.findByIdAndUpdate(
-      userId,
-      { $set: { plan: paymentDetails, active: true } },
+      req.userId,
+      {
+        $set: {
+          plan: {
+            name: planName,
+            subscribeAt: new Date(),
+            expireAt: expireAtDate,
+            imageLimit: selectedPlan.imageLimit,
+            priority: selectedPlan.priority,
+            fee: selectedPlan.fee,
+            active: true,
+          },
+        },
+      },
       { new: true, runValidators: true }
     );
 
-    // Check if client exists
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
     }
 
     res.status(200).json({
       success: true,
-      message: "Payment processed successfully",
+      message: "Payment processed and plan activated successfully",
+      plan: client.plan,
+      user:client
     });
   } catch (error) {
     console.error("Error processing payment:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 export const deactivePayment = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -214,6 +269,7 @@ export const deactivePayment = async (req, res) => {
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
     }
+     await sendDeactivationEmail(client.email, client.name);
 
     return res.status(200).json({
       success: true,

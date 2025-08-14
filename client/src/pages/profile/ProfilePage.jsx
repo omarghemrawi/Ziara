@@ -28,13 +28,13 @@ export default function ProfilePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((s) => s.user.userData);
+ const token = localStorage.getItem("token");
 
   // حارس توجيه
-  useEffect(() => {
-    if (!user?._id) navigate("/");
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if (!user?._id) navigate("/");
+  // }, [user, navigate]);
 
-  const placeId = user?._id;
 
   // بيانات العرض/التعديل
   const [businessName, setBusinessName] = useState(user?.name || "");
@@ -68,7 +68,11 @@ const reviewsCount = Array.isArray(reviews)
       return typeof txt === "string" && txt.trim().length > 0;
     }).length
   : 0;
+
+  const placeId = user?._id;
   const getReviews = useCallback(async () => {
+    
+    
     if (!placeId) return;
     try {
       const res = await axios.get(`http://localhost:5000/api/review/place/${placeId}`);
@@ -116,7 +120,7 @@ const reviewsCount = Array.isArray(reviews)
       referenceFiles.forEach((f) => formData.append("referenceImages", f));
 
       const res = await axios.put("http://localhost:5000/api/client/update-profile", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data?.user) {
         dispatch(setUser(res.data.user));
@@ -131,8 +135,9 @@ const reviewsCount = Array.isArray(reviews)
   const saveDescription = async (newDescription) => {
     try {
       const res = await axios.put("http://localhost:5000/api/client/update-profile", {
-        userId: user._id,
         description: newDescription,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data?.success) {
         dispatch(setUser(res.data.user));
@@ -151,6 +156,8 @@ const reviewsCount = Array.isArray(reviews)
         facebook: newLinks.facebook,
         instagram: newLinks.instagram,
         location: newLinks.location,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data?.success) {
         dispatch(setUser(res.data.user));
@@ -191,8 +198,8 @@ const reviewsCount = Array.isArray(reviews)
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
 
-    if (gallery.length + files.length > 5) {
-      alert("You can upload only 5 photos.");
+    if (gallery.length + files.length > user.plan.imageLimit) {
+      alert(`You can upload only ${user.plan.imageLimit} photos.`);
       e.target.value = "";
       return;
     }
@@ -203,7 +210,7 @@ const reviewsCount = Array.isArray(reviews)
       files.forEach((f) => formData.append("referenceImages", f));
 
       const res = await axios.put("http://localhost:5000/api/client/update-profile", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       if (res.data?.user) {
@@ -227,7 +234,9 @@ const reviewsCount = Array.isArray(reviews)
         deleteReferences: toDelete,
         referenceImagesToDelete: toDelete, // غطّي اختلاف اسم الحقل بالسيرفر
       };
-      const res = await axios.put("http://localhost:5000/api/client/update-profile", payload);
+      const res = await axios.put("http://localhost:5000/api/client/update-profile", payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (res.data?.user) {
         dispatch(setUser(res.data.user));
         setSelectedIndexes([]);
@@ -241,7 +250,6 @@ const reviewsCount = Array.isArray(reviews)
   const handleViewReviews = () => navigate(`/reviews/${placeId}`);
   const handleEditPlan = () => navigate("/plan");
 
-  if (!user?._id) return null;
 
   return (
     <div className="profile-page">

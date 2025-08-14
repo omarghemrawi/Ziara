@@ -22,11 +22,8 @@ export default function Login() {
       const response = await axios.post("http://localhost:5000/api/client/login", values);
       const user = response.data.user;
 
-      localStorage.setItem("user", JSON.stringify(user));
-      // Dispatch user data to Redux
+      localStorage.setItem("token", response.data.token);
       dispatch(setUser(user));
-
-      console.log("Logged in user:", user);
       navigate("/profile",{ replace: true });
     } catch (err) {
       console.error(err);

@@ -8,7 +8,8 @@ import AdditionalInfo from "./pages/AdditionalInfo";
 import ProfilePage from "./pages/profile/ProfilePage";
  import Plan             from "./pages/plan/Plan"; 
  import ReviewsPage from "./pages/review/ReviewsPage";
- import ReportReview from "./pages/profile/report/ReportReview";
+ import ReportReview from "./pages/report/ReportReview";
+ import Checkout from "./pages/plan/Checkout";
 import "./App.css";
 
 function App() {
@@ -40,6 +41,9 @@ function App() {
           {/* Redirect any unknown path back to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/report-review" element={<ReportReview />} />
+            <Route path="/plan/checkout/:planId" element={<Checkout />} />
+            {/* <Route path="/" element={<ReportReview />} /> */}
+
         </Routes>
       </main>
     </>

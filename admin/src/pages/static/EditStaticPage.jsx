@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { uploadImageToCloudinary } from "../../utils/cloudinaryUpload";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const EditStaticPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const API_URL = "http://localhost:5000/api/static";
 
   const [form, setForm] = useState({
     name: "",
@@ -12,7 +15,8 @@ const EditStaticPage = () => {
     description: "",
     profile: "",
     rate: 0,
-    location: { city: "", coordinates: { latitude: "", longitude: "" } },
+    city: "",
+    location: "",
     referenceImages: [],
   });
 
@@ -20,14 +24,21 @@ const EditStaticPage = () => {
   const [error, setError] = useState("");
   const [initialLoading, setInitialLoading] = useState(true);
 
-  const API_URL = "http://localhost:5000/api/static";
+  // Generic input change handler
+  const handleChange = (field) => (e) =>
+    setForm((prev) => ({
+      ...prev,
+      [field]: field === "rate" ? parseFloat(e.target.value) : e.target.value,
+    }));
 
+  // Fetch place data
   useEffect(() => {
     const fetchPlace = async () => {
       try {
         setInitialLoading(true);
-        const res = await fetch(`${API_URL}/${id}`);
-        const data = await res.json();
+        const res = await axios.get(`${API_URL}/${id}`);
+        const data = res.data;
+
         if (data.success) {
           const p = data.data;
           setForm({
@@ -36,19 +47,15 @@ const EditStaticPage = () => {
             description: p.description || "",
             profile: p.profile || "",
             rate: p.rate || 0,
-            location: {
-              city: p.location?.city || "",
-              coordinates: {
-                latitude: p.location?.coordinates?.latitude || "",
-                longitude: p.location?.coordinates?.longitude || "",
-              },
-            },
+            city: p.city || "",
+            location: p.location || "",
             referenceImages: p.referenceImages || [],
           });
         } else {
           setError("Failed to fetch place data");
         }
-      } catch {
+      } catch (err) {
+        console.error(err);
         setError("Network error. Please try again.");
       } finally {
         setInitialLoading(false);
@@ -58,78 +65,70 @@ const EditStaticPage = () => {
     if (id) fetchPlace();
   }, [id]);
 
+  // Upload profile image
   const handleProfileImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
     try {
       const url = await uploadImageToCloudinary(file);
-      setForm((f) => ({ ...f, profile: url }));
-    } catch {
-      alert("Failed to upload profile image");
+      setForm((prev) => ({ ...prev, profile: url }));
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to upload profile image");
     }
   };
 
+  // Add reference image
   const handleReferenceImageAdd = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
     try {
       const url = await uploadImageToCloudinary(file);
-      setForm((f) => ({
-        ...f,
-        referenceImages: [...f.referenceImages, url].slice(0, 15),
+      setForm((prev) => ({
+        ...prev,
+        referenceImages: [...prev.referenceImages, url].slice(0, 15),
       }));
-    } catch {
-      alert("Failed to upload reference image");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to upload reference image");
     }
   };
 
   const handleReferenceImageDelete = (index) => {
-    setForm((f) => ({
-      ...f,
-      referenceImages: f.referenceImages.filter((_, i) => i !== index),
+    setForm((prev) => ({
+      ...prev,
+      referenceImages: prev.referenceImages.filter((_, i) => i !== index),
     }));
   };
 
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !form.name ||
-      !form.description ||
-      !form.profile ||
-      !form.location.city
-    ) {
-      setError("Please fill all required fields");
+
+    if (!form.name || !form.description || !form.profile || !form.city || !form.location) {
+      toast.error("Please fill all required fields");
       return;
     }
+
     setLoading(true);
     setError("");
 
     try {
-      const response = await fetch(`${API_URL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          rate: parseFloat(form.rate),
-          location: {
-            city: form.location.city,
-            coordinates: {
-              latitude: parseFloat(form.location.coordinates.latitude) || null,
-              longitude:
-                parseFloat(form.location.coordinates.longitude) || null,
-            },
-          },
-        }),
+      const { data } = await axios.put(`${API_URL}/${id}`, {
+        ...form,
+        rate: parseFloat(form.rate),
       });
 
-      const data = await response.json();
       if (data.success) {
-        alert("Place updated successfully!");
+              toast.success("Place updated successfully!");
         navigate("/staticPlace", { replace: true });
       } else {
         setError(data.message || "Failed to update place");
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError("Network error. Please try again.");
     } finally {
       setLoading(false);
@@ -148,184 +147,45 @@ const EditStaticPage = () => {
     <div className="add-static-place-container">
       <h2>Edit Place</h2>
 
-      {error && (
-        <div
-          style={{
-            color: "red",
-            background: "#ffebee",
-            padding: 10,
-            borderRadius: 6,
-            marginBottom: 20,
-          }}
-        >
-          {error}
-        </div>
-      )}
+      {error && <div className="error-message">{error}</div>}
 
       <form className="add-static-place-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Place Name *"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
-        />
+        <input type="text" placeholder="Place Name *" value={form.name} onChange={handleChange("name")} required />
 
-        <select
-          value={form.type}
-          onChange={(e) => setForm({ ...form, type: e.target.value })}
-          required
-        >
+        <select value={form.type} onChange={handleChange("type")} required>
           <option value="religious">Religious</option>
           <option value="touristic">Touristic</option>
         </select>
 
-        <input
-          type="text"
-          placeholder="City *"
-          value={form.location.city}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              location: { ...form.location, city: e.target.value },
-            })
-          }
-          required
-        />
+        <input type="text" placeholder="City *" value={form.city} onChange={handleChange("city")} required />
+        <input type="text" placeholder="Location *" value={form.location} onChange={handleChange("location")} required />
 
-        <div style={{ display: "flex", gap: 10 }}>
-          <input
-            type="number"
-            placeholder="Latitude (optional)"
-            value={form.location.coordinates.latitude}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                location: {
-                  ...form.location,
-                  coordinates: {
-                    ...form.location.coordinates,
-                    latitude: e.target.value,
-                  },
-                },
-              })
-            }
-            step="any"
-          />
-          <input
-            type="number"
-            placeholder="Longitude (optional)"
-            value={form.location.coordinates.longitude}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                location: {
-                  ...form.location,
-                  coordinates: {
-                    ...form.location.coordinates,
-                    longitude: e.target.value,
-                  },
-                },
-              })
-            }
-            step="any"
-          />
-        </div>
-
-        <textarea
-          placeholder="Description *"
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          required
-        />
+        <textarea placeholder="Description *" value={form.description} onChange={handleChange("description")} required />
 
         <label>Profile Image *</label>
-        {form.profile && (
-          <img
-            src={form.profile}
-            alt="Profile"
-            style={{ maxWidth: 200, marginBottom: 10 }}
-          />
-        )}
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleProfileImageChange}
-          required={!form.profile}
-        />
+        {form.profile && <img src={form.profile} alt="Profile" className="profile-preview" />}
+        <input type="file" accept="image/*" onChange={handleProfileImageChange} required={!form.profile} />
 
-        <input
-          type="number"
-          placeholder="Rating (0-5)"
-          value={form.rate}
-          onChange={(e) => setForm({ ...form, rate: e.target.value })}
-          min="0"
-          max="5"
-          step="0.1"
-        />
+        <input type="number" placeholder="Rating (0-5)" value={form.rate} onChange={handleChange("rate")} min="0" max="5" step="0.1" />
 
-        <label style={{ marginTop: 20, fontWeight: "bold" }}>
-          Reference Images (max 5)
-        </label>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: 10,
-            marginBottom: 10,
-          }}
-        >
+        <label>Reference Images (max 15)</label>
+        <div className="reference-images-container">
           {form.referenceImages.map((img, i) => (
-            <div key={i} style={{ position: "relative" }}>
-              <img
-                src={img}
-                alt={`ref-${i}`}
-                style={{
-                  width: 100,
-                  height: 100,
-                  objectFit: "cover",
-                  borderRadius: 4,
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => handleReferenceImageDelete(i)}
-                style={{
-                  position: "absolute",
-                  top: -8,
-                  right: -8,
-                  background: "red",
-                  color: "white",
-                  borderRadius: "50%",
-                  border: "none",
-                  width: 20,
-                  height: 20,
-                  cursor: "pointer",
-                }}
-                aria-label="Delete reference image"
-              >
+            <div key={i} className="reference-image-wrapper">
+              <img src={img} alt={`ref-${i}`} className="reference-image" />
+              <button type="button" onClick={() => handleReferenceImageDelete(i)} className="delete-btn" aria-label="Delete reference image">
                 ×
               </button>
             </div>
           ))}
 
           {form.referenceImages.length < 15 && (
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleReferenceImageAdd}
-              style={{ width: 100, height: 100, cursor: "pointer" }}
-              title="Add Reference Image"
-            />
+            <input type="file" accept="image/*" onChange={handleReferenceImageAdd} className="reference-image-input" title="Add Reference Image" />
           )}
         </div>
 
-        <div style={{ display: "flex", gap: 10 }}>
-          <button
-            type="button"
-            onClick={() => navigate("/staticPlace", { replace: true })}
-            style={{ background: "#6c757d" }}
-          >
+        <div className="form-actions">
+          <button type="button" onClick={() => navigate("/staticPlace", { replace: true })} className="cancel-btn">
             Cancel
           </button>
           <button type="submit" disabled={loading}>
