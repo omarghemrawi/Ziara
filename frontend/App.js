@@ -40,6 +40,7 @@ import Hotels                from './src/screens/Places/Hotels';
 import ActivityPlaces        from './src/screens/Places/ActivityPlaces';
 import MapScreen from './src/screens/Map/Map';
 import ReportPlaceScreen from './src/screens/Report/ReportPlaceScreen';
+import VerifyEmail from './src/screens/Signup/VerfiyEmail';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,7 @@ export default function App() {
             {/* Onboarding & Splash */}
             <Stack.Screen name="Onboarding" component={OnboardingScreen} />
             <Stack.Screen name="Launching" component={LaunchingScreen} />
+             <Stack.Screen name="VerifyEmail" component={VerifyEmail} />
 
             {/* Auth flow */}
             <Stack.Screen name="Welcome" component={Welcome} />
