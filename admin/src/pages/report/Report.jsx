@@ -119,10 +119,10 @@ const deleteReport = async (reportId) => {
         }
     }
 
-    const takeAction= async(email)=>{
+    const takeAction= async()=>{
           try {
     const emailData = {
-      to: "ghemrawiomar@gmail.com",
+      to:'ramatobbo5@gmail.com',
       subject: "Report Resolved",
       message: "Thank you for your report, we resolved it."
     };
@@ -203,7 +203,11 @@ const deleteReport = async (reportId) => {
                                     {report.status !== 'action taken' && (
                                         <button
                                             className="action-taken-btn"
-                                            onClick={() => {takeAction(report.reportedBy.email)}}
+                                            onClick={() => {
+                                                console.log("Email to send:", report.reportedBy.email);
+                                              takeAction(
+                                                
+                                              )}}
                                         >
                                             Mark as Action Taken
                                         </button>
