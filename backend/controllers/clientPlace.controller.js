@@ -46,7 +46,7 @@ export const SignUp = async (req, res) => {
     });
     const { password: _, ...clientData } = newClient.toObject();
 
-    // await sendClientRegisterNotfication(newClient);
+    await sendClientRegisterNotfication(newClient);
 
     res.status(201).json({
       success: true,
