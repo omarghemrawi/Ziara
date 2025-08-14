@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
+  Alert,
 } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -47,13 +48,22 @@ export default function ProfileScreen() {
   };
 
   // Confirm deletion of review
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (selectedReviewIndex === null) return;
-    const updatedReviews = [...reviews];
-    updatedReviews.splice(selectedReviewIndex, 1);
-    setReviews(updatedReviews);
-    setModalVisible(false);
-    setSelectedReviewIndex(null);
+    const id = selectedReviewIndex;
+
+    try {
+      const res = await axios.delete(
+        `http://192.168.0.103:5000/api/review/${id}`,
+      );
+      if (res.data.success) {
+        fetchReviews();
+        setModalVisible(false);
+        setSelectedReviewIndex(null);
+      }
+    } catch (error) {
+      Alert.alert('alert', 'review Not deleted');
+    }
   };
 
   // Cancel deletion modal
@@ -102,10 +112,7 @@ export default function ProfileScreen() {
 
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: theme.background, flex: 1 },
-      ]}
+      style={[styles.container, { backgroundColor: theme.background, flex: 1 }]}
     >
       {/* Header */}
       <View style={styles.header}>
@@ -124,7 +131,9 @@ export default function ProfileScreen() {
               style={styles.icon}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('SettingsScreen')}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SettingsScreen')}
+          >
             <FontAwesome
               name="cog"
               size={30}
@@ -167,18 +176,22 @@ export default function ProfileScreen() {
           {reviews.length > 0 ? (
             reviews.map((review, index) => (
               <View key={review._id || index} style={styles.reviewCard}>
-                       {review.photoUrl && (
-                  <TouchableOpacity onPress={() => openImageModal(review.photoUrl)}>
+                {review.photoUrl && (
+                  <TouchableOpacity
+                    onPress={() => openImageModal(review.photoUrl)}
+                  >
                     <Image
                       source={{ uri: review.photoUrl }}
                       style={styles.reviewImage}
                     />
                   </TouchableOpacity>
-                )} 
+                )}
 
                 <View style={styles.reviewContent}>
                   <View style={styles.topRow}>
-                    <Text style={[styles.reviewPlaceName, { color: theme.text }]}>
+                    <Text
+                      style={[styles.reviewPlaceName, { color: theme.text }]}
+                    >
                       {review.placeName}
                     </Text>
                     <TouchableOpacity onPress={() => handleDeletePress(index)}>
@@ -192,7 +205,9 @@ export default function ProfileScreen() {
                         key={star}
                         style={[
                           styles.star1,
-                          star <= review.rating ? styles.filledStar : styles.unfilledStar,
+                          star <= review.rating
+                            ? styles.filledStar
+                            : styles.unfilledStar,
                         ]}
                       >
                         ★

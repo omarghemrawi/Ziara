@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux"; 
+import { setUser } from "../../redux/userActions";   
 import "./Signup.css";
 
 // Yup validation schema
@@ -22,6 +24,7 @@ const SignupSchema = Yup.object().shape({
 
 export default function Signup() {
   const navigate = useNavigate();
+    const dispatch = useDispatch();    
 
   const businessList = [
     { id: "shop", label: "Shop" },
@@ -40,9 +43,12 @@ export default function Signup() {
         password: payload.password,
       });
 
+      localStorage.setItem("token", response.data.token);
+
       console.log("Signup successful:", response.data);
 
-      // Navigate on success
+      dispatch(setUser(response.data.user));
+  
       navigate("/additional-info", { replace: true });
     } catch (error) {
       console.error("Signup error:", error.response?.data || error.message);

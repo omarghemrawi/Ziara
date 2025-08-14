@@ -26,15 +26,11 @@ const staticPlaceSchema = new mongoose.Schema({
         max: 5
     },
     location: {
-        city: {
+        type: String
+    } ,city: {
             type: String,
             required: true
         },
-        coordinates: {
-            latitude: Number,
-            longitude: Number
-        }
-    }
 }, {
     timestamps: true
 });

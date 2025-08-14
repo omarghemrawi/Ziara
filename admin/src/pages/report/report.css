@@ -246,6 +246,18 @@ main {
   background: #fff;
 }
 
+.delete-report-btn:hover {
+  color: red;
+}
+.report-card {
+  position: relative; /* Important for absolute positioning */
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  background: #fff;
+}
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -269,6 +281,7 @@ main {
     .report-detail, .report-description {
         font-size: 0.9em;
     }
+    
 }
 
 

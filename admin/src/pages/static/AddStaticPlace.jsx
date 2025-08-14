@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./AddStaticPlace.css";
 import axios from "axios";
 import { uploadImageToCloudinary } from "../../utils/cloudinaryUpload";
+import {toast} from "react-toastify"
 
 const initialForm = {
   name: "",
@@ -10,13 +11,8 @@ const initialForm = {
   description: "",
   profile: "",
   rate: 0,
-  location: {
-    city: "",
-    coordinates: {
-      latitude: "",
-      longitude: "",
-    },
-  },
+  city: "",
+  location:"",
   referenceImages: [],
 };
 
@@ -31,6 +27,7 @@ const AddStaticPlace = () => {
       return uploadedUrl;
     } catch (err) {
       console.error("Image upload failed:", err);
+      toast.error("Failed to upload image");
       return null;
     }
   };
@@ -42,9 +39,10 @@ const AddStaticPlace = () => {
       !form.name ||
       !form.description ||
       !form.profile ||
-      !form.location.city
+      !form.city ||
+      !form.location
     ) {
-      console.log("Please fill all required fields");
+      toast.error("Please fill all required fields");
       return;
     }
 
@@ -55,18 +53,13 @@ const AddStaticPlace = () => {
         description: form.description,
         profile: form.profile,
         rate: parseFloat(form.rate),
-        location: {
-          city: form.location.city,
-          coordinates: {
-            latitude: parseFloat(form.location.coordinates.latitude) || null,
-            longitude: parseFloat(form.location.coordinates.longitude) || null,
-          },
-        },
+        city: form.city,
+        location: form.location,
         referenceImages: form.referenceImages,
       });
 
       if (response.data.success) {
-        alert("Place created successfully!");
+        toast.success("Place created successfully!");
         navigate("/staticPlace", { replace: true });
       } else {
         console.log(response.data.message || "Failed to create place");
@@ -99,58 +92,28 @@ const AddStaticPlace = () => {
 
         <input
           type="text"
-          placeholder="City *"
-          value={form.location.city}
+          placeholder="City "
+          value={form.city}
           onChange={(e) =>
             setForm({
               ...form,
-              location: { ...form.location, city: e.target.value },
+               city: e.target.value ,
             })
           }
           required
         />
+         <input
+          type="text"
+          placeholder="Location "
+          value={form.location}
+          onChange={(e) => setForm({ ...form, location: e.target.value })}
+          required
+        />
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="number"
-            placeholder="Latitude (optional)"
-            value={form.location.coordinates.latitude}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                location: {
-                  ...form.location,
-                  coordinates: {
-                    ...form.location.coordinates,
-                    latitude: e.target.value,
-                  },
-                },
-              })
-            }
-            step="any"
-          />
-          <input
-            type="number"
-            placeholder="Longitude (optional)"
-            value={form.location.coordinates.longitude}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                location: {
-                  ...form.location,
-                  coordinates: {
-                    ...form.location.coordinates,
-                    longitude: e.target.value,
-                  },
-                },
-              })
-            }
-            step="any"
-          />
-        </div>
+       
 
         <textarea
-          placeholder="Description *"
+          placeholder="Description "
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           required
@@ -185,7 +148,7 @@ const AddStaticPlace = () => {
           type="number"
           placeholder="Rating (0-5)"
           value={form.rate}
-          onChange={(e) => setForm({ ...form, rate: e.target.value })}
+          onChange={(e) => setForm({ ...form, rate: parseFloat(e.target.value) })}
           min="0"
           max="5"
           step="0.1"

@@ -39,10 +39,7 @@ const clientSchema = new mongoose.Schema({
   },
   reviews: [],
   totalView: Number,
-  active: {
-    type: Boolean,
-    default: false,
-  },
+  
   facebook: {
     type: String,
   },
@@ -50,21 +47,14 @@ const clientSchema = new mongoose.Schema({
     type: String,
   },
   plan: {
-    type: {
-      type: String,
-      default: "", // Monthly || Six Month || Year
-    },
-    subscribeAt: {
-      type: Date,
-      default: null,
-    },
-    expireAt: {
-      type: Date,
-      default: null,
-    },
-    priority: { type: String, default: "" },
-    fee: { type: Number, default: 0 },
-  },
+  name: { type: String, default: "Standard" }, // Standard | Plus | Pro
+  subscribeAt: { type: Date, default: null },
+  expireAt: { type: Date, default: null },
+  imageLimit: { type: Number, default: 5 }, // Directly store limit
+  priority: { type: String, default: "normal" }, // normal | boosted | top
+  fee: { type: Number, default: 0 },
+  active: {type: Boolean,default: false},
+}
 });
 
 const ClientPlace = mongoose.model("ClientPlace", clientSchema);

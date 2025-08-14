@@ -39,6 +39,10 @@ const reportSchema = new mongoose.Schema({
       'Misleading Content',
       // reasons owner might report a user
       'Spam',
+      "Off topic",
+      "Conflict of interest",
+      "Profanity",
+      "Discrimination or hate speech",
     ],
     required: true
   },

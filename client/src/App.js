@@ -8,6 +8,8 @@ import AdditionalInfo from "./pages/AdditionalInfo";
 import ProfilePage from "./pages/profile/ProfilePage";
  import Plan             from "./pages/plan/Plan"; 
  import ReviewsPage from "./pages/review/ReviewsPage";
+ import ReportReview from "./pages/report/ReportReview";
+ import Checkout from "./pages/plan/Checkout";
 import "./App.css";
 
 function App() {
@@ -29,8 +31,7 @@ function App() {
 
          {/* صفحة المراجعات لكل business */}
          {/* <Route path="/reviews/:placeId" element={<ReviewsPage />} /> */}
-         <Route path="/reviews" element={<ReviewsPage />} />
-
+        <Route path="/reviews/:placeId" element={<ReviewsPage />} />
           {/* Signup page on "/login" */}
           <Route path="/login" element={<Login />} />
           
@@ -39,6 +40,10 @@ function App() {
 
           {/* Redirect any unknown path back to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/report-review" element={<ReportReview />} />
+            <Route path="/plan/checkout/:planId" element={<Checkout />} />
+            {/* <Route path="/" element={<ReportReview />} /> */}
+
         </Routes>
       </main>
     </>

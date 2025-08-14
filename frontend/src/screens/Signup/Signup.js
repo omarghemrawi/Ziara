@@ -23,7 +23,7 @@ export default function Signup({ navigation }) {
 
   const handleSignUp = async values => {
     try {
-      const resp = await axios.post('http://10.0.2.2:3000/api/user/signup', {
+      const resp = await axios.post('http://192.168.0.103:5000/api/user/signup', {
         username: values.username,
         email: values.email,
         password: values.password,
@@ -36,8 +36,16 @@ export default function Signup({ navigation }) {
         alert(resp.data.message);
       }
     } catch (error) {
-      console.log(error);
-      alert('Signup failed. Please try again.');
+   if (error.response) {
+  console.log('Backend error:', error.response.data);
+  alert(error.response.data.message || 'Signup failed.');
+} else if (error.request) {
+  console.log('No response from server:', error.request);
+  alert('Cannot reach server.');
+} else {
+  console.log('Error setting up request:', error.message);
+}
+
     }
   };
 
