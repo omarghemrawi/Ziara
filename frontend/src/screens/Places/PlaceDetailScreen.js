@@ -64,7 +64,7 @@ export default function PlaceDetailScreen() {
     try {
       console.log(id, user._id);
       if (newValue) {
-        await axios.post('http://192.168.0.103/api/favorite/', {
+        await axios.post('http://192.168.0.103:5000/api/favorite/', {
           placeId: id,
           userId: user._id,
         });

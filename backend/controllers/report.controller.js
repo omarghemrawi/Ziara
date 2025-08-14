@@ -5,6 +5,8 @@ import ClientPlace from '../models/clientPlace.model.js';
 export const createReport = async (req, res) => {
   try {
     const { type, complainant, targetId, reportedBy, reason , review } = req.body;
+    console.log("Type value:", type);
+
 
     //  Check required fields 
     if (!type || !complainant || !targetId || !reportedBy || !reason) { 

@@ -77,6 +77,23 @@ function ReportPage() {
     });
   } 
 };
+//delete report
+// const deleteReport = async (reportId) => {
+//   try {
+//     await axios.delete(`http://localhost:5000/api/report/${reportId}`);
+//     toast.success("🗑️ Report deleted successfully", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//     getReports(); // refresh list after deletion
+//   } catch (error) {
+//     console.error(error);
+//     toast.error("❌ Failed to delete report", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//   }
+// };
 
 //delete report
 const deleteReport = async (reportId) => {
@@ -122,7 +139,7 @@ const deleteReport = async (reportId) => {
     const takeAction= async()=>{
           try {
     const emailData = {
-      to:'ramatobbo5@gmail.com',
+      to: "ramatobbo5@gmail.com",
       subject: "Report Resolved",
       message: "Thank you for your report, we resolved it."
     };
@@ -132,7 +149,7 @@ const deleteReport = async (reportId) => {
     if(res.data.success) {
       toast.success("✅ Email sent successfully.");
     } else {
-      toast.error("⚠ Failed to send email.");
+      toast.error("⚠️ Failed to send email.");
     }
   } catch (error) {
     console.error(error);
@@ -203,11 +220,9 @@ const deleteReport = async (reportId) => {
                                     {report.status !== 'action taken' && (
                                         <button
                                             className="action-taken-btn"
-                                            onClick={() => {
-                                                console.log("Email to send:", report.reportedBy.email);
-                                              takeAction(
-                                                
-                                              )}}
+                                            onClick={() => {takeAction()}
+                                            // report.reportedBy._id
+                                        } 
                                         >
                                             Mark as Action Taken
                                         </button>

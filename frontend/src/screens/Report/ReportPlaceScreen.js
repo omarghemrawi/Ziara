@@ -44,8 +44,8 @@ export default function ReportPlaceScreen() {
     }
 
     try {
-      const response = await axios.post('http://10.0.2.2:5000/api/report', {
-        type: 'Client',
+      const response = await axios.post('http://192.168.0.103:5000/api/report', {
+        type: 'ClientPlace',
         complainant: 'User',
         targetId: placeId,
         reportedBy: userId,

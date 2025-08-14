@@ -11,8 +11,8 @@ Emailrouter.post('/send-email', async (req, res) => {
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASS,
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
     tls: {
       rejectUnauthorized: false,
@@ -21,7 +21,7 @@ Emailrouter.post('/send-email', async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"Report System" <${process.env.GMAIL_USER}>`,
+      from: `"Report System" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       text: message,
