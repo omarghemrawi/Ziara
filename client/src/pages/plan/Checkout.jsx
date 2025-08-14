@@ -2,6 +2,8 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios"
+import { setUser } from "../../redux/userActions";
 // import { subscribePlan } from "../../redux/subscriptionActions";
 
 import "./Checkout.css";
@@ -17,9 +19,9 @@ const PLANS = {
 export default function Checkout() {
   const { planId } = useParams();
   const navigate = useNavigate();
-
-const dispatch = useDispatch();
-const loading = useSelector((s) => s.subscription.loading);
+ const token = localStorage.getItem("token");
+ const dispatch = useDispatch()
+// const loading = useSelector((s) => s.subscription.loading);
   const plan = useMemo(() => PLANS[planId] ?? null, [planId]);
 
   // فقط الحقول الضرورية للدفع
@@ -47,22 +49,25 @@ const loading = useSelector((s) => s.subscription.loading);
     setForm((p) => ({ ...p, [name]: v }));
   };
 
-const payNow = async () => {
-  const required = ["email", "number", "expiry", "cvc", "name"];
-  if (!required.every((k) => String(form[k] || "").trim())) {
-    alert("Please fill all required fields.");
-    return;
-  }
-
+const payNow = async (plan) => {
   try {
-    // await dispatch(subscribePlan(plan.id)); // يعمل POST + refresh /me
-    alert(`Subscribed to ${plan.name} — $${plan.price}/month`);
-    navigate("/");
-  } catch {
-    // لو بدك، فيك تعرض توست هون
+    const response = await axios.put("http://localhost:5000/api/client/subscribe", {
+      planName: plan.name, // just the name: "Standard", "Plus", "Pro"
+    }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    if (response.data.success) {
+      console.log("Plan activated:", response.data.plan);
+      dispatch(setUser(response.data.user));
+      navigate("/profile",{replace:true})
+    } else {
+      alert(`Failed: ${response.data.message}`);
+    }
+  } catch (err) {
+    console.error(err.response?.data?.message || err.message);
+    alert(`Payment failed: ${err.response?.data?.message || err.message}`);
   }
 };
-
 
   return (
     <div className="checkout-wrap">
@@ -149,8 +154,8 @@ const payNow = async () => {
             />
           </div>
 
-<button className="pay-btn" onClick={payNow} disabled={loading}>
-  {loading ? "Processing..." : `Pay $${plan.price} / month`}
+<button className="pay-btn" onClick={()=>payNow(plan)}>
+  {`Pay $${plan.price} / month`}
 </button>
 
           <p className="fine">

@@ -9,7 +9,7 @@ export default function Navbar() {
   const { pathname, state } = useLocation(); // ← added `state`
   const dispatch =useDispatch()
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("userData"));
 
   const toggleLang = () => {
     const next = lang === "EN" ? "ع" : "EN";
