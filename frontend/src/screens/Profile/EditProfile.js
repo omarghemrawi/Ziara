@@ -18,48 +18,52 @@ import Config from 'react-native-config';
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function EditProfileScreen({ navigation }) {
-
- 
   const dispatch = useDispatch();
   const navigate = useNavigation();
 
   const user = useSelector(state => state.user.user);
 
-  // console.log(process.env.CLOUD_NAME);
   console.log(Config.UPLOAD_PRESET);
 
- const [name, setName] = useState(user?.username || '');
-const [about, setAbout] = useState(user?.about || '');
-const [profileImage, setProfileImage] = useState(null);
+  const [name, setName] = useState(user?.username || '');
+  const [about, setAbout] = useState(user?.about || '');
+  const [profileImage, setProfileImage] = useState(null);
 
-const handleEdit = async () => {
-  // Optional: only alert if no name anywhere
-  if (!name && !user.username) {
-    alert('Please Enter a Name');
-    return;
-  }
-  try {
-    let imageUrl = '';
-    if (profileImage !== null) {
-      imageUrl = await uploadImageToCloudinary(profileImage);
-    } else {
-      imageUrl = user.profile;
+  const handleEdit = async () => {
+    const token = await AsyncStorage.getItem('token');
+    // Optional: only alert if no name anywhere
+    if (!name && !user.username) {
+      alert('Please Enter a Name');
+      return;
     }
-    await axios.put('http://192.168.0.103:5000/api/user', {
-      profile: imageUrl,
-      userId: user._id,
-      about,
-      username: name || user.username,
-    });
-    dispatch(refreshUser(user._id));
-    navigation.goBack();
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+    try {
+      let imageUrl = '';
+      if (profileImage !== null) {
+        imageUrl = await uploadImageToCloudinary(profileImage);
+      } else {
+        imageUrl = user.profile;
+      }
+      await axios.put(
+        'http://10.0.2.2:5000/api/user',
+        {
+          profile: imageUrl,
+          userId: user._id,
+          about,
+          username: name || user.username,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      dispatch(refreshUser(user._id));
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleImagePick = () => {
     const options = {

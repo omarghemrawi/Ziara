@@ -6,12 +6,13 @@ import {
   getUser,
   verifyEmail
 } from "../controllers/user.controller.js";
+import { verifyToken } from "../middleware/auth.js";
 
 const userRouter = express.Router();
 
 userRouter.post("/signup", userSignUp);
 userRouter.post("/login", userLogin);
-userRouter.put("/", updateProfile);
+userRouter.put("/",verifyToken, updateProfile);
 userRouter.get("/:id", getUser);
 userRouter.get("/verify/:token", verifyEmail);
 

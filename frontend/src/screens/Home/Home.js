@@ -29,47 +29,35 @@ export default function Home() {
   const handleProfilePress = () => {
     navigation.navigate('Profile');
   };
-  //   const { theme } = useTheme();
-  // useEffect(() => {
-  //   const requestPermission = async () => {
-  //     if (Platform.OS === 'android') {
-  //       try {
-  //         const granted = await PermissionsAndroid.request(
-  //           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-  //           {
-  //             title: 'Location Permission',
-  //             message: 'App needs access to your location.',
-  //             buttonNeutral: 'Ask Me Later',
-  //             buttonNegative: 'Cancel',
-  //             buttonPositive: 'OK',
-  //           },
-  //         );
-
-  //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //           console.log('Location permission granted');
-  //         } else {
-  //           console.log('Location permission denied');
-  //         }
-  //       } catch (err) {
-  //         console.warn('Permission request error:', err);
-  //       }
-  //     }
-  //   };
-
-  //   requestPermission();
-  // }, []);
 
   const { theme } = useTheme();
 
   const getData = async (searchTerm = '') => {
     try {
-      const staticRes = await axios.get('http://192.168.0.103:5000/api/static');
-      const clientRes = await axios.get('http://192.168.0.103:5000/api/client');
+      const staticRes = await axios.get('http://10.0.2.2:5000/api/static');
+      const clientRes = await axios.get('http://10.0.2.2:5000/api/client');
 
       const staticPlaces = staticRes.data.places || [];
       const clientPlaces = clientRes.data.places || [];
 
-      const allPlaces = [...staticPlaces, ...clientPlaces];
+      // Priority sorting only for clientPlaces
+      const priorityOrder = { top: 3, boosted: 2, normal: 1 };
+
+      clientPlaces.sort((a, b) => {
+        const priorityDiff =
+          priorityOrder[b.plan.priority] - priorityOrder[a.plan.priority];
+        if (priorityDiff !== 0) return priorityDiff;
+
+        // Random shuffle for boosted
+        if (a.plan.priority === 'boosted' && b.plan.priority === 'boosted') {
+          return Math.random() - 0.5;
+        }
+
+        return 0;
+      });
+      console.log(clientPlaces);
+
+      const allPlaces = [...clientPlaces, ...staticPlaces];
 
       if (allPlaces.length > 0) {
         dispatch({ type: 'SET_PLACES', payload: allPlaces });

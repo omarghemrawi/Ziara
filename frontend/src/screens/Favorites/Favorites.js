@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Favourites() {
   const navigation = useNavigation();
@@ -24,8 +25,10 @@ export default function Favourites() {
   const { theme } = useTheme();
   const user = useSelector(state => state.user.user);
   const places = useSelector(state => state.places.all);
+  const [token, setToken] = useState('');
   const dispatch = useDispatch();
 
+  const getToken = async () => setToken(await AsyncStorage.getItem('token'));
   const getFavoritePLaces = () => {
     setFavoritePlaces(
       places.filter(place => user.favoritePlaces.includes(place._id)),
@@ -38,10 +41,15 @@ export default function Favourites() {
 
   const handleMoveToVisited = async () => {
     try {
-      const res = await axios.post('http://10.0.2.2:5000/api/visited', {
-        userId: user._id,
-        place_id: idSelectedPlace,
-      });
+      const res = await axios.post(
+        'http://10.0.2.2:5000/api/visited',
+        {
+          place_id: idSelectedPlace,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       dispatch(refreshUser(user._id));
       getFavoritePLaces();
       setModalVisible(false);
@@ -53,9 +61,9 @@ export default function Favourites() {
 
   const handleDelete = async () => {
     try {
-      await axios.post('http://10.0.2.2:5000/place/favorite/delete', {
-        placeId: idSelectedPlace,
-        userId: user._id,
+      await axios.delete('http://10.0.2.2:5000/api/favorite', {
+        data: { placeId: idSelectedPlace },
+        headers: { Authorization: `Bearer ${token}` },
       });
       dispatch(refreshUser(user._id));
       getFavoritePLaces();
@@ -70,6 +78,9 @@ export default function Favourites() {
   useEffect(() => {
     getFavoritePLaces();
   }, [user.favoritePlaces]);
+  useEffect(() => {
+    getToken();
+  }, []);
 
   return (
     <ScrollView
@@ -78,15 +89,17 @@ export default function Favourites() {
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
-             <TouchableOpacity onPress={() => navigation.goBack()}>
-                      <Entypo name="chevron-left" size={24} color="#fff" />
-                    </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Entypo name="chevron-left" size={24} color="#fff" />
+          </TouchableOpacity>
           <Text style={styles.title}>{i18n.t('favorites')}</Text>
           <TouchableOpacity
             style={styles.visitedButton}
             onPress={() => navigation.navigate('Visited')}
           >
-            <Text style={[styles.visitedButtonText]}>{i18n.t('goToVisited')}</Text>
+            <Text style={[styles.visitedButtonText]}>
+              {i18n.t('goToVisited')}
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -107,7 +120,7 @@ export default function Favourites() {
             marginTop: 20,
           }}
         >
-         {i18n.t('noFavourites')}
+          {i18n.t('noFavourites')}
         </Text>
       ) : (
         favoritePlaces.map((place, index) => (
@@ -115,7 +128,10 @@ export default function Favourites() {
             <Image style={styles.imageItem} source={{ uri: place.profile }} />
             <View style={styles.textContainer}>
               <Text style={styles.placeName}>{place.name}</Text>
-              <Text style={styles.placeLocation}> {i18n.t('city')}: {place.city}</Text>
+              <Text style={styles.placeLocation}>
+                {' '}
+                {i18n.t('city')}: {place.city}
+              </Text>
             </View>
             <TouchableOpacity
               style={styles.iconContainer}

@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 
-
 export default function VerifyEmail({ route, navigation }) {
   const { email } = route.params; // email passed from Signup
   const [code, setCode] = useState('');
 
   const handleVerify = async () => {
     try {
-      const resp = await axios.post('http://192.168.0.103:5000/api/user/verify-email', {
-        email,
-        code
-      });
+      const resp = await axios.post(
+        'http://192.168.0.103:5000/api/user/verify-email',
+        {
+          email,
+          code,
+        },
+      );
       if (resp.data.success) {
         alert('Email verified! You can now login.');
         navigation.replace('Login'); // go to login after verification
@@ -27,7 +29,10 @@ export default function VerifyEmail({ route, navigation }) {
 
   const handleResend = async () => {
     try {
-      const resp = await axios.post('http://192.168.0.103:3000/api/user/resend-code', { email });
+      const resp = await axios.post(
+        'http://10.0.2.2:5000/api/user/resend-code',
+        { email },
+      );
       alert(resp.data.message);
     } catch (err) {
       alert('Could not resend code.');
@@ -37,7 +42,9 @@ export default function VerifyEmail({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Verify Email</Text>
-      <Text style={styles.subtitle}>Enter the 6-digit code sent to {email}</Text>
+      <Text style={styles.subtitle}>
+        Enter the 6-digit code sent to {email}
+      </Text>
 
       <TextInput
         style={styles.input}

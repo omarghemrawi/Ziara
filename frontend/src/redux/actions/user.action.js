@@ -1,8 +1,12 @@
 import axios from 'axios';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export const refreshUser = userId => async dispatch => {
   try {
-    const res = await axios.get(`http://192.168.0.103:5000/api/user/${userId}`);
+    const token = await AsyncStorage.getItem('token');
+
+    const res = await axios.get(`http://10.0.2.2:5000/api/user/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     dispatch({
       type: 'SET_USER',
       payload: res.data.user,

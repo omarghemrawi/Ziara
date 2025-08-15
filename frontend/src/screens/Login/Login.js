@@ -5,6 +5,7 @@ import styles from './styles';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -21,12 +22,13 @@ export default function Login({ navigation }) {
 
   const handleLogin = async values => {
     try {
-      const response = await axios.post('http://192.168.0.103:5000/api/user/login', {
+      const response = await axios.post('http://10.0.2.2:5000/api/user/login', {
         email: values.email,
         password: values.password,
       });
 
       if (response.data.success) {
+        await AsyncStorage.setItem('token', response.data.token);
         dispatch({
           type: 'SET_USER',
           payload: response.data.user,

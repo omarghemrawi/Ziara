@@ -7,7 +7,7 @@ import { sendDeactivationEmail , sendClientRegisterNotfication } from "../utils/
 // ??? Done
 export const getAllPlaces = async (req, res) => {
   try {
-    const resp = await ClientPlace.find();
+    const resp = await ClientPlace.find({"plan.active" : true}).select("-password");;
     if (resp.length > 0) {
       return res.status(200).json({ places: resp });
     } else {
@@ -129,7 +129,6 @@ export const completeRegister = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 export const updateProfile = async (req, res) => {
   try { 
     const updates = req.body;
@@ -222,7 +221,7 @@ export const submitPayment = async (req, res) => {
         },
       },
       { new: true, runValidators: true }
-    );
+    ).select("-password");
 
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
@@ -239,7 +238,6 @@ export const submitPayment = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 export const deactivePayment = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -264,7 +262,7 @@ export const deactivePayment = async (req, res) => {
         new: true,
         runValidators: true,
       }
-    );
+    ).select("-password");
 
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
@@ -281,6 +279,31 @@ export const deactivePayment = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+// ! this done for admin
+export const getPlace = async (req, res) => {
+  try {
+    const { place_id} = req.params;
+    if (!place_id ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Place ID is required " });
+    }
+   
+    const place = await ClientPlace.findById(place_id)
+    if (!place) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Place not found in favorites" });
+    }
+    return res.status(200).json({ success: true, place });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
+
 // !!!
 // export const getPlace = async (req, res) => {
 //   try {
@@ -310,25 +333,3 @@ export const deactivePayment = async (req, res) => {
 //   }
 // };
 
-// ! this done for admin
-export const getPlace = async (req, res) => {
-  try {
-    const { place_id} = req.params;
-    if (!place_id ) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Place ID is required " });
-    }
-   
-    const place = await ClientPlace.findById(place_id)
-    if (!place) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Place not found in favorites" });
-    }
-    return res.status(200).json({ success: true, place });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
-};

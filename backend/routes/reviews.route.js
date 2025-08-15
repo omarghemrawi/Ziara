@@ -6,14 +6,16 @@ import {
   getUserReviews,
   getSingleReview
 } from "../controllers/review.controller.js";
+import {verifyToken} from "../middleware/auth.js"
 
 const reviewRouter = express.Router();
 
-reviewRouter.post("/", createReview);
-reviewRouter.delete("/:id", deleteReview);
-reviewRouter.get("/:reviewId", getSingleReview);
+reviewRouter.get("/user",verifyToken, getUserReviews);
 reviewRouter.get("/place/:placeId", getPlaceReviews);
-reviewRouter.get("/user/:userId", getUserReviews);
+
+reviewRouter.post("/",verifyToken, createReview);
+reviewRouter.delete("/:id",verifyToken, deleteReview);
+reviewRouter.get("/:reviewId", getSingleReview);
 
 
 export default reviewRouter;

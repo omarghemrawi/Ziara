@@ -7,22 +7,20 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
-  Button,
   TextInput,
 } from 'react-native';
-import DatePicker from 'react-native-date-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { favoritePlaces } from '../Favorites/FavoriteStorage';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
 import SocialIcons from '../components/SocialIcons';
 import { uploadImageToCloudinary } from '../../utils/cloudinaryUpload';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function PlaceDetailScreen() {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -31,9 +29,9 @@ export default function PlaceDetailScreen() {
   const [selectedStar, setSelectedStar] = useState(0);
   const [image, setImage] = useState(null);
   const [showTooltip, setShowTooltip] = useState(true);
-    const [imageModalVisible, setImageModalVisible] = useState(false);
-    const [selectedImageUri, setSelectedImageUri] = useState(null);
-      const openImageModal = uri => {
+  const [imageModalVisible, setImageModalVisible] = useState(false);
+  const [selectedImageUri, setSelectedImageUri] = useState(null);
+  const openImageModal = uri => {
     setSelectedImageUri(uri);
     setImageModalVisible(true);
   };
@@ -51,36 +49,35 @@ export default function PlaceDetailScreen() {
   const user = useSelector(state => state.user.user);
   const dispatch = useDispatch();
 
-  console.log(data);
-
   const place = data.find(item => item._id === id);
 
   const starArray = [1, 2, 3, 4, 5];
 
   const handleFavouriteToggle = async () => {
+    const token = await AsyncStorage.getItem('token');
     const newValue = !isFavourite;
     setIsFavourite(newValue);
 
     try {
       console.log(id, user._id);
       if (newValue) {
-        await axios.post('http://192.168.0.103:5000/api/favorite/', {
-          placeId: id,
-          userId: user._id,
-        });
-      } else {
-        await axios.delete('http://192.168.0.103:5000/api/favorite', {
-          data: {
-            placeId: id,
-            userId: user._id,
+        await axios.post(
+          'http://10.0.2.2:5000/api/favorite/',
+          { placeId: id },
+          {
+            headers: { Authorization: `Bearer ${token}` },
           },
+        );
+      } else {
+        await axios.delete('http://10.0.2.2:5000/api/favorite', {
+          data: { placeId: id },
+          headers: { Authorization: `Bearer ${token}` },
         });
       }
       dispatch(refreshUser(user._id)); // Refresh after success
     } catch (error) {
       console.error('Error toggling favorite:', error);
       setIsFavourite(newValue);
-      // Optionally revert UI state here if needed
     }
   };
 
@@ -106,6 +103,8 @@ export default function PlaceDetailScreen() {
   };
 
   const handleSubmit = async () => {
+    const token = await AsyncStorage.getItem('token');
+
     if (!selectedStar || !reviewText) {
       alert('Please fill in all required fields.');
       return;
@@ -123,14 +122,19 @@ export default function PlaceDetailScreen() {
         ? 'StaticPlace'
         : 'ClientPlace';
       // Submit review data
-      const res = await axios.post('http://192.168.0.103:5000/api/review', {
-        rating: selectedStar,
-        comment: reviewText,
-        image: imageUrl || null,
-        userId: user._id,
-        placeId: place._id,
-        placeModel: modelType,
-      });
+      const res = await axios.post(
+        'http://10.0.2.2:5000/api/review',
+        {
+          rating: selectedStar,
+          comment: reviewText,
+          image: imageUrl || null,
+          placeId: place._id,
+          placeModel: modelType,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       if (res.data.success) {
         alert('Review submitted successfully!');
@@ -166,9 +170,8 @@ export default function PlaceDetailScreen() {
   const fetchReviews = async placeId => {
     try {
       const res = await axios.get(
-        `http://192.168.0.103:5000/api/review/place/${placeId}`,
+        `http://10.0.2.2:5000/api/review/place/${placeId}`,
       );
-      console.log(res.data);
       if (res.data.success) {
         setReviews(res.data.reviews);
       }
@@ -191,15 +194,14 @@ export default function PlaceDetailScreen() {
       <View style={styles.reviewHeader}>
         <Image
           source={{
-            uri: review.userId.profileImage || 'https://via.placeholder.com/50',
+            uri: review.userId.profile || 'https://via.placeholder.com/50',
           }}
           style={styles.reviewAvatar}
         />
         <View style={{ marginLeft: 10 }}>
-          
-         <Text style={styles.reviewerName}>
-  {review.userId?.name || review.userId?.username || 'Anonymous'}
-</Text>
+          <Text style={styles.reviewerName}>
+            {review.userId?.name || review.userId?.username || 'Anonymous'}
+          </Text>
           <View style={styles.starsRow}>
             {[1, 2, 3, 4, 5].map(
               (
@@ -218,16 +220,16 @@ export default function PlaceDetailScreen() {
                 </Text>
               ),
             )}
-
           </View>
         </View>
       </View>
- <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}>
-  
-  {review.image && (
-    <TouchableOpacity onPress={() => openImageModal(review.image)}>
+      <View
+        style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}
+      >
+        {review.image && (
+          <TouchableOpacity onPress={() => openImageModal(review.image)}>
             <Image
-              source={{ uri: review.image  }}
+              source={{ uri: review.image }}
               style={{
                 width: 100,
                 height: 100,
@@ -236,13 +238,11 @@ export default function PlaceDetailScreen() {
               }}
             />
           </TouchableOpacity>
-  )}
-  <Text style={{ flex: 1, fontSize: 15, color: '#333' }}>
-    {review.comment}
-  </Text>
-</View>
-
-   
+        )}
+        <Text style={{ flex: 1, fontSize: 15, color: '#333' }}>
+          {review.comment}
+        </Text>
+      </View>
     </View>
   );
 
@@ -265,7 +265,7 @@ export default function PlaceDetailScreen() {
               width: '90%',
             }}
           >
-         <Text style={styles.title}>{place?.name || 'Loading...'}</Text>
+            <Text style={styles.title}>{place?.name || 'Loading...'}</Text>
             <View style={{ alignItems: 'center' }}>
               {showTooltip && (
                 <View style={styles.tooltipContainer}>
@@ -294,8 +294,10 @@ export default function PlaceDetailScreen() {
 
           <TouchableOpacity
             style={styles.mapButton}
-        onPress={() =>
-              navigation.navigate('Map', { locationUrl: place.location || null })
+            onPress={() =>
+              navigation.navigate('Map', {
+                locationUrl: place.location || null,
+              })
             }
           >
             <Text style={styles.mapButtonText}>{i18n.t('ViewOnMap')}</Text>
@@ -481,30 +483,30 @@ export default function PlaceDetailScreen() {
           </View>
         </View>
       </Modal>
-        <Modal
-              visible={imageModalVisible}
-              transparent={true}
-              animationType="fade"
-              onRequestClose={closeImageModal}
-            >
-              <View style={styles.fullscreenImageOverlay}>
-                <TouchableOpacity
-                  style={styles.fullscreenCloseArea}
-                  onPress={closeImageModal}
-                />
-                <Image
-                  source={{ uri: selectedImageUri }}
-                  style={styles.fullscreenImage}
-                  resizeMode="contain"
-                />
-                <TouchableOpacity
-                  style={styles.fullscreenCloseButton}
-                  onPress={closeImageModal}
-                >
-                  <MaterialIcons name="close" size={30} color="#fff" />
-                </TouchableOpacity>
-              </View>
-            </Modal>
+      <Modal
+        visible={imageModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={closeImageModal}
+      >
+        <View style={styles.fullscreenImageOverlay}>
+          <TouchableOpacity
+            style={styles.fullscreenCloseArea}
+            onPress={closeImageModal}
+          />
+          <Image
+            source={{ uri: selectedImageUri }}
+            style={styles.fullscreenImage}
+            resizeMode="contain"
+          />
+          <TouchableOpacity
+            style={styles.fullscreenCloseButton}
+            onPress={closeImageModal}
+          >
+            <MaterialIcons name="close" size={30} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </>
   );
 }
@@ -772,8 +774,7 @@ const styles = StyleSheet.create({
   reviewerName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color:'black',
-   
+    color: 'black',
   },
 
   starsRow: {
@@ -799,8 +800,6 @@ const styles = StyleSheet.create({
   unfilledStar: {
     color: '#ccc',
   },
-
-
 
   reviewImage: {
     width: 100,
@@ -845,29 +844,28 @@ const styles = StyleSheet.create({
     borderTopColor: '#FAC75C',
   },
   fullscreenImageOverlay: {
-  flex: 1,
-  backgroundColor: 'rgba(0,0,0,0.9)',
-  justifyContent: 'center',
-  alignItems: 'center',
-  position: 'relative',
-},
-fullscreenCloseArea: {
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-},
-fullscreenImage: {
-  width: '90%',
-  height: '70%',
-  borderRadius: 12,
-},
-fullscreenCloseButton: {
-  position: 'absolute',
-  top: 40,
-  right: 20,
-  zIndex: 10,
-},
-
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  },
+  fullscreenCloseArea: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  fullscreenImage: {
+    width: '90%',
+    height: '70%',
+    borderRadius: 12,
+  },
+  fullscreenCloseButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 10,
+  },
 });

@@ -4,8 +4,8 @@ import User from "../models/user.model.js";
 // Create review
 export const createReview = async (req, res) => {
   try {
-    const { placeId, rating, comment,  userId , image , placeModel } = req.body;
-    // console.log(placeId , rating , comment  ,userName , userId , image , date)
+    const { placeId, rating, comment,  image , placeModel } = req.body;
+    const  userId =req.userId
 
      if (!placeId || !rating || !comment  || !userId ) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -56,11 +56,10 @@ export const getPlaceReviews = async (req, res) => {
   }
 };
 
-// Get all reviews for a user
+// Get all reviews for a user //? no delete
 export const getUserReviews = async (req, res) => {
   try {
-    const userId = req.params.userId;
-
+    const  userId = req.userId
     if (!userId) {
       return res
         .status(404)

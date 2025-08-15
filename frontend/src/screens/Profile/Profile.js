@@ -17,6 +17,7 @@ import { useTheme } from '../Theme/Theme';
 import { useSelector } from 'react-redux';
 import i18n from '../locales/i18n';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -53,13 +54,19 @@ export default function ProfileScreen() {
     const id = selectedReviewIndex;
 
     try {
-      const res = await axios.delete(
-        `http://192.168.0.103:5000/api/review/${id}`,
-      );
+      const token = await AsyncStorage.getItem('token');
+      const res = await axios.delete(`http://10.0.2.2:5000/api/review/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (res.data.success) {
         fetchReviews();
         setModalVisible(false);
         setSelectedReviewIndex(null);
+      } else {
+        console.log(res.data.message);
+        console.log('first');
       }
     } catch (error) {
       Alert.alert('alert', 'review Not deleted');
@@ -74,12 +81,11 @@ export default function ProfileScreen() {
 
   // Fetch user reviews from API and normalize data
   const fetchReviews = async () => {
-    if (!user?._id) return;
-
+    const token = await AsyncStorage.getItem('token');
     try {
-      const res = await axios.get(
-        `http://192.168.0.103:5000/api/review/user/${user._id}`,
-      );
+      const res = await axios.get('http://10.0.2.2:5000/api/review/user', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       console.log('API response:', res.data);
 
       if (res.data.success && Array.isArray(res.data.reviews)) {
@@ -194,7 +200,9 @@ export default function ProfileScreen() {
                     >
                       {review.placeName}
                     </Text>
-                    <TouchableOpacity onPress={() => handleDeletePress(index)}>
+                    <TouchableOpacity
+                      onPress={() => handleDeletePress(review._id)}
+                    >
                       <MaterialIcons name="delete" size={22} color="black" />
                     </TouchableOpacity>
                   </View>
@@ -246,7 +254,7 @@ export default function ProfileScreen() {
             <View style={styles.modalButtons}>
               <TouchableOpacity
                 style={[styles.modalButton, { backgroundColor: '#FAC75C' }]}
-                onPress={confirmDelete}
+                onPress={() => confirmDelete()}
               >
                 <Text style={styles.modalButtonText}>{i18n.t('yes')}</Text>
               </TouchableOpacity>

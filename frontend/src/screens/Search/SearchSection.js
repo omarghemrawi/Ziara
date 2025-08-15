@@ -42,7 +42,6 @@ const SearchSection = ({ title, headerColor, headerImage }) => {
   };
 
   useEffect(() => {
-    console.log('Redux places data:', data);
     getPlaces(searchValue);
   }, [searchValue, data]);
 
@@ -85,7 +84,10 @@ const SearchSection = ({ title, headerColor, headerImage }) => {
       <View style={[styles.header, { backgroundColor: headerColor }]}>
         <Image
           source={headerImage}
-          style={[styles.headerImage, title === i18n.t('search') && { width: 110 }]}
+          style={[
+            styles.headerImage,
+            title === i18n.t('search') && { width: 110 },
+          ]}
         />
         <View style={styles.headerTitleRow}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
