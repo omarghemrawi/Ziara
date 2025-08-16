@@ -4,10 +4,13 @@ import styles from './styles';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import axios from 'axios';
+import Toast from 'react-native-toast-message';
+
 
 export default function Signup({ navigation }) {
   const [passwordInput, setPasswordInput] = useState('');
 
+  // Form validation schema
   const userSchema = yup.object({
     username: yup.string().required('Username is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
@@ -21,43 +24,7 @@ export default function Signup({ navigation }) {
       .required('Confirm Password is required'),
   });
 
-  const handleSignUp = async values => {
-    try {
-      const resp = await axios.post('http://192.168.0.101:5000/api/user/signup', {
-        username: values.username,
-        email: values.email,
-        password: values.password,
-      });
-
-      if (resp.data.success) {
-        Toast.show({
-          type: 'success',
-          text1: resp.data.message,
-          position: 'top',
-          visibilityTime: 5000,
-        });
-        navigation.navigate('Login');
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: resp.data.message,
-          position: 'top',
-          visibilityTime: 5000,
-        });
-      }
-    } catch (error) {
-      if (error.response) {
-        console.log('Backend error:', error.response.data);
-        alert(error.response.data.message || 'Signup failed.');
-      } else if (error.request) {
-        console.log('No response from server:', error.request);
-        alert('Cannot reach server.');
-      } else {
-        console.log('Error setting up request:', error.message);
-      }
-    }
-  };
-
+  // Check password strength
   const checkPasswordIsStrong = password => {
     return (
       /[A-Z]/.test(password) &&
@@ -81,22 +48,46 @@ export default function Signup({ navigation }) {
           confirmPassword: '',
         }}
         validationSchema={userSchema}
-        onSubmit={handleSignUp}
+        onSubmit={async (values, { resetForm }) => {
+          try {
+            // Signup request
+            const resp = await axios.post('http://192.168.0.101:5000/api/user/signup', {
+              username: values.username,
+              email: values.email,
+              password: values.password,
+            });
+
+            if (resp.data.success) {
+              Toast.show({
+                type: 'success',
+                text1: resp.data.message,
+                position: 'top',
+                visibilityTime: 5000,
+              });
+
+              resetForm(); // clear form
+              // Navigate to Verify Email page
+              navigation.navigate('VerifyEmail', { email: values.email });
+            } else {
+              Toast.show({
+                type: 'error',
+                text1: resp.data.message,
+                position: 'top',
+                visibilityTime: 5000,
+              });
+            }
+          } catch (error) {
+            console.log(error.response?.data || error.message);
+            alert(error.response?.data?.message || 'Signup failed');
+          }
+        }}
       >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => {
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => {
           const isStrongPassword = checkPasswordIsStrong(passwordInput);
 
           return (
             <>
               {/* Username */}
-
               <TextInput
                 style={styles.input}
                 placeholder="Enter your username"
@@ -109,7 +100,6 @@ export default function Signup({ navigation }) {
               )}
 
               {/* Email */}
-
               <TextInput
                 style={styles.input}
                 placeholder="Enter your email"
@@ -124,7 +114,6 @@ export default function Signup({ navigation }) {
               )}
 
               {/* Password */}
-
               <TextInput
                 style={styles.input}
                 placeholder="Enter your password"
@@ -147,14 +136,15 @@ export default function Signup({ navigation }) {
                     marginLeft: 10,
                     marginBottom: 5,
                   }}
-                ></Text>
+                >
+                  {isStrongPassword ? 'Strong password' : 'Weak password'}
+                </Text>
               )}
               <Text style={[styles.req, { fontSize: 10, color: '#666' }]}>
                 *Min 8 chars, uppercase, lowercase, number, special characters
               </Text>
 
               {/* Confirm Password */}
-
               <TextInput
                 style={styles.input}
                 placeholder="Confirm your password"

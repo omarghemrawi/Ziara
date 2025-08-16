@@ -64,6 +64,7 @@ export default function App() {
               <Stack.Screen name="Login" component={Login} />
               <Stack.Screen name="Signup" component={Signup} />
               <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+               <Stack.Screen name="verify" component={VerifyEmail} />
 
               {/* Intro */}
               <Stack.Screen name="Intro" component={IntroPage} />

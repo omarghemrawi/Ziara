@@ -177,8 +177,6 @@ const transporter = nodemailer.createTransport({
 });
 
 
-// ✅ Signup with email verification
-
 export const userSignUp = async (req, res) => {
   try {
     const { email, password, username } = req.body;
@@ -186,11 +184,6 @@ export const userSignUp = async (req, res) => {
     if (!email || !password || !username) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
-    const isValidEmail = await validateEmail(email);
-if (!isValidEmail) {
-  return res.status(400).json({ success: false, message: "Email does not exist. Enter a valid email." });
-}
-
 
     const existingUser = await User.findOne({ email });
 
@@ -199,24 +192,22 @@ if (!isValidEmail) {
       if (existingUser.isVerified) {
         return res.status(400).json({ success: false, message: "Email already exists" });
       } else {
-        // Resend verification email for unverified user
-        const verificationToken = crypto.randomBytes(32).toString("hex");
-        existingUser.verificationToken = verificationToken;
+        // Resend verification code for unverified user
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
+        existingUser.verificationCode = verificationCode;
         await existingUser.save();
 
-        const verifyUrl = `http://10.0.2.2:5000/api/user/verify/${verificationToken}`;
         await transporter.sendMail({
           to: email,
           subject: "Verify Your Email",
           html: `<p>Hi ${existingUser.username},</p>
-                 <p>Please click the link below to verify your email address:</p>
-                 <a href="${verifyUrl}">${verifyUrl}</a>
-                 <p>This link will expire in 24 hours.</p>`
+                 <p>Your verification code is: <b>${verificationCode}</b></p>
+                 <p>This code will expire in 10 minutes.</p>`,
         });
 
         return res.status(200).json({
           success: true,
-          message: "A verification email has been resent. Please check your inbox."
+          message: "A verification code has been resent. Please check your inbox.",
         });
       }
     }
@@ -224,33 +215,31 @@ if (!isValidEmail) {
     // New user signup
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
 
     const newUser = new User({
       username,
       email,
       password: hashedPassword,
       isVerified: false,
-      verificationToken
+      verificationCode,
     });
 
     await newUser.save();
 
-    const verifyUrl = `http://10.0.2.2:5000/api/user/verify/${verificationToken}`;
+    // Send verification code
     await transporter.sendMail({
       to: email,
       subject: "Verify Your Email",
       html: `<p>Hi ${username},</p>
-             <p>Please click the link below to verify your email address:</p>
-             <a href="${verifyUrl}">${verifyUrl}</a>
-             <p>This link will expire in 24 hours.</p>`
+             <p>Your verification code is: <b>${verificationCode}</b></p>
+             <p>This code will expire in 10 minutes.</p>`,
     });
 
     return res.status(201).json({
       success: true,
-      message: "Signup successful! Please check your email to verify your account."
+      message: "Signup successful! Please check your email to verify your account.",
     });
-
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, message: error.message });
@@ -373,5 +362,70 @@ export const getUser = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error. Please try again later." });
+  }
+};
+export const verifyEmailCode = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+
+    if (!email || !code) {
+      return res.status(400).json({ success: false, message: "Email and code are required" });
+    }
+
+    const user = await User.findOne({ email, verificationCode:code.toString()});
+
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid code or email" });
+    }
+
+    user.isVerified = true;
+    user.verificationCode = undefined; // remove code after verification
+    await user.save();
+
+    return res.status(200).json({ success: true, message: "Email verified successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+export const resendVerificationCode = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Email not found' });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ success: false, message: 'Email is already verified' });
+    }
+
+    // Generate new 6-digit code
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    user.verificationCode = code;
+    await user.save();
+
+    // Send code via email
+    await transporter.sendMail({
+      to: email,
+      subject: 'Your verification code',
+      html: `<p>Hi ${user.username},</p>
+             <p>Your new verification code is: <b>${code}</b></p>
+             <p>This code will expire in 10 minutes.</p>`,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Verification code has been resent. Please check your email.',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Server error' });
   }
 };
