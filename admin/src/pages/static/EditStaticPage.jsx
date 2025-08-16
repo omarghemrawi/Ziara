@@ -8,6 +8,7 @@ const EditStaticPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const API_URL = "http://localhost:5000/api/static";
+  const token = localStorage.getItem("adminToken")
 
   const [form, setForm] = useState({
     name: "",
@@ -119,7 +120,8 @@ const EditStaticPage = () => {
       const { data } = await axios.put(`${API_URL}/${id}`, {
         ...form,
         rate: parseFloat(form.rate),
-      });
+      }, {
+            headers: { Authorization: `Bearer ${token}` },});
 
       if (data.success) {
               toast.success("Place updated successfully!");

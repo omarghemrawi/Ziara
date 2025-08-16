@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ClientPage.css";
+import { toast } from "react-toastify";
 
 const types = ["all", "restaurant", "shop", "hotel", "activity"];
 const statuses = ["all", "active", "inactive"];
-const plans = ["all", "Basic", "Standard", "Premium", "Enterprise"];
+const plans = ["all", "Standard", "Plus", "Pro"];
 
 const ClientPage = () => {
   const [typeFilter, setTypeFilter] = useState("all");
@@ -12,14 +13,16 @@ const ClientPage = () => {
   const [planFilter, setPlanFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [clientPlaces, setClientPlaces] = useState([]);
+  const token = localStorage.getItem("adminToken")
 
+  // Filter client places by type, status, plan, and search term
   const filteredPlaces = clientPlaces.filter((place) => {
     const typeMatch = typeFilter === "all" || place.type === typeFilter;
     const statusMatch =
       statusFilter === "all" ||
-      (statusFilter === "active" && place.active) ||
-      (statusFilter === "inactive" && !place.active);
-    const planMatch = planFilter === "all" || place?.plan?.type === planFilter;
+      (statusFilter === "active" && place.plan.active) ||
+      (statusFilter === "inactive" && !place.plan.active);
+    const planMatch = planFilter === "all" || place?.plan?.name === planFilter;
     const searchMatch =
       searchTerm === "" ||
       place.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -27,28 +30,34 @@ const ClientPage = () => {
     return typeMatch && statusMatch && planMatch && searchMatch;
   });
 
+  // Fetch all client places from the API
   const getPlaces = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/client");
+      const res = await axios.get("http://localhost:5000/api/client/to-admin", {
+  headers: { Authorization: `Bearer ${token}` },
+});
       setClientPlaces(res.data.places);
     } catch (error) {
       console.error("Error fetching client places:", error);
     }
   };
 
+  // Deactivate a client place by ID
   const deactivate = async (placeId) => {
     try {
-      const res = await axios.put(
-        "http://localhost:5000/api/client/deactive-subscribe",
-        { userId: placeId }
-      );
+      const res = await axios.put("http://localhost:5000/api/client/deactive-subscribe", {
+        userId: placeId,
+      }, {
+      headers: { Authorization: `Bearer ${token}` },
+      });
       getPlaces();
-      if (res) alert("deactive successfly");
+      if (res) toast("deactive successfully");
     } catch (error) {
       console.log(error);
     }
   };
 
+  // Run once on component mount to load client places
   useEffect(() => {
     getPlaces();
   }, []);
@@ -65,30 +74,27 @@ const ClientPage = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="client-search-input"
         />
-        <select
-          value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
-        >
+
+        <h4>Type</h4>
+        <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
           {types.map((type) => (
             <option key={type} value={type}>
               {type.charAt(0).toUpperCase() + type.slice(1)}
             </option>
           ))}
         </select>
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
+
+        <h4>Status</h4>
+        <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
           {statuses.map((status) => (
             <option key={status} value={status}>
               {status.charAt(0).toUpperCase() + status.slice(1)}
             </option>
           ))}
         </select>
-        <select
-          value={planFilter}
-          onChange={(e) => setPlanFilter(e.target.value)}
-        >
+
+        <h4>Plan</h4>
+        <select value={planFilter} onChange={(e) => setPlanFilter(e.target.value)}>
           {plans.map((plan) => (
             <option key={plan} value={plan}>
               {plan.charAt(0).toUpperCase() + plan.slice(1)}
@@ -99,7 +105,7 @@ const ClientPage = () => {
 
       <div className="client-place-list">
         {filteredPlaces.map((place) => {
-          const { _id, name, profile, active, type, plan = {} } = place;
+          const { _id, name, profile, type, plan = {} } = place;
 
           return (
             <div key={_id} className="client-place-card">
@@ -111,12 +117,12 @@ const ClientPage = () => {
                   <div className="client-place-status">
                     <span
                       className={`status-badge ${
-                        active
+                        plan.active
                           ? "client-place-status-active"
                           : "client-place-status-inactive"
                       }`}
                     >
-                      {active ? "Active" : "Inactive"}
+                      {plan.active ? "Active" : "Inactive"}
                     </span>
                     <span className="type-badge">{type}</span>
                   </div>
@@ -125,7 +131,7 @@ const ClientPage = () => {
                 <div className="client-place-details">
                   <div className="detail-group">
                     <span className="detail-label">Plan:</span>
-                    <span className="detail-value">{plan.type || "N/A"}</span>
+                    <span className="detail-value">{plan.name || "N/A"}</span>
                   </div>
                   <div className="detail-group">
                     <span className="detail-label">Fee:</span>
@@ -160,12 +166,10 @@ const ClientPage = () => {
 
               <div className="client-place-actions">
                 <button
-                  disabled={!place.active}
-                  title={active ? "Deactivate client" : "Already inactive"}
+                  disabled={!plan.active}
+                  title={plan.active ? "Deactivate client" : "Already inactive"}
                   className="deactivate-button"
-                  onClick={() => {
-                    deactivate(place._id);
-                  }}
+                  onClick={() => deactivate(_id)}
                 >
                   Deactivate
                 </button>

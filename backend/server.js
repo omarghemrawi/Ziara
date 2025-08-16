@@ -10,6 +10,8 @@ import favRouter from "./routes/favorite.route.js";
 import visitedRouter from "./routes/visited.route.js";
 import reviewRouter from "./routes/reviews.route.js";
 import reportRouter from "./routes/report.route.js";
+import Emailrouter from "./routes/email.route.js";
+import adminRouter from "./routes/admin.route.js";
 
 dotenv.config();
 const app = express();
@@ -26,6 +28,8 @@ app.use("/api/favorite", favRouter);
 app.use("/api/visited", visitedRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/report", reportRouter);
+app.use("/api/email", Emailrouter);
+app.use("/api/admin", adminRouter);
 
 app.listen(PORT, () => {
   connectDB();

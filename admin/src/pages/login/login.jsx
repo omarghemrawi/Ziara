@@ -1,28 +1,35 @@
 import React, { useState } from "react";
 import "./login.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      setError("Please enter both email and password.");
-      return;
-    }
 
-    // Check for admin credentials
-    if (email === "omar@admin.com" && password === "omaradmin") {
-      setError("");
-      alert("Login successful! Welcome Admin Omar.");
-      navigate("/dashboard", { replace: true });
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const { data } = await axios.post("http://localhost:5000/api/admin/login", {
+      email,
+      password,
+    });
+
+    // Save the token in localStorage
+    localStorage.setItem("adminToken", data.token);
+    navigate("/dashboard");
+  } catch (err) {
+    if (err.response && err.response.data && err.response.data.message) {
+      setError(err.response.data.message); 
     } else {
-      setError("Invalid credentials. Please use: omar@admin.com / omaradmin");
+      setError("Server error");
     }
-  };
+  }
+};
 
   return (
     <div className="login-container">

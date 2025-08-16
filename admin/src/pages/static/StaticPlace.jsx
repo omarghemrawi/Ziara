@@ -6,17 +6,16 @@ import "./StaticPlace.css";
 const StaticPlace = () => {
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
-
   const API_URL = "http://localhost:5000/api/static";
+  const token = localStorage.getItem("adminToken")
 
-  // Fetch all places from backend
+  // Fetch all static places from backend
   const fetchPlaces = async () => {
     try {
       const response = await axios.get(API_URL);
-
       if (response.data.success) {
         setPlaces(response.data.places);
-        } else {
+      } else {
         console.log("Failed to fetch places");
       }
     } catch (error) {
@@ -28,16 +27,19 @@ const StaticPlace = () => {
     fetchPlaces();
   }, []);
 
-  // Edit place
+  // Navigate to edit page with place data
   const handleEdit = (place) => {
     navigate(`/editStaticPlace/${place._id}`, { state: { place } });
   };
 
-  // Delete place
+  // Delete a static place by ID
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this place?")) {
       try {
-        const response = await axios.delete(`${API_URL}/${id}`);
+        const response = await axios.delete(`${API_URL}/${id}`,
+  {
+    headers: { Authorization: `Bearer ${token}` }, // token for auth
+  });
         if (response.data.success) {
           setPlaces((prev) => prev.filter((p) => p._id !== id));
           alert("Place deleted successfully!");
@@ -51,6 +53,7 @@ const StaticPlace = () => {
     }
   };
 
+  // Render the UI
   return (
     <div className="static-place-container">
       <h2>Static Places Management</h2>
@@ -97,7 +100,6 @@ const StaticPlace = () => {
                 <p>
                   <strong>Type:</strong> {place.type}
                 </p>
-
                 <p>
                   <strong>City:</strong> {place.location?.city}
                 </p>

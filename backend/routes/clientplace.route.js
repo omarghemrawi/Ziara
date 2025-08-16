@@ -8,8 +8,9 @@ import {
   logIn,
   deactivePayment,
   completeRegister,
+  getAllPlacesToAdmin
 } from "../controllers/clientPlace.controller.js";
-import { verifyToken } from "../middleware/auth.js";
+import { verifyTokenAndRole } from "../middleware/auth.js";
 import ClientPlace from "../models/clientPlace.model.js";
 
 import upload from "../middleware/multer.js";
@@ -19,22 +20,12 @@ const clientRouter = express.Router();
 // Get all places
 clientRouter.get("/", getAllPlaces);
 clientRouter.get("/place/:place_id", getPlace);
-// ********************************* WebSite ********************//
+clientRouter.get("/to-admin",verifyTokenAndRole(['admin']), getAllPlacesToAdmin);
 clientRouter.post("/signup", SignUp);
 clientRouter.post("/login", logIn);
-// clientRouter.put(
-//   "/update-profile",
-//   verifyToken,
-  
-//       upload.fields([
-//         { name: "profile", maxCount: 1 },
-//         { name: "referenceImages", maxCount: 7 },
-//       ]),
-//   updateProfile
-// );
 clientRouter.put(
   "/update-profile",
-  verifyToken,
+  verifyTokenAndRole,
   (req, res, next) => {
     ClientPlace.findById(req.userId)
       .then(client => {
@@ -48,10 +39,9 @@ clientRouter.put(
   },
   updateProfile
 );
-clientRouter.put("/complete-register",verifyToken,completeRegister)
-clientRouter.put("/subscribe",verifyToken, submitPayment);
-clientRouter.put("/deactive-subscribe", deactivePayment);
-
+clientRouter.put("/complete-register",completeRegister)
+clientRouter.put("/subscribe", submitPayment);
+clientRouter.put("/deactive-subscribe",verifyTokenAndRole(['admin']) , deactivePayment);
 export default clientRouter;
 
 

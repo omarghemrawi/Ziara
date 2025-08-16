@@ -1,11 +1,12 @@
 import express from 'express';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import {verifyTokenAndRole} from "../middleware/auth.js"
 dotenv.config();
 
 const Emailrouter = express.Router();
 
-Emailrouter.post('/send-email', async (req, res) => {
+Emailrouter.post('/send-email',verifyTokenAndRole(['admin']), async (req, res) => {
   const { to, subject, message } = req.body;
 
   let transporter = nodemailer.createTransport({
@@ -21,7 +22,7 @@ Emailrouter.post('/send-email', async (req, res) => {
 
   try {
     await transporter.sendMail({
-      from: `"Report System" <${process.env.EMAIL_USER}>`,
+      from: `"Ziara" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       text: message,

@@ -4,7 +4,7 @@ const clientSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-  },
+  },role:{type : String , default:"client"},
   type: {
     type: String,
     required: true,

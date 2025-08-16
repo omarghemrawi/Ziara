@@ -9,35 +9,71 @@ import AddStaticPlace from "./pages/static/AddStaticPlace";
 import EditStaticPage from "./pages/static/EditStaticPage";
 import ClientPage from "./pages/client/ClientPage";
 import { ToastContainer} from 'react-toastify';
-// --- CHANGE THIS LINE ---
-// Import 'ReportPage' because that's what Report.jsx exports by default
 import ReportPage from "./pages/report/Report"; 
-// Also, import the CSS for the ReportPage here, so it's applied when the component mounts
+import ProtectedRoute from "./utils/ProtectedRoute.jsx";
 import "./pages/report/report.css";
 
 
 function App() {
   return (
-    <Router>
-        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
-      <Routes>
-        
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/clientPlace" element={<ClientPage />} />
-        <Route path="/staticPlace" element={<StaticPlace />} />
-        <Route
-          path="/addStaticPlace"
-          element={
-            <AddStaticPlace/>
-          }
-        />
-        <Route path="/editStaticPlace/:id" element={<EditStaticPage />} />
-        {/* This line is now correct, as ReportPage is imported with the right name */}
-        <Route path="/report" element={<ReportPage />} /> 
-      </Routes>
-    </Router>
-  );
+<Router>
+  <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+  <Routes>
+    {/* Public route */}
+    <Route path="/" element={<Login />} />
+
+    {/* Protected routes */}
+    <Route
+      path="/dashboard"
+      element={
+        <ProtectedRoute>
+          <Dashboard />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/clientPlace"
+      element={
+        <ProtectedRoute>
+          <ClientPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/staticPlace"
+      element={
+        <ProtectedRoute>
+          <StaticPlace />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/addStaticPlace"
+      element={
+        <ProtectedRoute>
+          <AddStaticPlace />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/editStaticPlace/:id"
+      element={
+        <ProtectedRoute>
+          <EditStaticPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/report"
+      element={
+        <ProtectedRoute>
+          <ReportPage />
+        </ProtectedRoute>
+      }
+    />
+  </Routes>
+</Router>
+  )
 }
 
 export default App;

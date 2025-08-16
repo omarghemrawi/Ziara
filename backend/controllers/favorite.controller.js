@@ -1,24 +1,7 @@
 import User from "../models/user.model.js";
 
 // ???Done
-// Get favorite Places a user
-// export const getFavoritePlaces = async (req, res) => {
-//   try {
-//     const userId = req.userId;
-//     const user = await User.findById(userId);
-//     if (!user) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "User not found" });
-//     }
-//     return res
-//       .status(200)
-//       .json({ success: true, favoritePlaces: user.favoritePlaces });
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };
+
 export const addToFav = async (req, res) => {
   try {
     const { placeId,} = req.body;
@@ -55,7 +38,6 @@ export const deleteFav = async (req, res) => {
   try {
     const { placeId } = req.body;
     const userId = req.userId
-    // const userId = req.user.id;
     if (!placeId) {
       return res
         .status(400)

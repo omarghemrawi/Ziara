@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { sendDeactivationEmail , sendClientRegisterNotfication } from "../utils/emailSender.js";
 
-// ??? Done
+// ?
 export const getAllPlaces = async (req, res) => {
   try {
     const resp = await ClientPlace.find({"plan.active" : true}).select("-password");;
@@ -19,8 +19,6 @@ export const getAllPlaces = async (req, res) => {
 };
 export const SignUp = async (req, res) => {
   try {
-    // console.log(req.body);
-    // console.log(process.env.JWT_SECRET);
     const { type, name, email, password } = req.body;
 
     if (!type || !name || !email || !password) {
@@ -41,7 +39,7 @@ export const SignUp = async (req, res) => {
     });
     await newClient.save();
 
-    const token = jwt.sign({ id: newClient._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: newClient._id , role: newClient.role }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     const { password: _, ...clientData } = newClient.toObject();
@@ -76,7 +74,7 @@ export const logIn = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     const { password: _, ...clientData } = client.toObject();
-    const token = jwt.sign({ id: client._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: client._id , role: client.role }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
     res.status(200).json({
@@ -92,7 +90,6 @@ export const logIn = async (req, res) => {
 };  
 export const completeRegister = async (req, res) => {
   try {
-    // req.userId is set by verifyToken middleware
     const userId = req.userId;
 
     if (!userId) {
@@ -141,20 +138,20 @@ export const updateProfile = async (req, res) => {
     let updatedReferenceImages = oldVersion.referenceImages || [];
 
     
-    // 1️⃣ Remove images if requested
+    //  Remove images if requested
     if (updates.referenceImagesToDelete && Array.isArray(updates.referenceImagesToDelete)) {
       updatedReferenceImages = updatedReferenceImages.filter(
         (img) => !updates.referenceImagesToDelete.includes(img)
       );
     }
 
-    // 2️⃣ Add new images if uploaded
+    // Add new images if uploaded
     if (req.files?.referenceImages) {
       const newImages = req.files.referenceImages.map((img) => img.path);
       updatedReferenceImages = updatedReferenceImages.concat(newImages);
     }
 
-updates.referenceImages = updatedReferenceImages;
+    updates.referenceImages = updatedReferenceImages;
     // Handle single image upload
 
     if (req.files?.profile?.[0]) {
@@ -250,12 +247,12 @@ export const deactivePayment = async (req, res) => {
       userId,
       {
         $set: {
-          "plan.type": "",
+          "plan.name": "",
           "plan.subscribeAt": null,
           "plan.expireAt": null,
           "plan.priority": "",
           "plan.fee": 0,
-          active: false,
+          "plan.active": false,
         },
       },
       {
@@ -301,35 +298,18 @@ export const getPlace = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+export const getAllPlacesToAdmin = async (req, res) => { 
+  try {
+    const resp = await ClientPlace.find().select("-password");;
+    if (resp.length > 0) {
+      return res.status(200).json({ places: resp });
+    } else {
+      return res.status(404).json({ message: "No Places found" });
+    }
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to fetch restaurants" });
+  }
+};
 
 
-
-// !!!
-// export const getPlace = async (req, res) => {
-//   try {
-//     const { place_id, field } = req.query;
-//     const userId = req.user.id;
-//     if (!place_id || !field) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "Place ID or field is required " });
-//     }
-//     const user = await User.findById(userId).select(field);
-//     if (!user) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "User not found" });
-//     }
-//     const place = user.favoritePlaces.find((fav) => fav.place_id === place_id);
-//     if (!place) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Place not found in favorites" });
-//     }
-//     return res.status(200).json({ success: true, place });
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).json({ success: false, message: "Server error" });
-//   }
-// };
 
