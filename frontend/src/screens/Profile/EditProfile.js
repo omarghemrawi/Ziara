@@ -19,6 +19,7 @@ import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 export default function EditProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -36,7 +37,13 @@ export default function EditProfileScreen({ navigation }) {
     const token = await AsyncStorage.getItem('token');
     // Optional: only alert if no name anywhere
     if (!name && !user.username) {
-      alert('Please Enter a Name');
+      Toast.show({
+        type: 'error',
+        text1: 'Alert',
+        text2: 'Please Enter a Name',
+        position: 'top',
+        visibilityTime: 5000,
+      });
       return;
     }
     try {

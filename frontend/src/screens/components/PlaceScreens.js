@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Linking
+  Linking,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -146,9 +146,9 @@ const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
               navigation.navigate('PlaceDetails', {
                 id: item._id,
                 type: item.type,
-         
-  locationUrl: 'https://maps.app.goo.gl/rdKAvxEkCvEvRPY56', 
-  title: 'Place Name',
+
+                locationUrl: 'https://maps.app.goo.gl/rdKAvxEkCvEvRPY56',
+                title: 'Place Name',
               })
             }
             activeOpacity={0.8}
@@ -162,7 +162,10 @@ const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
             <Text style={styles.cardTitle}>{item.name}</Text>
             <View style={styles.ratingContainer}>
               {renderStars(item.rate)}
-              <Text style={styles.ratingText}> {item.rate} / 5</Text>
+              <Text style={styles.ratingText}>
+                {' '}
+                {parseFloat(item.rate.toFixed(1))} / 5
+              </Text>
             </View>
           </TouchableOpacity>
         ))}

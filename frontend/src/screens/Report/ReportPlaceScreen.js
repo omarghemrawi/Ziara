@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
 } from 'react-native';
 import { useTheme } from '../Theme/Theme';
 import { useNavigation } from '@react-navigation/native';
@@ -13,6 +12,8 @@ import i18n from '../locales/i18n';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 export default function ReportPlaceScreen() {
   const { theme } = useTheme();
@@ -39,28 +40,58 @@ export default function ReportPlaceScreen() {
 
   const handleSubmit = async () => {
     if (selectedReasons.length === 0) {
-      Alert.alert('Error', 'Please select at least one reason.');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please select at least one reason.',
+        position: 'botton',
+        visibilityTime: 5000,
+      });
       return;
     }
-
     try {
-      const response = await axios.post('http://192.168.0.103:5000/api/report', {
-        type: 'ClientPlace',
-        complainant: 'User',
-        targetId: placeId,
-        reportedBy: userId,
-        reason: selectedReasons,
-      });
+      const token = await AsyncStorage.getItem('token');
+      const response = await axios.post(
+        'http://10.0.2.2:5000/api/report',
+        {
+          type: 'ClientPlace',
+          complainant: 'User',
+          targetId: placeId,
+          reportedBy: userId,
+          reason: selectedReasons,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       if (response.data.success) {
-        Alert.alert('Report Submitted', 'Thank you for your feedback.');
+        Toast.show({
+          type: 'success',
+          text1: 'Report Submitted',
+          text2: 'Thank you for your feedback',
+          position: 'botton',
+          visibilityTime: 5000,
+        });
         navigation.goBack();
       } else {
-        Alert.alert('Error', 'Failed to submit the report. Please try again.');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'Failed to submit the report. Please try again.',
+          position: 'top',
+          visibilityTime: 5000,
+        });
       }
     } catch (error) {
       console.error('Error submitting report:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Something went wrong. Please try again.',
+        position: 'top',
+        visibilityTime: 5000,
+      });
     }
   };
 

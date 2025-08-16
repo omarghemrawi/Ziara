@@ -8,6 +8,7 @@ import {
   ScrollView,
   Modal,
   TextInput,
+  ToastAndroid,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -21,6 +22,7 @@ import i18n from '../locales/i18n';
 import SocialIcons from '../components/SocialIcons';
 import { uploadImageToCloudinary } from '../../utils/cloudinaryUpload';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 export default function PlaceDetailScreen() {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -106,7 +108,13 @@ export default function PlaceDetailScreen() {
     const token = await AsyncStorage.getItem('token');
 
     if (!selectedStar || !reviewText) {
-      alert('Please fill in all required fields.');
+      Toast.show({
+        type: 'error',
+        text1: 'Bad',
+        text2: 'Please fill in all required fields.',
+        position: 'top',
+        visibilityTime: 5000,
+      });
       return;
     }
 
@@ -137,19 +145,37 @@ export default function PlaceDetailScreen() {
       );
 
       if (res.data.success) {
-        alert('Review submitted successfully!');
+        Toast.show({
+          type: 'success',
+          text1: 'Great',
+          text2: 'Review submitted successfully!',
+          position: 'top', // optional, default is 'top'
+          visibilityTime: 5000, // optional, default 4000 ms
+        });
         setSelectedStar(0);
         setReviewText('');
         setImage(null);
+        // navigation.navigate('Home', { refresh: true });
       } else {
-        alert('Something went wrong. Please try again.');
+        Toast.show({
+          type: 'error',
+          text1: 'error',
+          text2: 'Something went wrong. Please try again..',
+          position: 'top',
+          visibilityTime: 5000,
+        });
       }
     } catch (err) {
       console.error('Submit error:', err);
-      alert(
-        Done,
-        'Submission failed. Please check your network or try again later.',
-      );
+
+      Toast.show({
+        type: 'error',
+        text1: 'Submission failed',
+        text2:
+          'Submission failed. Please check your network or try again later.',
+        position: 'top',
+        visibilityTime: 5000,
+      });
     }
   };
 
@@ -358,7 +384,7 @@ export default function PlaceDetailScreen() {
       {/* Modal Sheet */}
       <Modal
         animationType="slide"
-        transparent
+        transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
@@ -436,6 +462,7 @@ export default function PlaceDetailScreen() {
               </TouchableOpacity>
             </View>
           </View>
+          <Toast />
         </View>
       </Modal>
       {/* Modal Sheet1 */}

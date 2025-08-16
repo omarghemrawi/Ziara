@@ -6,6 +6,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -35,10 +36,22 @@ export default function Login({ navigation }) {
         });
         navigation.navigate('Home'); // Navigate to Home after successful login
       } else {
-        alert('Alert', response.data.message);
+        Toast.show({
+          type: 'error',
+          text1: 'error',
+          text2: response.data.message,
+          position: 'botton',
+          visibilityTime: 5000,
+        });
       }
     } catch (error) {
-      alert('Login failed. Please check your credentials.');
+      Toast.show({
+        type: 'error',
+        text1: 'error',
+        text2: 'Login failed. Please check your credentials.',
+        position: 'top',
+        visibilityTime: 5000,
+      });
     }
   };
 
