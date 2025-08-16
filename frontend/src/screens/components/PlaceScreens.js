@@ -147,8 +147,8 @@ const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
                 id: item._id,
                 type: item.type,
          
-  locationUrl: 'https://maps.app.goo.gl/rdKAvxEkCvEvRPY56', 
-  title: 'Place Name',
+  // locationUrl: 'https://maps.app.goo.gl/rdKAvxEkCvEvRPY56', 
+  // title: 'Place Name',
               })
             }
             activeOpacity={0.8}

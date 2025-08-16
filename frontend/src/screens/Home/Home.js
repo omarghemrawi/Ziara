@@ -34,8 +34,8 @@ export default function Home() {
 
   const getData = async (searchTerm = '') => {
     try {
-      const staticRes = await axios.get('http://10.0.2.2:5000/api/static');
-      const clientRes = await axios.get('http://10.0.2.2:5000/api/client');
+      const staticRes = await axios.get('http://192.168.0.101:5000/api/static');
+      const clientRes = await axios.get('http://192.168.0.101:5000/api/client');
 
       const staticPlaces = staticRes.data.places || [];
       const clientPlaces = clientRes.data.places || [];
