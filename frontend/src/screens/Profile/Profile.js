@@ -14,16 +14,18 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import i18n from '../locales/i18n';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setPlacesRefresh } from '../../redux/actions/user.action';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const { theme } = useTheme();
   const user = useSelector(state => state.user.user);
   const [reviews, setReviews] = useState([]);
+  const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedReviewIndex, setSelectedReviewIndex] = useState(null);
@@ -64,9 +66,9 @@ export default function ProfileScreen() {
         fetchReviews();
         setModalVisible(false);
         setSelectedReviewIndex(null);
+        dispatch(setPlacesRefresh(true));
       } else {
         console.log(res.data.message);
-        console.log('first');
       }
     } catch (error) {
       Toast.show({

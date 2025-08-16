@@ -15,3 +15,8 @@ export const refreshUser = userId => async dispatch => {
     console.error('Failed to refresh user:', err);
   }
 };
+
+export const setPlacesRefresh = value => ({
+  type: 'SET_PLACES_REFRESH',
+  payload: value,
+});
