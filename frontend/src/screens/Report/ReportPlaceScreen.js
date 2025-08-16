@@ -39,6 +39,7 @@ export default function ReportPlaceScreen() {
   };
 
   const handleSubmit = async () => {
+    const token = await AsyncStorage.getItem('token'); 
     if (selectedReasons.length === 0) {
       Toast.show({
         type: 'error',
@@ -56,7 +57,12 @@ export default function ReportPlaceScreen() {
         targetId: placeId,
         reportedBy: userId,
         reason: selectedReasons,
-      });
+      },
+      {
+    headers: {
+      Authorization: `Bearer ${token}`, // <-- send the token here
+    },
+  });
 
       if (response.data.success) {
         Toast.show({
