@@ -1,4 +1,5 @@
 import Review from "../models/review.model.js";
+import { updatePlaceRating } from "../utils/ratingPlace.js";
 import User from "../models/user.model.js";
 
 // Create review
@@ -21,6 +22,9 @@ export const createReview = async (req, res) => {
     });
 
     await review.save();
+
+    const avg = await updatePlaceRating(placeId, placeModel);
+
     res
       .status(201)
       .json({ success: true, message: "Review created", data: review });

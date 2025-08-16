@@ -30,10 +30,20 @@ export default function Signup({ navigation }) {
       });
 
       if (resp.data.success) {
-        alert(resp.data.message);
+        Toast.show({
+          type: 'success',
+          text1: resp.data.message,
+          position: 'top',
+          visibilityTime: 5000,
+        });
         navigation.navigate('Login');
       } else {
-        alert(resp.data.message);
+        Toast.show({
+          type: 'error',
+          text1: resp.data.message,
+          position: 'top',
+          visibilityTime: 5000,
+        });
       }
     } catch (error) {
       if (error.response) {

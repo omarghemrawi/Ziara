@@ -69,7 +69,13 @@ export default function ProfileScreen() {
         console.log('first');
       }
     } catch (error) {
-      Alert.alert('alert', 'review Not deleted');
+      Toast.show({
+        type: 'error',
+        text1: 'alert',
+        text2: 'review Not deleted',
+        position: 'top',
+        visibilityTime: 5000,
+      });
     }
   };
 

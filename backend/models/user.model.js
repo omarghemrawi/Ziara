@@ -9,9 +9,8 @@ const userSchema = new mongoose.Schema(
     visitedPlaces: [],
     about: String,
     profile: String,
-    review: [],
-      isVerified: { type: Boolean, default: false },
-  verificationToken: { type: String },
+    isVerified: { type: Boolean, default: false },
+    verificationToken: { type: String },
     currentCity: String,
   },
   {
