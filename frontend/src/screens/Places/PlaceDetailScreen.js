@@ -23,6 +23,7 @@ import SocialIcons from '../components/SocialIcons';
 import { uploadImageToCloudinary } from '../../utils/cloudinaryUpload';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import { setPlacesRefresh } from '../../redux/actions/user.action';
 
 export default function PlaceDetailScreen() {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -152,6 +153,7 @@ export default function PlaceDetailScreen() {
           position: 'top', // optional, default is 'top'
           visibilityTime: 5000, // optional, default 4000 ms
         });
+        dispatch(setPlacesRefresh(true));
         setSelectedStar(0);
         setReviewText('');
         setImage(null);

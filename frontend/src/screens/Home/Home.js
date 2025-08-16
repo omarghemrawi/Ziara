@@ -18,14 +18,15 @@ import {
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import i18n from '../locales/i18n';
+import { setPlacesRefresh } from '../../redux/actions/user.action';
 
 export default function Home() {
   const dispatch = useDispatch();
-
   const navigation = useNavigation();
+  const refreshTrigger = useSelector(state => state.user.refreshPlaces);
   const handleProfilePress = () => {
     navigation.navigate('Profile');
   };
@@ -62,7 +63,7 @@ export default function Home() {
       if (allPlaces.length > 0) {
         dispatch({ type: 'SET_PLACES', payload: allPlaces });
       } else {
-        console.error('No restaurants found');
+        console.error('No Places found');
         dispatch({ type: 'SET_PLACES', payload: null });
       }
     } catch (error) {
@@ -73,6 +74,14 @@ export default function Home() {
   useEffect(() => {
     getData();
   }, []);
+
+  // to refresh data after event like review to get new rate of each place
+  useEffect(() => {
+    if (refreshTrigger) {
+      getData(); // fetch the latest data
+      dispatch(setPlacesRefresh(false)); // reset trigger
+    }
+  }, [refreshTrigger]);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>

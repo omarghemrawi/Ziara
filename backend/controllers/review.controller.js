@@ -42,6 +42,8 @@ export const deleteReview = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Review not found" });
     }
+    const avg = await updatePlaceRating(review.placeId, review.placeModel);
+
     res.json({ success: true, message: "Review deleted" });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server error" });
