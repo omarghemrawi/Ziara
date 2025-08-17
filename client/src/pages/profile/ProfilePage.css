@@ -1,425 +1,330 @@
-/* ─── Container ───────────────────────────────────────── */
-.profile-page {
-  position: relative;
-  padding: 40px 20px;
-  max-width: 800px;
-  margin: 0 auto;
+/* =====================================================
+   ProfilePage.css — Ziara theme + legacy header card
+   ===================================================== */
+
+:root{
+  --gold-brown:#A75D3E;
+  --gold:#FAC75C;
+  --gold-deep:#E9B245;
+  --beige:#EFE2D5;
+  --black:#111213;
+  --gray:#565b6b;
+  --white:#ffffff;
+
+  --radius:16px;
+  --shadow-sm: 0 4px 14px rgba(17,18,19,.06);
+  --shadow-md: 0 10px 24px rgba(17,18,19,.10);
 }
 
-/* ─── HEADER CARD WRAPPER ───────────────────────── */
-.profile-page .header-card {
-  position: relative;
-  width: 100%;
-  max-width: 800px;
+/* Page background */
+.profile-page{
+  background: linear-gradient(180deg, var(--beige) 0%, var(--white) 100%);
+  color: var(--black);
+  padding: 12px 0 56px;
+}
+
+/* =====================================================
+   Generic cards (all sections EXCEPT header)
+   ===================================================== */
+.card{
+  width: min(1100px, 100% - 48px);
+  margin: 16px auto;
+  background: var(--white);
+  border: 1px solid rgba(17,18,19,.06);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 20px;
+}
+
+/* =====================================================
+   FIRST CARD — Legacy header design
+   ===================================================== */
+.header-card{
+  /* sizes & knobs */
+  --header-top-h: 140px;
+  --avatar-size: 150px;
+  --name-size: clamp(30px, 4vw, 44px);
+  --meta-size: clamp(15px, 1.6vw, 19px);
+  --text-gap: 48px;           /* المسافة بين الصورة والكتابة */
+  --gap-factor: .48;          /* تصغير الفراغ فوق النص */
+  --gap-cushion: 0px;
+  --avatar-overlap: .64;   /* جرّب .64 أو .66 حسب ما بتحب */
+  --cushion: 6px;          /* هامش أمان بسيط فوق النص */
+
+
+  width: min(1100px, 100% - 48px);
   margin: 24px auto;
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  overflow: visible;
-  /* allow avatar to overflow */
   padding: 0;
-  /* we’ll handle spacing in the parts */
-}
-
-/* ─── TWO “PARTS” ─────────────────────────────────── */
-.header-part {
-  width: 100%;
-}
-
-.header-part--top {
-  height: 140px;
-  /* whatever height you like */
-  background-color: #fac75c;
-  /* your “brown” color */
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-}
-
-.header-part--bottom {
-  background: #fff;
-  padding: 80px 20px 24px;
-  /* top padding ≈ avatar radius*1.1 */
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  text-align: center;
-}
-
-/* ─── AVATAR OVERLAP ───────────────────────────── */
-/* ─── AVATAR OVERLAP (moved left + larger) ───────────────────────────── */
-.avatar-area {
-  position: absolute;
-  /* move down so that half of 150px overlaps the seam */
-  top: calc(140px - 75px);
-  /* كان 10px - 75px */
+  border: 1px dashed #ccc;
+  border-radius: 16px;
+  box-shadow: 0 3px 14px rgba(17,18,19,.05);
   overflow: visible;
-  /* pin 24px from the left edge of the header card */
-  left: 24px;
-  transform: none;
-  /* remove the old translateX(-50%) centering */
+  position: relative;
+  
+}
 
-  width: 150px;
-  /* bump from 120→150 */
-  height: 150px;
+/* Split into two parts */
+.header-part{ width: 100%; box-sizing: border-box; margin: 0; }
+.header-part--top{
+  height: var(--header-top-h);
+  background: var(--gold);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  position: relative;
+}
+.header-part--bottom{
+  background: #fff;
+  /* قلّصنا الفراغ العلوي فوق الكتابة */
+    padding-top: calc(var(--avatar-size) * var(--avatar-overlap) + var(--cushion)) !important;
+  /* خَلّي الجوانب كما هي */
+  padding-right: 24px;
+  padding-left: 24px;
+  padding-bottom: 24px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  position: relative;
+}
+
+/* tiny white pen on the gold bar (top-right) */
+.edit-header{
+  position: absolute;
+  top: 12px; right: 16px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+/* Avatar: large, overlaps the seam, left-aligned */
+.avatar-area{
+  position: absolute;
+  left: 24px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   border: 4px solid #fff;
   border-radius: 50%;
   background: #eee;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  overflow: visible;
+  z-index: 2;
 
-.avatar-clip {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  /* 60% overlap مع الشريط الذهبي */
+  top: calc(var(--header-top-h) - (var(--avatar-size) * var(--avatar-overlap))) !important;
+}
+.avatar-clip{
+  position: absolute; inset: 0;
   border-radius: 50%;
   overflow: hidden;
-  display: grid;
-  place-items: center;
-  /* القصّ هون بدل .avatar-area */
-  z-index: 1;
+  display: grid; place-items: center;
 }
-
-.avatar-area>img {
-  width: 100%;
-  height: 100%;
-  object-position: center;
-  /* يركّز الصورة داخل الدائرة */
-  object-fit: cover;
-  display: block;
-  /* لإزالة الفراغات الافتراضية */
-}
-
-/* لأنك صرت تستخدم className="avatar-img" داخل .avatar-clip */
 .avatar-clip img,
-.avatar-clip .avatar-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 50%;
-  /* بالنص تمام */
-  display: block;
+.avatar-clip .avatar-img{
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 50%;
   border-radius: 50%;
-  /* fallback إضافي */
-  transform: scale(1.50) !important;
-  /* جرّبي 1.06 → 1.12 حسب ما يروح الفراغ تمامًا */
+  transform: scale(1.5);
   transform-origin: center;
-  /* يضلّ التكبير من الوسط */
-
   mask-image: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%);
   -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 99%, transparent 100%);
-
 }
-
-/* ─── BUMP BOTTOM-PART PADDING to clear the larger avatar ───────────── */
-.header-part--bottom {
-  /* top padding must be at least half the avatar height + some breathing room */
-  padding: calc(75px + 16px) 20px 24px;
-  /* 75px half of 150px + 16px extra spacing = 91px total top padding */
-}
-
-.avatar-area .edit-avatar {
+/* small white circular pencil on avatar edge */
+.edit-avatar{
   position: absolute;
-  bottom: 4px;
-  right: 4px;
+  right: -8px; bottom: -8px;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 50%;
-  padding: 4px;
-  font-size: 0.9rem;
+  padding: 6px;
   cursor: pointer;
+  z-index: 3;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
 }
 
-/* 3) خَلّي القلم برّة الإطار شوي (أسفل-يمين) وما ينوضع تحت القصّ */
-.avatar-area .edit-avatar {
-  position: absolute;
-  bottom: -8px;
-  /* -8px لتكون برّة الدائرة، بدّكها ألزق؟ حوّلها لـ 4px */
-  right: -8px;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  padding: 4px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  z-index: 1;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-/* لو ما في صورة وعم ينعرض 👤 خلّيه بالنص */
-.avatar-placeholder {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-  /* بالنص */
-  font-size: 22px;
-  color: #555;
-  background: transparent;
-  /* خليه شفاف داخل الرمادي تبع .avatar-area */
-}
-
-/* ——— PROFILE DETAILS ——— */
-.profile-details {
-  padding: 20px 0 0 0;
-  margin-left: 40px;
-  /* avatar width (150px) + gap (~50px) */
+/* ===== Header text (without box) ===== */
+.profile-details{
+  /* المكان نفسه، بس بدون خلفية أو حدود */
+  margin-left: calc(var(--avatar-size) + var(--text-gap));
+  margin-right: 24px;
   text-align: left;
-}
+  line-height: 1.15;
 
-
-/* ─── TEXT STYLES (optional tweak) ─────────────── */
-.business-name {
-  font-size: 1.75rem;
-  margin: 0 0 4px;
-  color: #111;
-}
-
-.service-name,
-.city-name {
-  margin: 2px 0;
-  color: #555;
-  font-size: 1rem;
-}
-
-.header-part--top {
-  position: relative;
-  /* so the button can absolutely position within it */
-  /* …your brown styles… */
-}
-
-.edit-header {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: #fff;
-  /* or whatever color contrasts your brown */
-}
-
-
-
-/* ─── SectionCards & Other Styles ───────────────────── */
-.card {
-  background: #fff;
-  border: 1px dashed #ccc;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 24px;
-  position: relative;
-}
-
-.section-card {
-  margin-top: 24px;
-}
-
-.section-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+  flex-direction: column;
+  justify-content: center;
+
+  /* شعرة لفوق لتصغير الفراغ */
+  transform: translateY(-30px); /* - لفوق، + لتحت (اختياري) */
 }
 
-.card.section-card {
-  padding-top: 10px !important;
-  /* كان 16px غالباً؛ عدّلي الرقم اللي بيريحك */
+/* Typography & colors */
+.business-name{
+  margin: 0 0 6px;
+  font-size: var(--name-size);
+  font-weight: 900;
+  color: var(--black);
+  letter-spacing: .2px;
 }
-
-/* شيل الـ margin العلوي الافتراضي للعنوان */
-.card.section-card .section-title {
-  margin-top: 0;
-  /* مهم جداً لتخفيف الفراغ فوق العنوان */
+.service-name{
+  margin: 0 0 2px;
+  font-size: var(--meta-size);
+  font-weight: 800;
+  color: var(--gold-brown);
 }
-
-.section-title {
-  font-size: 1.5rem !important;
-  font-weight: 600;
-  color: #1C2D44 !important;
-}
-
-.section-header-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.edit-section {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.section-content {
-  margin-top: 0;
-}
-
-.links-list {
-  list-style: none;
-  padding: 0;
+.city-name{
   margin: 0;
+  font-size: var(--meta-size);
+  color: var(--gray);
 }
 
-.links-list li {
-  margin-bottom: 6px;
-}
-
-.reviews-row {
-  display: flex;
-  gap: 8px;
-  border: red 2px;
-}
-
-.photo-grid-horizontal {
-  display: flex;
-  overflow-x: auto;
-  gap: 10px;
-  padding: 10px 0;
-  scroll-behavior: smooth;
+/* =====================================================
+   Section cards (titles, actions)
+   ===================================================== */
+.section-card{ padding: 18px 18px; }
+.section-header{
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
 }
-
-.uploaded-photo {
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: 0.3s;
+.section-title{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 800;
+  margin: 0;
+  color: var(--black);
 }
-
-.uploaded-photo.selected {
-  border-color: red;
-  opacity: 0.7;
+.section-title::after{
+  content:"";
+  width: 48px; height: 6px;
+  border-radius: 999px;
+  background: var(--gold-brown);
 }
+.section-header-right{ display:flex; align-items:center; gap:10px; }
+.section-content{ color: var(--black); }
 
-.upload-btn {
+.edit-section{
+  border: none;
+  background: var(--white);
+  color: var(--gold-brown);
+  border-radius: 10px;
   padding: 8px 10px;
-  background-color: #fac75c;
-  color: black;
-  font-weight: bold;
-  border-radius: 6px;
+  font-weight: 800;
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
-  white-space: nowrap;
-  border: none;
 }
 
-.upload-btn:hover {
-  background-color: #eab94a;
+/* =====================================================
+   Photos area
+   ===================================================== */
+.upload-hint{
+  margin: 0 0 8px;
+  background: rgba(233,178,69,.18);
+  color: var(--black);
+  padding: 10px 12px;
+  border-left: 4px solid var(--gold-brown);
+  border-radius: 12px;
 }
-
-.upload-input-hidden {
-  display: none;
-}
-
-.delete-selected-btn {
-  margin-top: 10px;
-  background-color: #a64c3a;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  align-self: flex-start;
-}
-
-.subscribe-btn {
-  width: 100%;
-  padding: 12px;
-  background: #fac75c;
-  border: none;
-  border-radius: 20px;
-  color: #1c2d44;
-}
-
-/* Add these rules to ProfilePage.css */
-
-.upload-hint {
-  text-align: center;
-  color: #555;
-  margin-bottom: 8px;
-  font-size: 0.9rem;
-}
-
-.photo-controls {
+.photo-grid-horizontal{
   display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-
-/**************  style of reviews list     **************/
-
-.review-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.review-item {
-  border-bottom: 1px solid #ddd;
-  padding: 1rem 0;
-}
-
-.review-header {
-  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 6px 2px 10px;
+  scroll-snap-type: x proximity;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.25rem;
 }
-
-.review-user-image {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.uploaded-photo{
+  width: 200px; height: 140px;
   object-fit: cover;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(17,18,19,.08);
+  scroll-snap-align: start;
+  transition: transform .15s ease, box-shadow .15s ease, outline .15s ease;
+}
+.uploaded-photo.selected{
+  outline: 3px solid var(--gold-brown);
+  box-shadow: 0 0 0 3px rgba(167,93,62,.18);
 }
 
-.review-username {
-  font-weight: 600;
-  color: #222;
-  flex-grow: 1;
+.photo-controls{
+  display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;
 }
-
-.report-btn {
-  background: transparent;
-  border: none;
+.upload-btn{
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 800;
+  background: var(--white);
+  color: var(--gold-brown);
+  border: 2px solid var(--gold-brown);
   cursor: pointer;
-  font-size: 1.2rem;
-  color: #d9534f;
-  /* red color */
-  transition: color 0.3s ease;
+}
+.upload-input-hidden{ display: none; }
+.delete-selected-btn{
+  margin-top: 10px;
+  background: var(--gold-brown);
+  color: var(--white);
+  border: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
 }
 
-.report-btn:hover {
-  color: #a94442;
+/* Reviews summary row */
+.reviews-row{
+  display: flex; gap: 12px; align-items: center; color: var(--gray);
 }
 
-.review-rating {
-  color: #f5a623;
-  /* gold stars */
-  margin-bottom: 0.5rem;
-}
-
-.review-text {
-  font-size: 1rem;
-  color: #444;
-  line-height: 1.4;
-  margin-bottom: 0.5rem;
-}
-
-.review-image {
-  max-width: 300px;
-  /* max width for the review image */
+/* Plan CTA */
+.subscribe-btn{
   width: 100%;
-  /* scale down on smaller screens */
-  height: auto;
-  border-radius: 6px;
-  margin-top: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  object-fit: cover;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 800;
+  background: var(--gold);
+  color: #1c2d44;
+  border: none;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+}
+
+/* Optional: reviews list styling (if you render it) */
+.review-list{ list-style:none; padding:0; margin:0; }
+.review-item{ border-bottom:1px solid #ddd; padding:1rem 0; }
+.review-header{ display:flex; align-items:center; gap:.75rem; margin-bottom:.25rem; }
+.review-user-image{ width:40px; height:40px; border-radius:50%; object-fit:cover; }
+.review-username{ font-weight:600; color:#222; flex-grow:1; }
+.report-btn{ background:transparent; border:none; cursor:pointer; font-size:1.1rem; color:#d9534f; }
+.report-btn:hover{ color:#a94442; }
+.review-rating{ color:#f5a623; margin-bottom:.5rem; }
+.review-text{ font-size:1rem; color:#444; line-height:1.4; margin-bottom:.5rem; }
+.review-image{ max-width:300px; width:100%; height:auto; border-radius:6px; margin-top:.5rem; box-shadow:0 2px 8px rgba(0,0,0,.1); object-fit:cover; }
+
+/* =====================================================
+   Responsive tweaks for header
+   ===================================================== */
+@media (max-width: 640px){
+  .header-card{
+    --header-top-h: 120px;
+    --avatar-size: 110px;
+    --text-gap: 28px;
+    --gap-factor: .50;     /* شعرة فراغ زيادة على الموبايل */
+  }
+  .avatar-area{ left: 16px; }
+  .profile-details{ margin-left: calc(var(--avatar-size) + var(--text-gap)); }
+  .uploaded-photo{ width: 160px; height: 120px; }
+}
+@media (max-width: 420px){
+  .header-card{
+    --header-top-h: 110px;
+    --avatar-size: 98px;
+    --text-gap: 20px;
+  }
+  .avatar-area{ left: 12px; }
+  .profile-details{ margin-left: calc(var(--avatar-size) + var(--text-gap)); }
 }
