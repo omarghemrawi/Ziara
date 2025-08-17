@@ -318,7 +318,7 @@ export default function PlaceDetailScreen() {
         </View>
 
         <View style={styles.headerImageContainer}>
-          <Image source={{ uri: place.profile }} style={styles.headerImage} />
+          <Image source={{ uri: place?.profile }} style={styles.headerImage} />
 
           <TouchableOpacity
             style={styles.mapButton}
@@ -335,7 +335,7 @@ export default function PlaceDetailScreen() {
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.galleryRow}>
-            {place.referenceImages.map((img, index) => (
+            {place?.referenceImages.map((img, index) => (
               <Image
                 key={index}
                 source={{ uri: img }}
@@ -346,14 +346,14 @@ export default function PlaceDetailScreen() {
         </ScrollView>
 
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
-        <Text style={styles.descriptionText}>{place.description}</Text>
+        <Text style={styles.descriptionText}>{place?.description}</Text>
         <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
 
         <SocialIcons
-          facebookLink={place.facebook}
-          instagramLink={place.instagram}
-          isResto={place.type === 'restaurant'}
-          menuLink={place.menuLink}
+          facebookLink={place?.facebook}
+          instagramLink={place?.instagram}
+          isResto={place?.type === 'restaurant'}
+          menuLink={place?.menuLink}
         />
 
         <View style={styles.actionsRow}>

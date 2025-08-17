@@ -7,7 +7,7 @@ import { sendDeactivationEmail , sendClientRegisterNotfication } from "../utils/
 // ?
 export const getAllPlaces = async (req, res) => {
   try {
-    const resp = await ClientPlace.find({"plan.active" : true}).select("-password -plan");;
+    const resp = await ClientPlace.find({"plan.active" : true}).select("-password");;
     if (resp.length > 0) {
       return res.status(200).json({ places: resp });
     } else {

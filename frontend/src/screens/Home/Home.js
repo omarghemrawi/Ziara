@@ -56,7 +56,6 @@ export default function Home() {
 
         return 0;
       });
-      console.log(clientPlaces);
 
       const allPlaces = [...clientPlaces, ...staticPlaces];
 
