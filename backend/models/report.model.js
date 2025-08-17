@@ -31,18 +31,18 @@ const reportSchema = new mongoose.Schema({
   reason: {
     type: [String],
     enum: [
-      'Offensive Language', // for Each
+      'offensiveLanguage', // for Each
       
       // reasons user might report a place
-      'Hate Speech',
-      'Inappropriate Content',
-      'Misleading Content',
+      'hateSpeech',
+      'inappropriateContent',
+      'misleadingContent',
       // reasons owner might report a user
-      'Spam',
-      "Off topic",
-      "Conflict of interest",
-      "Profanity",
-      "Discrimination or hate speech",
+      'spam',
+      "offTopic",
+      "conflictOfInterest",
+      "profanity",
+      "discriminationOrHateSpeech",
     ],
     required: true
   },

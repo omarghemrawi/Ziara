@@ -22,10 +22,10 @@ export default function ReportPlaceScreen() {
   const { placeId, userId } = route.params;
 
   const reasonsList = [
-    i18n.t('hateSpeech'),
-    i18n.t('offensiveLanguage'),
-    i18n.t('inappropriateContent'),
-    i18n.t('misleadingContent'),
+    { key: 'offensiveLanguage', label: i18n.t('offensiveLanguage') },
+    { key: 'hateSpeech', label: i18n.t('hateSpeech') },
+    { key: 'inappropriateContent', label: i18n.t('inappropriateContent') },
+    { key: 'misleadingContent', label: i18n.t('misleadingContent') },
   ];
 
   const [selectedReasons, setSelectedReasons] = useState([]);
@@ -45,7 +45,7 @@ export default function ReportPlaceScreen() {
         type: 'error',
         text1: 'Error',
         text2: 'Please select at least one reason.',
-        position: 'botton',
+        position: 'bottom',
         visibilityTime: 5000,
       });
       return;
@@ -69,7 +69,7 @@ export default function ReportPlaceScreen() {
           type: 'success',
           text1: 'Report Submitted',
           text2: 'Thank you for your feedback',
-          position: 'botton',
+          position: 'bottom',
           visibilityTime: 5000,
         });
         navigation.goBack();
@@ -109,7 +109,7 @@ export default function ReportPlaceScreen() {
 
       <ScrollView contentContainerStyle={styles.scroll}>
         {reasonsList.map((reason, index) => {
-          const selected = selectedReasons.includes(reason);
+          const selected = selectedReasons.includes(reason.key);
           return (
             <TouchableOpacity
               key={index}
@@ -120,7 +120,7 @@ export default function ReportPlaceScreen() {
                   borderColor: selected ? '#e0a500' : '#ccc',
                 },
               ]}
-              onPress={() => toggleReason(reason)}
+              onPress={() => toggleReason(reason.key)}
             >
               <Text
                 style={[
@@ -128,7 +128,7 @@ export default function ReportPlaceScreen() {
                   { color: selected ? '#fff' : theme.text },
                 ]}
               >
-                {reason}
+                {reason.label}
               </Text>
             </TouchableOpacity>
           );

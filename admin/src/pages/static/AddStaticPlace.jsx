@@ -20,6 +20,7 @@ const AddStaticPlace = () => {
   const [form, setForm] = useState(initialForm);
   const navigate = useNavigate();
   const API_URL = "http://localhost:5000/api/static";
+  const token = localStorage.getItem("adminToken")
 
   const handleImageUpload = async (file) => {
     try {
@@ -56,7 +57,8 @@ const AddStaticPlace = () => {
         city: form.city,
         location: form.location,
         referenceImages: form.referenceImages,
-      });
+      }, {
+  headers: { Authorization: `Bearer ${token}` }});
 
       if (response.data.success) {
         toast.success("Place created successfully!");

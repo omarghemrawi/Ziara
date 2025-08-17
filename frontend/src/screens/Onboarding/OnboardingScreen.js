@@ -17,7 +17,7 @@ export default function OnboardingScreen({ navigation }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleSkip = () => {
-    navigation.replace('Welcome'); // Navigate to Home 
+    navigation.replace('Welcome'); // Navigate to Home
   };
 
   const handleNext = () => {
@@ -28,19 +28,17 @@ export default function OnboardingScreen({ navigation }) {
     }
   };
 
-  const isEven = currentIndex % 2 !== 0; 
+  const isEven = currentIndex % 2 !== 0;
   const buttonBackgroundColor = isEven ? '#A75D3E' : '#20374c';
-  const skipColor=isEven?'#000000':'#ffffff';
-//   const bottonPaddingHorizontal=currentIndex==4?  70: 70;
+  const skipColor = isEven ? '#000000' : '#ffffff';
+  //   const bottomPaddingHorizontal=currentIndex==4?  70: 70;
 
   return (
     <View style={styles.container}>
-    
       <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
-        <Text style={[styles.skipText,{color:skipColor}]}>Skip</Text>
+        <Text style={[styles.skipText, { color: skipColor }]}>Skip</Text>
       </TouchableOpacity>
 
-     
       <FlatList
         ref={flatListRef}
         data={onboardingScreens}
@@ -55,7 +53,6 @@ export default function OnboardingScreen({ navigation }) {
         }
       />
 
-    
       <View style={styles.bottom}>
         <TouchableOpacity
           style={[styles.nextBtn, { backgroundColor: buttonBackgroundColor }]}
@@ -85,7 +82,6 @@ const styles = StyleSheet.create({
   },
   skipText: {
     fontSize: 16,
-
   },
   bottom: {
     position: 'absolute',
@@ -95,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nextBtn: {
-paddingHorizontal:70,
+    paddingHorizontal: 70,
     paddingVertical: 12,
     borderRadius: 35,
   },

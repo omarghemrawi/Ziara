@@ -77,7 +77,6 @@ export const deleteReport = async (req, res) => {
     const deletedReport = await Report.findByIdAndDelete(reportId);
 
     if (!deletedReport) {
-      console.log("DOne")
       return res.status(404).json({ success: false, message: "Report not found" });
     }
 
