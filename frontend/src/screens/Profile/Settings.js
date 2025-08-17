@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext,useState,useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -31,6 +31,17 @@ const SettingsScreen = () => {
     console.error('Logout error:', error);
   }
 };
+ const [isGuest, setIsGuest] = useState(false);
+    // check if guest
+  useEffect(() => {
+    const checkGuest = async () => {
+      const guest = await AsyncStorage.getItem('guest');
+      if (guest) {
+        setIsGuest(true);
+      }
+    };
+    checkGuest();
+  }, []);
 
 
 const { language } = useLanguage(); 
@@ -101,6 +112,7 @@ console.log(language);
           
         ))}
         {/* Logout Button */}
+ {!isGuest && (
   <TouchableOpacity
     style={[styles.item, { borderBottomColor: theme.border }]}
     onPress={handleLogout}
@@ -110,6 +122,7 @@ console.log(language);
       {i18n.t('logout')}
     </Text>
   </TouchableOpacity>
+)}
       </ScrollView>
     </SafeAreaView>
   );

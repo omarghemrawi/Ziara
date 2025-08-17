@@ -317,12 +317,31 @@ export default function PlaceDetailScreen() {
                 </View>
               )}
               <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('ReportPlaceScreen', {
+                 onPress={async () => {
+    const guest = await AsyncStorage.getItem('guest');
+    
+      
+
+    if (guest) {
+      
+          Alert.alert(
+     i18n.t('login_required'),
+             i18n.t('login_message'),
+        [
+          { text: i18n.t('cancel'), style: "cancel" },
+          { text: i18n.t('login'), onPress: () => navigation.navigate('Login') },
+          { text:  i18n.t('signup'), onPress: () => navigation.navigate('Signup') },
+        ]
+      );
+    } else {
+       navigation.navigate('ReportPlaceScreen', {
                     placeId: id,
                     userId: user._id,
                   })
-                }
+  
+    }
+  }}
+               
               >
                 <MaterialIcons name="report" size={29} color="#FAC75C" />
               </TouchableOpacity>
