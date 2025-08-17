@@ -70,12 +70,13 @@ const reviewsCount = Array.isArray(reviews)
   : 0;
 
   const placeId = user?._id;
+
   const getReviews = useCallback(async () => {
-    
-    
     if (!placeId) return;
     try {
-      const res = await axios.get(`http://localhost:5000/api/review/place/${placeId}`);
+      const res = await axios.get(`http://localhost:5000/api/review/place/${placeId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
       if (res.data?.success) setReviews(res.data.reviews || []);
     } catch (e) {
       console.log(e);
@@ -405,6 +406,8 @@ const reviewsCount = Array.isArray(reviews)
 
 
       <SectionCard title="Upgrade Your Plan">
+        <br />
+        <h4>You have subscribe by : {user.plan.name} Plan with fee {user.plan.fee}$</h4>
         <button
           type="button"
           className="edit-section"

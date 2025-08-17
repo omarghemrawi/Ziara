@@ -9,6 +9,7 @@ export default function ReportReview() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const user = useSelector(state => state.user.userData)
+ const token = localStorage.getItem("token");
 
   // Guard: if opened directly without state, go back
   const reviewId = state?.reviewId;
@@ -18,43 +19,15 @@ export default function ReportReview() {
     navigate(-1);
   }
 
-  const reasons = useMemo(
-    () => [
-      {
-        id: "off-topic",
-        title: "Off topic",
-        desc:
-          "Review doesn’t pertain to an experience at or with this business",
-      },
-      {
-        id: "spam",
-        title: "Spam",
-        desc:
-          "Review is from a bot, a fake account, or contains ads and promotions",
-      },
-      {
-        id: "conflict",
-        title: "Conflict of interest",
-        desc:
-          "Review is from someone affiliated with the business or a competitor’s business",
-      },
-      {
-        id: "profanity",
-        title: "Profanity",
-        desc:
-          "Review contains swear words, has sexually explicit language, or details graphic violence",
-      },
-      {
-        id: "hate-speech",
-        title: "Discrimination or hate speech",
-        desc:
-          "Review has harmful language about an individual or group based on identity",
-      },
-    ],
-    []
-  );
+ const reasons = useMemo(() => [
+  { id: "offTopic", title: "Off topic", desc: "Review doesn’t pertain to an experience at or with this business" },
+  { id: "spam", title: "Spam", desc: "Review is from a bot, a fake account, or contains ads and promotions" },
+  { id: "conflictOfInterest", title: "Conflict of interest", desc: "Review is from someone affiliated with the business or a competitor’s business" },
+  { id: "profanity", title: "Profanity", desc: "Review contains swear words, has sexually explicit language, or details graphic violence" },
+  { id: "discriminationOrHateSpeech", title: "Discrimination or hate speech", desc: "Review has harmful language about an individual or group based on identity" },
+], []);
 
-  const [selectedReasonId, setSelectedReasonId] = useState("");
+  const [selectedReasonId, setSelectedReasonId] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSelect = (id) => setSelectedReasonId(id);
@@ -74,7 +47,9 @@ export default function ReportReview() {
       reason: [selectedReasonId] 
     };
 
-    const res = await axios.post("http://localhost:5000/api/report", payload);
+    const res = await axios.post("http://localhost:5000/api/report", payload, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
 
     if (res.status !== 200 && res.status !== 201) {
       throw new Error("Failed to submit report");
@@ -119,7 +94,7 @@ export default function ReportReview() {
               <button
                 type="button"
                 className={`rr-row ${selectedReasonId === r.id ? "is-selected" : ""}`}
-                onClick={() => handleSelect(r.title)}
+                onClick={() => handleSelect(r.id)}
                 aria-label={`Choose: ${r.title}`}
               >
                 <div className="rr-text">
