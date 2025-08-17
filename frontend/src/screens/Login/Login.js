@@ -40,7 +40,7 @@ export default function Login({ navigation }) {
           type: 'error',
           text1: 'error',
           text2: response.data.message,
-          position: 'botton',
+          position: 'bottom',
           visibilityTime: 5000,
         });
       }
