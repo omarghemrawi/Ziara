@@ -1,283 +1,150 @@
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 60px;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  font-family: "Poppins", sans-serif;
-  z-index: 1000;
-}
-
-.navbar .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0 20px;
-}
-
-/* Logo + text */
-.navbar__logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-right: auto;     /* pushes the rest to the right */
-}
-
-.navbar__logo img {
-  width: 40px;            /* smaller logo */
-  height: auto;
-}
-
-.logo-text {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #FAC75C;
-}
-
-/* Navigation links */
-.navbar__links {
-  display: flex;
-  list-style: none;
-  gap: 32px;
-  margin: 0;
-  padding: 0;
-}
-
-.navbar__links a {
-  text-decoration: none;
-  color: #333333;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.navbar__links a:hover {/* reset any default page margins */
+/* Reset */
 html, body {
   margin: 0;
   padding: 0;
 }
 
+/* ===== Brand palette ===== */
+:root{
+  --brown:#A75D3E;
+  --gold:#FAC75C;
+  --gold-deep:#E9B245;
+  --beige:#EFE2D5;
+  --text:#111213;
+  --muted:#565b6b;
+  --white:#fff;
+}
+
+/* ===== Bar ===== */
 .navbar {
   position: fixed;
-  top: 0;
-  width: 100%;
-  height: 60px;
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  top: 0; width: 100%; height: 60px;
+  background: var(--white);
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
   font-family: "Poppins", sans-serif;
   z-index: 1000;
 }
 
+/* ===== Inner container ===== */
 .navbar .container {
   max-width: 1200px;
-  margin: 0 auto;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* start from left */
+  margin: 0 auto; height: 100%;
+  display: flex; align-items: center;
+  justify-content: flex-start;
   padding: 0 20px;
 }
 
-/* — Logo + “Ziara” */
+/* ===== Logo + text ===== */
 .navbar__logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-right: auto;           /* push everything else to the right */
+  display: flex; align-items: center; gap: 8px;
+  margin-right: auto; /* push rest to the right */
 }
-
-.logo-img {
-  width: 36px;                  /* smaller logo size */
-  height: auto;
-}
-
+.logo-img { width: 40px; height: auto; }
 .logo-text {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #FAC75C;
+  font-size: 1.25rem; font-weight: 700;
+  color: var(--gold); letter-spacing: .3px;
 }
 
-/* — Nav Links */
+/* ===== Links ===== */
 .navbar__links {
-  display: flex;
-  list-style: none;
-  gap: 32px;                    /* consistent spacing */
-  margin: 0;
-  padding: 0;
+  display: flex; list-style: none; gap: 32px;
+  margin: 0; padding: 0;
+}
+.navbar__links a{
+  text-decoration: none; color: #333;
+  font-weight: 500; transition: color .2s, text-decoration-color .2s;
+}
+.navbar__links a:hover{
+  color: var(--brown); text-decoration: underline;
 }
 
-.navbar__links a {
-  text-decoration: none;
-  color: #333333;
-  font-weight: 500;
-  transition: color 0.2s;
+/* ===== Actions (right side) ===== */
+.navbar__actions{
+  display: flex; align-items: center; gap: 32px;
+  margin-left: 32px; /* breathing room after links */
 }
 
-.navbar__links a:hover {
-  color: #1C2D44;
-  text-decoration: underline;
+/* ===== Buttons base ===== */
+.btn, .btn-profile, .language-switch{
+  font-size: 1rem; line-height: 1;
+  padding: 8px 20px; border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer; user-select: none;
+  transition: background-color .2s, color .2s, border-color .2s, transform .15s, box-shadow .2s, opacity .2s;
+  display: inline-flex; align-items: center; justify-content: center;
 }
 
-/* — Buttons & Language */
-.navbar__actions {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  
+/* Login — ghost/brand text */
+.btn.login{
+  background: transparent; color: var(--brown);
+  border-color: transparent; font-weight: 600;
 }
+.btn.login:hover{ background: var(--beige); }
 
-.btn.login {
-  background: transparent;
-  border: none;
-  color: #333333;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.2s;
+/* Sign Up — solid gold */
+.btn.signup{
+  background: var(--gold);
+  color: #2b1a12; /* readable on gold */
+  border-color: var(--gold);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(250,199,92,.35);
 }
-
-.btn.login:hover {
-  color: #1C2D44;
-}
-
-.btn.signup {
-  background: #FAC75C;
-  color: #1C2D44;
-  padding: 8px 20px;
-  border: none;
-  border-radius: 20px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn.signup:hover {
-  opacity: 0.8;
-}
-
-.language-switch {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #333333;
-  font-size: 0.9rem;
-}
-
-.language-switch:hover {
-  color: #1C2D44;
-}
-
-  color: #1C2D44;
-  text-decoration: underline;
-}
-
-/* Buttons and language switch */
-.navbar__actions {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-
-.btn.login {
-  background: transparent;
-  border: none;
-  color: #333333;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.btn.login:hover {
-  color: #1C2D44;
-}
-
-.btn.signup {
-  background: #FAC75C;
-  color: #1C2D44;
-  padding: 8px 20px;
-  border: none;
-  border-radius: 20px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn.signup:hover {
-  opacity: 0.8;
-}
-
-.language-switch {
-  background: none;
-  border: none;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #333333;
-}
-
-.language-switch:hover {
-  color: #1C2D44;
-}
-
-/* this governs the gap between links/buttons */
-.navbar__actions {
-  display: flex;
-  align-items: center;
-  gap: 32px;       /* ↳ bump this up from 24px if you want more space */
-}
-
-/* make login/signup use the same font-size as your links */
-.btn.login,
-.btn.signup {
-  font-size: 1rem;      /* match your .navbar__links a { font-size: 1rem; } */
-  line-height: 1;       /* optional: tighten up the line-height */
-}
-
-/* if you want extra breathing room between "Contact" and the actions group, */
-/* you can add margin-left on .navbar__actions instead: */
-.navbar__actions {
-  margin-left: 32px;    /* pushes the whole group further right */
-}
-/* style logout the same as signup */
-.btn.logout {
-  background: #FAC75C;
-  color: #1C2D44;
-  padding: 8px 20px;
-  border: none;
-  border-radius: 20px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-.btn.logout:hover {
-  opacity: 0.8;
+.btn.signup:hover{
+  background: var(--gold-deep); border-color: var(--gold-deep);
   transform: translateY(-1px);
 }
+.btn.signup:active{ transform: translateY(0); }
 
-.btn-profile {
-  display: inline-block;
-  background: linear-gradient(135deg, #4e54c8, #8f94fb);
-  color: white;
-  padding: 10px 18px;
-  border-radius: 30px;
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 14px;
-  text-align: center;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(78, 84, 200, 0.3);
+/* Logout — solid gold (same visual weight as signup) */
+.btn.logout{
+  background: var(--gold);
+  color: #2b1a12;
+  border-color: var(--gold);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(250,199,92,.35);
+}
+.btn.logout:hover{
+  background: var(--gold-deep); border-color: var(--gold-deep);
+  transform: translateY(-1px);
+}
+.btn.logout:active{ transform: translateY(0); }
+
+/* Profile — brand gradient pill */
+.btn-profile{
+  background: linear-gradient(135deg, var(--brown), var(--gold-deep));
+  color: #fff; font-weight: 700;
+  padding: 10px 18px; border-radius: 30px; text-decoration: none;
+  box-shadow: 0 4px 12px rgba(167,93,62,.28);
+}
+.btn-profile:hover{
+  filter: brightness(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(167,93,62,.35);
 }
 
-.btn-profile:hover {
-  background: linear-gradient(135deg, #8f94fb, #4e54c8);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(78, 84, 200, 0.4);
+/* Language switch — subtle chip */
+.language-switch{
+  background: var(--white); color: var(--text);
+  border-color: #e6e6e6; font-weight: 600;
+  gap: 6px;
+}
+.language-switch:hover{ background: var(--beige); }
+
+/* Focus-visible for accessibility */
+.navbar__links a:focus-visible,
+.btn:focus-visible, .btn-profile:focus-visible, .language-switch:focus-visible{
+  outline: 2px solid var(--gold); outline-offset: 2px;
+}
+
+/* Compact press state */
+.btn:active, .btn-profile:active, .language-switch:active{ transform: translateY(0); }
+
+/* ===== Responsive ===== */
+@media (max-width: 780px){
+  .navbar .container{ flex-wrap: wrap; row-gap: .5rem; padding: .5rem 0; }
+  .navbar__links{
+    order: 3; width: 100%; justify-content: center;
+    padding: .5rem 0; border-top: 1px solid #f0f0f0;
+  }
+  .logo-text{ display: none; }
 }
