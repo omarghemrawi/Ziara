@@ -7,7 +7,7 @@ import { sendDeactivationEmail , sendClientRegisterNotfication } from "../utils/
 // ?
 export const getAllPlaces = async (req, res) => {
   try {
-    const resp = await ClientPlace.find({"plan.active" : true}).select("-password");;
+    const resp = await ClientPlace.find({"plan.active" : true}).select("-password -plan");;
     if (resp.length > 0) {
       return res.status(200).json({ places: resp });
     } else {
@@ -73,7 +73,7 @@ export const logIn = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    const { password: _, ...clientData } = client.toObject();
+    const { password: _ , ...clientData } = client.toObject();
     const token = jwt.sign({ id: client._id , role: client.role }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
