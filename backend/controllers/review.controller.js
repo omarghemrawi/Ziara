@@ -39,8 +39,8 @@ export const deleteReview = async (req, res) => {
     const review = await Review.findByIdAndDelete(req.params.id);
     if (!review) {
       return res
-        .status(404)
-        .json({ success: false, message: "Review not found" });
+        .status(410)
+        .json({ success: false, message: "Review already deleted" });
     }
     const avg = await updatePlaceRating(review.placeId, review.placeModel);
 

@@ -7,6 +7,6 @@ const reportRouter = express.Router()
 //? Create Report
 reportRouter.get("/", verifyTokenAndRole(['admin']), getReports)
 reportRouter.post("/",verifyTokenAndRole(['user' , "client"]),createReport)
-reportRouter.delete("/:reportId",verifyTokenAndRole(['user' , 'client']),deleteReport)
+reportRouter.delete("/:reportId",verifyTokenAndRole(['admin']),deleteReport)
 
 export default reportRouter

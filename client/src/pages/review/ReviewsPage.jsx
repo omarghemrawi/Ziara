@@ -6,6 +6,7 @@ import "./ReviewsPage.css";
 export default function ReviewsPage() {
   const { placeId } = useParams();
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   // ─── Data ─────────────────────────────────────────────
   const [reviews, setReviews] = useState([]);
@@ -16,7 +17,9 @@ export default function ReviewsPage() {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/review/place/${placeId}`
+        `http://localhost:5000/api/review/place/${placeId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  }
       );
       setReviews(Array.isArray(res?.data?.reviews) ? res.data.reviews : []);
     } catch (e) {
