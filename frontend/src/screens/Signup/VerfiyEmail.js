@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
+  
   },
   title: {
     fontSize: 28,
@@ -115,6 +116,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '80%',
+    marginRight:30,
   },
   codeInput: {
     borderWidth: 1,

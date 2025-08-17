@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { Formik } from 'formik';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Signup({ navigation }) {

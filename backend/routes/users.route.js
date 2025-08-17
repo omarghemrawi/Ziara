@@ -7,6 +7,8 @@ import {
   verifyEmail,
   verifyEmailCode,
   resendVerificationCode,
+  forgotPassword,
+  resetPassword
 
 } from "../controllers/user.controller.js";
 import { verifyTokenAndRole } from "../middleware/auth.js";
@@ -21,7 +23,8 @@ userRouter.get("/verify/:token", verifyEmail);
 userRouter.post("/verify-email", verifyEmailCode);
 userRouter.post('/resend-code', resendVerificationCode);
 
-
+userRouter.post("/forgot-password", forgotPassword);
+userRouter.post("/reset-password", resetPassword);
 
 
 export default userRouter;

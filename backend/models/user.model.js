@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema(
     verificationToken: { type: String },
     currentCity: String,
     verificationCode: { type: String },
+    resetCode: { type: String },
+resetCodeExpire: { type: Date },
+
   },
   {
     timestamps: true,

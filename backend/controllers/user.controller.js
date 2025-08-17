@@ -283,3 +283,80 @@ export const resendVerificationCode = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
+// ========================
+// Forgot Password (send reset code)
+// ========================
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: "No account found with this email" });
+    }
+
+    // Generate reset code (6-digit)
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+    user.resetCode = resetCode;
+    user.resetCodeExpire = Date.now() + 10 * 60 * 1000; // valid for 10 minutes
+    await user.save();
+
+    // Send email
+    await transporter.sendMail({
+      to: email,
+      subject: "Password Reset Request",
+      html: `<p>Hi ${user.username},</p>
+             <p>Your password reset code is: <b>${resetCode}</b></p>
+             <p>This code will expire in 10 minutes.</p>`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Reset code sent to your email.",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ========================
+// Reset Password (with code)
+// ========================
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+
+    if (!email || !code || !newPassword) {
+      return res.status(400).json({ success: false, message: "All fields are required" });
+    }
+
+    const user = await User.findOne({ email, resetCode: code });
+    if (!user) {
+      return res.status(400).json({ success: false, message: "Invalid code or email" });
+    }
+
+    // Check expiration
+    if (Date.now() > user.resetCodeExpire) {
+      return res.status(400).json({ success: false, message: "Reset code expired" });
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    user.resetCode = undefined;
+    user.resetCodeExpire = undefined;
+    await user.save();
+
+    return res.status(200).json({ success: true, message: "Password reset successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
