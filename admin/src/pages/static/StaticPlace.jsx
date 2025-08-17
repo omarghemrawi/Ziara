@@ -101,7 +101,7 @@ const StaticPlace = () => {
                   <strong>Type:</strong> {place.type}
                 </p>
                 <p>
-                  <strong>City:</strong> {place.location?.city}
+                  <strong>City:</strong> {place.city}
                 </p>
                 <p>
                   <strong>Rate:</strong> {place.rate}/5

@@ -87,7 +87,6 @@ export const getUserReviews = async (req, res) => {
 };
 
 // Get single review
-
 export const getSingleReview = async (req, res) => {
   try {
     const { reviewId } = req.params;
@@ -109,6 +108,20 @@ export const getSingleReview = async (req, res) => {
     res.status(200).json({ success: true, data: review });
   } catch (error) {
     console.error("Error fetching review:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find()                     // get all reviews
+      .populate("userId", "username profileImage")         // load username + profileImage from User
+      .populate("placeId", "name")                         // optional: get place name
+      .sort({ createdAt: -1 });                            // newest first
+
+    res.json({ success: true, reviews });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

@@ -55,7 +55,9 @@ function ReportPage() {
   // Fetch reports //?
   const getReports = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/report");
+      const res = await axios.get("http://localhost:5000/api/report", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
       if (res.data.success) {
         setReports(res.data.reports);
       } else {
