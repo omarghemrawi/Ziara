@@ -1,5 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import axios from 'axios';
 
 export default function VerifyEmail({ route, navigation }) {
@@ -31,12 +37,15 @@ export default function VerifyEmail({ route, navigation }) {
       alert('Please enter the 6-digit code.');
       return;
     }
-    
+
     try {
-      const resp = await axios.post('http://192.168.0.101:5000/api/user/verify-email', {
-        email,
-        code: verificationCode,
-      });
+      const resp = await axios.post(
+        'http://10.0.2.2:5000/api/user/verify-email',
+        {
+          email,
+          code: verificationCode,
+        },
+      );
 
       if (resp.data.success) {
         alert('Email verified! You can now login.');
@@ -52,7 +61,10 @@ export default function VerifyEmail({ route, navigation }) {
 
   const handleResend = async () => {
     try {
-      const resp = await axios.post('http://192.168.0.101:5000/api/user/resend-code', { email });
+      const resp = await axios.post(
+        'http://10.0.2.2:5000/api/user/resend-code',
+        { email },
+      );
       alert(resp.data.message);
     } catch (err) {
       console.log(err);
@@ -63,7 +75,9 @@ export default function VerifyEmail({ route, navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Verify Email</Text>
-      <Text style={styles.subtitle}>Enter the 6-digit code sent to {email}</Text>
+      <Text style={styles.subtitle}>
+        Enter the 6-digit code sent to {email}
+      </Text>
 
       <View style={styles.codeContainer}>
         {code.map((digit, index) => (

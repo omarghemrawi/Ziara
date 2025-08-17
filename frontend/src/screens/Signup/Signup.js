@@ -6,7 +6,6 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 
-
 export default function Signup({ navigation }) {
   const [passwordInput, setPasswordInput] = useState('');
 
@@ -51,14 +50,17 @@ export default function Signup({ navigation }) {
         onSubmit={async (values, { resetForm }) => {
           try {
             // Signup request
-            const resp = await axios.post('http://192.168.0.101:5000/api/user/signup', {
-              username: values.username,
-              email: values.email,
-              password: values.password,
-            });
+            const resp = await axios.post(
+              'http://10.0.2.2:5000/api/user/signup',
+              {
+                username: values.username,
+                email: values.email,
+                password: values.password,
+              },
+            );
 
             if (resp.data.success) {
-               await AsyncStorage.removeItem('guest');
+              await AsyncStorage.removeItem('guest');
               Toast.show({
                 type: 'success',
                 text1: resp.data.message,
@@ -83,7 +85,14 @@ export default function Signup({ navigation }) {
           }
         }}
       >
-        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => {
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => {
           const isStrongPassword = checkPasswordIsStrong(passwordInput);
 
           return (

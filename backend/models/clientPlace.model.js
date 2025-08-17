@@ -54,7 +54,7 @@ const clientSchema = new mongoose.Schema({
   priority: { type: String, default: "normal" }, // normal | boosted | top
   fee: { type: Number, default: 0 },
   active: {type: Boolean,default: false},
-}
+},menu: {type:String}
 });
 
 const ClientPlace = mongoose.model("ClientPlace", clientSchema);

@@ -14,7 +14,9 @@ function ReportPage() {
   const fetchTargetDetails = async (id, type) => {
     try {
       if (type === "place") {
-        const res = await axios.get(`http://localhost:5000/api/client/place/${id}`);
+        const res = await axios.get(`http://localhost:5000/api/client/place/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
         if (res.data.success) {
           setDetails(res.data.place);
           setShowPlaceDetails(true);
@@ -22,7 +24,9 @@ function ReportPage() {
           alert("Failed to fetch target details");
         }
       } else {
-        const res = await axios.get(`http://localhost:5000/api/review/${id}`);
+        const res = await axios.get(`http://localhost:5000/api/review/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
         if (res.data.success) {
           setDetails(res.data.data);
           setShowReviewDetails(true);
@@ -72,6 +76,7 @@ function ReportPage() {
   // Delete report
   const deleteReport = async (reportId) => {
     try {
+     
       await axios.delete(`http://localhost:5000/api/report/${reportId}`, 
     {
       headers: { Authorization: `Bearer ${token}` }
@@ -80,7 +85,11 @@ function ReportPage() {
       getReports();
     } catch (error) {
       console.error(error);
-      toast.error("❌ Failed to delete report", { position: "top-right", autoClose: 3000 });
+      if (error.response.status === 410) {
+        toast.info("⚠️ Report was already deleted", { position: "top-right", autoClose: 3000 });
+      } else {
+        toast.error("❌ Failed to delete report", { position: "top-right", autoClose: 3000 });
+      }
     }
   };
 
@@ -112,7 +121,9 @@ function ReportPage() {
         message: "Thank you for your report, we resolved it.",
       };
 
-      const res = await axios.post("http://localhost:5000/api/email/send-email", emailData);
+      const res = await axios.post("http://localhost:5000/api/email/send-email", emailData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
 
       if (res.data.success) {
         toast.success("✅ Email sent successfully.");
@@ -204,7 +215,7 @@ function ReportPage() {
                     </button>
                   ) : (
                     <button className="details-btn" onClick={() => fetchTargetDetails(report.reviewReported._id, "review")}>
-                      Details Of User
+                      Details Of User's Review
                     </button>
                   )}
                 </div>

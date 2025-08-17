@@ -56,12 +56,11 @@ export default function PlaceDetailScreen() {
   const place = data.find(item => item._id === id);
 
   const starArray = [1, 2, 3, 4, 5];
-    const [isGuest, setIsGuest] = useState(false);
-
+  const [isGuest, setIsGuest] = useState(false);
 
   const handleFavouriteToggle = async () => {
     const token = await AsyncStorage.getItem('token');
-    
+
     const newValue = !isFavourite;
     setIsFavourite(newValue);
     try {
@@ -183,7 +182,7 @@ export default function PlaceDetailScreen() {
       });
     }
   };
-   useEffect(() => {
+  useEffect(() => {
     const checkGuest = async () => {
       const guest = await AsyncStorage.getItem('guest');
       if (guest) {
@@ -193,25 +192,30 @@ export default function PlaceDetailScreen() {
     checkGuest();
   }, []);
 
- useEffect(() => {
-  if (user && user.favoritePlaces) {
-    const existsInFavorites = user.favoritePlaces.some(fav => fav === id);
-    setIsFavourite(existsInFavorites);
-  } else {
-    setIsFavourite(false);
-  }
+  useEffect(() => {
+    if (user && user.favoritePlaces) {
+      const existsInFavorites = user.favoritePlaces.some(fav => fav === id);
+      setIsFavourite(existsInFavorites);
+    } else {
+      setIsFavourite(false);
+    }
 
-  const timer = setTimeout(() => {
-    setShowTooltip(false);
-  }, 4000);
+    const timer = setTimeout(() => {
+      setShowTooltip(false);
+    }, 4000);
 
-  return () => clearTimeout(timer);
-}, [user, isGuest]);
+    return () => clearTimeout(timer);
+  }, [user, isGuest]);
   //fetching reviews of a specific place
   const fetchReviews = async placeId => {
+    const token = await AsyncStorage.getItem('token');
+
     try {
       const res = await axios.get(
         `http://10.0.2.2:5000/api/review/place/${placeId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
       );
       if (res.data.success) {
         setReviews(res.data.reviews);
@@ -317,31 +321,32 @@ export default function PlaceDetailScreen() {
                 </View>
               )}
               <TouchableOpacity
-                 onPress={async () => {
-    const guest = await AsyncStorage.getItem('guest');
-    
-      
+                onPress={async () => {
+                  const guest = await AsyncStorage.getItem('guest');
 
-    if (guest) {
-      
-          Alert.alert(
-     i18n.t('login_required'),
-             i18n.t('login_message'),
-        [
-          { text: i18n.t('cancel'), style: "cancel" },
-          { text: i18n.t('login'), onPress: () => navigation.navigate('Login') },
-          { text:  i18n.t('signup'), onPress: () => navigation.navigate('Signup') },
-        ]
-      );
-    } else {
-       navigation.navigate('ReportPlaceScreen', {
-                    placeId: id,
-                    userId: user._id,
-                  })
-  
-    }
-  }}
-               
+                  if (guest) {
+                    Alert.alert(
+                      i18n.t('login_required'),
+                      i18n.t('login_message'),
+                      [
+                        { text: i18n.t('cancel'), style: 'cancel' },
+                        {
+                          text: i18n.t('login'),
+                          onPress: () => navigation.navigate('Login'),
+                        },
+                        {
+                          text: i18n.t('signup'),
+                          onPress: () => navigation.navigate('Signup'),
+                        },
+                      ],
+                    );
+                  } else {
+                    navigation.navigate('ReportPlaceScreen', {
+                      placeId: id,
+                      userId: user._id,
+                    });
+                  }
+                }}
               >
                 <MaterialIcons name="report" size={29} color="#FAC75C" />
               </TouchableOpacity>
@@ -392,27 +397,25 @@ export default function PlaceDetailScreen() {
           <TouchableOpacity
             style={styles.actionButton}
             // onPress={() => handleFavouriteToggle()}
-           onPress={async () => {
-    const guest = await AsyncStorage.getItem('guest');
-    
-      
+            onPress={async () => {
+              const guest = await AsyncStorage.getItem('guest');
 
-    if (guest) {
-      
-          Alert.alert(
-     i18n.t('login_required'),
-             i18n.t('login_message'),
-        [
-          { text: i18n.t('cancel'), style: "cancel" },
-          { text: i18n.t('login'), onPress: () => navigation.navigate('Login') },
-          { text:  i18n.t('signup'), onPress: () => navigation.navigate('Signup') },
-        ]
-      );
-    } else {
- handleFavouriteToggle()
-  
-    }
-  }}
+              if (guest) {
+                Alert.alert(i18n.t('login_required'), i18n.t('login_message'), [
+                  { text: i18n.t('cancel'), style: 'cancel' },
+                  {
+                    text: i18n.t('login'),
+                    onPress: () => navigation.navigate('Login'),
+                  },
+                  {
+                    text: i18n.t('signup'),
+                    onPress: () => navigation.navigate('Signup'),
+                  },
+                ]);
+              } else {
+                handleFavouriteToggle();
+              }
+            }}
           >
             <Text style={styles.actionText}>{i18n.t('AddToFavourite')}</Text>
             <AntDesign
@@ -425,11 +428,7 @@ export default function PlaceDetailScreen() {
 
           <TouchableOpacity
             style={styles.actionButton}
-             onPress={
-  
-      openReviewsModal}
-    
-  
+            onPress={openReviewsModal}
           >
             <Text style={styles.actionText}>{i18n.t('RatingAndReview')}</Text>
             <Entypo
@@ -558,32 +557,32 @@ export default function PlaceDetailScreen() {
               )}
             </ScrollView>
 
-  <TouchableOpacity
+            <TouchableOpacity
+              onPress={async () => {
+                const guest = await AsyncStorage.getItem('guest');
 
-onPress={async () => {
-    const guest = await AsyncStorage.getItem('guest');
-    
-      
-
-    if (guest) {
-      
-             Alert.alert(
-     i18n.t('login_required'),
-             i18n.t('login_message'),
-        [
-          { text: i18n.t('cancel'), style: "cancel" },
-          { text: i18n.t('login'), onPress: () => navigation.navigate('Login') },
-          { text:  i18n.t('signup'), onPress: () => navigation.navigate('Signup') },
-        ]
-      );
-    } else {
-        setReviewModalVisible(false);
-      setModalVisible(true);
-  
-    }
-  }}
->
-  
+                if (guest) {
+                  Alert.alert(
+                    i18n.t('login_required'),
+                    i18n.t('login_message'),
+                    [
+                      { text: i18n.t('cancel'), style: 'cancel' },
+                      {
+                        text: i18n.t('login'),
+                        onPress: () => navigation.navigate('Login'),
+                      },
+                      {
+                        text: i18n.t('signup'),
+                        onPress: () => navigation.navigate('Signup'),
+                      },
+                    ],
+                  );
+                } else {
+                  setReviewModalVisible(false);
+                  setModalVisible(true);
+                }
+              }}
+            >
               <Text style={{ color: '#333', fontSize: 10 }}>
                 {i18n.t('YouAlsoVisited')}
               </Text>
