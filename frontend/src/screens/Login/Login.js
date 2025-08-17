@@ -30,6 +30,7 @@ export default function Login({ navigation }) {
 
       if (response.data.success) {
         await AsyncStorage.setItem('token', response.data.token);
+         await AsyncStorage.removeItem('guest');
         dispatch({
           type: 'SET_USER',
           payload: response.data.user,

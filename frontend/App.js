@@ -45,6 +45,26 @@ import Toast from 'react-native-toast-message';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [initialRoute, setInitialRoute] = React.useState(null);
+
+  // useEffect(() => {
+  //   const checkUserStatus = async () => {
+  //     const token = await AsyncStorage.getItem('token');
+  //     const guest = await AsyncStorage.getItem('guest');
+
+  //     if (token) {
+  //       setInitialRoute('Home');  // logged in
+  //     } else if (guest) {
+  //       setInitialRoute('Home');  // guest
+  //     } else {
+  //       setInitialRoute('Login'); // not logged in
+  //     }
+  //   };
+
+  //   checkUserStatus();
+  // }, []);
+
+  // if (!initialRoute) return null;
   return (
     <LanguageProvider>
       <Provider store={store}>

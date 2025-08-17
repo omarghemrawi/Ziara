@@ -103,7 +103,12 @@
          "edit_favorite": "Edit Favorite",
   "move_to_visited": "Move to Visited",
   "delete": "Delete",
-  "city": "City"
+  "city": "City",
+  "logout": "Logout",
+      "cancel": "Cancel",
+    "login": "Login",
+    "signup": "Sign Up",
+     "login_required": "Login Required"
 
   
 

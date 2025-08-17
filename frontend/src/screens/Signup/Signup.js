@@ -58,6 +58,7 @@ export default function Signup({ navigation }) {
             });
 
             if (resp.data.success) {
+               await AsyncStorage.removeItem('guest');
               Toast.show({
                 type: 'success',
                 text1: resp.data.message,

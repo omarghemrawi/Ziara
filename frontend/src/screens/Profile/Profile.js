@@ -25,6 +25,7 @@ export default function ProfileScreen() {
   const { theme } = useTheme();
   const user = useSelector(state => state.user.user);
   const [reviews, setReviews] = useState([]);
+    const [isGuest, setIsGuest] = useState(false);
   const dispatch = useDispatch();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -57,7 +58,7 @@ export default function ProfileScreen() {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await axios.delete(`http://10.0.2.2:5000/api/review/${id}`, {
+      const res = await axios.delete(`http://192.168.0.101:5000/api/review/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -89,9 +90,11 @@ export default function ProfileScreen() {
 
   // Fetch user reviews from API and normalize data
   const fetchReviews = async () => {
-    const token = await AsyncStorage.getItem('token');
+    
+      const token = await AsyncStorage.getItem('token');
+    if (!token) return; 
     try {
-      const res = await axios.get('http://10.0.2.2:5000/api/review/user', {
+      const res = await axios.get('http://192.168.0.101:5000/api/review/user', {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log('API response:', res.data);
@@ -117,12 +120,22 @@ export default function ProfileScreen() {
 
   // Get year user joined
   const year = user?.createdAt ? new Date(user.createdAt).getFullYear() : '';
+   // check if guest
+  useEffect(() => {
+    const checkGuest = async () => {
+      const guest = await AsyncStorage.getItem('guest');
+      if (guest) {
+        setIsGuest(true);
+      }
+    };
+    checkGuest();
+  }, []);
 
   useEffect(() => {
     if (user?._id) {
       fetchReviews();
     }
-  }, [user]);
+  }, [user,isGuest]);
 
   return (
     <View
@@ -137,14 +150,33 @@ export default function ProfileScreen() {
           {i18n.t('profile')}
         </Text>
         <View style={styles.headerIcons}>
-          <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
-            <MaterialIcons
-              name="edit"
-              size={30}
-              color={theme.text}
-              style={styles.icon}
-            />
-          </TouchableOpacity>
+      <TouchableOpacity
+  onPress={async () => {
+    const guest = await AsyncStorage.getItem('guest');
+      
+
+    if (!guest ) {
+      navigation.navigate('EditProfile');
+    } else {
+      Alert.alert(
+        i18n.t('login_required'),
+          i18n.t('login_message'),
+        [
+          { text:  i18n.t('cancel'), style: "cancel" },
+          { text:  i18n.t('login'), onPress: () => navigation.navigate('Login') },
+          { text:  i18n.t('signup'), onPress: () => navigation.navigate('Signup') },
+        ]
+      );
+    }
+  }}
+>
+  <MaterialIcons
+    name="edit"
+    size={30}
+    color={theme.text}
+    style={styles.icon}
+  />
+</TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('SettingsScreen')}
           >
@@ -345,6 +377,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginTop: 10,
+  },
+  user :{
+    marginLeft:20,
   },
   joinedText: {
     color: '#777',

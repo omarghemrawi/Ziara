@@ -9,6 +9,7 @@ import {
   Modal,
   TextInput,
   ToastAndroid,
+  Alert,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -55,12 +56,14 @@ export default function PlaceDetailScreen() {
   const place = data.find(item => item._id === id);
 
   const starArray = [1, 2, 3, 4, 5];
+    const [isGuest, setIsGuest] = useState(false);
+
 
   const handleFavouriteToggle = async () => {
     const token = await AsyncStorage.getItem('token');
+    
     const newValue = !isFavourite;
     setIsFavourite(newValue);
-
     try {
       console.log(id, user._id);
       if (newValue) {
@@ -180,20 +183,30 @@ export default function PlaceDetailScreen() {
       });
     }
   };
-
-  useEffect(() => {
-    const existsInFavorites = user.favoritePlaces?.some(fav => fav === id);
-    if (existsInFavorites) {
-      setIsFavourite(true);
-    } else {
-      setIsFavourite(false);
-    }
-    const timer = setTimeout(() => {
-      setShowTooltip(false);
-    }, 4000); // Hide after 4 seconds
-    return () => clearTimeout(timer);
+   useEffect(() => {
+    const checkGuest = async () => {
+      const guest = await AsyncStorage.getItem('guest');
+      if (guest) {
+        setIsGuest(true);
+      }
+    };
+    checkGuest();
   }, []);
 
+ useEffect(() => {
+  if (user && user.favoritePlaces) {
+    const existsInFavorites = user.favoritePlaces.some(fav => fav === id);
+    setIsFavourite(existsInFavorites);
+  } else {
+    setIsFavourite(false);
+  }
+
+  const timer = setTimeout(() => {
+    setShowTooltip(false);
+  }, 4000);
+
+  return () => clearTimeout(timer);
+}, [user, isGuest]);
   //fetching reviews of a specific place
   const fetchReviews = async placeId => {
     try {
@@ -318,7 +331,7 @@ export default function PlaceDetailScreen() {
         </View>
 
         <View style={styles.headerImageContainer}>
-          <Image source={{ uri: place.profile }} style={styles.headerImage} />
+          <Image source={{ uri: place?.profile }} style={styles.headerImage} />
 
           <TouchableOpacity
             style={styles.mapButton}
@@ -334,7 +347,7 @@ export default function PlaceDetailScreen() {
         </View>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View style={styles.galleryRow}>
-            {place.referenceImages.map((img, index) => (
+            {place?.referenceImages.map((img, index) => (
               <Image
                 key={index}
                 source={{ uri: img }}
@@ -345,20 +358,41 @@ export default function PlaceDetailScreen() {
         </ScrollView>
 
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
-        <Text style={styles.descriptionText}>{place.description}</Text>
+        <Text style={styles.descriptionText}>{place?.description}</Text>
         <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
 
         <SocialIcons
-          facebookLink={place.facebook}
-          instagramLink={place.instagram}
-          isResto={place.type === 'restaurant'}
-          menuLink={place.menuLink}
+          facebookLink={place?.facebook}
+          instagramLink={place?.instagram}
+          isResto={place?.type === 'restaurant'}
+          menuLink={place?.menuLink}
         />
 
         <View style={styles.actionsRow}>
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={() => handleFavouriteToggle()}
+            // onPress={() => handleFavouriteToggle()}
+           onPress={async () => {
+    const guest = await AsyncStorage.getItem('guest');
+    
+      
+
+    if (guest) {
+      
+          Alert.alert(
+     i18n.t('login_required'),
+             i18n.t('login_message'),
+        [
+          { text: i18n.t('cancel'), style: "cancel" },
+          { text: i18n.t('login'), onPress: () => navigation.navigate('Login') },
+          { text:  i18n.t('signup'), onPress: () => navigation.navigate('Signup') },
+        ]
+      );
+    } else {
+ handleFavouriteToggle()
+  
+    }
+  }}
           >
             <Text style={styles.actionText}>{i18n.t('AddToFavourite')}</Text>
             <AntDesign
@@ -371,7 +405,11 @@ export default function PlaceDetailScreen() {
 
           <TouchableOpacity
             style={styles.actionButton}
-            onPress={openReviewsModal}
+             onPress={
+  
+      openReviewsModal}
+    
+  
           >
             <Text style={styles.actionText}>{i18n.t('RatingAndReview')}</Text>
             <Entypo
@@ -401,10 +439,10 @@ export default function PlaceDetailScreen() {
             </TouchableOpacity>
 
             <View style={styles.profileSection}>
-              <Image source={{ uri: place.profile }} style={styles.avatar} />
+              <Image source={{ uri: place?.profile }} style={styles.avatar} />
               <View>
-                <Text style={styles.name}>{place.name}</Text>
-                <Text style={styles.location}>{place.city} || Tripoli</Text>
+                <Text style={styles.name}>{place?.name}</Text>
+                <Text style={styles.location}>{place?.city} || Tripoli</Text>
               </View>
             </View>
 
@@ -500,12 +538,32 @@ export default function PlaceDetailScreen() {
               )}
             </ScrollView>
 
-            <TouchableOpacity
-              onPress={() => {
-                setReviewModalVisible(false);
-                setModalVisible(true);
-              }}
-            >
+  <TouchableOpacity
+
+onPress={async () => {
+    const guest = await AsyncStorage.getItem('guest');
+    
+      
+
+    if (guest) {
+      
+             Alert.alert(
+     i18n.t('login_required'),
+             i18n.t('login_message'),
+        [
+          { text: i18n.t('cancel'), style: "cancel" },
+          { text: i18n.t('login'), onPress: () => navigation.navigate('Login') },
+          { text:  i18n.t('signup'), onPress: () => navigation.navigate('Signup') },
+        ]
+      );
+    } else {
+        setReviewModalVisible(false);
+      setModalVisible(true);
+  
+    }
+  }}
+>
+  
               <Text style={{ color: '#333', fontSize: 10 }}>
                 {i18n.t('YouAlsoVisited')}
               </Text>

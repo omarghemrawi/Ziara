@@ -13,12 +13,25 @@ import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
 import i18n from '../locales/i18n';
 import { useLanguage } from '../locales/LanguageContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
   const { isLightMode, toggleTheme, theme } = useTheme();
+  const handleLogout = async () => {
+  try {
+    // Clear stored token or user info
+    await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('user'); 
+   
+    navigation.replace('Login');
+  } catch (error) {
+    console.error('Logout error:', error);
+  }
+};
+
 
 const { language } = useLanguage(); 
 console.log(language);
@@ -85,7 +98,18 @@ console.log(language);
               {item.label}
             </Text>
           </TouchableOpacity>
+          
         ))}
+        {/* Logout Button */}
+  <TouchableOpacity
+    style={[styles.item, { borderBottomColor: theme.border }]}
+    onPress={handleLogout}
+  >
+    <Icon name="logout" size={24} color={theme.text} style={styles.itemIcon} />
+    <Text style={[styles.itemLabel, { color: theme.text }]}>
+      {i18n.t('logout')}
+    </Text>
+  </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );

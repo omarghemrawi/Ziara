@@ -2,8 +2,18 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home({ navigation }) {
+  
+  const joinAsGuest = async () => {
+    try {
+      await AsyncStorage.setItem('guest', 'true'); 
+      navigation.replace('Home'); 
+    } catch (error) {
+      console.error('Error setting guest mode:', error);
+    }
+  };
   return (
     <View style={styles.container}>
     
@@ -29,7 +39,7 @@ export default function Home({ navigation }) {
           {/* Skip button */}
       <TouchableOpacity
         style={styles.skipButton}
-        onPress={() => navigation.navigate('Home')}
+        onPress={joinAsGuest}
       >
         <Text style={styles.skipText}>Join as guest</Text>
       </TouchableOpacity>
