@@ -25,7 +25,7 @@ clientRouter.post("/signup", SignUp);
 clientRouter.post("/login", logIn);
 clientRouter.put(
   "/update-profile",
-  verifyTokenAndRole,
+  verifyTokenAndRole(['client']),
   (req, res, next) => {
     ClientPlace.findById(req.userId)
       .then(client => {
@@ -39,8 +39,8 @@ clientRouter.put(
   },
   updateProfile
 );
-clientRouter.put("/complete-register",completeRegister)
-clientRouter.put("/subscribe", submitPayment);
+clientRouter.put("/complete-register",verifyTokenAndRole(['client']),completeRegister)
+clientRouter.put("/subscribe",verifyTokenAndRole(['client']), submitPayment);
 clientRouter.put("/deactive-subscribe",verifyTokenAndRole(['admin']) , deactivePayment);
 export default clientRouter;
 

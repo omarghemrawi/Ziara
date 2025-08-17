@@ -65,14 +65,14 @@ export default function PlaceDetailScreen() {
       console.log(id, user._id);
       if (newValue) {
         await axios.post(
-          'http://192.168.0.101:5000/api/favorite/',
+          'http://10.0.2.2:5000/api/favorite/',
           { placeId: id },
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
       } else {
-        await axios.delete('http://192.168.0.101:5000/api/favorite', {
+        await axios.delete('http://10.0.2.2:5000/api/favorite', {
           data: { placeId: id },
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -132,7 +132,7 @@ export default function PlaceDetailScreen() {
         : 'ClientPlace';
       // Submit review data
       const res = await axios.post(
-        'http://192.168.0.101:5000/api/review',
+        'http://10.0.2.2:5000/api/review',
         {
           rating: selectedStar,
           comment: reviewText,
@@ -198,7 +198,7 @@ export default function PlaceDetailScreen() {
   const fetchReviews = async placeId => {
     try {
       const res = await axios.get(
-        `http://192.168.0.101:5000/api/review/place/${placeId}`,
+        `http://10.0.2.2:5000/api/review/place/${placeId}`,
       );
       if (res.data.success) {
         setReviews(res.data.reviews);
@@ -325,7 +325,8 @@ export default function PlaceDetailScreen() {
             onPress={() =>
               navigation.navigate('Map', {
                 // locationUrl: place.location || null,
-           locationUrl:  "https://www.google.com/maps/place/Baytna/@34.42762,35.8279711,17z"
+                locationUrl:
+                  'https://www.google.com/maps/place/Baytna/@34.42762,35.8279711,17z',
               })
             }
           >

@@ -50,13 +50,21 @@ export default function ReportPlaceScreen() {
       return;
     }
     try {
-      const response = await axios.post('http://192.168.0.101:5000/api/report', {
-        type: 'ClientPlace',
-        complainant: 'User',
-        targetId: placeId,
-        reportedBy: userId,
-        reason: selectedReasons,
-      });
+      const token = await AsyncStorage.getItem('token');
+
+      const response = await axios.post(
+        'http://10.0.2.2:5000/api/report',
+        {
+          type: 'ClientPlace',
+          complainant: 'User',
+          targetId: placeId,
+          reportedBy: userId,
+          reason: selectedReasons,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       if (response.data.success) {
         Toast.show({

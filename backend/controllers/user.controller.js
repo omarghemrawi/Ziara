@@ -180,7 +180,8 @@ export const userLogin = async (req, res) => {
 // ========================
 export const updateProfile = async (req, res) => {
   try {
-    const { userId, username, about, profile } = req.body;
+    const { username, about, profile } = req.body;
+    const userId = req.userId
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required." });
