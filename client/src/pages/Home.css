@@ -1,0 +1,243 @@
+/* =========================
+   Home.css — Ziara unified theme
+   Palette:
+   --gold-brown: #A75D3E;
+   --gold:       #FAC75C;
+   --gold-deep:  #E9B245;
+   --beige:      #EFE2D5;
+   --black:      #111213;
+   --gray:       #565b6b;
+   --white:      #ffffff;
+   ========================= */
+
+:root{
+  --gold-brown:#A75D3E;
+  --gold:#FAC75C;
+  --gold-deep:#E9B245;
+  --beige:#EFE2D5;
+  --black:#111213;
+  --gray:#565b6b;
+  --white:#ffffff;
+
+  --radius:16px;
+  --shadow-sm: 0 4px 14px rgba(17,18,19,.06);
+  --shadow-md: 0 10px 24px rgba(17,18,19,.10);
+}
+
+.home{
+  background: linear-gradient(180deg, var(--beige) 0%, var(--white) 100%);
+  color: var(--black);
+}
+
+/* =========================
+   1) Carousel (kept as-is)
+   ========================= */
+/* بدل هالبلوك بدل القديم تبع .home-carousel */
+.home-carousel{
+  width: min(1100px, 100% - 48px); /* نفس عرض السكاشن */
+  margin: 16px auto 0;             /* مسافة صغيرة تحت الـ hero وتوسيط */
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.home-carousel img,
+.home-carousel video{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* =========================
+   2) HERO — full-bleed like About/Services
+   ========================= */
+.home-hero{
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+  border-bottom: 4px solid var(--gold-brown);
+  padding: 72px 0;
+  box-shadow: var(--shadow-sm);
+}
+.home-hero-inner{
+  width: min(1100px, 100% - 48px);
+  margin-inline: auto;
+}
+.home-kicker{
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 800;
+  font-size: 12px;
+  opacity: .95;
+  margin-bottom: 8px;
+}
+.home-hero h1{
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+.home-hero p{
+  margin: 0;
+  font-size: clamp(15px, 1.8vw, 18px);
+  color: #1b1c20;
+}
+.home-hero-ctas{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* Buttons (shared look) */
+.btn-pill{
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-weight: 800;
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: var(--shadow-sm);
+  transition: transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+}
+.btn-pill:active{ transform: translateY(1px); }
+
+.btn-brown{
+  background: var(--gold-brown);
+  color: var(--white);
+}
+.btn-gold{
+  color: var(--gold-brown);
+  background: var(--white);
+  border: 2px solid var(--gold-brown);
+}
+
+/* =========================
+   3) Sections
+   ========================= */
+.home-section{
+  width: min(1100px, 100% - 48px);
+  margin-inline: auto;
+  padding: 56px 0 32px;
+}
+.home-heading{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.home-heading h2{
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 800;
+  margin: 0;
+}
+.accent-line{
+  width: 64px; height: 6px;
+  border-radius: 999px;
+  background: var(--gold-brown);
+}
+
+/* Cards / lists */
+.home-grid-4{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+.home-grid-3{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.home-card{
+  background: var(--white);
+  border: 1px solid rgba(17,18,19,.06);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.home-card:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.home-card-head{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.home-icon{
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--beige);
+  border: 2px solid var(--gold-brown);
+  color: var(--gold-brown);
+  flex: 0 0 auto;
+}
+.home-card h3{
+  font-size: 18px;
+  margin: 0;
+}
+.home-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.home-list li{
+  position: relative;
+  padding-left: 16px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+.home-list li::before{
+  content:"";
+  position: absolute;
+  left: 0; top: 10px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold-brown);
+  box-shadow: 0 0 0 2px rgba(167,93,62,.18);
+}
+.muted{ color: var(--gray); }
+
+/* =========================
+   5) Final CTA
+   ========================= */
+.home-cta-final{
+  width: min(1100px, 100% - 48px);
+  margin: 8px auto 56px;
+  padding: 28px 20px;
+  border-radius: var(--radius);
+  text-align: center;
+  background: linear-gradient(180deg, #fff 0%, var(--beige) 100%);
+  border: 1px solid rgba(17,18,19,.06);
+  box-shadow: var(--shadow-sm);
+}
+.home-cta-final h3{
+  margin: 0 0 10px;
+  font-size: clamp(18px, 2.2vw, 24px);
+}
+.cta-actions{
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 992px){
+  .home-grid-4{ grid-template-columns: 1fr 1fr; }
+  .home-grid-3{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px){
+  .home-hero{ padding: 56px 0; }
+  .home-grid-4,
+  .home-grid-3{ grid-template-columns: 1fr; }
+}
+/* gap بسيط بين الـ hero وأول سكشن بعدها (الكاروسيل) */
+.home-hero + .home-carousel { margin-top: 16px; }
+
+/* احتياط: لو أول سكشن بعد الـ hero مش كاروسيل */
+.home-hero + .home-section { margin-top: 16px; }

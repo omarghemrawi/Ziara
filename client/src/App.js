@@ -10,6 +10,10 @@ import ProfilePage from "./pages/profile/ProfilePage";
  import ReviewsPage from "./pages/review/ReviewsPage";
  import ReportReview from "./pages/report/ReportReview";
  import Checkout from "./pages/plan/Checkout";
+ import About from "./pages/About"; 
+ import Contact from "./pages/Contact";
+ import Services from "./pages/Services";
+ import Home from "./pages/Home";
 import "./App.css";
 
 function App() {
@@ -19,7 +23,9 @@ function App() {
       <main className="main-content">
         <Routes>
           {/* Home carousel on "/" */}
-          <Route path="/" element={<Carousel />} />
+    
+         <Route path="/" element={<Home />} />                 {/* Home أول ما يفتح */}
+        <Route path="/home" element={<Navigate to="/" replace />} />
 
           {/* Signup page on "/signup" */}
           <Route path="/signup" element={<Signup />} />
@@ -34,10 +40,12 @@ function App() {
         <Route path="/reviews/:placeId" element={<ReviewsPage />} />
           {/* Signup page on "/login" */}
           <Route path="/login" element={<Login />} />
-          
+
           {/* Plan page on "/plan" */}
           <Route path="/plan" element={<Plan />} />
-
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
           {/* Redirect any unknown path back to home */}
           <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/report-review" element={<ReportReview />} />

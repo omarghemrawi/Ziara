@@ -6,10 +6,19 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const [lang, setLang] = useState("EN");
-  const { pathname, state } = useLocation(); // ← added `state`
-  const dispatch =useDispatch()
+  const { pathname } = useLocation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("userData"));
+
+  // اقرأ المستخدم دائمًا من نفس المفتاح
+  const user = (() => {
+    try {
+      const raw = localStorage.getItem("userData");
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
 
   const toggleLang = () => {
     const next = lang === "EN" ? "ع" : "EN";
@@ -19,23 +28,19 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-  // Clear Redux state
-  dispatch({ type: "CLEAR_USER" });
+    // نظّف ريدكس
+    dispatch({ type: "CLEAR_USER" });
 
-  // Clear localStorage
-  localStorage.removeItem("user");
+    // امسح نفس المفتاح يلي عم نقرا منو
+    localStorage.removeItem("userData");
 
-  // Navigate back to home
-  navigate("/");
-};
-
-  // ───────── تحديد نوع الصفحة الحالية ─────────
-  const isReviewPage = pathname.startsWith("/reviews");
+    // ارجع عالصفحة الرئيسية
+    navigate("/");
+  };
 
   return (
     <nav className="navbar">
       <div className="container">
-
         {/* — Logo + Site Name */}
         <div className="navbar__logo">
           <img
@@ -49,25 +54,23 @@ export default function Navbar() {
         {/* — Navigation Links */}
         <ul className="navbar__links">
           <li><Link to="/">Home</Link></li>
-          <li><Link to="/#about">About</Link></li>
-          <li><Link to="/#services">Services</Link></li>
-          <li><Link to="/#contact">Contact</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/services">Services</Link></li>
+          <li><Link to="/contact">Contact</Link></li>
         </ul>
 
         {/* — Actions: Profile / Logout / Auth / Language */}
         <div className="navbar__actions">
           {user ? (
-            // فقط في صفحة البروفايل: عرض زر تسجيل الخروج
-            <><button className="btn logout" onClick={handleLogout}>
-              Logout
-            </button>
-               <Link to="/profile" className="btn-profile">
-      Profile
-    </Link>
+            // إذا مسجّل دخول: دايمًا بيظهر Profile + Logout بكل الصفحات
+            <>
+              <Link to="/profile" className="btn-profile">Profile</Link>
+              <button className="btn logout" onClick={handleLogout}>
+                Logout
+              </button>
             </>
-            
-          ) :(
-            // باقي الصفحات: عرض Login + Sign Up
+          ) : (
+            // إذا مش مسجّل: Login + Sign Up
             <>
               <Link to="/login" className="btn login">Login</Link>
               <Link to="/signup" className="btn signup">Sign Up</Link>

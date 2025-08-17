@@ -1,0 +1,253 @@
+/* =========================
+   Services.css — unified with About.css
+   ========================= */
+
+:root{
+  --gold-brown:#A75D3E;
+  --gold:#FAC75C;
+  --gold-deep:#E9B245;
+  --beige:#EFE2D5;
+  --black:#111213;
+  --gray:#565b6b;
+  --white:#ffffff;
+
+  --radius:16px;
+  --shadow-sm: 0 4px 14px rgba(17,18,19,.06);
+  --shadow-md: 0 10px 24px rgba(17,18,19,.10);
+}
+
+/* Page bg */
+.services-page{
+  background: linear-gradient(180deg, var(--beige) 0%, var(--white) 100%);
+  color: var(--black);
+}
+
+/* Only constrain regular content sections (NOT the hero) */
+.svc-section{
+  width: min(1100px, 100% - 48px);
+  margin-inline: auto;
+  padding: 56px 0 28px;
+}
+
+/* =========================
+   HERO — full-bleed like About
+   ========================= */
+.svc-hero{
+  /* full width bar */
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+  border-bottom: 4px solid var(--gold-brown);
+  padding: 72px 0;
+  box-shadow: var(--shadow-sm);
+  /* remove card look */
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  text-align: left;
+}
+/* constrain hero text without extra markup */
+.svc-hero .kicker,
+.svc-hero h1,
+.svc-hero p{
+  display: block;
+  width: min(1100px, 100% - 48px);
+  margin-inline: auto;
+}
+.svc-hero .kicker{
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 800;
+  font-size: 12px;
+  opacity: .95;
+  margin: 0 0 8px;
+}
+.svc-hero h1{
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+.svc-hero p{
+  margin: 0;
+  font-size: clamp(15px, 1.8vw, 18px);
+  color: #1b1c20;
+}
+
+/* =========================
+   Section titles — same as About
+   ========================= */
+.svc-title{
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 800;
+  margin: 0 0 24px;
+}
+.svc-title::after{
+  content:"";
+  width: 64px; height: 6px;
+  border-radius: 999px;
+  background: var(--gold-brown);
+}
+
+/* =========================
+   Business cards (4)
+   ========================= */
+.svc-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  margin-bottom: 8px;
+}
+.svc-card{
+  background: var(--white);
+  border: 1px solid rgba(17,18,19,.06);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.svc-card:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.svc-card-head{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.svc-icon{
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--beige);
+  border: 2px solid var(--gold-brown);
+  color: var(--gold-brown);
+  flex: 0 0 auto;
+}
+.svc-card h3{
+  font-size: 18px;
+  margin: 0;
+}
+.svc-list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.svc-list li{
+  position: relative;
+  padding-left: 16px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+.svc-list li::before{
+  content:"";
+  position: absolute;
+  left: 0; top: 10px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold-brown);
+  box-shadow: 0 0 0 2px rgba(167,93,62,.18);
+}
+/* shared hero */
+.page-hero{
+  background: linear-gradient(180deg, #FAC75C 0%, #E9B245 100%);
+  border-bottom: 4px solid #A75D3E;
+  padding: 72px 0;
+  box-shadow: 0 4px 14px rgba(17,18,19,.06);
+}
+.page-hero .kicker, .page-hero h1, .page-hero p{
+  width: min(1100px, 100% - 48px);
+  margin-inline: auto;
+}
+
+/* =========================
+   Plans (match spacing/feel)
+   ========================= */
+.plans-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.plan-card{
+  position: relative;
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  border: 1.5px solid rgba(17,18,19,.06);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.plan-card:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.plan-popular{
+  position: absolute;
+  top: 12px; right: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--gold-brown);
+  color: var(--white);
+}
+.price{
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.price .currency{ font-weight: 800; font-size: 14px; color: var(--gold-brown); }
+.price .amount{ font-weight: 900; font-size: clamp(28px, 4.2vw, 40px); line-height: 1; color: var(--black); }
+.price .unit{ font-size: 12px; color: var(--gray); }
+.plan-title{ font-size: 18px; margin: 2px 0 6px; }
+.plan-sub{ margin: 0 0 12px; color: var(--gray); }
+.plan-list{ gap: 8px; }
+.plan-card.v-standard{ border-color: rgba(233,178,69,.35); }
+.plan-card.v-plus{
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--white), var(--white)) padding-box,
+    linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%) border-box;
+}
+.plan-card.v-pro{
+  border: 2px solid var(--gold-brown);
+  box-shadow: 0 8px 24px rgba(167,93,62,.18);
+}
+
+/* =========================
+   CTA (unchanged)
+   ========================= */
+.svc-cta-final{
+  width: min(1100px, 100% - 48px);
+  margin: 8px auto 56px;
+  padding: 28px 20px;
+  border-radius: var(--radius);
+  text-align: center;
+  background: linear-gradient(180deg, #fff 0%, var(--beige) 100%);
+  border: 1px solid rgba(17,18,19,.06);
+  box-shadow: var(--shadow-sm);
+}
+.svc-cta-final h3{ margin: 0 0 6px; font-size: clamp(18px, 2.2vw, 24px); }
+.svc-cta-final .svc-sub{ margin: 0 0 14px; color: var(--gray); }
+.cta-actions{ display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.btn-pill{ padding: 10px 16px; border-radius: 999px; font-weight: 700; user-select: none; cursor: default; }
+.btn-pill--primary{ background: var(--gold-brown); color: var(--white); box-shadow: var(--shadow-sm); }
+.btn-pill--outline{ background: var(--white); color: var(--gold-brown); border: 2px solid var(--gold-brown); }
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 992px){
+  .svc-grid{ grid-template-columns: 1fr 1fr; }
+  .plans-grid{ grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px){
+  .svc-hero{ padding: 56px 0; }
+  .svc-grid{ grid-template-columns: 1fr; }
+  .plans-grid{ grid-template-columns: 1fr; }
+}

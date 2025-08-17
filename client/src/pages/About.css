@@ -1,0 +1,236 @@
+/* =========================
+   About.css — Ziara theme
+   Palette:
+   --gold-brown: #A75D3E;
+   --gold:       #FAC75C;
+   --gold-deep:  #E9B245;
+   --beige:      #EFE2D5;
+   --black:      #111213;
+   --gray:       #565b6b;
+   --white:      #ffffff;
+   ========================= */
+
+:root{
+  --gold-brown:#A75D3E;
+  --gold:#FAC75C;
+  --gold-deep:#E9B245;
+  --beige:#EFE2D5;
+  --black:#111213;
+  --gray:#565b6b;
+  --white:#ffffff;
+
+  --radius:16px;
+  --shadow-sm: 0 4px 14px rgba(17,18,19,0.06);
+  --shadow-md: 0 10px 24px rgba(17,18,19,0.10);
+}
+
+/* Page wrapper */
+.about{
+  background: linear-gradient(180deg, var(--beige) 0%, var(--white) 100%);
+  color: var(--black);
+  padding-bottom: 64px;
+}
+
+/* Container */
+.about-container{
+  width: min(1100px, 100% - 48px);
+  margin-inline: auto;
+}
+
+/* =========================
+   Hero
+   ========================= */
+.about-hero{
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+  border-bottom: 4px solid var(--gold-brown);
+  color: var(--black);
+  padding: 72px 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.about-hero .eyebrow{
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-weight: 700;
+  font-size: 12px;
+  opacity: .9;
+  margin: 0 0 8px;
+}
+
+.about-hero h1{
+  font-size: clamp(28px, 3.5vw, 44px);
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+
+.about-hero .lead{
+  font-size: clamp(15px, 1.8vw, 18px);
+  line-height: 1.6;
+  max-width: 840px;
+  margin: 0;
+  color: #1b1c20;
+}
+
+/* =========================
+   Sections
+   ========================= */
+.about-section{
+  padding: 56px 0;
+}
+
+.section-title{
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 800;
+  color: var(--black);
+  margin: 0 0 24px;
+}
+
+.section-title .section-bar{
+  display: inline-block;
+  width: 64px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--gold-brown);
+}
+
+/* =========================
+   “What is Ziara?” steps
+   ========================= */
+.steps{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.step{
+  background: var(--white);
+  border: 1px solid rgba(17,18,19,0.06);
+  border-radius: var(--radius);
+  padding: 20px 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.step:hover{
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.step-icon{
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--beige);
+  border: 2px solid var(--gold-brown);
+  color: var(--gold-brown);
+  margin-bottom: 12px;
+}
+.step-icon svg{
+  width: 28px;
+  height: 28px;
+}
+
+.step h3{
+  font-size: 18px;
+  margin: 0 0 8px;
+  color: var(--black);
+}
+.step p{
+  margin: 0;
+  color: var(--gray);
+  line-height: 1.6;
+}
+
+/* =========================
+   Web × Mobile bullets
+   ========================= */
+.bullets{
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: grid;
+  gap: 12px;
+  max-width: 900px;
+}
+.bullets li{
+  display: flex;
+  align-items: start;
+  gap: 10px;
+  color: var(--black);
+  line-height: 1.6;
+}
+.bullets .dot{
+  width: 10px;
+  height: 10px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-deep) 100%);
+  box-shadow: 0 0 0 3px rgba(233,178,69,0.25);
+  flex: 0 0 auto;
+}
+
+/* =========================
+   Two-column cards
+   ========================= */
+.grid-2{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.card{
+  background: var(--white);
+  border: 1px solid rgba(17,18,19,0.06);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+.card h3{
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+.list{
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.list li{
+  position: relative;
+  padding-left: 16px;
+  color: var(--gray);
+  line-height: 1.6;
+}
+.list li::before{
+  content: "";
+  position: absolute;
+  left: 0; top: 10px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold-brown);
+  box-shadow: 0 0 0 2px rgba(167,93,62,0.18);
+}
+
+.muted{
+  color: var(--gray);
+  margin: 0;
+}
+
+/* =========================
+   Responsive
+   ========================= */
+@media (max-width: 992px){
+  .steps{ grid-template-columns: 1fr 1fr; }
+  .grid-2{ grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px){
+  .about-hero{ padding: 56px 0; }
+  .steps{ grid-template-columns: 1fr; }
+  .section-title{ gap: 12px; }
+}
