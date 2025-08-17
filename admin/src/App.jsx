@@ -11,6 +11,7 @@ import ClientPage from "./pages/client/ClientPage";
 import { ToastContainer} from 'react-toastify';
 import ReportPage from "./pages/report/Report"; 
 import ProtectedRoute from "./utils/ProtectedRoute.jsx";
+import Review from "./pages/review/Review.jsx";
 import "./pages/report/report.css";
 
 
@@ -68,6 +69,14 @@ function App() {
       element={
         <ProtectedRoute>
           <ReportPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/review"
+      element={
+        <ProtectedRoute>
+          <Review />
         </ProtectedRoute>
       }
     />

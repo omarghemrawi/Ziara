@@ -22,6 +22,7 @@ const AddStaticPlace = () => {
   const API_URL = "http://localhost:5000/api/static";
   const token = localStorage.getItem("adminToken")
 
+
   const handleImageUpload = async (file) => {
     try {
       const uploadedUrl = await uploadImageToCloudinary(file);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { uploadImageToCloudinary } from "../../utils/cloudinaryUpload";
 import { toast } from "react-toastify";
+import "./EditStaticPage.css";
 import axios from "axios";
 
 const EditStaticPage = () => {
@@ -37,7 +38,8 @@ const EditStaticPage = () => {
     const fetchPlace = async () => {
       try {
         setInitialLoading(true);
-        const res = await axios.get(`${API_URL}/${id}`);
+        const res = await axios.get(`${API_URL}/${id}`, {
+  headers: { Authorization: `Bearer ${token}` }});
         const data = res.data;
 
         if (data.success) {
@@ -152,49 +154,103 @@ const EditStaticPage = () => {
       {error && <div className="error-message">{error}</div>}
 
       <form className="add-static-place-form" onSubmit={handleSubmit}>
-        <input type="text" placeholder="Place Name *" value={form.name} onChange={handleChange("name")} required />
+  <p className="input-helper">Enter the official name of the place.</p>
+  <input
+    type="text"
+    placeholder="Place Name *"
+    value={form.name}
+    onChange={handleChange("name")}
+    required
+  />
 
-        <select value={form.type} onChange={handleChange("type")} required>
-          <option value="religious">Religious</option>
-          <option value="touristic">Touristic</option>
-        </select>
+  <p className="input-helper">Choose the type of place.</p>
+  <select value={form.type} onChange={handleChange("type")} required>
+    <option value="religious">Religious</option>
+    <option value="touristic">Touristic</option>
+  </select>
 
-        <input type="text" placeholder="City *" value={form.city} onChange={handleChange("city")} required />
-        <input type="text" placeholder="Location *" value={form.location} onChange={handleChange("location")} required />
+  <p className="input-helper">Enter the city where the place is located.</p>
+  <input
+    type="text"
+    placeholder="City *"
+    value={form.city}
+    onChange={handleChange("city")}
+    required
+  />
 
-        <textarea placeholder="Description *" value={form.description} onChange={handleChange("description")} required />
+  <p className="input-helper">Enter the detailed location or address.</p>
+  <input
+    type="text"
+    placeholder="Location *"
+    value={form.location}
+    onChange={handleChange("location")}
+    required
+  />
 
-        <label>Profile Image *</label>
-        {form.profile && <img src={form.profile} alt="Profile" className="profile-preview" />}
-        <input type="file" accept="image/*" onChange={handleProfileImageChange} required={!form.profile} />
+  <p className="input-helper">Provide a short description of the place.</p>
+  <textarea
+    placeholder="Description *"
+    value={form.description}
+    onChange={handleChange("description")}
+    required
+  />
 
-        <input type="number" placeholder="Rating (0-5)" value={form.rate} onChange={handleChange("rate")} min="0" max="5" step="0.1" />
+  <p className="input-helper">Upload a main image representing the place.</p>
+  {form.profile && <img src={form.profile} alt="Profile" className="profile-preview" />}
+  <input type="file" accept="image/*" onChange={handleProfileImageChange} required={!form.profile} />
 
-        <label>Reference Images (max 15)</label>
-        <div className="reference-images-container">
-          {form.referenceImages.map((img, i) => (
-            <div key={i} className="reference-image-wrapper">
-              <img src={img} alt={`ref-${i}`} className="reference-image" />
-              <button type="button" onClick={() => handleReferenceImageDelete(i)} className="delete-btn" aria-label="Delete reference image">
-                ×
-              </button>
-            </div>
-          ))}
+  <p className="input-helper">Enter the average rating (0–5) for the place.</p>
+  <input
+    type="number"
+    placeholder="Rating (0-5)"
+    value={form.rate}
+    onChange={handleChange("rate")}
+    min="0"
+    max="5"
+    step="0.1"
+  />
 
-          {form.referenceImages.length < 15 && (
-            <input type="file" accept="image/*" onChange={handleReferenceImageAdd} className="reference-image-input" title="Add Reference Image" />
-          )}
-        </div>
+  <p className="input-helper">Upload additional images (up to 15) to show details.</p>
+  <div className="reference-images-container">
+    {form.referenceImages.map((img, i) => (
+      <div key={i} className="reference-image-wrapper">
+        <img src={img} alt={`ref-${i}`} className="reference-image" />
+        <button
+          type="button"
+          onClick={() => handleReferenceImageDelete(i)}
+          className="delete-btn"
+          aria-label="Delete reference image"
+        >
+          ×
+        </button>
+      </div>
+    ))}
+    {form.referenceImages.length < 15 && (
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleReferenceImageAdd}
+        className="reference-image-input"
+        title="Add Reference Image"
+      />
+    )}
+  </div>
 
-        <div className="form-actions">
-          <button type="button" onClick={() => navigate("/staticPlace", { replace: true })} className="cancel-btn">
-            Cancel
-          </button>
-          <button type="submit" disabled={loading}>
-            {loading ? "Updating..." : "Update Place"}
-          </button>
-        </div>
-      </form>
+  <div className="form-actions">
+    <button
+      type="button"
+      onClick={() => navigate("/staticPlace", { replace: true })}
+      className="cancel-btn"
+    >
+      Cancel
+    </button>
+    <button type="submit" disabled={loading}>
+      {loading ? "Updating..." : "Update Place"}
+    </button>
+  </div>
+</form>
+
+
     </div>
   );
 };

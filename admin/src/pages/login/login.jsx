@@ -21,7 +21,7 @@ const Login = () => {
 
     // Save the token in localStorage
     localStorage.setItem("adminToken", data.token);
-    navigate("/dashboard");
+    navigate("/dashboard" , {replace:true});
   } catch (err) {
     if (err.response && err.response.data && err.response.data.message) {
       setError(err.response.data.message); 
@@ -74,7 +74,7 @@ const Login = () => {
           textAlign: "center",
         }}
       >
-        <strong>Admin:</strong> omar@admin.com / omaradmin
+        <strong>Admin:</strong> ziara961libanon@gmail.com / ziaralebanon
       </div>
     </div>
   );

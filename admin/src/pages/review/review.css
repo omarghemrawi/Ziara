@@ -1,0 +1,265 @@
+.review-page {
+  padding: 20px;
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+.review-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #22223b;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.review-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  width: 250px;
+  max-width: 100%;
+}
+
+.review-table {
+  background: white;
+  border-radius: 12px;
+  overflow-x: auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.review-table table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* Ensures table doesn't get too cramped */
+}
+
+.review-table th,
+.review-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: left;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
+.review-table th {
+  background: #f3f4f6;
+  font-weight: 600;
+  color: #374151;
+  position: sticky;
+  top: 0;
+}
+
+/* Make comment column flexible */
+.review-table td:nth-child(4) {
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 200px;
+}
+
+.review-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+.btn-delete {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: linear-gradient(90deg, #ef4444 60%, #f87171 100%);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.btn-delete:hover {
+  background: linear-gradient(90deg, #dc2626 60%, #ef4444 100%);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Desktop/Tablet: Show table, hide cards */
+.review-cards {
+  display: none;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .review-page {
+    padding: 15px;
+  }
+  
+  .review-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+  
+  .review-toolbar {
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  /* Hide table and show card layout on mobile */
+  .review-table table {
+    display: none;
+  }
+  
+  .review-table {
+    background: transparent;
+    box-shadow: none;
+  }
+  
+  /* Show mobile cards, hide on desktop */
+  .review-cards {
+    display: block;
+  }
+  
+  .review-card {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .review-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .review-card-user {
+    font-weight: 600;
+    color: #374151;
+  }
+  
+  .review-card-rating {
+    font-size: 0.875rem;
+    color: #f59e0b;
+  }
+  
+  .review-card-content {
+    margin-bottom: 12px;
+  }
+  
+  .review-card-place {
+    font-weight: 500;
+    color: #22223b;
+    margin-bottom: 8px;
+  }
+  
+  .review-card-comment {
+    color: #6b7280;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  
+  .review-card-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .review-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  .btn-delete {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .review-page {
+    padding: 18px;
+  }
+  
+  .search-input {
+    width: 200px;
+  }
+  
+  .review-table th,
+  .review-table td {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .review-img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .btn-delete {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1025px) {
+  .review-page {
+    padding: 25px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .review-title {
+    font-size: 2rem;
+  }
+  
+  .search-input {
+    width: 300px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .review-page {
+    padding: 10px;
+  }
+  
+  .review-title {
+    font-size: 1.3rem;
+  }
+  
+  .search-input {
+    width: 100%;
+    margin: 0;
+  }
+  
+  .review-card {
+    padding: 12px;
+  }
+  
+  .btn-delete {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    min-width: auto;
+  }
+}
