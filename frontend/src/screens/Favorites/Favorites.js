@@ -31,13 +31,10 @@ export default function Favourites() {
   const getToken = async () => setToken(await AsyncStorage.getItem('token'));
 
   const getFavoritePLaces = () => {
-    if (!user || !user.favoritePlaces) {
-      setFavoritePlaces([]);
-      return;
-    }
+ 
 
     setFavoritePlaces(
-      places.filter(place => user.favoritePlaces.includes(place._id)),
+      places.filter(place => user?.favoritePlaces.includes(place._id)),
     );
   };
 
@@ -98,14 +95,14 @@ export default function Favourites() {
     getToken();
   }, []);
   useEffect(() => {
-    if (user && user.favoritePlaces) {
+    if (user && user?.favoritePlaces) {
       getFavoritePLaces();
         AsyncStorage.setItem('favorites', JSON.stringify(user.favoritePlaces));
     } else {
       setFavoritePlaces([]);
         AsyncStorage.removeItem('favorites');
     }
-  }, [user.favoritePlaces, places]);
+  }, [user?.favoritePlaces, places]);
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.background }]}
