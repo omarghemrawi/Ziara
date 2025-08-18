@@ -13,6 +13,10 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { useTheme } from '../Theme/Theme';
 import { useSelector, useDispatch } from 'react-redux';
 import i18n from '../locales/i18n';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { refreshUser } from '../../redux/actions/user.action';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function Visited() {
   const navigation = useNavigation();
@@ -24,19 +28,40 @@ export default function Visited() {
   const places = useSelector(state => state.places.all);
   const dispatch = useDispatch();
 
+  const handleDeleteVisited = async placeId => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      console.log(token);
+
+      const { data } = await axios.delete(
+        `http://10.0.2.2:5000/api/visited/${placeId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (data.success) {
+        // toast.success('✅ Place removed from visited');
+        dispatch(refreshUser(user._id));
+        getVisitedPlaces();
+      }
+    } catch (error) {
+      console.error('Failed to delete visited place:', error);
+    }
+  };
+
   const getVisitedPlaces = () => {
-      if (!user || !user.visitedPlaces) {
-    setVisitedPLaces([]);
-    return;
-  }
+    if (!user || !user.visitedPlaces) {
+      setVisitedPLaces([]);
+      return;
+    }
     setVisitedPLaces(
       places.filter(place => user.visitedPlaces.includes(place._id)),
     );
   };
 
-  // useEffect(() => {
-  //   getVisitedPlaces();
-  // }, [user.visitedPlaces]);
   useEffect(() => {
     if (user && user.visitedPlaces) {
       getVisitedPlaces();
@@ -50,9 +75,9 @@ export default function Visited() {
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
-             <TouchableOpacity onPress={() => navigation.goBack()}>
-                      <Entypo name="chevron-left" size={24} color="#fff" />
-                    </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Entypo name="chevron-left" size={24} color="#fff" />
+          </TouchableOpacity>
           <Text style={styles.title}>{i18n.t('visited')}</Text>
         </View>
 
@@ -77,10 +102,7 @@ export default function Visited() {
         </Text>
       ) : (
         visitedPlaces.map((place, index) => (
-          <View
-            key={index}
-            style={[styles.grid, {}]}
-          >
+          <View key={index} style={[styles.grid, {}]}>
             <Image style={styles.imageItem} source={{ uri: place.profile }} />
 
             <View style={styles.textContainer}>
@@ -90,6 +112,12 @@ export default function Visited() {
               <Text style={[styles.placeLocation, { color: theme.text }]}>
                 {place.city || 'Not Found'}
               </Text>
+              <TouchableOpacity
+                onPress={() => handleDeleteVisited(place._id)}
+                style={styles.deleteButton}
+              >
+                <MaterialIcons name="delete" size={20} color="black" />
+              </TouchableOpacity>
             </View>
           </View>
         ))
@@ -101,6 +129,11 @@ export default function Visited() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
   header: {
     height: 180,
@@ -121,7 +154,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'RobotoSlabBold',
-    marginRight:240,
+    marginRight: 240,
   },
   headerImage: {
     width: 90,

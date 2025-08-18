@@ -102,24 +102,18 @@ export const completeRegister = async (req, res) => {
       return res.status(400).json({ message: "City and phone are required" });
     }
 
-    const user = await ClientPlace.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const updatedUser = await ClientPlace.findByIdAndUpdate(
+      userId,
+      { city, phone },
+      { new: true, runValidators: true } 
+      ).select("-password"); 
 
-    user.city = city;
-    user.phone = phone;
-
-    const updatedUser = await user.save();
-
+    if (!updatedUser) return res.status(404).json({ message: "User not found" });
+    
     res.status(200).json({
       success: true,
       message: "Profile updated successfully",
-      user: {
-        id: updatedUser._id,
-        email: updatedUser.email,
-        name: updatedUser.name,
-        city: updatedUser.city,
-        phone: updatedUser.phone,
-      },
+      user: updatedUser
     });
   } catch (err) {
     console.error("Error completing registration:", err);

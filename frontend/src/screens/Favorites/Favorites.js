@@ -29,27 +29,23 @@ export default function Favourites() {
   const dispatch = useDispatch();
   const [isGuest, setIsGuest] = useState(false);
   const getToken = async () => setToken(await AsyncStorage.getItem('token'));
-  // const getFavoritePLaces = () => {
-  //   setFavoritePlaces(
-  //     places.filter(place => user.favoritePlaces.includes(place._id)),
-  //   );
-  // };
-  const getFavoritePLaces = () => {
-  if (!user || !user.favoritePlaces) {
-    setFavoritePlaces([]);
-    return;
-  }
 
-  setFavoritePlaces(
-    places.filter(place => user.favoritePlaces.includes(place._id)),
-  );
-};
+  const getFavoritePLaces = () => {
+    if (!user || !user.favoritePlaces) {
+      setFavoritePlaces([]);
+      return;
+    }
+
+    setFavoritePlaces(
+      places.filter(place => user.favoritePlaces.includes(place._id)),
+    );
+  };
 
   const handleDotsPress = id => {
     setIdSelectedPlace(id);
     setModalVisible(true);
   };
-    useEffect(() => {
+  useEffect(() => {
     const checkGuest = async () => {
       const guest = await AsyncStorage.getItem('guest');
       if (guest) {
@@ -59,49 +55,29 @@ export default function Favourites() {
     checkGuest();
   }, []);
 
-//   const handleMoveToVisited = async () => {
-//   try {
-//     await axios.post(
-//       'http://192.168.0.101:5000/api/visited',
-//       { place_id: idSelectedPlace },
-//       { headers: { Authorization: `Bearer ${token}` } }
-//     );
-    
+  const handleMoveToVisited = async () => {
+    try {
+      await axios.post(
+        'http://10.0.2.2:5000/api/visited',
+        { place_id: idSelectedPlace },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
 
-//     // Refresh Redux store
-//     await dispatch(refreshUser(user._id));
+      // Refresh Redux store
+      dispatch(refreshUser(user._id));
 
-//     // Refresh local state
-//     getFavoritePLaces();
-
-//     setModalVisible(false);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-const handleMoveToVisited = async () => {
-  try {
-    await axios.post(
-      'http://192.168.0.101:5000/api/visited',
-      { place_id: idSelectedPlace },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-
-    // Refresh Redux store
-    dispatch(refreshUser(user._id));
-
-    // close modal
-    setModalVisible(false);
-  } catch (error) {
-    console.log(error.response?.data || error.message);
-  }
-};
+      // close modal
+      setModalVisible(false);
+    } catch (error) {
+      console.log(error.response?.data || error.message);
+    }
+  };
 
   //************************************************** */
 
   const handleDelete = async () => {
     try {
-      await axios.delete('http://192.168.0.101:5000/api/favorite', {
+      await axios.delete('http://10.0.2.2:5000/api/favorite', {
         data: { placeId: idSelectedPlace },
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -121,13 +97,13 @@ const handleMoveToVisited = async () => {
   useEffect(() => {
     getToken();
   }, []);
-useEffect(() => {
-  if (user && user.favoritePlaces) {
-    getFavoritePLaces();
-  } else {
-    setFavoritePlaces([]);
-  }
-}, [user.favoritePlaces,places]);
+  useEffect(() => {
+    if (user && user.favoritePlaces) {
+      getFavoritePLaces();
+    } else {
+      setFavoritePlaces([]);
+    }
+  }, [user.favoritePlaces, places]);
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.background }]}

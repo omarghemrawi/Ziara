@@ -40,10 +40,57 @@ if (!isInFavorites) {
     return res.status(200).json({
       success: true,
       message: "Place moved to visited successfully",
-      user, // send back updated user
+      userId: user._id, // send back updated user
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const deleteFromVisited = async (req, res) => {
+  const userId = req.userId;
+  const { placeId } = req.params;
+
+  if (!placeId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Place ID is required" });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    // Check if place exists in visited
+    // const isInVisited = user.visitedPlaces.includes(placeId);
+    // if (!isInVisited) {
+    //   return res.status(404).json({
+    //     success: false,
+    //     message: "Place not found in visited",
+    //   });
+    // }
+
+    // Remove from visited
+    user.visitedPlaces = user.visitedPlaces.filter(
+      (id) => String(id) !== String(placeId)
+    );
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Place deleted from visited successfully",
+      userId : user._id, // return updated user
+    });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Server error" });
   }
 };
