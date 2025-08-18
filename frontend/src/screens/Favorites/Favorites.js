@@ -59,24 +59,44 @@ export default function Favourites() {
     checkGuest();
   }, []);
 
-  const handleMoveToVisited = async () => {
-    try {
-      const res = await axios.post(
-        'http://192.168.0.101:5000/api/visited',
-        {
-          place_id: idSelectedPlace,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      dispatch(refreshUser(user._id));
-      getFavoritePLaces();
-      setModalVisible(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+//   const handleMoveToVisited = async () => {
+//   try {
+//     await axios.post(
+//       'http://192.168.0.101:5000/api/visited',
+//       { place_id: idSelectedPlace },
+//       { headers: { Authorization: `Bearer ${token}` } }
+//     );
+    
+
+//     // Refresh Redux store
+//     await dispatch(refreshUser(user._id));
+
+//     // Refresh local state
+//     getFavoritePLaces();
+
+//     setModalVisible(false);
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+const handleMoveToVisited = async () => {
+  try {
+    await axios.post(
+      'http://192.168.0.101:5000/api/visited',
+      { place_id: idSelectedPlace },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // Refresh Redux store
+    dispatch(refreshUser(user._id));
+
+    // close modal
+    setModalVisible(false);
+  } catch (error) {
+    console.log(error.response?.data || error.message);
+  }
+};
+
   //************************************************** */
 
   const handleDelete = async () => {
@@ -98,16 +118,16 @@ export default function Favourites() {
   // useEffect(() => {
   //   getFavoritePLaces();
   // }, [user.favoritePlaces]);
-  // useEffect(() => {
-  //   getToken();
-  // }, []);
+  useEffect(() => {
+    getToken();
+  }, []);
 useEffect(() => {
   if (user && user.favoritePlaces) {
     getFavoritePLaces();
   } else {
     setFavoritePlaces([]);
   }
-}, [user]);
+}, [user.favoritePlaces,places]);
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.background }]}

@@ -9,6 +9,7 @@ import {
   Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Entypo from 'react-native-vector-icons/Entypo';
 import { useTheme } from '../Theme/Theme';
 import { useSelector, useDispatch } from 'react-redux';
 import i18n from '../locales/i18n';
@@ -42,13 +43,16 @@ export default function Visited() {
     } else {
       setVisitedPLaces([]);
     }
-  }, [user]);
+  }, [user.visitedPlaces]);
 
   return (
     <ScrollView style={styles.container}>
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.headerTopRow}>
+             <TouchableOpacity onPress={() => navigation.goBack()}>
+                      <Entypo name="chevron-left" size={24} color="#fff" />
+                    </TouchableOpacity>
           <Text style={styles.title}>{i18n.t('visited')}</Text>
         </View>
 
@@ -75,7 +79,7 @@ export default function Visited() {
         visitedPlaces.map((place, index) => (
           <View
             key={index}
-            style={[styles.grid, { backgroundColor: theme.background }]}
+            style={[styles.grid, {}]}
           >
             <Image style={styles.imageItem} source={{ uri: place.profile }} />
 
@@ -117,6 +121,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     fontFamily: 'RobotoSlabBold',
+    marginRight:240,
   },
   headerImage: {
     width: 90,
