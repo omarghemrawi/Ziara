@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -24,7 +24,7 @@ import Toast from 'react-native-toast-message';
 export default function EditProfileScreen({ navigation }) {
   const dispatch = useDispatch();
   const navigate = useNavigation();
-   const [isGuest, setIsGuest] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
 
   const user = useSelector(state => state.user.user);
 
@@ -33,10 +33,10 @@ export default function EditProfileScreen({ navigation }) {
   const [name, setName] = useState(user?.username || '');
   const [about, setAbout] = useState(user?.about || '');
   const [profileImage, setProfileImage] = useState(null);
-  
+
   const handleEdit = async () => {
     const token = await AsyncStorage.getItem('token');
-  
+
     if (!name && !user.username) {
       Toast.show({
         type: 'error',
@@ -55,7 +55,7 @@ export default function EditProfileScreen({ navigation }) {
         imageUrl = user.profile;
       }
       await axios.put(
-        'http://192.168.0.101:5000/api/user',
+        'http://10.0.2.2:5000/api/user',
         {
           profile: imageUrl,
           userId: user._id,

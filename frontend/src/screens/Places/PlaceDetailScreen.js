@@ -64,7 +64,6 @@ export default function PlaceDetailScreen() {
     const newValue = !isFavourite;
     setIsFavourite(newValue);
     try {
-      console.log(id, user._id);
       if (newValue) {
         await axios.post(
           'http://10.0.2.2:5000/api/favorite/',

@@ -92,6 +92,7 @@ android {
         // Added By Omar
         buildConfigField "String", "UPLOAD_PRESET", "\"${project.env.get("UPLOAD_PRESET") ?: ""}\""
         buildConfigField "String", "CLOUD_NAME", "\"${project.env.get("CLOUD_NAME") ?: ""}\""
+        buildConfigField "String", "API_KEY_GOOGLE_PLACES", "\"${project.env.get("API_KEY_GOOGLE_PLACES") ?: ""}\""
     }
     signingConfigs {
         debug {
