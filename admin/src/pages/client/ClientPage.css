@@ -160,6 +160,16 @@
   box-shadow: 0 0 0 2px #6366f133;
 }
 
+
+.delete-button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+  background: linear-gradient(90deg, #414141 60%, #6f6f6f 100%);
+  color: white;
+}
 .deactivate-button {
   padding: 8px 18px;
   border-radius: 8px;

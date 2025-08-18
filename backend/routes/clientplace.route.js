@@ -8,7 +8,8 @@ import {
   logIn,
   deactivePayment,
   completeRegister,
-  getAllPlacesToAdmin
+  getAllPlacesToAdmin,
+  deleteClient
 } from "../controllers/clientPlace.controller.js";
 import { verifyTokenAndRole } from "../middleware/auth.js";
 import ClientPlace from "../models/clientPlace.model.js";
@@ -18,6 +19,7 @@ import upload from "../middleware/multer.js";
 const clientRouter = express.Router();
 
 // Get all places
+clientRouter.delete("/:id",verifyTokenAndRole(['admin']) , deleteClient);
 clientRouter.get("/", getAllPlaces);
 clientRouter.get("/place/:place_id", getPlace);
 clientRouter.get("/to-admin",verifyTokenAndRole(['admin']), getAllPlacesToAdmin);

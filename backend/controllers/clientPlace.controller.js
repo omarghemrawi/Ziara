@@ -88,6 +88,30 @@ export const logIn = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };  
+export const deleteClient = async (req, res) => {
+  try {
+    const {id} = req.params
+
+    if (!id) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const deletedUser = await ClientPlace.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Client deleted successfully",
+    });
+  } catch (err) {
+    console.error("Error deleting client:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 export const completeRegister = async (req, res) => {
   try {
     const userId = req.userId;
