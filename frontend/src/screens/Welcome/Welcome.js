@@ -9,6 +9,9 @@ export default function Home({ navigation }) {
   const joinAsGuest = async () => {
     try {
       await AsyncStorage.setItem('guest', 'true'); 
+       await AsyncStorage.removeItem('user');
+  await AsyncStorage.removeItem('favorites');
+  await AsyncStorage.removeItem('visited');
       navigation.replace('Home'); 
     } catch (error) {
       console.error('Error setting guest mode:', error);

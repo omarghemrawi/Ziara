@@ -12,19 +12,27 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
 import i18n from '../locales/i18n';
+import { useDispatch, useSelector, } from 'react-redux';
 import { useLanguage } from '../locales/LanguageContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {clearUser} from '../../redux/actions/user.action';
 
 
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
   const { isLightMode, toggleTheme, theme } = useTheme();
+  const dispatch = useDispatch();
   const handleLogout = async () => {
   try {
-    // Clear stored token or user info
-    await AsyncStorage.removeItem('token');
-    await AsyncStorage.removeItem('user'); 
+     await AsyncStorage.multiRemove([
+      'token',
+      'user',
+      'guest',
+      'favorites',
+      'visited'
+    ]);
+      dispatch(clearUser());
    
     navigation.replace('Welcome');
   } catch (error) {
