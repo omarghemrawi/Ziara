@@ -26,9 +26,9 @@ export default function NearbyScreen() {
   const fetchData = async () => {
     try {
       const [resRestaurants, resTouristic, resReligious] = await Promise.all([
-        axios.get('http://10.0.2.2:5000/api/nearby/restaurant'),
-        axios.get('http://10.0.2.2:5000/api/nearby/touristic'),
-        axios.get('http://10.0.2.2:5000/api/nearby/religious'),
+        axios.get('http://192.168.0.101:5000/api/nearby/restaurant'),
+        axios.get('http://192.168.0.101:5000/api/nearby/touristic'),
+        axios.get('http://192.168.0.101:5000/api/nearby/religious'),
       ]);
 
       setRestaurants(resRestaurants.data.restaurants || []);

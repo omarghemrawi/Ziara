@@ -13,7 +13,7 @@ export default function ForgotPassword({ navigation }) {
   const requestResetCode = async () => {
     try {
       const res = await axios.post(
-        'http://10.0.2.2:5000/api/user/forgot-password',
+        'http://192.168.0.101:5000/api/user/forgot-password',
         { email },
       );
       Alert.alert('Success', res.data.message);
@@ -32,7 +32,7 @@ export default function ForgotPassword({ navigation }) {
     }
     try {
       const res = await axios.post(
-        'http://10.0.2.2:5000/api/user/reset-password',
+        'http://192.168.0.101:5000/api/user/reset-password',
         {
           email,
           code,

@@ -55,7 +55,7 @@ export const getNearbyRestaurants = async (req, res) => {
       .json({ error: "Latitude and longitude are required" });
   }
 
-  const radius = 1500;
+  const radius = 100;
   const type = "restaurant";
 
   try {

@@ -40,7 +40,7 @@ export default function VerifyEmail({ route, navigation }) {
 
     try {
       const resp = await axios.post(
-        'http://192.168.0.101:5000/api/user/verify-email',
+        'http://10.0.2.2:5000/api/user/verify-email',
         {
           email,
           code: verificationCode,
@@ -62,7 +62,7 @@ export default function VerifyEmail({ route, navigation }) {
   const handleResend = async () => {
     try {
       const resp = await axios.post(
-        'http://192.168.0.101:5000/api/user/resend-code',
+        'http://10.0.2.2:5000/api/user/resend-code',
         { email },
       );
       alert(resp.data.message);
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
-  
   },
   title: {
     fontSize: 28,
@@ -130,7 +129,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '80%',
-    marginRight:30,
+    marginRight: 30,
   },
   codeInput: {
     borderWidth: 1,

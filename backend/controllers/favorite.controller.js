@@ -1,7 +1,6 @@
 import User from "../models/user.model.js";
 
 // ???Done
-
 export const addToFav = async (req, res) => {
   try {
     const { placeId} = req.body;
