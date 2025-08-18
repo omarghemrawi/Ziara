@@ -10,6 +10,8 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // فعّالة إذا كان الرابط هو الصفحة الحالية (مع دعم المسارات المتشعّبة)
+  const isActive = (p) => (p === "/" ? pathname === "/" : pathname.startsWith(p));
   // اقرأ المستخدم دائمًا من نفس المفتاح
   const user = (() => {
     try {
@@ -53,10 +55,34 @@ export default function Navbar() {
 
         {/* — Navigation Links */}
         <ul className="navbar__links">
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/about">About</Link></li>
-          <li><Link to="/services">Services</Link></li>
-          <li><Link to="/contact">Contact</Link></li>
+          <li>
+            <Link
+              to="/"
+              className={isActive("/") ? "active" : undefined}
+              aria-current={isActive("/") ? "page" : undefined}
+            >Home</Link>
+          </li>
+          <li>
+            <Link
+              to="/about"
+              className={isActive("/about") ? "active" : undefined}
+              aria-current={isActive("/about") ? "page" : undefined}
+            >About</Link>
+          </li>
+          <li>
+            <Link
+              to="/services"
+              className={isActive("/services") ? "active" : undefined}
+              aria-current={isActive("/services") ? "page" : undefined}
+            >Services</Link>
+          </li>
+          <li>
+            <Link
+              to="/contact"
+              className={isActive("/contact") ? "active" : undefined}
+              aria-current={isActive("/contact") ? "page" : undefined}
+            >Contact</Link>
+          </li>
         </ul>
 
         {/* — Actions: Profile / Logout / Auth / Language */}

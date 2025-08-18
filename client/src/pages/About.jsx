@@ -75,7 +75,6 @@ export default function About() {
             <li><span className="dot" /> Updates on the website appear instantly in the app.</li>
             <li><span className="dot" /> App reviews/photos show on the website; owners can reply.</li>
             <li><span className="dot" /> Plans chosen on the website influence ranking and limits in the app.</li>
-            <li><span className="dot" /> A unified backend keeps everything perfectly in sync.</li>
           </ul>
         </div>
       </section>

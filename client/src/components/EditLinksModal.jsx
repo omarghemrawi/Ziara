@@ -42,6 +42,23 @@ export default function EditLinksModal({
           onChange={(e) => handleChange("location", e.target.value)}
           placeholder="Enter your location"
         />
+        {/* ... باقي الحقول ... */}
+
+{"menu" in links && ( // NEW: يظهر فقط إذا موجود المفتاح
+  <div className="form-row">
+    <label htmlFor="menu">Menu (URL)</label>
+    <input
+      id="menu"
+      type="url"
+      placeholder="https://your-restaurant.com/menu"
+      value={links.menu}
+      onChange={(e) =>
+        setLinks((prev) => ({ ...prev, menu: e.target.value }))
+      }
+    />
+  </div>
+)}
+
 
         <div className="modal-actions align-right">
           <button onClick={onSave} className="btn save-btn">Save</button>
