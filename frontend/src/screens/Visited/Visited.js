@@ -24,14 +24,25 @@ export default function Visited() {
   const dispatch = useDispatch();
 
   const getVisitedPlaces = () => {
+      if (!user || !user.visitedPlaces) {
+    setVisitedPLaces([]);
+    return;
+  }
     setVisitedPLaces(
       places.filter(place => user.visitedPlaces.includes(place._id)),
     );
   };
 
+  // useEffect(() => {
+  //   getVisitedPlaces();
+  // }, [user.visitedPlaces]);
   useEffect(() => {
-    getVisitedPlaces();
-  }, [user.visitedPlaces]);
+    if (user && user.visitedPlaces) {
+      getVisitedPlaces();
+    } else {
+      setVisitedPLaces([]);
+    }
+  }, [user]);
 
   return (
     <ScrollView style={styles.container}>

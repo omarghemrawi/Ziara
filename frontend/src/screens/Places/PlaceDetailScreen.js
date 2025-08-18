@@ -102,14 +102,14 @@ export default function PlaceDetailScreen() {
       console.log(id, user._id);
       if (newValue) {
         await axios.post(
-          'http://10.0.2.2:5000/api/favorite/',
+          'http://192.168.0.101:5000/api/favorite/',
           { placeId: id },
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
       } else {
-        await axios.delete('http://10.0.2.2:5000/api/favorite', {
+        await axios.delete('http://192.168.0.101:5000/api/favorite', {
           data: { placeId: id },
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -169,7 +169,7 @@ export default function PlaceDetailScreen() {
         : 'ClientPlace';
       // Submit review data
       const res = await axios.post(
-        'http://10.0.2.2:5000/api/review',
+        'http://192.168.0.101:5000/api/review',
         {
           rating: selectedStar,
           comment: reviewText,
@@ -247,7 +247,7 @@ export default function PlaceDetailScreen() {
 
     try {
       const res = await axios.get(
-        `http://10.0.2.2:5000/api/review/place/${placeId}`,
+        `http://192.168.0.101:5000/api/review/place/${placeId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
