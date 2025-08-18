@@ -57,6 +57,26 @@ const ClientPage = () => {
     }
   };
 
+  // Delete a client place 
+ const deleteClient = async (id) => {
+  try {
+    const { data } = await axios.delete(`http://localhost:5000/api/client/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (data.success) {
+      toast("Client deleted successfully!");
+      getPlaces();
+      // Optionally, refresh your client list here
+    }
+  } catch (error) {
+    console.error("Failed to delete client:", error);
+    toast.error("Failed to delete client.");
+  }
+};
+
   // Run once on component mount to load client places
   useEffect(() => {
     getPlaces();
@@ -172,6 +192,15 @@ const ClientPage = () => {
                   onClick={() => deactivate(_id)}
                 >
                   Deactivate
+                </button>
+               
+              </div>
+              <div>
+               <button
+                  className="delete-button"
+                  onClick={() => deleteClient(_id)}
+                >
+                  Delete
                 </button>
               </div>
             </div>
