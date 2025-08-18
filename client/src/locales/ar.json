@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "about": "من نحن",
+    "services": "الخدمات",
+    "contact": "تواصل"
+  },
+  "home": {
+    "exploreTitle": "استكشف حسب الفئة",
+    "restaurants": "مطاعم",
+    "hotels": "فنادق",
+    "activities": "أنشطة وأماكن",
+    "shops": "متاجر",
+    "whyZiara": "لماذا زيــارة؟",
+    "bilingual": "ثنائي اللغة افتراضياً",
+    "smartRanking": "ترتيب ذكي",
+    "richReviews": "مراجعات غنية"
+  },
+  "contact": {
+    "title": "تواصل معنا",
+    "desc": "اختر خطة أو لديك أسئلة حول إضافة عملك على Ziara؟ أرسل لنا رسالة — نرد عادة خلال 24–48 ساعة.",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "subject": "الموضوع (اختياري)",
+    "message": "الرسالة",
+    "send": "إرسال"
+  },
+
+  "auth": {
+    "loginTitle": "تسجيل الدخول",
+    "signupTitle": "إنشاء حساب جديد",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "businessName": "اسم العمل",
+    "selectBusiness": "اختر نوع عملك",
+    "loginBtn": "تسجيل الدخول",
+    "signupBtn": "إنشاء حساب",
+    "noAccount": "ليس لديك حساب؟",
+    "haveAccount": "هل لديك حساب بالفعل؟",
+    "goSignup": "سجل من هنا",
+    "goLogin": "سجّل الدخول من هنا"
+  }
+
+}

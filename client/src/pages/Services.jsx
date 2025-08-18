@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import SignupButton from "../components/SignupButton";
 import "./Services.css";
 
 
@@ -78,7 +79,6 @@ function PlanCard({ variant, name, price, subtitle, features, badge }) {
 
 export default function Services() {
   const navigate = useNavigate();
-  const goSignup = () => navigate("/signup"); // غيّر المسار إذا بدّك
   const goContact = () => navigate("/contact"); // غيّر المسار إذا بدّك
   const businesses = [
     {
@@ -186,16 +186,8 @@ export default function Services() {
         <h3>Ready to grow with Ziara?</h3>
         <p className="svc-sub">Create an account or reach out to our team anytime.</p>
         <div className="cta-actions">
-          <div
-            className="btn-pill btn-pill--primary"
-            aria-disabled="true"
-            onClick={goSignup}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && goSignup()}
-          >
-            Create Account
-         </div>
+         <SignupButton />
+
          <div
           className="btn-pill btn-pill--outline"
            aria-disabled="true"
