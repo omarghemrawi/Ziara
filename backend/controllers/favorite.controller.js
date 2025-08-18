@@ -4,7 +4,7 @@ import User from "../models/user.model.js";
 
 export const addToFav = async (req, res) => {
   try {
-    const { placeId,} = req.body;
+    const { placeId} = req.body;
     const userId = req.userId;
     if (!placeId) {
       return res

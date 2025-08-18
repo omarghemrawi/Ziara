@@ -12,6 +12,7 @@ import reviewRouter from "./routes/reviews.route.js";
 import reportRouter from "./routes/report.route.js";
 import Emailrouter from "./routes/email.route.js";
 import adminRouter from "./routes/admin.route.js";
+import nearbyRouter from "./routes/nearbyPlace.route.js";
 
 dotenv.config();
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/review", reviewRouter);
 app.use("/api/report", reportRouter);
 app.use("/api/email", Emailrouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/nearby", nearbyRouter);
 
 app.listen(PORT, () => {
   connectDB();
