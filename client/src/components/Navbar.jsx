@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -6,13 +5,14 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const [lang, setLang] = useState("EN");
+  const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // فعّالة إذا كان الرابط هو الصفحة الحالية (مع دعم المسارات المتشعّبة)
-  const isActive = (p) => (p === "/" ? pathname === "/" : pathname.startsWith(p));
-  // اقرأ المستخدم دائمًا من نفس المفتاح
+  const isActive = (p) =>
+    p === "/" ? pathname === "/" : pathname.startsWith(p);
+
   const user = (() => {
     try {
       const raw = localStorage.getItem("userData");
@@ -30,20 +30,15 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    // نظّف ريدكس
     dispatch({ type: "CLEAR_USER" });
-
-    // امسح نفس المفتاح يلي عم نقرا منو
     localStorage.removeItem("userData");
-
-    // ارجع عالصفحة الرئيسية
     navigate("/");
   };
 
   return (
     <nav className="navbar">
       <div className="container">
-        {/* — Logo + Site Name */}
+        {/* Logo */}
         <div className="navbar__logo">
           <img
             src="/image/navbar__logo.png"
@@ -53,57 +48,68 @@ export default function Navbar() {
           <span className="logo-text">Ziara</span>
         </div>
 
-        {/* — Navigation Links */}
-        <ul className="navbar__links">
+        {/* Hamburger icon (mobile only) */}
+        <button
+          className="menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+
+        {/* Links */}
+        <ul className={`navbar__links ${menuOpen ? "open" : ""}`}>
           <li>
-            <Link
-              to="/"
-              className={isActive("/") ? "active" : undefined}
-              aria-current={isActive("/") ? "page" : undefined}
-            >Home</Link>
+            <Link to="/" className={isActive("/") ? "active" : undefined}>
+              Home
+            </Link>
           </li>
           <li>
             <Link
               to="/about"
               className={isActive("/about") ? "active" : undefined}
-              aria-current={isActive("/about") ? "page" : undefined}
-            >About</Link>
+            >
+              About
+            </Link>
           </li>
           <li>
             <Link
               to="/services"
               className={isActive("/services") ? "active" : undefined}
-              aria-current={isActive("/services") ? "page" : undefined}
-            >Services</Link>
+            >
+              Services
+            </Link>
           </li>
           <li>
             <Link
               to="/contact"
               className={isActive("/contact") ? "active" : undefined}
-              aria-current={isActive("/contact") ? "page" : undefined}
-            >Contact</Link>
+            >
+              Contact
+            </Link>
           </li>
         </ul>
 
-        {/* — Actions: Profile / Logout / Auth / Language */}
+        {/* Actions */}
         <div className="navbar__actions">
           {user ? (
-            // إذا مسجّل دخول: دايمًا بيظهر Profile + Logout بكل الصفحات
             <>
-              <Link to="/profile" className="btn-profile">Profile</Link>
+              <Link to="/profile" className="btn-profile">
+                Profile
+              </Link>
               <button className="btn logout" onClick={handleLogout}>
                 Logout
               </button>
             </>
           ) : (
-            // إذا مش مسجّل: Login + Sign Up
             <>
-              <Link to="/login" className="btn login">Login</Link>
-              <Link to="/signup" className="btn signup">Sign Up</Link>
+              <Link to="/login" className="btn login">
+                Login
+              </Link>
+              <Link to="/signup" className="btn signup">
+                Sign Up
+              </Link>
             </>
           )}
-
-          {/* — Language toggle: دائمًا ظاهر */}
           <button className="language-switch" onClick={toggleLang}>
             {lang} <span>▼</span>
           </button>

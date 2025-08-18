@@ -78,3 +78,91 @@
     padding: 20px;
   }
 }
+/* Extra Responsive: Mobile small screens */
+@media (max-width: 480px) {
+  .login-page {
+    padding-top: 70px; /* navbar space أقل */
+  }
+
+  .login-container {
+    flex-direction: column;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .login-form {
+    padding: 16px;
+  }
+
+  .login-form h2 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+
+  .login-form input {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .login-submit {
+    padding: 10px;
+    font-size: 0.95rem;
+    margin-top: 16px;
+  }
+
+  .login-image {
+    padding: 12px;
+  }
+
+  .login-image img {
+    max-width: 70%;  /* صغّر الصورة */
+    margin: 0 auto;
+  }
+}
+/* Extra Responsive: Mobile small screens */
+@media (max-width: 480px) {
+  .login-page {
+    padding-top: 70px; /* اترك مسافة للـ Navbar */
+  }
+
+  .login-container {
+    flex-direction: column; /* الفورم فوق، الصورة تحت */
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    align-items: center;   /* وسّط المحتوى */
+  }
+
+  /* ====== Form ====== */
+  .login-form {
+    width: 100%;
+    max-width: 350px;   /* خلي الفورم عرض مريح */
+    padding: 16px;
+  }
+  .login-form h2 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+  .login-form input {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+  .login-submit {
+    padding: 10px;
+    font-size: 1rem;
+    margin-top: 16px;
+  }
+
+  /* ====== Image ====== */
+  .login-image {
+    width: 100%;
+    display: flex;
+    justify-content: center; /* وسّط الصورة */
+    padding: 20px 0;
+  }
+  .login-image img {
+    max-width: 60%;   /* صغّر شوي */
+    height: auto;
+  }
+}

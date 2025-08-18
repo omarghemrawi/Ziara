@@ -1,7 +1,8 @@
 // src/pages/home/Home.jsx
 import React from "react";
-import { Link } from "react-router-dom";
-import Carousel from "../components/Carousel"; // unchanged
+import { useNavigate } from "react-router-dom";
+import Carousel from "../components/Carousel"; 
+import SignupButton from "../components/SignupButton";
 import "./Home.css";
 
 /* inline icons */
@@ -38,6 +39,28 @@ function Icon({ name, size = 28 }) {
 }
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  // Navigate functions
+  const goServices = () => navigate("/services");
+
+  const goPlans = () => navigate("/services");
+  const goAbout = () => navigate("/about");
+  const goContact = () => navigate("/contact");
+
+  // Reusable button component
+  const NavButton = ({ onClick, children, className }) => (
+    <div
+      className={className}
+      role="button"
+      tabIndex={0}
+      onClick={onClick}
+      onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onClick()}
+    >
+      {children}
+    </div>
+  );
+
   return (
     <div className="home">
       {/* 1) HERO FIRST */}
@@ -51,8 +74,10 @@ export default function Home() {
             bilingual experience across web and mobile.
           </p>
           <div className="home-hero-ctas">
-            <Link to="/services" className="btn-pill btn-brown">Explore services</Link>
-            <Link to="/signup" className="btn-pill btn-gold">Create account</Link>
+            <NavButton className="btn-pill btn-brown" onClick={goServices}>
+              Explore services
+            </NavButton>
+            <SignupButton />
           </div>
         </div>
       </section>
@@ -158,8 +183,15 @@ export default function Home() {
       <section className="home-cta-final">
         <h3>Ready to get started?</h3>
         <div className="cta-actions">
-          <Link to="/services" className="btn-pill btn-brown">See plans</Link>
-          <Link to="/signup" className="btn-pill btn-gold">Create account</Link>
+          <NavButton className="btn-pill btn-brown" onClick={goPlans}>
+            See plans
+          </NavButton>
+          <NavButton className="btn-pill btn-gold" onClick={goAbout}>
+            About Us
+          </NavButton>
+          <NavButton className="btn-pill btn-pill--outline" onClick={goContact}>
+            Contact Us
+          </NavButton>
         </div>
       </section>
     </div>

@@ -1,0 +1,46 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "contact": "Contact"
+  },
+  "home": {
+    "exploreTitle": "Explore by category",
+    "restaurants": "Restaurants",
+    "hotels": "Hotels",
+    "activities": "Activities & Places",
+    "shops": "Shops",
+    "whyZiara": "Why Ziara?",
+    "bilingual": "Bilingual by default",
+    "smartRanking": "Smart ranking",
+    "richReviews": "Rich reviews"
+  },
+  "contact": {
+    "title": "Get in touch.",
+    "desc": "Choose a plan or have questions about listing your business on Ziara? Send us a message — we usually reply within 24–48 hours.",
+    "fullName": "Full name",
+    "email": "Email",
+    "subject": "Subject (optional)",
+    "message": "Message",
+    "send": "Send"
+  },
+  
+  "auth": {
+    "loginTitle": "Login to your account",
+    "signupTitle": "Create a new account",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "businessName": "Business name",
+    "selectBusiness": "Choose your business type",
+    "loginBtn": "Login",
+    "signupBtn": "Sign Up",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "goSignup": "Sign up here",
+    "goLogin": "Login here"
+  }
+
+}
+

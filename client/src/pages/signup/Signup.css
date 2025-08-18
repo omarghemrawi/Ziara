@@ -1,5 +1,3 @@
-/* src/pages/Signup.css */
-
 /* — page layout */
 .signup-page {
   padding-top: 80px;
@@ -80,47 +78,63 @@
   font-weight: 600;
 }
 
-/* — responsive */
+/* — Tablet responsive */
 @media (max-width: 768px) {
   .signup-container {
     flex-direction: column;
+    max-width: 600px;
   }
   .signup-image,
   .signup-form {
     width: 100%;
-    padding: 20px;
+    padding: 24px;
+  }
+  .signup-image img {
+    max-width: 60%;
   }
 }
-/* ─── ProfilePage.css adjustments ──────────────────────── */
 
-/* 1. Shrink the cover strip and switch to contain */
-.profile-page .cover-image {
-  height: 120px;                    /* smaller banner height */
-  background-size: contain;         /* make the logo fit without cropping */
-  background-repeat: no-repeat;     /* no tiling */
-  background-position: center;      /* center it horizontally & vertically */
-}
+/* — Mobile small screens */
+@media (max-width: 480px) {
+  .signup-container {
+    flex-direction: column;
+    max-width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+    align-items: center; /* وسّط المحتوى */
+  }
 
-/* 2. Pull header‐card up less, matching the new banner height */
-.profile-page .header-card {
-  margin-top: -40px;                /* half of avatar (60px) + a bit */
-  padding-top: 60px;                /* space for the avatar */
-}
+  /* form */
+  .signup-form {
+    width: 100%;
+    max-width: 350px;
+    padding: 16px;
+  }
+  .signup-form h2 {
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+  }
+  .signup-form input,
+  .signup-form select {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+  .signup-submit {
+    padding: 10px;
+    font-size: 0.95rem;
+    margin-top: 16px;
+  }
 
-/* 3. Reposition the avatar to overlap correctly under the smaller banner */
-.profile-page .header-card .avatar-area {
-  top: 80px;                        /* banner (120px) - half avatar (60px) */
-}
-
-/* 4. (Optional) If your avatar is still too small, bump it: */
-.profile-page .header-card .avatar-img,
-.profile-page .header-card .avatar-placeholder {
-  width: 100px;
-  height: 100px;
-  border-width: 3px;                /* slightly thinner white ring */
-}
-
-/* 5. Ensure the info‐area still clears the avatar */
-.profile-page .header-card .info-area {
-  margin-left: 140px;               /* avatar width (100px) + gap (≈40px) */
+  /* image */
+  .signup-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+  }
+  .signup-image img {
+    max-width: 70%;
+    height: auto;
+    margin: 0 auto;
+  }
 }

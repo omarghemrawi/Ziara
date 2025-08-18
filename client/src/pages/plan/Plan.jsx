@@ -1,7 +1,8 @@
 // src/pages/plan/Plan.jsx
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../../redux/userActions";   // ⚡ استدعاء الأكشن
 import "./Plan.css";
 
 const plans = [
@@ -14,7 +15,6 @@ const plans = [
     features: ["Active subscription","Unlimited images","Top Rank (always)"], cta: "Get Pro" },
 ];
 
-// --- helpers: ما منقرّب على الريدوكس غير للقراءة بس
 const normalizePlan = (p) => {
   if (!p) return "";
   const s = String(p).toLowerCase();
@@ -23,38 +23,23 @@ const normalizePlan = (p) => {
   if (s.includes("pro") || s.includes("advanced")) return "pro";
   return s;
 };
+
 const getSavedUser = () => {
   try { const raw = localStorage.getItem("userData"); return raw ? JSON.parse(raw) : null; }
   catch { return null; }
 };
+
 const sniffPlan = (u) => {
   if (!u) return "";
-  const cand =
-    u?.subscription?.plan ||
-    u?.subscription?.planName ||
-    u?.subscriptionPlan ||
-    u?.plan ||
-    u?.planName ||
-    u?.planId ||
-    u?.currentPlan ||
-    u?.business?.subscription?.plan ||
-    u?.business?.subscription?.planName ||
-    u?.business?.plan ||
-    "";
-  if (cand) return normalizePlan(cand);
-
-  // fallback robust
-  const s = JSON.stringify(u).toLowerCase();
-  if (s.includes("advanced") || s.includes('"pro"') || s.includes(" pro ")) return "pro";
-  if (s.includes("intermediate") || s.includes('"plus"') || s.includes(" plus ")) return "plus";
-  if (s.includes("basic") || s.includes('"standard"') || s.includes(" standard ") || s.includes(" std")) return "standard";
+  if (u.plan?.name) return normalizePlan(u.plan.name);  // ✅ جاي من backend مباشرة
   return "";
 };
 
+
 export default function Plan() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();   // ⚡ استخدام الديسباتش
 
-  // من الريدوكس أولاً، وإذا مش موجود من localStorage
   const reduxUser = useSelector((s) => s?.user?.userData ?? s?.user ?? null);
   const currentPlan = useMemo(() => {
     const a = sniffPlan(reduxUser);
@@ -63,7 +48,18 @@ export default function Plan() {
   }, [reduxUser]);
 
   const goCheckout = (planId) => {
-    if (normalizePlan(planId) === currentPlan) return; // ما منروح على checkout إذا نفس الخطة
+    const normalized = normalizePlan(planId);
+    if (normalized === currentPlan) return;
+
+    const user = getSavedUser() || {};
+    const updatedUser = {
+      ...user,
+      subscription: { ...(user.subscription || {}), plan: normalized },
+    };
+    localStorage.setItem("userData", JSON.stringify(updatedUser));
+
+    dispatch(setUser(updatedUser));   // ⚡ تحديث الريدوكس
+
     navigate(`/plan/checkout/${planId}`);
   };
 

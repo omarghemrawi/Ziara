@@ -385,8 +385,8 @@ export default function PlaceDetailScreen() {
             onPress={() =>
               navigation.navigate('Map', {
                 // locationUrl: place.location || null,
-                locationUrl:
-                  'https://www.google.com/maps/place/Baytna/@34.42762,35.8279711,17z',
+                locationUrl:place.location
+                  // 'https://www.google.com/maps/place/Baytna/@34.42762,35.8279711,17z',
               })
             }
           >

@@ -1,5 +1,3 @@
-/* src/components/Carousel.css */
-
 /* ─── Carousel Container ───────────────────────────────── */
 .carousel {
   width: 100%;
@@ -9,16 +7,18 @@
 
 /* ─── Slide as 2-column grid ──────────────────────────── */
 .carousel .slide {
-  position: relative;    /* ← تأكد من وجود هذا */
+  position: relative;
   display: grid;
   grid-template-columns: 50% 50%;
   align-items: center;
   height: 500px;
   box-sizing: border-box;
   background-color: var(--slide-bg, #faf0e6);
+  gap: 8px;
+  padding: 0 10px;
 }
 
-/* ─── الصورة في العمود الأيسر ─────────────────────────── */
+/* ─── Image ─────────────────────────── */
 .carousel .slide img {
   justify-self: center;
   max-height: 80%;
@@ -26,18 +26,12 @@
   object-fit: contain;
 }
 
-/* ─── صندوق النص مُقمَع بين منتصف الشريحة و10px عن اليمين ─── */
+/* ─── Text Box ─────────────────────────── */
 .carousel .slide .slide-content {
-  position: absolute;      /* أهم سطر */
-  top: 50%;                /* يوسّطه عموديّاً */
-  left: 50%;               /* يضع الحد الأيسر عند منتصف الشريحة */
-  right: 10px;             /* يضمن بقاء الحد الأيمن 10px من الصفحة */
-  transform: translateY(-50%);
   text-align: left;
-  padding-left: 20px;      /* المسافة بين الصورة والنص */
+  padding: 0 20px;
 }
 
-/* ─── تنسيقات العنوان والوصف ──────────────────────────── */
 .carousel .slide .slide-content h2 {
   font-size: 2.5rem;
   margin: 0 0 8px;
@@ -50,7 +44,7 @@
   line-height: 1.4;
 }
 
-/* ─── Pagination Dots ─────────────────────────────────── */
+/* ─── Pagination Dots ─────────────────────────── */
 .dots {
   display: flex;
   justify-content: center;
@@ -70,7 +64,7 @@
   background: #1c2d44;
 }
 
-/* ─── Responsive ───────────────────────────────────────── */
+/* ─── Tablet (≤768px) ─────────────────────────── */
 @media (max-width: 768px) {
   .carousel .slide {
     grid-template-columns: 1fr;
@@ -84,11 +78,49 @@
   }
 
   .carousel .slide .slide-content {
-    position: static;       /* بدل absolute للشاشات الصغيرة */
+    text-align: center;
     padding: 0 10%;
-    transform: none;
-    left: auto;
-    right: auto;
+  }
+
+  .carousel .slide .slide-content h2 {
+    font-size: 1.8rem !important;
+  }
+
+  .carousel .slide .slide-content p {
+    font-size: 1rem !important;
   }
 }
 
+/* ─── Mobile (≤480px) ─────────────────────────── */
+@media (max-width: 480px) {
+  .carousel .slide {
+    grid-template-columns: 1fr; /* صورة فوق، نص تحت */
+    height: auto;
+    padding: 16px 0;
+  }
+
+  .carousel .slide img {
+    max-height: 120px !important;
+    width: 70% !important;
+    margin: 0 auto 12px;
+  }
+
+  .carousel .slide .slide-content {
+    max-width: 90%;
+    margin: 0 auto;
+    text-align: center !important;
+    padding: 0 12px !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .carousel .slide .slide-content h2 {
+    font-size: 1.2rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .carousel .slide .slide-content p {
+    font-size: 0.9rem !important;
+    line-height: 1.4 !important;
+  }
+}
