@@ -26,7 +26,7 @@ const SettingsScreen = () => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('user'); 
    
-    navigation.replace('Login');
+    navigation.replace('Welcome');
   } catch (error) {
     console.error('Logout error:', error);
   }

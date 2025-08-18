@@ -35,6 +35,41 @@ export default function PlaceDetailScreen() {
   const [showTooltip, setShowTooltip] = useState(true);
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [selectedImageUri, setSelectedImageUri] = useState(null);
+   const [places, setPlaces] = useState([]);
+ 
+  
+    const actionTypeMap = {
+      restaurant: 'SET_RESTAURANTS',
+      shop: 'SET_SHOPS',
+      hotel: 'SET_HOTELS',
+      activity: 'SET_ACTIVITY_PLACES',
+      religious: 'SET_RELIGIOUS_PALCES',
+      touristic: 'SET_TOURISTIC_PLACES',
+    };
+  //dummy data
+  const [suggestedPlaces, setSuggestedPlaces] = useState([
+  {
+    id: '1',
+    name: 'Place 1',
+    image: 'https://via.placeholder.com/150',
+  },
+  {
+    id: '2',
+    name: 'Place 2',
+    image: 'https://via.placeholder.com/150',
+  },
+  {
+    id: '3',
+    name: 'Place 3',
+    image: 'https://via.placeholder.com/150',
+  },
+  {
+    id: '4',
+    name: 'Place 4',
+    image: 'https://via.placeholder.com/150',
+  },
+]);
+
   const openImageModal = uri => {
     setSelectedImageUri(uri);
     setImageModalVisible(true);
@@ -385,6 +420,8 @@ export default function PlaceDetailScreen() {
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
         <Text style={styles.descriptionText}>{place?.description}</Text>
         <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
+       
+
 
         <SocialIcons
           facebookLink={place?.facebook}
@@ -392,6 +429,29 @@ export default function PlaceDetailScreen() {
           isResto={place?.type === 'restaurant'}
           menuLink={place?.menuLink}
         />
+         {/* suggested places */}
+        <Text style={styles.sectionTitle}>{i18n.t('SuggestedPlaces')}</Text>
+<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+  <View style={styles.suggestedRow}>
+    {suggestedPlaces.map((item, index) =>(
+      <TouchableOpacity
+          key={index}
+            style={styles.suggestedCard}
+            onPress={() =>
+              navigation.navigate('PlaceDetails', {
+                id: item._id,
+                type: item.type,
+         
+
+              })
+            }
+      >
+        <Image source={{ uri: place.image }} style={styles.suggestedImage} />
+        <Text style={styles.suggestedName}>{place.name}</Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+</ScrollView>
 
         <View style={styles.actionsRow}>
           <TouchableOpacity
@@ -975,4 +1035,37 @@ const styles = StyleSheet.create({
     right: 20,
     zIndex: 10,
   },
+  suggestedRow: {
+  flexDirection: 'row',
+  paddingVertical: 10,
+  paddingHorizontal: 5,
+  gap: 10,
+},
+suggestedCard: {
+  width: 120,
+  borderRadius: 10,
+  overflow: 'hidden',
+  marginRight: 10,
+  alignItems: 'center',
+  backgroundColor: '#fff',
+  elevation: 2, // for Android shadow
+  shadowColor: '#000',
+  shadowOpacity: 0.1,
+  shadowRadius: 5,
+  shadowOffset: { width: 0, height: 2 },
+},
+suggestedImage: {
+  width: '100%',
+  height: 80,
+  borderTopLeftRadius: 10,
+  borderTopRightRadius: 10,
+},
+suggestedName: {
+  padding: 5,
+  fontSize: 14,
+  fontWeight: '600',
+  textAlign: 'center',
+  color: '#333',
+},
+
 });

@@ -19,7 +19,15 @@ export default function Home({ navigation }) {
     
 
 
-      <Text style={styles.text}>Ziara</Text>
+     <Text style={styles.text}>
+  <Text style={{ color: '#FAC75C' }}>Z</Text>
+  <Text style={{ color: '#FAC75C' }}>i</Text>
+  <Text style={{ color: '#FAC75C' }}>a</Text>
+  <Text style={{ color: '#FAC75C' }}>r</Text>
+  <Text style={{ color: '#FAC75C' }}>a</Text>
+</Text>
+<Image source={'../../assets/images/launching.png'}></Image>
+
 
       {/* Buttons container */}
       <View style={styles.LoginSignupConatiner}>

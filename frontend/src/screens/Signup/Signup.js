@@ -99,6 +99,7 @@ export default function Signup({ navigation }) {
           return (
             <>
               {/* Username */}
+               <Text style={styles.label}>Username</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Enter your username"
@@ -111,6 +112,7 @@ export default function Signup({ navigation }) {
               )}
 
               {/* Email */}
+               <Text style={styles.label}>Email</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Enter your email"
@@ -125,6 +127,7 @@ export default function Signup({ navigation }) {
               )}
 
               {/* Password */}
+               <Text style={styles.label}>Password</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Enter your password"
@@ -156,6 +159,7 @@ export default function Signup({ navigation }) {
               </Text>
 
               {/* Confirm Password */}
+               <Text style={styles.label}>Confirm Password</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Confirm your password"

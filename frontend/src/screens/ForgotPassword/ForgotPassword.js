@@ -43,6 +43,7 @@ export default function ForgotPassword({ navigation }) {
 
       {step === 1 ? (
         <>
+          <Text style={styles.label}>Email</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter your email"
@@ -56,12 +57,14 @@ export default function ForgotPassword({ navigation }) {
         </>
       ) : (
         <>
+          <Text style={styles.label}>Enter reset code</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter reset code"
             value={code}
             onChangeText={setCode}
           />
+            <Text style={styles.label}>New Password</Text>
           <TextInput
             style={styles.input}
             placeholder="New password"
@@ -69,6 +72,7 @@ export default function ForgotPassword({ navigation }) {
             value={newPassword}
             onChangeText={setNewPassword}
           />
+            <Text style={styles.label}>Confirm Password</Text>
           <TextInput
             style={styles.input}
             placeholder="Confirm password"

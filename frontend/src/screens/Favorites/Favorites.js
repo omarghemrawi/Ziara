@@ -27,22 +27,42 @@ export default function Favourites() {
   const places = useSelector(state => state.places.all);
   const [token, setToken] = useState('');
   const dispatch = useDispatch();
-
+  const [isGuest, setIsGuest] = useState(false);
   const getToken = async () => setToken(await AsyncStorage.getItem('token'));
+  // const getFavoritePLaces = () => {
+  //   setFavoritePlaces(
+  //     places.filter(place => user.favoritePlaces.includes(place._id)),
+  //   );
+  // };
   const getFavoritePLaces = () => {
-    setFavoritePlaces(
-      places.filter(place => user.favoritePlaces.includes(place._id)),
-    );
-  };
+  if (!user || !user.favoritePlaces) {
+    setFavoritePlaces([]);
+    return;
+  }
+
+  setFavoritePlaces(
+    places.filter(place => user.favoritePlaces.includes(place._id)),
+  );
+};
+
   const handleDotsPress = id => {
     setIdSelectedPlace(id);
     setModalVisible(true);
   };
+    useEffect(() => {
+    const checkGuest = async () => {
+      const guest = await AsyncStorage.getItem('guest');
+      if (guest) {
+        setIsGuest(true);
+      }
+    };
+    checkGuest();
+  }, []);
 
   const handleMoveToVisited = async () => {
     try {
       const res = await axios.post(
-        'http://10.0.2.2:5000/api/visited',
+        'http://192.168.0.101:5000/api/visited',
         {
           place_id: idSelectedPlace,
         },
@@ -61,7 +81,7 @@ export default function Favourites() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete('http://10.0.2.2:5000/api/favorite', {
+      await axios.delete('http://192.168.0.101:5000/api/favorite', {
         data: { placeId: idSelectedPlace },
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -75,13 +95,19 @@ export default function Favourites() {
     setModalVisible(false);
   };
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   getFavoritePLaces();
+  // }, [user.favoritePlaces]);
+  // useEffect(() => {
+  //   getToken();
+  // }, []);
+useEffect(() => {
+  if (user && user.favoritePlaces) {
     getFavoritePLaces();
-  }, [user.favoritePlaces]);
-  useEffect(() => {
-    getToken();
-  }, []);
-
+  } else {
+    setFavoritePlaces([]);
+  }
+}, [user]);
   return (
     <ScrollView
       style={[styles.container, { backgroundColor: theme.background }]}

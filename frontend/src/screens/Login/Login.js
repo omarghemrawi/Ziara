@@ -77,6 +77,7 @@ export default function Login({ navigation }) {
           touched,
         }) => (
           <>
+           <Text style={styles.label}>Email</Text>
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -89,7 +90,7 @@ export default function Login({ navigation }) {
             {touched.email && errors.email && (
               <Text style={styles.errorText2}>*{errors.email}</Text>
             )}
-
+ <Text style={styles.label}>Password</Text>
             <TextInput
               style={styles.input}
               placeholder="Password"

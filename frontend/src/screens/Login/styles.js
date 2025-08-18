@@ -10,6 +10,15 @@ export default StyleSheet.create({
     paddingTop: 60,
     paddingHorizontal: 20,
   },
+   label: {
+  fontSize: 10,
+  fontWeight: '500',
+  color: '#333',
+  marginBottom: 5,
+  marginTop: 15,
+  marginRight:250,
+},
+
   title: {
     fontSize: 28,
     fontWeight: '600',
