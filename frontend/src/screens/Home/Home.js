@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { Linking } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
@@ -109,14 +110,24 @@ export default function Home() {
           labelKey="nearby"
           image={require('../../assets/images/map.png')}
         />
+           <OptionBox
+          labelKey="trip"
+          image={require('../../assets/images/trip.png')}
+            onPress={() => {
+    Linking.openURL('https://www.getyourguide.com/lebanon-l169127/')
+      .catch(err => console.error("Failed to open URL:", err));
+  }}
+  isBrown
+        />
         <OptionBox
           labelKey="popularFoods"
           image={require('../../assets/images/Hummus.png')}
-          isBrown
+       
         />
         <OptionBox
           labelKey="popularPlaces"
           image={require('../../assets/images/window1.png')}
+          isBrown
         />
       </ScrollView>
 
@@ -156,7 +167,7 @@ export default function Home() {
 }
 
 // Small horizontal square box
-const OptionBox = ({ labelKey, image, isBrown }) => {
+const OptionBox = ({ labelKey, image, isBrown ,onPress}) => {
   const navigation = useNavigation();
 
   // map label → screen name
@@ -165,14 +176,18 @@ const OptionBox = ({ labelKey, image, isBrown }) => {
     popularFoods: 'PopularFoods',
     popularPlaces: 'PopularPlaces',
   };
-
+const handlePress = () => {
+    if (onPress) {
+      onPress(); 
+    } else {
+      const screen = screenMap[labelKey];
+      if (screen) navigation.navigate(screen);
+      else console.warn(`No screen for ${labelKey}`);
+    }
+  };
   return (
     <TouchableOpacity
-      onPress={() => {
-        const screen = screenMap[labelKey];
-        if (screen) navigation.navigate(screen);
-        else console.warn(`No screen for ${labelKey}`);
-      }}
+      onPress={handlePress}
       style={[styles.optionBox, isBrown && styles.brownBox]}
     >
       <Image source={image} style={styles.optionImage} />
