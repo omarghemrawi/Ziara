@@ -88,7 +88,7 @@ export default function PlaceDetailScreen() {
   const user = useSelector(state => state.user.user);
   const dispatch = useDispatch();
 
-  const place = data.find(item => item._id === id);
+  const place = data?.find(item => item._id === id);
 
   const starArray = [1, 2, 3, 4, 5];
   const [isGuest, setIsGuest] = useState(false);
@@ -305,10 +305,10 @@ export default function PlaceDetailScreen() {
       <View
         style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10 }}
       >
-        {review.image && (
-          <TouchableOpacity onPress={() => openImageModal(review.image)}>
+        {review?.image && (
+          <TouchableOpacity onPress={() => openImageModal(review?.image)}>
             <Image
-              source={{ uri: review.image }}
+              source={{ uri: review?.image }}
               style={{
                 width: 100,
                 height: 100,
@@ -445,8 +445,8 @@ export default function PlaceDetailScreen() {
               })
             }
       >
-        <Image source={{ uri: place.image }} style={styles.suggestedImage} />
-        <Text style={styles.suggestedName}>{place.name}</Text>
+        <Image source={{ uri: place?.image }} style={styles.suggestedImage} />
+        <Text style={styles.suggestedName}>{place?.name}</Text>
       </TouchableOpacity>
     ))}
   </View>
