@@ -22,7 +22,7 @@ export default function Contact() {
     try {
       setStatus({ loading: true, ok: null, msg: "" });
 
-      const res = await fetch("/api/contact", {
+      const res = await fetch("http://localhost:5000/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -128,7 +128,7 @@ export default function Contact() {
               </div>
               <div>
                 <div className="info-title">Email</div>
-                <div className="info-text">ziara961libanon@gmail.com</div>
+                <div className="info-text">ziaralebanon@gmail.com</div>
               </div>
             </div>
 

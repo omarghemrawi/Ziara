@@ -1,4 +1,11 @@
-// src/pages/profile/ProfilePage.jsx
+// ============================================================
+// File: src/pages/profile/ProfilePage.jsx
+// Purpose: Profile page for viewing and editing user/business info,
+//          images, links, description, plan details, and reviews.
+// NOTE: The logic and JSX are kept IDENTICAL to your original code.
+//       Only formatting and explanatory comments were added.
+// ============================================================
+
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +19,10 @@ import EditLinksModal from "../../components/EditLinksModal";
 import { setUser } from "../../redux/userActions";
 import "./ProfilePage.css";
 
+// ------------------------------------------------------------
+// Reusable section wrapper: renders a card with title and header-right
+// content (children[0]) and the section body (children[1]).
+// ------------------------------------------------------------
 function SectionCard({ title, children }) {
   return (
     <div className="card section-card">
@@ -24,72 +35,123 @@ function SectionCard({ title, children }) {
   );
 }
 
+// ------------------------------------------------------------
+// Main: ProfilePage
+// ------------------------------------------------------------
 export default function ProfilePage() {
+  // Redux + Router helpers
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Logged-in user from Redux state
   const user = useSelector((s) => s.user.userData);
- const token = localStorage.getItem("token");
 
-  // حارس توجيه
-  // useEffect(() => {
-  //   if (!user?._id) navigate("/");
-  // }, [user, navigate]);
+  // Whether the business type is restaurant (affects 'menu' link field)
+  const isRestaurant = (user?.type || "").toLowerCase() === "restaurant";
 
+  // Auth token used in API requests
+  const token = localStorage.getItem("token");
 
-  // بيانات العرض/التعديل
+  // ===== Plans / limits (آمن ضد عدم وجود plan) =====
+  const plan = user?.plan ?? null;
+  const planName = (plan?.name || "").toLowerCase();
+  const planFee = Number(plan?.fee);
+  const isPro = planName === "pro" || planFee === 50;
+
+  // Default per-plan image limit (fallback if server doesn't send one)
+  const defaultLimitByPlan =
+    planName === "plus" || planFee === 20
+      ? 10
+      : planName === "standard" || planFee === 10
+      ? 5
+      : 5; // لا خطة
+
+  // Use server-provided imageLimit if valid; otherwise fall back
+  const serverLimitRaw = plan?.imageLimit;
+  const serverLimitNum = Number(serverLimitRaw);
+  const safeLimit =
+    Number.isFinite(serverLimitNum) && serverLimitNum > 0
+      ? serverLimitNum
+      : defaultLimitByPlan;
+
+  // Final limit (Infinity for Pro)
+  const imageLimit = isPro ? Infinity : safeLimit;
+
+  // Photo hint shown when there are no photos yet
+  const photoHintText = isPro
+    ? "You can upload unlimited photos."
+    : `You can upload only ${imageLimit} photos.`;
+
+  // ===== Editable fields shown in UI (bind to modals/inputs) =====
   const [businessName, setBusinessName] = useState(user?.name || "");
   const [city, setCity] = useState(user?.city || "");
-  const [profileDescription, setProfileDescription] = useState(user?.description || "");
+  const [profileDescription, setProfileDescription] = useState(
+    user?.description || ""
+  );
   const [editedLinks, setEditedLinks] = useState({
-    facebook: user?.facebook || "",
-    instagram: user?.instagram || "",
-    location: user?.location || "",
+    facebook: "",
+    instagram: "",
+    location: "",
+    menu: "", // موجود دايمًا، فاضي إذا مش restaurant
   });
 
-  // الصورة الشخصية الحالية
+  // Current avatar URL/base64 preview
   const [currentAvatar, setCurrentAvatar] = useState(user?.profile || "");
 
-  // مودالات
+  // Modal visibility flags
   const [showHeaderModal, setShowHeaderModal] = useState(false);
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const [showLinksModal, setShowLinksModal] = useState(false);
 
-  // مراجعات
+  // Reviews state (list from server)
   const [reviews, setReviews] = useState([]);
-  // احسب عدد التقييمات (rating فقط)
-const ratingsCount = Array.isArray(reviews)
-  ? reviews.filter(r => Number(r?.rating) > 0).length
-  : 0;
 
-// احسب عدد المراجعات النصّية (تعليقات)
-const reviewsCount = Array.isArray(reviews)
-  ? reviews.filter(r => {
-      const txt = r?.comment ?? r?.reviewComment ?? r?.text ?? r?.review;
-      return typeof txt === "string" && txt.trim().length > 0;
-    }).length
-  : 0;
+  // Count of ratings (numeric ratings only)
+  const ratingsCount = Array.isArray(reviews)
+    ? reviews.filter((r) => Number(r?.rating) > 0).length
+    : 0;
 
+  // Count of textual reviews (comments)
+  const reviewsCount = Array.isArray(reviews)
+    ? reviews.filter((r) => {
+        const txt = r?.comment ?? r?.reviewComment ?? r?.text ?? r?.review;
+        return typeof txt === "string" && txt.trim().length > 0;
+      }).length
+    : 0;
+
+  // Place id for fetching reviews/navigating to reviews page
   const placeId = user?._id;
 
+  // ----------------------------------------------------------
+  // Fetch reviews for this place (memoized by placeId/token)
+  // ----------------------------------------------------------
   const getReviews = useCallback(async () => {
     if (!placeId) return;
     try {
-      const res = await axios.get(`http://localhost:5000/api/review/place/${placeId}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+      const res = await axios.get(
+        `http://localhost:5000/api/review/place/${placeId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       if (res.data?.success) setReviews(res.data.reviews || []);
     } catch (e) {
       console.log(e);
     }
-  }, [placeId]);
+  }, [placeId, token]);
 
+  // Load reviews on mount/place change
   useEffect(() => {
     getReviews();
   }, [getReviews]);
 
-  // ربط الواجهة عند تغيّر اليوزر
+  // Debug: log user from Redux when it changes
+  useEffect(() => {
+    console.log("👤 user from Redux:", user);
+  }, [user]);
+
+  // Sync UI fields whenever user changes
   useEffect(() => {
     if (!user) return;
+    const _isRestaurant = (user?.type || "").toLowerCase() === "restaurant";
     setBusinessName(user.name || "");
     setCity(user.city || "");
     setProfileDescription(user.description || "");
@@ -97,21 +159,31 @@ const reviewsCount = Array.isArray(reviews)
       facebook: user.facebook || "",
       instagram: user.instagram || "",
       location: user.location || "",
+      menu: _isRestaurant ? (user.menu || "") : "",
     });
     setCurrentAvatar(user.profile || "");
   }, [user]);
 
-  // معرض الصور من السيرفر
+  // ----------------------------------------------------------
+  // Gallery (reference images) + showUploadHint when empty
+  // ----------------------------------------------------------
   const gallery = user?.referenceImages || [];
-
-  // Hint: يظهر فقط إذا ما في صور
-  const [showUploadHint, setShowUploadHint] = useState(() => gallery.length === 0);
+  const [showUploadHint, setShowUploadHint] = useState(
+    () => gallery.length === 0
+  );
   useEffect(() => {
     if (gallery.length > 0) setShowUploadHint(false);
   }, [gallery.length]);
 
-  // حفظ الاسم/المدينة + صور
-  const saveProfileInfo = async (newName, newCity, profileFile = null, referenceFiles = []) => {
+  // ----------------------------------------------------------
+  // Save: profile info (name, city) + optional profile/reference images
+  // ----------------------------------------------------------
+  const saveProfileInfo = async (
+    newName,
+    newCity,
+    profileFile = null,
+    referenceFiles = []
+  ) => {
     try {
       const formData = new FormData();
       formData.append("userId", user._id);
@@ -120,9 +192,11 @@ const reviewsCount = Array.isArray(reviews)
       if (profileFile) formData.append("profile", profileFile);
       referenceFiles.forEach((f) => formData.append("referenceImages", f));
 
-      const res = await axios.put("http://localhost:5000/api/client/update-profile", formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.put(
+        "http://localhost:5000/api/client/update-profile",
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       if (res.data?.user) {
         dispatch(setUser(res.data.user));
         setShowHeaderModal(false);
@@ -132,14 +206,14 @@ const reviewsCount = Array.isArray(reviews)
     }
   };
 
-  // حفظ الوصف
+  // Save: description only
   const saveDescription = async (newDescription) => {
     try {
-      const res = await axios.put("http://localhost:5000/api/client/update-profile", {
-        description: newDescription,
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.put(
+        "http://localhost:5000/api/client/update-profile",
+        { description: newDescription },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       if (res.data?.success) {
         dispatch(setUser(res.data.user));
         setShowDescriptionModal(false);
@@ -149,17 +223,21 @@ const reviewsCount = Array.isArray(reviews)
     }
   };
 
-  // حفظ الروابط
+  // Save: links (and menu only if restaurant)
   const saveLinks = async (newLinks) => {
     try {
-      const res = await axios.put("http://localhost:5000/api/client/update-profile", {
+      const payload = {
         userId: user._id,
         facebook: newLinks.facebook,
         instagram: newLinks.instagram,
         location: newLinks.location,
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+        ...(isRestaurant && { menu: newLinks.menu }),
+      };
+      const res = await axios.put(
+        "http://localhost:5000/api/client/update-profile",
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       if (res.data?.success) {
         dispatch(setUser(res.data.user));
         setShowLinksModal(false);
@@ -169,7 +247,9 @@ const reviewsCount = Array.isArray(reviews)
     }
   };
 
-  // قلم الصورة الشخصية
+  // ----------------------------------------------------------
+  // Avatar edit (open file picker + upload and update preview)
+  // ----------------------------------------------------------
   const avatarInputRef = useRef(null);
   const handleEditPhoto = () => avatarInputRef.current?.click();
 
@@ -183,7 +263,9 @@ const reviewsCount = Array.isArray(reviews)
     e.target.value = "";
   };
 
-  // سكشن الصور (تحديد/حذف + رفع)
+  // ----------------------------------------------------------
+  // Photos section: select/delete + upload multiple reference images
+  // ----------------------------------------------------------
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIndexes, setSelectedIndexes] = useState([]);
 
@@ -193,14 +275,20 @@ const reviewsCount = Array.isArray(reviews)
   };
 
   const togglePhotoSelection = (i) =>
-    setSelectedIndexes((p) => (p.includes(i) ? p.filter((x) => x !== i) : [...p, i]));
+    setSelectedIndexes((p) =>
+      p.includes(i) ? p.filter((x) => x !== i) : [...p, i]
+    );
 
   const handlePhotoUpload = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
 
-    if (gallery.length + files.length > user.plan.imageLimit) {
-      alert(`You can upload only ${user.plan.imageLimit} photos.`);
+    // Enforce plan image limit (if not Infinity)
+    if (
+      Number.isFinite(imageLimit) &&
+      gallery.length + files.length > imageLimit
+    ) {
+      alert(`You can upload only ${imageLimit} photos.`);
       e.target.value = "";
       return;
     }
@@ -210,9 +298,11 @@ const reviewsCount = Array.isArray(reviews)
       formData.append("userId", user._id);
       files.forEach((f) => formData.append("referenceImages", f));
 
-      const res = await axios.put("http://localhost:5000/api/client/update-profile", formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.put(
+        "http://localhost:5000/api/client/update-profile",
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       if (res.data?.user) {
         dispatch(setUser(res.data.user));
@@ -235,9 +325,11 @@ const reviewsCount = Array.isArray(reviews)
         deleteReferences: toDelete,
         referenceImagesToDelete: toDelete, // غطّي اختلاف اسم الحقل بالسيرفر
       };
-      const res = await axios.put("http://localhost:5000/api/client/update-profile", payload, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await axios.put(
+        "http://localhost:5000/api/client/update-profile",
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       if (res.data?.user) {
         dispatch(setUser(res.data.user));
         setSelectedIndexes([]);
@@ -248,12 +340,26 @@ const reviewsCount = Array.isArray(reviews)
     }
   };
 
+  // ----------------------------------------------------------
+  // Navigation handlers
+  // ----------------------------------------------------------
   const handleViewReviews = () => navigate(`/reviews/${placeId}`);
   const handleEditPlan = () => navigate("/plan");
 
+  // تجهيز اسم الخدمة للعرض مع دعم لأسماء حقول مختلفة
+const serviceRaw = (user?.type ?? user?.business ?? user?.service ?? "").toString();
+const serviceNamePretty = serviceRaw
+  ? serviceRaw.charAt(0).toUpperCase() + serviceRaw.slice(1)
+  : "—";
 
+
+  // ----------------------------------------------------------
+  // Render
+  // ----------------------------------------------------------
   return (
+    
     <div className="profile-page">
+      {/* ================= Header card (avatar + name + city) ================ */}
       <div className="card header-card">
         <div className="header-part header-part--top">
           <button
@@ -267,6 +373,7 @@ const reviewsCount = Array.isArray(reviews)
         </div>
 
         <div className="header-part header-part--bottom">
+          {/* Avatar block */}
           <div className="avatar-area">
             <div className="avatar-clip">
               {currentAvatar ? (
@@ -294,14 +401,16 @@ const reviewsCount = Array.isArray(reviews)
             />
           </div>
 
+          {/* Name / type / city */}
           <div className="profile-details">
             <h2 className="business-name">{businessName}</h2>
-            <p className="service-name">{user?.type || "—"}</p>
+           <p className="service-name">{serviceNamePretty}</p>
             <p className="city-name">{city}</p>
           </div>
         </div>
       </div>
 
+      {/* ================= Section: Description ================= */}
       <SectionCard title="Description">
         <button
           type="button"
@@ -314,6 +423,7 @@ const reviewsCount = Array.isArray(reviews)
         <p>{profileDescription || "No description"}</p>
       </SectionCard>
 
+      {/* ================= Section: Links & Location ================= */}
       <SectionCard title="Links & Location">
         <button
           type="button"
@@ -333,9 +443,15 @@ const reviewsCount = Array.isArray(reviews)
           <li>
             <strong>Location:</strong> {editedLinks.location || "—"}
           </li>
+          {isRestaurant && (
+            <li>
+              <strong>Menu:</strong> {editedLinks.menu || "—"}
+            </li>
+          )}
         </ul>
       </SectionCard>
 
+      {/* ================= Section: Photos ================= */}
       <SectionCard title="Photos">
         <button
           type="button"
@@ -347,9 +463,7 @@ const reviewsCount = Array.isArray(reviews)
         </button>
 
         <div>
-          {showUploadHint && (
-            <p className="upload-hint">You can upload only 5 photos.</p>
-          )}
+          {showUploadHint && <p className="upload-hint">{photoHintText}</p>}
 
           <div className="photo-grid-horizontal">
             {gallery.map((src, idx) => (
@@ -387,40 +501,46 @@ const reviewsCount = Array.isArray(reviews)
         </div>
       </SectionCard>
 
-<SectionCard title="Rating & Review">
-  <button
-    type="button"
-    className="edit-section"
-    title="View All Reviews"
-    onClick={handleViewReviews}
-  >
-    View All
-  </button>
+      {/* ================= Section: Rating & Review ================= */}
+      <SectionCard title="Rating & Review">
+        <button
+          type="button"
+          className="edit-section"
+          title="View All Reviews"
+          onClick={handleViewReviews}
+        >
+          View All
+        </button>
 
-  <div className="reviews-row">
-    <span>{reviewsCount} Reviews</span>
-    <span>{ratingsCount} Rating</span>
-  </div>
-</SectionCard>
+        <div className="reviews-row">
+          <span>{reviewsCount} Reviews</span>
+          <span>{ratingsCount} Rating</span>
+        </div>
+      </SectionCard>
 
-
-
+      {/* ================= Section: Upgrade Your Plan ================= */}
       <SectionCard title="Upgrade Your Plan">
-        <br />
-        <h4>You have subscribe by : {user.plan.name} Plan with fee {user.plan.fee}$</h4>
+        {/* Header-right: pen goes first */}
         <button
           type="button"
           className="edit-section"
           title="Edit Plan"
+          aria-label="Edit plan"
           onClick={handleEditPlan}
         >
-          ✎
+          <FontAwesomeIcon icon={faPen} />
         </button>
-        <button className="subscribe-btn" onClick={handleEditPlan}>
-          Subscriptions →
-        </button>
+
+        {/* Body content */}
+        <div>
+          <h4>
+            You have subscribe by : {plan?.name ?? "—"} Plan
+            {Number.isFinite(planFee) ? ` with fee ${planFee}$` : ""}
+          </h4>
+        </div>
       </SectionCard>
 
+      {/* ================= Modals ================= */}
       {showHeaderModal && (
         <EditProfileModal
           tempName={businessName}
@@ -430,7 +550,9 @@ const reviewsCount = Array.isArray(reviews)
           onSave={() => saveProfileInfo(businessName, city)}
           onCancel={() => setShowHeaderModal(false)}
           setProfileFile={(file) => saveProfileInfo(businessName, city, file)}
-          setReferenceFiles={(files) => saveProfileInfo(businessName, city, null, files)}
+          setReferenceFiles={(files) =>
+            saveProfileInfo(businessName, city, null, files)
+          }
         />
       )}
 

@@ -224,3 +224,58 @@ input:focus, textarea:focus{
 @media (max-width: 640px){
   .hero-wrap{ padding: 56px 0; }
 }
+/* ==== FIX: stop overlap + add right-edge space (form only) ==== */
+
+/* Ensure padding counts in width (no overflow) */
+.contact-v2 .card.form-card,
+.contact-v2 .card.form-card * ,
+.contact-v2 .card.form-card *::before,
+.contact-v2 .card.form-card *::after{
+  box-sizing: border-box;
+}
+
+/* Global right padding for all rows/fields */
+.contact-v2 .card.form-card form{
+  display: grid;
+  gap: 16px;
+  padding-right: 12px; /* space at far right of the form */
+}
+
+/* First row (and any 2-col rows): two equal columns without overflow */
+.contact-v2 .card.form-card .row2{
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: 16px;            /* space between the two inputs */
+}
+.contact-v2 .card.form-card .row2 > *{ min-width: 0; } /* allow shrink inside grid */
+
+/* Inputs fill their cell but never spill */
+.contact-v2 .card.form-card input,
+.contact-v2 .card.form-card textarea{
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Keep mobile stacking */
+@media (max-width: 640px){
+  .contact-v2 .card.form-card form{ padding-right: 8px; }
+  .contact-v2 .card.form-card .row2{ grid-template-columns: 1fr; }
+}
+/* === Align the two inputs in the first row perfectly === */
+.contact-v2 .card.form-card .row2{ align-items: start; }
+
+/* Give both labels the same height so inputs start at the same Y */
+@media (min-width: 641px){
+  .contact-v2 .card.form-card .row2 .field label{
+    display: block;
+    margin: 0 0 8px 2px;
+    line-height: 1.2;
+    height: 20px;           /* equal label height = aligned inputs */
+  }
+  .contact-v2 .card.form-card .row2 .field input{ margin-top: 0; }
+}
+
+/* Keep all fields from overflowing and add right-side breathing room */
+.contact-v2 .card.form-card form{ padding-right: 12px; }
+.contact-v2 .card.form-card .row2 > *{ min-width: 0; }   /* prevent spill */
+

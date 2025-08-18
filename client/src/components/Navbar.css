@@ -148,3 +148,16 @@ html, body {
   }
   .logo-text{ display: none; }
 }
+
+/* الحالة الفعّالة (هايلايتر على الكلمة) */
+.navbar__links a.active{
+  color: var(--brown);
+  text-decoration: none; /* منع خط تحت */
+  /* ماركر خلف النص */
+  background: linear-gradient(180deg, transparent 60%, rgba(250,199,92,.45) 0);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+.navbar__links a.active:hover{
+  color: var(--brown);
+}

@@ -1,5 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Services.css";
+
 
 /* Inline icons */
 function Icon({ name, size = 28 }) {
@@ -75,6 +77,9 @@ function PlanCard({ variant, name, price, subtitle, features, badge }) {
 }
 
 export default function Services() {
+  const navigate = useNavigate();
+  const goSignup = () => navigate("/signup"); // غيّر المسار إذا بدّك
+  const goContact = () => navigate("/contact"); // غيّر المسار إذا بدّك
   const businesses = [
     {
       icon: "restaurant",
@@ -98,7 +103,7 @@ export default function Services() {
       icon: "activities",
       title: "Activities & Places",
       bullets: [
-        "Tours, attractions, museums, landmarks—describe what guests will find.",
+        "Tours, attractions, museums, landmarks describe what guests will find.",
         "Add timing, ticket info (if any), and must-see photos.",
         "Visitors can favorite, rate, and leave feedback.",
       ],
@@ -181,8 +186,26 @@ export default function Services() {
         <h3>Ready to grow with Ziara?</h3>
         <p className="svc-sub">Create an account or reach out to our team anytime.</p>
         <div className="cta-actions">
-          <div className="btn-pill btn-pill--primary" aria-disabled="true">Create Account</div>
-          <div className="btn-pill btn-pill--outline" aria-disabled="true">Contact Us</div>
+          <div
+            className="btn-pill btn-pill--primary"
+            aria-disabled="true"
+            onClick={goSignup}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && goSignup()}
+          >
+            Create Account
+         </div>
+         <div
+          className="btn-pill btn-pill--outline"
+           aria-disabled="true"
+           onClick={goContact}
+            role="button"
+           tabIndex={0}
+            onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && goContact()}
+         >
+            Contact Us
+          </div>
         </div>
       </section>
     </div>
