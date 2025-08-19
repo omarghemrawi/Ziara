@@ -6,6 +6,7 @@
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 15px;
+  text-align: center;
 }
 
 .user-search {
@@ -66,16 +67,60 @@
   background-color: #c53030;
 }
 
-.ban-btn.unban {
-  background-color: #38a169;
-}
-
-.ban-btn.unban:hover {
-  background-color: #2f855a;
-}
-
 .no-users {
   text-align: center;
   padding: 20px;
   color: #888;
+}
+
+/* ✅ Responsive design */
+@media (max-width: 768px) {
+  .user-table thead {
+    display: none; /* hide table head */
+  }
+
+  .user-table,
+  .user-table tbody,
+  .user-table tr,
+  .user-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .user-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .user-table td {
+    text-align: right;
+    padding: 10px;
+    position: relative;
+  }
+
+  .user-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: #555;
+  }
+
+  .actions-cell {
+    text-align: right;
+  }
+
+  .user-search {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .user-title {
+    font-size: 18px;
+  }
 }

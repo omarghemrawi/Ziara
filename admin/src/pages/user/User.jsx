@@ -69,17 +69,17 @@ const User = () => {
             {filteredUsers.length > 0 ? (
               filteredUsers.map((user) => (
                 <tr key={user._id}>
-                  <td>{user.username}</td>
-                  <td>{user.email}</td>
-                  <td>{user.isVerified ? "✅ Yes" : "❌ No"}</td>
-                  <td className="actions-cell">
-                    <button
-                      onClick={() => handleRemoveButton(user._id)}
-                      className="remove-btn"
-                    >
-                      Remove
-                    </button>
-                  </td>
+                  <td data-label="Username">{user.username}</td>
+        <td data-label="Email">{user.email}</td>
+        <td data-label="Verified">{user.isVerified ? "✅ Yes" : "❌ No"}</td>
+        <td data-label="Actions" className="actions-cell">
+          <button
+            onClick={() => handleRemoveButton(user._id)}
+            className="remove-btn"
+          >
+            Remove
+          </button>
+        </td>
                 </tr>
               ))
             ) : (
