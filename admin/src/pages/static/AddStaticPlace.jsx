@@ -58,8 +58,8 @@ const AddStaticPlace = () => {
         city: form.city,
         location: form.location,
         referenceImages: form.referenceImages,
-      }, {
-  headers: { Authorization: `Bearer ${token}` }});
+       }, {
+        headers: { Authorization: `Bearer ${token}` }});
 
       if (response.data.success) {
         toast.success("Place created successfully!");

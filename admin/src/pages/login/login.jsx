@@ -62,7 +62,6 @@ const Login = () => {
         <button type="submit">Login</button>
       </form>
 
-      {/* Credentials info */}
       <div
         style={{
           marginTop: "20px",

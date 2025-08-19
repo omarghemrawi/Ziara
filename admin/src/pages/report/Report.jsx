@@ -15,8 +15,8 @@ function ReportPage() {
     try {
       if (type === "place") {
         const res = await axios.get(`http://localhost:5000/api/client/place/${id}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+      headers: { Authorization: `Bearer ${token}` }
+        });
         if (res.data.success) {
           setDetails(res.data.place);
           setShowPlaceDetails(true);
@@ -25,8 +25,8 @@ function ReportPage() {
         }
       } else {
         const res = await axios.get(`http://localhost:5000/api/review/${id}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+         headers: { Authorization: `Bearer ${token}` }
+         });
         if (res.data.success) {
           setDetails(res.data.data);
           setShowReviewDetails(true);
@@ -60,8 +60,8 @@ function ReportPage() {
   const getReports = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/report", {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+          headers: { Authorization: `Bearer ${token}` }
+        });
       if (res.data.success) {
         setReports(res.data.reports);
       } else {

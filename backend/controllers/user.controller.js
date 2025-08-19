@@ -1,8 +1,6 @@
-
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import axios from "axios";
@@ -101,7 +99,6 @@ export const userSignUp = async (req, res) => {
 
 
 // Email verification route
-
 export const verifyEmail = async (req, res) => {
   try {
     const { token } = req.params;
@@ -122,9 +119,7 @@ export const verifyEmail = async (req, res) => {
   }
 };
 
-
 // Login (blocked if not verified)
-
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -309,7 +304,7 @@ export const resendVerificationCode = async (req, res) => {
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };
-// ========================
+
 // Forgot Password (send reset code)
 // ========================
 export const forgotPassword = async (req, res) => {

@@ -6,11 +6,12 @@ const Review = () => {
   const [reviews, setReviews] = useState([]);
   const [filteredReviews, setFilteredReviews] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+      const token = localStorage.getItem("adminToken");
+
 
   // Fetch reviews from API
   const fetchReviews = async () => {
     try {
-      const token = localStorage.getItem("adminToken");
       const res = await axios.get("http://localhost:5000/api/review", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -29,7 +30,6 @@ const Review = () => {
   const handleDelete = async (reviewId) => {
     if (!window.confirm("Are you sure you want to delete this review?")) return;
     try {
-      const token = localStorage.getItem("adminToken");
       await axios.delete(`http://localhost:5000/api/review/${reviewId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });

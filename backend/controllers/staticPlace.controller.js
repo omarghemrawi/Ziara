@@ -1,6 +1,6 @@
 import StaticPlace from "../models/staticPlace.model.js";
 
-// ?? Done
+//! get all places (religious and touristic)
 export const getAllPlaces = async (req, res) => {
   try {
     const places = await StaticPlace.find().sort({ createdAt: -1 });
@@ -9,6 +9,23 @@ export const getAllPlaces = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+//! get place for admin and user 
+export const getPlace = async (req, res) => {
+  try {
+    const place = await StaticPlace.findById(req.params.id);
+    if (!place) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Place not found" });
+    }
+    res.json({ success: true, data: place });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
 export const createPlace = async (req, res) => {
   try {
     const place = new StaticPlace(req.body);
@@ -49,17 +66,3 @@ export const deletePlace = async (req, res) => {
   }
 };
 
-// !!
-export const getPlace = async (req, res) => {
-  try {
-    const place = await StaticPlace.findById(req.params.id);
-    if (!place) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Place not found" });
-    }
-    res.json({ success: true, data: place });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-};

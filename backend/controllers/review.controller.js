@@ -23,7 +23,7 @@ export const createReview = async (req, res) => {
 
     await review.save();
 
-    const avg = await updatePlaceRating(placeId, placeModel);
+    await updatePlaceRating(placeId, placeModel);
 
     res
       .status(201)
@@ -42,7 +42,7 @@ export const deleteReview = async (req, res) => {
         .status(410)
         .json({ success: false, message: "Review already deleted" });
     }
-    const avg = await updatePlaceRating(review.placeId, review.placeModel);
+    await updatePlaceRating(review.placeId, review.placeModel);
 
     res.json({ success: true, message: "Review deleted" });
   } catch (error) {
@@ -62,7 +62,7 @@ export const getPlaceReviews = async (req, res) => {
   }
 };
 
-// Get all reviews for a user //? no delete
+// Get all reviews for a user 
 export const getUserReviews = async (req, res) => {
   try {
     const  userId = req.userId
@@ -98,8 +98,7 @@ export const getSingleReview = async (req, res) => {
 
     // Find the review by ID
     const review = await Review.findById(reviewId)
-      .populate("userId", "username email") // correct field name for User
-      // .populate("placeId", "name profile"); 
+      .populate("userId", "username email") 
 
     if (!review) {
       return res.status(404).json({ success: false, message: "Review not found" });
@@ -114,9 +113,9 @@ export const getSingleReview = async (req, res) => {
 
 export const getAllReviews = async (req, res) => {
   try {
-    const reviews = await Review.find()                     // get all reviews
-      .populate("userId", "username profileImage")         // load username + profileImage from User
-      .populate("placeId", "name")                         // optional: get place name
+    const reviews = await Review.find()                   
+      .populate("userId", "username profileImage")         
+      .populate("placeId", "name")                         
       .sort({ createdAt: -1 });                            // newest first
 
     res.json({ success: true, reviews });

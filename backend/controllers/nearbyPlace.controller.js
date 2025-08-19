@@ -14,7 +14,7 @@ const filterPlaces = (places) => {
 };
 
 export const getNearbyPlaces = async (req, res) => {
-//   const { latitude, longitude } = req.body;
+//   const { latitude, longitude } = req.query;
   const apiKey = process.env.API_KEY_GOOGLE_PLACES;
 
   const latitude = 34.45387
@@ -42,12 +42,13 @@ export const getNearbyPlaces = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch nearby places" });
   }
 };
+    // const latitude = 34.424569
+    // const longitude= 35.8304939
 
 export const getNearbyRestaurants = async (req, res) => {
-//   const { latitude, longitude } = req.body;
+  const { latitude, longitude } = req.query;
   const apiKey = process.env.API_KEY_GOOGLE_PLACES;
-    const latitude = 34.424569
-    const longitude= 35.8304939
+
 
   if (!latitude || !longitude) {
     return res
@@ -75,7 +76,7 @@ export const getNearbyRestaurants = async (req, res) => {
 };
 
 export const getNearbyTouristicPlaces = async (req, res) => {
-//   const { latitude, longitude } = req.body;
+//   const { latitude, longitude } = req.query;
   const apiKey = process.env.API_KEY_GOOGLE_PLACES;
     const latitude = 34.424569
     const longitude= 35.8304939
@@ -106,6 +107,8 @@ export const getNearbyTouristicPlaces = async (req, res) => {
 };
 
 export const getNearbyReligiousPlaces = async (req, res) => {
+//   const { latitude, longitude } = req.query;
+
   const latitude = 34.45387;
   const longitude = 35.87083;
   const radius = 1500;

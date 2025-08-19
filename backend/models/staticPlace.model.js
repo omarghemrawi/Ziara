@@ -12,11 +12,9 @@ const staticPlaceSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        // required: true
     },
     profile: {
         type: String,
-        // required: true
     },
     referenceImages: [],
     rate: {
