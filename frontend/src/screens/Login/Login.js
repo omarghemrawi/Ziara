@@ -24,24 +24,25 @@ export default function Login({ navigation }) {
 
   const handleLogin = async values => {
     try {
-      const response = await axios.post('http://192.168.0.101:5000/api/user/login', {
+      const response = await axios.post('http://10.0.2.2:5000/api/user/login', {
         email: values.email,
         password: values.password,
       });
 
       if (response.data.success) {
-        await AsyncStorage.setItem('user', JSON.stringify(response.data.user)); 
+        await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
         await AsyncStorage.setItem('token', response.data.token);
         await AsyncStorage.removeItem('guest');
         dispatch({
           type: 'SET_USER',
           payload: response.data.user,
         });
-       navigation.dispatch(
-  CommonActions.reset({
-    index: 0,
-    routes: [{ name: 'Home' }],
-  })); // Navigate to Home after successful login
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          }),
+        ); // Navigate to Home after successful login
       } else {
         Toast.show({
           type: 'error',
@@ -83,7 +84,7 @@ export default function Login({ navigation }) {
           touched,
         }) => (
           <>
-           <Text style={styles.label}>Email</Text>
+            <Text style={styles.label}>Email</Text>
             <TextInput
               style={styles.input}
               placeholder="Email"
@@ -96,7 +97,7 @@ export default function Login({ navigation }) {
             {touched.email && errors.email && (
               <Text style={styles.errorText2}>*{errors.email}</Text>
             )}
- <Text style={styles.label}>Password</Text>
+            <Text style={styles.label}>Password</Text>
             <TextInput
               style={styles.input}
               placeholder="Password"

@@ -34,7 +34,7 @@ export default function Visited() {
       console.log(token);
 
       const { data } = await axios.delete(
-        `http://192.168.0.101:5000/api/visited/${placeId}`,
+        `http://10.0.2.2:5000/api/visited/${placeId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,7 +53,6 @@ export default function Visited() {
   };
 
   const getVisitedPlaces = () => {
-
     setVisitedPLaces(
       places.filter(place => user?.visitedPlaces?.includes(place._id)),
     );
@@ -62,10 +61,10 @@ export default function Visited() {
   useEffect(() => {
     if (user && user?.visitedPlaces) {
       getVisitedPlaces();
-          AsyncStorage.setItem('visited', JSON.stringify(user.visitedPlaces));
+      AsyncStorage.setItem('visited', JSON.stringify(user.visitedPlaces));
     } else {
       setVisitedPLaces([]);
-         AsyncStorage.removeItem('visited');
+      AsyncStorage.removeItem('visited');
     }
   }, [user?.visitedPlaces]);
 

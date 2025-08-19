@@ -55,7 +55,7 @@ export default function EditProfileScreen({ navigation }) {
         imageUrl = user?.profile;
       }
       await axios.put(
-        'http://192.168.0.101:5000/api/user',
+        'http://10.0.2.2:5000/api/user',
         {
           profile: imageUrl,
           userId: user._id,
@@ -112,7 +112,9 @@ export default function EditProfileScreen({ navigation }) {
         <Image
           source={{
             uri:
-              profileImage || user?.profile || 'https://example.com/default.jpg',
+              profileImage ||
+              user?.profile ||
+              'https://example.com/default.jpg',
           }}
           style={styles.profileImage}
         />

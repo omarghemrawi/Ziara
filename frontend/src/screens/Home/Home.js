@@ -36,8 +36,8 @@ export default function Home() {
 
   const getData = async (searchTerm = '') => {
     try {
-      const staticRes = await axios.get('http://192.168.0.101:5000/api/static');
-      const clientRes = await axios.get('http://192.168.0.101:5000/api/client');
+      const staticRes = await axios.get('http://10.0.2.2:5000/api/static');
+      const clientRes = await axios.get('http://10.0.2.2:5000/api/client');
 
       const staticPlaces = staticRes.data.places || [];
       const clientPlaces = clientRes.data.places || [];
@@ -110,19 +110,19 @@ export default function Home() {
           labelKey="nearby"
           image={require('../../assets/images/map.png')}
         />
-           <OptionBox
+        <OptionBox
           labelKey="trip"
           image={require('../../assets/images/trip.png')}
-            onPress={() => {
-    Linking.openURL('https://www.getyourguide.com/lebanon-l169127/')
-      .catch(err => console.error("Failed to open URL:", err));
-  }}
-  isBrown
+          onPress={() => {
+            Linking.openURL(
+              'https://www.getyourguide.com/lebanon-l169127/',
+            ).catch(err => console.error('Failed to open URL:', err));
+          }}
+          isBrown
         />
         <OptionBox
           labelKey="popularFoods"
           image={require('../../assets/images/Hummus.png')}
-       
         />
         <OptionBox
           labelKey="popularPlaces"
@@ -167,7 +167,7 @@ export default function Home() {
 }
 
 // Small horizontal square box
-const OptionBox = ({ labelKey, image, isBrown ,onPress}) => {
+const OptionBox = ({ labelKey, image, isBrown, onPress }) => {
   const navigation = useNavigation();
 
   // map label → screen name
@@ -176,9 +176,9 @@ const OptionBox = ({ labelKey, image, isBrown ,onPress}) => {
     popularFoods: 'PopularFoods',
     popularPlaces: 'PopularPlaces',
   };
-const handlePress = () => {
+  const handlePress = () => {
     if (onPress) {
-      onPress(); 
+      onPress();
     } else {
       const screen = screenMap[labelKey];
       if (screen) navigation.navigate(screen);

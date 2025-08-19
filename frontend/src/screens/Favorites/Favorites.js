@@ -31,8 +31,6 @@ export default function Favourites() {
   const getToken = async () => setToken(await AsyncStorage.getItem('token'));
 
   const getFavoritePLaces = () => {
- 
-
     setFavoritePlaces(
       places.filter(place => user?.favoritePlaces.includes(place._id)),
     );
@@ -55,7 +53,7 @@ export default function Favourites() {
   const handleMoveToVisited = async () => {
     try {
       await axios.post(
-        'http://192.168.0.101:5000/api/visited',
+        'http://10.0.2.2:5000/api/visited',
         { place_id: idSelectedPlace },
         { headers: { Authorization: `Bearer ${token}` } },
       );
@@ -74,7 +72,7 @@ export default function Favourites() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete('http://192.168.0.101:5000/api/favorite', {
+      await axios.delete('http://10.0.2.2:5000/api/favorite', {
         data: { placeId: idSelectedPlace },
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -97,10 +95,10 @@ export default function Favourites() {
   useEffect(() => {
     if (user && user?.favoritePlaces) {
       getFavoritePLaces();
-        AsyncStorage.setItem('favorites', JSON.stringify(user.favoritePlaces));
+      AsyncStorage.setItem('favorites', JSON.stringify(user.favoritePlaces));
     } else {
       setFavoritePlaces([]);
-        AsyncStorage.removeItem('favorites');
+      AsyncStorage.removeItem('favorites');
     }
   }, [user?.favoritePlaces, places]);
   return (

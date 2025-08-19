@@ -8,7 +8,6 @@ import {
   ScrollView,
   Modal,
   TextInput,
-  ToastAndroid,
   Alert,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -35,30 +34,30 @@ export default function PlaceDetailScreen() {
   const [showTooltip, setShowTooltip] = useState(true);
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [selectedImageUri, setSelectedImageUri] = useState(null);
-  const [places, setPlaces] = useState([]);
+  // const [places, setPlaces] = useState([]);
   const [suggestedPlaces, setSuggestedPlaces] = useState([]);
 
   const route = useRoute();
   const { id, type } = route.params;
   const navigation = useNavigation();
-  const data = useSelector(state => state.places[type]);
+  // const data = useSelector(state => state.places[type] || []);
   const user = useSelector(state => state.user.user);
   const allPlaces = useSelector(state => state.places.all);
   const dispatch = useDispatch();
 
-  const place = data.find(item => item._id === id);
+  const place = allPlaces.find(item => item._id === id);
 
   const starArray = [1, 2, 3, 4, 5];
   const [isGuest, setIsGuest] = useState(false);
 
-  const actionTypeMap = {
-    restaurant: 'SET_RESTAURANTS',
-    shop: 'SET_SHOPS',
-    hotel: 'SET_HOTELS',
-    activity: 'SET_ACTIVITY_PLACES',
-    religious: 'SET_RELIGIOUS_PALCES',
-    touristic: 'SET_TOURISTIC_PLACES',
-  };
+  // const actionTypeMap = {
+  //   restaurant: 'SET_RESTAURANTS',
+  //   shop: 'SET_SHOPS',
+  //   hotel: 'SET_HOTELS',
+  //   activity: 'SET_ACTIVITY_PLACES',
+  //   religious: 'SET_RELIGIOUS_PALCES',
+  //   touristic: 'SET_TOURISTIC_PLACES',
+  // };
 
   const openImageModal = uri => {
     setSelectedImageUri(uri);
@@ -71,10 +70,11 @@ export default function PlaceDetailScreen() {
     setSelectedImageUri(null);
   };
 
-  const fetchSuggestedPlace = place => {
+  const fetchSuggestedPlace = () => {
     console.log(allPlaces);
     if (!place || !place.city) return;
     const city = place.city;
+    const type = place.type;
     const suggestions = allPlaces.filter(
       p => p.city === city && String(p._id) !== String(id),
     );
@@ -89,14 +89,14 @@ export default function PlaceDetailScreen() {
     try {
       if (newValue) {
         await axios.post(
-          'http://192.168.0.101:5000/api/favorite/',
+          'http://10.0.2.2:5000/api/favorite/',
           { placeId: id },
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
       } else {
-        await axios.delete('http://192.168.0.101:5000/api/favorite', {
+        await axios.delete('http://10.0.2.2:5000/api/favorite', {
           data: { placeId: id },
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -156,7 +156,7 @@ export default function PlaceDetailScreen() {
         : 'ClientPlace';
       // Submit review data
       const res = await axios.post(
-        'http://192.168.0.101:5000/api/review',
+        'http://10.0.2.2:5000/api/review',
         {
           rating: selectedStar,
           comment: reviewText,
@@ -212,8 +212,8 @@ export default function PlaceDetailScreen() {
       }
     };
     checkGuest();
-    fetchSuggestedPlace(place);
-  }, []);
+    fetchSuggestedPlace();
+  }, [id, type, allPlaces]);
 
   useEffect(() => {
     if (user && user.favoritePlaces) {
@@ -235,7 +235,7 @@ export default function PlaceDetailScreen() {
 
     try {
       const res = await axios.get(
-        `http://192.168.0.101:5000/api/review/place/${placeId}`,
+        `http://10.0.2.2:5000/api/review/place/${placeId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -249,7 +249,7 @@ export default function PlaceDetailScreen() {
   };
 
   const [visibleReviews, setVisibleReviews] = useState(3); // Start by showing 3 reviews
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
 
@@ -385,8 +385,8 @@ export default function PlaceDetailScreen() {
             onPress={() =>
               navigation.navigate('Map', {
                 // locationUrl: place.location || null,
-                locationUrl:place.location
-                  // 'https://www.google.com/maps/place/Baytna/@34.42762,35.8279711,17z',
+                locationUrl: place.location,
+                // 'https://www.google.com/maps/place/Baytna/@34.42762,35.8279711,17z',
               })
             }
           >
@@ -407,36 +407,54 @@ export default function PlaceDetailScreen() {
 
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
         <Text style={styles.descriptionText}>{place?.description}</Text>
-        <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
+        {place?.phone ? (
+          <Text style={styles.phoneText}>Call us On : {place?.phone}</Text>
+        ) : (
+          ''
+        )}
 
-        <SocialIcons
-          facebookLink={place?.facebook}
-          instagramLink={place?.instagram}
-          isResto={place?.type === 'restaurant'}
-          menuLink={place?.menuLink}
-        />
+        <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
+        {place?.facebook || place?.instagram || place?.menuLink ? (
+          <SocialIcons
+            facebookLink={place?.facebook}
+            instagramLink={place?.instagram}
+            isResto={place?.type === 'restaurant'}
+            menuLink={place?.menuLink}
+          />
+        ) : (
+          ''
+        )}
+
         {/* suggested places */}
         <Text style={styles.sectionTitle}>{i18n.t('SuggestedPlaces')}</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View style={styles.suggestedRow}>
-            {suggestedPlaces.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.suggestedCard}
-                onPress={() =>
-                  navigation.navigate('PlaceDetails', {
-                    id: item._id,
-                    type: item.type,
-                  })
-                }
+            {suggestedPlaces.length > 0 ? (
+              suggestedPlaces.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.suggestedCard}
+                  onPress={() =>
+                    navigation.navigate('PlaceDetails', {
+                      id: item._id,
+                      type: item.type,
+                    })
+                  }
+                >
+                  <Image
+                    source={{ uri: item?.profile }}
+                    style={styles.suggestedImage}
+                  />
+                  <Text style={styles.suggestedName}>{item?.name}</Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text
+                style={{ color: '#555', fontStyle: 'italic', marginLeft: 10 }}
               >
-                <Image
-                  source={{ uri: item?.profile }}
-                  style={styles.suggestedImage}
-                />
-                <Text style={styles.suggestedName}>{item?.name}</Text>
-              </TouchableOpacity>
-            ))}
+                No places found in same city/region.
+              </Text>
+            )}
           </View>
         </ScrollView>
 
@@ -718,6 +736,12 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontSize: 14,
     color: '#555',
+  },
+  phoneText: {
+    marginTop: 5,
+    fontSize: 14,
+    color: '#1f1f1fff',
+    fontWeight: 'bold',
   },
   actionsRow: {
     flexDirection: 'column',

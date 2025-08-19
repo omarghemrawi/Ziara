@@ -13,8 +13,8 @@ export default function ForgotPassword({ navigation }) {
   const requestResetCode = async () => {
     try {
       const res = await axios.post(
-        'http://192.168.0.101:5000/api/user/forgot-password',
-        { email:email.toLowerCase() },
+        'http://10.0.2.2:5000/api/user/forgot-password',
+        { email: email.toLowerCase() },
       );
       Alert.alert('Success', res.data.message);
       setStep(2);
@@ -32,9 +32,9 @@ export default function ForgotPassword({ navigation }) {
     }
     try {
       const res = await axios.post(
-        'http://192.168.0.101:5000/api/user/reset-password',
+        'http://10.0.2.2:5000/api/user/reset-password',
         {
-          email:email.toLowerCase(),
+          email: email.toLowerCase(),
           code,
           newPassword,
         },
@@ -76,7 +76,7 @@ export default function ForgotPassword({ navigation }) {
             value={code}
             onChangeText={setCode}
           />
-            <Text style={styles.label}>New Password</Text>
+          <Text style={styles.label}>New Password</Text>
           <TextInput
             style={styles.input}
             placeholder="New password"
@@ -84,7 +84,7 @@ export default function ForgotPassword({ navigation }) {
             value={newPassword}
             onChangeText={setNewPassword}
           />
-            <Text style={styles.label}>Confirm Password</Text>
+          <Text style={styles.label}>Confirm Password</Text>
           <TextInput
             style={styles.input}
             placeholder="Confirm password"
