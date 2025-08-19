@@ -49,22 +49,43 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   const [initialRoute, setInitialRoute] = React.useState(null);
 
-  useEffect(() => {
-    const checkUserStatus = async () => {
-      const token = await AsyncStorage.getItem('token');
-      const guest = await AsyncStorage.getItem('guest');
+  // useEffect(() => {
+  //   const checkUserStatus = async () => {
+  //     const token = await AsyncStorage.getItem('token');
+  //     const guest = await AsyncStorage.getItem('guest');
 
-      if (token) {
-        setInitialRoute('Home');  // logged in
-      } else if (guest) {
-        setInitialRoute('Home');  // guest
-      } else {
-        setInitialRoute('Onboarding'); // not logged in
-      }
-    };
+  //     if (token) {
+  //       setInitialRoute('Home');  // logged in
+  //     } else if (guest) {
+  //       setInitialRoute('Home');  // guest
+  //     } else {
+  //       setInitialRoute('Onboarding'); // not logged in
+  //     }
+  //   };
 
-    checkUserStatus();
-  }, []);
+  //   checkUserStatus();
+  // }, []);
+useEffect(() => {
+  const checkUserStatus = async () => {
+    const token = await AsyncStorage.getItem('token');
+    const guest = await AsyncStorage.getItem('guest');
+    const savedUser = await AsyncStorage.getItem('user');
+
+    if (token && savedUser) {
+      // Set user in Redux or local state
+      const userObject = JSON.parse(savedUser);
+      store.dispatch({ type: 'SET_USER', payload: userObject });
+
+      setInitialRoute('Home');  // logged in
+    } else if (guest) {
+      setInitialRoute('Home');  // guest
+    } else {
+      setInitialRoute('Onboarding'); // not logged in
+    }
+  };
+
+  checkUserStatus();
+}, []);
 
   if (!initialRoute) return null;
   return (

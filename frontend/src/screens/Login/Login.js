@@ -5,6 +5,7 @@ import styles from './styles';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 
@@ -29,13 +30,18 @@ export default function Login({ navigation }) {
       });
 
       if (response.data.success) {
+        await AsyncStorage.setItem('user', JSON.stringify(response.data.user)); 
         await AsyncStorage.setItem('token', response.data.token);
         await AsyncStorage.removeItem('guest');
         dispatch({
           type: 'SET_USER',
           payload: response.data.user,
         });
-        navigation.navigate('Home'); // Navigate to Home after successful login
+       navigation.dispatch(
+  CommonActions.reset({
+    index: 0,
+    routes: [{ name: 'Home' }],
+  })); // Navigate to Home after successful login
       } else {
         Toast.show({
           type: 'error',

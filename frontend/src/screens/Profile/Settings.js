@@ -25,13 +25,14 @@ const SettingsScreen = () => {
   const dispatch = useDispatch();
   const handleLogout = async () => {
   try {
-     await AsyncStorage.multiRemove([
-      'token',
-      'user',
-      'guest',
-      'favorites',
-      'visited'
-    ]);
+    //  await AsyncStorage.multiRemove([
+    //   'token',
+    //   'user',
+    //   'guest',
+    //   'favorites',
+    //   'visited'
+    // ]);
+     await AsyncStorage.clear();
       dispatch(clearUser());
    
     navigation.replace('Welcome');

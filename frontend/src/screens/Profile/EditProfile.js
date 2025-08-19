@@ -37,7 +37,7 @@ export default function EditProfileScreen({ navigation }) {
   const handleEdit = async () => {
     const token = await AsyncStorage.getItem('token');
 
-    if (!name && !user.username) {
+    if (!name && !user?.username) {
       Toast.show({
         type: 'error',
         text1: 'Alert',
@@ -52,7 +52,7 @@ export default function EditProfileScreen({ navigation }) {
       if (profileImage !== null) {
         imageUrl = await uploadImageToCloudinary(profileImage);
       } else {
-        imageUrl = user.profile;
+        imageUrl = user?.profile;
       }
       await axios.put(
         'http://192.168.0.101:5000/api/user',
@@ -60,7 +60,7 @@ export default function EditProfileScreen({ navigation }) {
           profile: imageUrl,
           userId: user._id,
           about,
-          username: name || user.username,
+          username: name || user?.username,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -112,7 +112,7 @@ export default function EditProfileScreen({ navigation }) {
         <Image
           source={{
             uri:
-              profileImage || user.profile || 'https://example.com/default.jpg',
+              profileImage || user?.profile || 'https://example.com/default.jpg',
           }}
           style={styles.profileImage}
         />
@@ -125,7 +125,7 @@ export default function EditProfileScreen({ navigation }) {
       <Text style={styles.label}>{i18n.t('name')}</Text>
       <TextInput
         style={styles.input}
-        placeholder={'Current ' + user.username}
+        placeholder={'Current ' + user?.username}
         placeholderTextColor="#777"
         value={name}
         onChangeText={setName}
