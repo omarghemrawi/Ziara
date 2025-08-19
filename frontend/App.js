@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { LanguageProvider } from './src/screens/locales/LanguageContext';
@@ -41,37 +42,38 @@ import MapScreen from './src/screens/Map/Map';
 import ReportPlaceScreen from './src/screens/Report/ReportPlaceScreen';
 import VerifyEmail from './src/screens/Signup/VerfiyEmail';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [initialRoute, setInitialRoute] = React.useState(null);
 
-  // useEffect(() => {
-  //   const checkUserStatus = async () => {
-  //     const token = await AsyncStorage.getItem('token');
-  //     const guest = await AsyncStorage.getItem('guest');
+  useEffect(() => {
+    const checkUserStatus = async () => {
+      const token = await AsyncStorage.getItem('token');
+      const guest = await AsyncStorage.getItem('guest');
 
-  //     if (token) {
-  //       setInitialRoute('Home');  // logged in
-  //     } else if (guest) {
-  //       setInitialRoute('Home');  // guest
-  //     } else {
-  //       setInitialRoute('Login'); // not logged in
-  //     }
-  //   };
+      if (token) {
+        setInitialRoute('Home');  // logged in
+      } else if (guest) {
+        setInitialRoute('Home');  // guest
+      } else {
+        setInitialRoute('Onboarding'); // not logged in
+      }
+    };
 
-  //   checkUserStatus();
-  // }, []);
+    checkUserStatus();
+  }, []);
 
-  // if (!initialRoute) return null;
+  if (!initialRoute) return null;
   return (
     <LanguageProvider>
       <Provider store={store}>
         <ThemeProvider>
           <NavigationContainer>
             <Stack.Navigator
-              initialRouteName="Onboarding"
+              initialRouteName ={initialRoute}
               screenOptions={{ headerShown: false }}
             >
               {/* Onboarding & Splash */}
