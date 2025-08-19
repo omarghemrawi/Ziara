@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
+import styles from './NearbyScreenstyle';
 import i18n from '../locales/i18n';
 import Config from 'react-native-config';
 import axios from 'axios';
@@ -23,63 +24,94 @@ export default function NearbyScreen() {
   const [loading, setLoading] = useState(true);
   const [locationError, setLocationError] = useState(false);
 
+
   const fetchData = async () => {
-    try {
-      const [resRestaurants, resTouristic, resReligious] = await Promise.all([
-        axios.get('http://10.0.2.2:5000/api/nearby/restaurant', {
-          params: {
-            latitude: 34.424569,
-            longitude: 35.8304939,
-          },
-        }),
-        axios.get('http://10.0.2.2:5000/api/nearby/touristic', {
-          params: {
-            latitude: 34.424569,
-            longitude: 35.8304939,
-          },
-        }),
-        axios.get('http://10.0.2.2:5000/api/nearby/religious', {
-          params: {
-            latitude: 34.424569,
-            longitude: 35.8304939,
-          },
-        }),
-      ]);
+  try {
+    if (!location) return; 
 
-      setRestaurants(resRestaurants.data.restaurants || []);
-      setTouristic(resTouristic.data.touristPlaces || []);
-      setReligious(resReligious.data.religiousPlaces || []);
-    } catch (error) {
-      console.error('Failed to fetch nearby places:', error.message);
-      // You could set an error state here if needed
-    } finally {
-      setLoading(false);
-    }
-  };
+    const [resRestaurants, resTouristic, resReligious] = await Promise.all([
+      axios.get('http://192.168.0.101:5000/api/nearby/restaurant', {
+        params: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
+      }),
+      axios.get('http://192.168.0.101:5000/api/nearby/touristic', {
+        params: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
+      }),
+      axios.get('http://192.168.0.101:5000/api/nearby/religious', {
+        params: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+        },
+      }),
+    ]);
 
+    setRestaurants(resRestaurants.data.restaurants || []);
+    setTouristic(resTouristic.data.touristPlaces || []);
+    setReligious(resReligious.data.religiousPlaces || []);
+  } catch (error) {
+    console.error('Failed to fetch nearby places:', error.message);
+  } finally {
+    setLoading(false);
+  }
+};
   useEffect(() => {
-    const requestLocation = async () => {
-      try {
-        const loc = await GetLocation.getCurrentPosition({
-          enableHighAccuracy: true,
-          timeout: 60000,
-        });
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 60000,
+    })
+      .then(loc => {
         setLocation(loc);
-        setLocationError(false);
-      } catch (error) {
-        console.warn('Location error:', error.message);
-        setLocationError(true);
-        // Set a default location if location fails
-        setLocation({
-          latitude: 33.8938,
-          longitude: 35.5018, // Beirut coordinates as fallback
-        });
-      }
-    };
-
-    requestLocation();
-    fetchData();
+        Alert.alert(
+          'Location Retrieved',
+          `Latitude: ${loc.latitude}\nLongitude: ${loc.longitude}`
+        );
+      })
+      .catch(error => {
+        const { message } = error;
+        console.warn(message);
+        Alert.alert('Error', message);
+      });
   }, []);
+//   useEffect(() => {
+//   const requestLocation = async () => {
+//     try {
+//       const loc = await GetLocation.getCurrentPosition({
+//         enableHighAccuracy: true,
+//         timeout: 60000,
+//       });
+//       setLocation(loc);
+//       setLocationError(false);
+//       Alert.alert(
+//         'Location Retrieved',
+//         `Latitude: ${loc.latitude}\nLongitude: ${loc.longitude}`
+//       );
+//     } catch (error) {
+//       console.warn('Location error:', error.message);
+//       setLocationError(true);
+//       setLocation({
+//         latitude: 33.8938,
+//         longitude: 35.5018, // Beirut fallback
+//       });
+//       Alert.alert(
+//         'Location Error',
+//         'Using default location (Beirut)'
+//       );
+//     }
+//   };
+
+//   requestLocation();
+// }, []);
+
+useEffect(() => {
+  if (location) {
+    fetchData(); // now it will fetch only after location is available
+  }
+}, [location]);
 
   // Filter and validate places data
   const getValidPlaces = places => {
@@ -206,87 +238,3 @@ export default function NearbyScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  header: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  locationError: {
-    fontSize: 12,
-    color: '#FF6B6B',
-    fontStyle: 'italic',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 100,
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: '#666',
-  },
-  map: {
-    width: Dimensions.get('window').width,
-    height: 250,
-  },
-  section: {
-    paddingHorizontal: 20,
-    marginTop: 20,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 10,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: '#999',
-    fontStyle: 'italic',
-    textAlign: 'center',
-    paddingVertical: 20,
-  },
-  card: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-    overflow: 'hidden',
-    marginBottom: 15,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
-  image: {
-    width: '100%',
-    height: 180,
-  },
-  cardTitle: {
-    padding: 10,
-    paddingBottom: 5,
-    fontSize: 16,
-    fontWeight: '500',
-    backgroundColor: '#fff',
-  },
-  cardAddress: {
-    paddingHorizontal: 10,
-    paddingBottom: 10,
-    fontSize: 14,
-    color: '#666',
-    backgroundColor: '#fff',
-  },
-});

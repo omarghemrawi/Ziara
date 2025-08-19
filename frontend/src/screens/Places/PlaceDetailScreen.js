@@ -137,7 +137,7 @@ export default function PlaceDetailScreen() {
         type: 'error',
         text1: 'Bad',
         text2: 'Please fill in all required fields.',
-        position: 'top',
+        position: 'bottom',
         visibilityTime: 5000,
       });
       return;
@@ -408,7 +408,7 @@ export default function PlaceDetailScreen() {
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
         <Text style={styles.descriptionText}>{place?.description}</Text>
         {place?.phone ? (
-          <Text style={styles.phoneText}>Call us On : {place?.phone}</Text>
+          <Text style={styles.phoneText}>{i18n.t('callus')} : {place?.phone}</Text>
         ) : (
           ''
         )}
