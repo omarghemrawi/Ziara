@@ -3,6 +3,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Carousel from "../components/Carousel"; 
 import SignupButton from "../components/SignupButton";
+import { useTranslation } from "react-i18next";   // ✅ Translation hook
 import "./Home.css";
 
 /* inline icons */
@@ -40,10 +41,10 @@ function Icon({ name, size = 28 }) {
 
 export default function Home() {
   const navigate = useNavigate();
+  const { t } = useTranslation();   // ✅ Translation
 
   // Navigate functions
   const goServices = () => navigate("/services");
-
   const goPlans = () => navigate("/services");
   const goAbout = () => navigate("/about");
   const goContact = () => navigate("/contact");
@@ -66,16 +67,12 @@ export default function Home() {
       {/* 1) HERO FIRST */}
       <section className="home-hero">
         <div className="home-hero-inner">
-          <span className="home-kicker">WELCOME TO ZIARA</span>
-          <h1>Discover Lebanon, together.</h1>
-          <p>
-            Ziara connects visitors with local <strong>restaurants</strong>, <strong>stays</strong>,{" "}
-            <strong>activities & places</strong>, and <strong>shops</strong>—through a simple,
-            bilingual experience across web and mobile.
-          </p>
+          <span className="home-kicker">{t("home.hero.kicker")}</span>
+          <h1>{t("home.hero.title")}</h1>
+          <p>{t("home.hero.subtitle")}</p>
           <div className="home-hero-ctas">
             <NavButton className="btn-pill btn-brown" onClick={goServices}>
-              Explore services
+              {t("home.hero.explore")}
             </NavButton>
             <SignupButton />
           </div>
@@ -90,7 +87,7 @@ export default function Home() {
       {/* 3) Explore by category */}
       <section className="home-section">
         <div className="home-heading">
-          <h2>Explore by category</h2>
+          <h2>{t("home.categories.title")}</h2>
           <span className="accent-line" />
         </div>
 
@@ -98,48 +95,48 @@ export default function Home() {
           <div className="home-card">
             <div className="home-card-head">
               <div className="home-icon"><Icon name="restaurant" /></div>
-              <h3>Restaurants</h3>
+              <h3>{t("home.categories.restaurants.title")}</h3>
             </div>
             <ul className="home-list">
-              <li>Menu link + photos</li>
-              <li>Hours, delivery & map</li>
-              <li>Ratings and reviews</li>
+              <li>{t("home.categories.restaurants.item1")}</li>
+              <li>{t("home.categories.restaurants.item2")}</li>
+              <li>{t("home.categories.restaurants.item3")}</li>
             </ul>
           </div>
 
           <div className="home-card">
             <div className="home-card-head">
               <div className="home-icon"><Icon name="hotel" /></div>
-              <h3>Hotels</h3>
+              <h3>{t("home.categories.hotels.title")}</h3>
             </div>
             <ul className="home-list">
-              <li>Rooms & amenities</li>
-              <li>Gallery + exact location</li>
-              <li>External booking link</li>
+              <li>{t("home.categories.hotels.item1")}</li>
+              <li>{t("home.categories.hotels.item2")}</li>
+              <li>{t("home.categories.hotels.item3")}</li>
             </ul>
           </div>
 
           <div className="home-card">
             <div className="home-card-head">
               <div className="home-icon"><Icon name="activities" /></div>
-              <h3>Activities & Places</h3>
+              <h3>{t("home.categories.activities.title")}</h3>
             </div>
             <ul className="home-list">
-              <li>Tours & attractions</li>
-              <li>Timing & ticket info</li>
-              <li>Must-see photos</li>
+              <li>{t("home.categories.activities.item1")}</li>
+              <li>{t("home.categories.activities.item2")}</li>
+              <li>{t("home.categories.activities.item3")}</li>
             </ul>
           </div>
 
           <div className="home-card">
             <div className="home-card-head">
               <div className="home-icon"><Icon name="shop" /></div>
-              <h3>Shops</h3>
+              <h3>{t("home.categories.shops.title")}</h3>
             </div>
             <ul className="home-list">
-              <li>Showcase items</li>
-              <li>Price range + contacts</li>
-              <li>Social links & website</li>
+              <li>{t("home.categories.shops.item1")}</li>
+              <li>{t("home.categories.shops.item2")}</li>
+              <li>{t("home.categories.shops.item3")}</li>
             </ul>
           </div>
         </div>
@@ -148,7 +145,7 @@ export default function Home() {
       {/* 4) Why Ziara */}
       <section className="home-section">
         <div className="home-heading">
-          <h2>Why Ziara?</h2>
+          <h2>{t("home.why.title")}</h2>
           <span className="accent-line" />
         </div>
 
@@ -156,41 +153,41 @@ export default function Home() {
           <div className="home-card">
             <div className="home-card-head">
               <div className="home-icon"><Icon name="restaurant" /></div>
-              <h3>Bilingual by default</h3>
+              <h3>{t("home.why.bilingual.title")}</h3>
             </div>
-            <p className="muted">Arabic/English UI with instant LTR/RTL switch.</p>
+            <p className="muted">{t("home.why.bilingual.desc")}</p>
           </div>
 
           <div className="home-card">
             <div className="home-card-head">
               <div className="home-icon"><Icon name="restaurant" /></div>
-              <h3>Smart ranking</h3>
+              <h3>{t("home.why.ranking.title")}</h3>
             </div>
-            <p className="muted">Plans boost visibility so the right visitors find you.</p>
+            <p className="muted">{t("home.why.ranking.desc")}</p>
           </div>
 
           <div className="home-card">
             <div className="home-card-head">
               <div className="home-icon"><Icon name="restaurant" /></div>
-              <h3>Rich reviews</h3>
+              <h3>{t("home.why.reviews.title")}</h3>
             </div>
-            <p className="muted">Photo reviews with owner replies keep listings fresh.</p>
+            <p className="muted">{t("home.why.reviews.desc")}</p>
           </div>
         </div>
       </section>
 
       {/* 5) Final CTA */}
       <section className="home-cta-final">
-        <h3>Ready to get started?</h3>
+        <h3>{t("home.final.title")}</h3>
         <div className="cta-actions">
           <NavButton className="btn-pill btn-brown" onClick={goPlans}>
-            See plans
+            {t("home.final.plans")}
           </NavButton>
           <NavButton className="btn-pill btn-gold" onClick={goAbout}>
-            About Us
+            {t("home.final.about")}
           </NavButton>
           <NavButton className="btn-pill btn-pill--outline" onClick={goContact}>
-            Contact Us
+            {t("home.final.contact")}
           </NavButton>
         </div>
       </section>

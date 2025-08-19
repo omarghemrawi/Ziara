@@ -1,14 +1,10 @@
-// src/pages/plan/Checkout.jsx
 import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios"
+import { useDispatch } from "react-redux";
+import axios from "axios";
 import { setUser } from "../../redux/userActions";
-// import { subscribePlan } from "../../redux/subscriptionActions";
-
+import { useTranslation } from "react-i18next"; // 👈 Added
 import "./Checkout.css";
-
-
 
 const PLANS = {
   standard: { id: "standard", name: "Standard", price: 10 },
@@ -19,12 +15,12 @@ const PLANS = {
 export default function Checkout() {
   const { planId } = useParams();
   const navigate = useNavigate();
- const token = localStorage.getItem("token");
- const dispatch = useDispatch()
-// const loading = useSelector((s) => s.subscription.loading);
+  const token = localStorage.getItem("token");
+  const dispatch = useDispatch();
+  const { t } = useTranslation(); // 👈 Added
+
   const plan = useMemo(() => PLANS[planId] ?? null, [planId]);
 
-  // فقط الحقول الضرورية للدفع
   const [form, setForm] = useState({
     email: "",
     number: "",
@@ -49,25 +45,23 @@ export default function Checkout() {
     setForm((p) => ({ ...p, [name]: v }));
   };
 
-const payNow = async (plan) => {
-  try {
-    const response = await axios.put("http://localhost:5000/api/client/subscribe", {
-      planName: plan.name, // just the name: "Standard", "Plus", "Pro"
-    }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-    if (response.data.success) {
-      console.log("Plan activated:", response.data.plan);
-      dispatch(setUser(response.data.user));
-      navigate("/profile",{replace:true})
-    } else {
-      alert(`Failed: ${response.data.message}`);
+  const payNow = async (plan) => {
+    try {
+      const response = await axios.put(
+        "http://localhost:5000/api/client/subscribe",
+        { planName: plan.name },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.data.success) {
+        dispatch(setUser(response.data.user));
+        navigate("/profile", { replace: true });
+      } else {
+        alert(`${t("checkout.failed")}: ${response.data.message}`);
+      }
+    } catch (err) {
+      alert(`${t("checkout.paymentFailed")}: ${err.response?.data?.message || err.message}`);
     }
-  } catch (err) {
-    console.error(err.response?.data?.message || err.message);
-    alert(`Payment failed: ${err.response?.data?.message || err.message}`);
-  }
-};
+  };
 
   return (
     <div className="checkout-wrap">
@@ -75,24 +69,26 @@ const payNow = async (plan) => {
         {/* Summary */}
         <div className="summary">
           <div className="logo">Ziara</div>
-          <h2 className="summary-title">Subscribe to {plan.name}</h2>
+          <h2 className="summary-title">
+            {t("checkout.subscribeTo", { plan: plan.name })}
+          </h2>
           <div className="summary-price">
             <span className="s-currency">$</span>
             <span className="s-amount">{plan.price}</span>
-            <span className="s-per">/ month</span>
+            <span className="s-per">/ {t("checkout.month")}</span>
           </div>
 
           <div className="summary-box">
             <div className="row">
-              <span>Subtotal</span>
+              <span>{t("checkout.subtotal")}</span>
               <span>${plan.price.toFixed(2)}</span>
             </div>
             <div className="row">
-              <span>Tax</span>
+              <span>{t("checkout.tax")}</span>
               <span>$0.00</span>
             </div>
             <div className="row row-total">
-              <span>Total due today</span>
+              <span>{t("checkout.total")}</span>
               <span>${plan.price.toFixed(2)}</span>
             </div>
           </div>
@@ -100,24 +96,24 @@ const payNow = async (plan) => {
 
         {/* Payment form */}
         <div className="form">
-          <h3 className="form-title">Contact information</h3>
+          <h3 className="form-title">{t("checkout.contactInfo")}</h3>
           <div className="field">
             <input
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder={t("checkout.email")}
               value={form.email}
               onChange={onChange}
               required
             />
           </div>
 
-          <h3 className="form-title">Payment method</h3>
+          <h3 className="form-title">{t("checkout.paymentMethod")}</h3>
           <div className="field-row">
             <input
               type="text"
               name="number"
-              placeholder="1234 1234 1234 1234"
+              placeholder={t("checkout.cardNumber")}
               value={form.number}
               onChange={onChange}
               inputMode="numeric"
@@ -126,7 +122,7 @@ const payNow = async (plan) => {
             <input
               type="text"
               name="expiry"
-              placeholder="MM / YY"
+              placeholder={t("checkout.expiry")}
               value={form.expiry}
               onChange={onChange}
               inputMode="numeric"
@@ -135,7 +131,7 @@ const payNow = async (plan) => {
             <input
               type="text"
               name="cvc"
-              placeholder="CVC"
+              placeholder={t("checkout.cvc")}
               value={form.cvc}
               onChange={onChange}
               inputMode="numeric"
@@ -147,21 +143,18 @@ const payNow = async (plan) => {
             <input
               type="text"
               name="name"
-              placeholder="Cardholder name"
+              placeholder={t("checkout.cardName")}
               value={form.name}
               onChange={onChange}
               required
             />
           </div>
 
-<button className="pay-btn" onClick={()=>payNow(plan)}>
-  {`Pay $${plan.price} / month`}
-</button>
+          <button className="pay-btn" onClick={() => payNow(plan)}>
+            {t("checkout.payNow", { price: plan.price })}
+          </button>
 
-          <p className="fine">
-            By subscribing, you agree to our Terms and authorize storing your payment method
-            for renewals.
-          </p>
+          <p className="fine">{t("checkout.agreement")}</p>
         </div>
       </div>
     </div>

@@ -64,3 +64,26 @@ input[type="text"] {
   font-weight: bold;
   cursor: pointer;
 }
+/* Default */
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+.align-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-right: 0;   /* ✅ شيل أي padding زايد */
+}
+
+.save-btn {
+  background-color: #fac75c;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: -10px;          /* ✅ شيل أي margin يخليه يطلع برا */
+  position: relative; /* ✅ خليه يضل جوّا الفلو */
+}

@@ -124,3 +124,13 @@
     line-height: 1.4 !important;
   }
 }
+/* ─── RTL Support for Arabic ─────────────────────────── */
+html[dir="rtl"] .carousel .slide .slide-content {
+  text-align: right !important;   /* العناوين والنصوص تبدأ من اليمين */
+}
+
+html[dir="rtl"] .carousel .slide .slide-content h2,
+html[dir="rtl"] .carousel .slide .slide-content p {
+  direction: rtl !important;      /* اتجاه الكتابة عربي */
+  text-align: right !important;
+}

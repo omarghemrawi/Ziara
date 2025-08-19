@@ -1,11 +1,14 @@
+// src/pages/reviews/ReviewsPage.jsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from "react-i18next"; // 🟢 للترجمة
 import "./ReviewsPage.css";
 
 export default function ReviewsPage() {
   const { placeId } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation(); // 🟢 hook الترجمة
   const token = localStorage.getItem("token");
 
   // ─── Data ─────────────────────────────────────────────
@@ -17,10 +20,14 @@ export default function ReviewsPage() {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/review/place/${placeId}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  }
+        `http://localhost:5000/api/review/place/${placeId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
+
+     console.log("✅ Full API response:", res.data);
+    console.log("✅ Reviews array:", res.data.reviews);
       setReviews(Array.isArray(res?.data?.reviews) ? res.data.reviews : []);
     } catch (e) {
       console.error(e);
@@ -33,7 +40,6 @@ export default function ReviewsPage() {
   useEffect(() => {
     fetchReviews();
   }, [fetchReviews]);
-  console.log(reviews)
 
   // normalized list
   const list = useMemo(() => (Array.isArray(reviews) ? reviews : []), [reviews]);
@@ -63,7 +69,7 @@ export default function ReviewsPage() {
     }
   };
 
-  // ─── Menu (same design/behavior as your second code) ──
+  // ─── Menu ──
   const [openMenuId, setOpenMenuId] = useState(null);
   const toggleMenu = (id) => setOpenMenuId((p) => (p === id ? null : id));
 
@@ -76,30 +82,32 @@ export default function ReviewsPage() {
   }, []);
 
   // ─── Actions ──────────────────────────────────────────
-  const onReport = (r) => {
-    setOpenMenuId(null);
-    // Map to your Report page payload
-    const reviewerName =
-      r?.user?.name || r?.userName || r?.author || "Anonymous";
-    const reviewComment =
-      r?.comment ?? r?.reviewComment ?? r?.text ?? r?.review ?? "";
-    navigate("/report-review", {
-      state: {
-        reviewId: r?._id,
-        reviewerName,
-        reviewComment,
-        userId : r?.userId?._id
-      },
-    });
-  };
+const onReport = (r) => {
+  setOpenMenuId(null);
+
+  // 👇 جب الاسم الحقيقي من userId
+  const reviewerName = r?.userId?.username || t("reviews.unknownUser");
+  const reviewComment =
+    r?.comment ?? r?.reviewComment ?? r?.text ?? r?.review ?? "";
+
+  navigate("/report-review", {
+    state: {
+      reviewId: r?._id,
+      reviewerName,     // اسم المستخدم الحقيقي
+      reviewComment,    // الكومنت
+      userId: r?.userId?._id, // ID صاحب الريفيو
+    },
+  });
+};
+
 
   const onShare = async (r) => {
     setOpenMenuId(null);
     const reviewerName =
-      r?.user?.name || r?.userName || r?.author || "Anonymous";
+      r?.user?.name || r?.userName || r?.author || t("reviews.anonymous");
     const comment =
       (r?.comment ?? r?.reviewComment ?? r?.text ?? r?.review ?? "").toString();
-    const title = `Review by ${reviewerName}`;
+    const title = `${t("reviews.reviewBy")} ${reviewerName}`;
     const text = comment.slice(0, 120) + (comment.length > 120 ? "…" : "");
     const url = window.location.origin + `/reviews/${placeId}#review-${r?._id}`;
     try {
@@ -107,22 +115,22 @@ export default function ReviewsPage() {
         await navigator.share({ title, text, url });
       } else {
         await navigator.clipboard.writeText(url);
-        alert("Link copied to clipboard!");
+        alert(t("reviews.linkCopied"));
       }
     } catch {
       /* user canceled */
     }
   };
 
-  if (loading) return <p className="center">Loading reviews…</p>;
+  if (loading) return <p className="center">{t("reviews.loading")}</p>;
 
   return (
     <div className="reviews-page">
-      <h1 className="page-title">Rating & Review</h1>
+      <h1 className="page-title">{t("reviews.title")}</h1>
 
-      {/* ───── Review summary (design from your second file) ───── */}
+      {/* Summary */}
       <section className="review-summary">
-        <div className="summary-header">Review summary</div>
+        <div className="summary-header">{t("reviews.summaryTitle")}</div>
         <div className="summary-body">
           <div className="bars">
             {[5, 4, 3, 2, 1].map((star) => {
@@ -145,24 +153,23 @@ export default function ReviewsPage() {
                 <span key={i}>⭐</span>
               ))}
             </div>
-            <div className="total">{total} reviews</div>
+            <div className="total">
+              {total} {t("reviews.totalReviews")}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ───── Reviews list (design from second file) ───── */}
+      {/* List */}
       <ul className="reviews-list">
         {list.map((r) => {
           const id = r?._id;
-          const username =
-            r?.user?.name || r?.userName || r?.author || "Anonymous";
+          const username = r?.userId?.username || t("reviews.anonymous");
           const avatarUrl = r?.user?.profile || r?.avatar || null;
           const comment =
             r?.comment ?? r?.reviewComment ?? r?.text ?? r?.review ?? "";
           const rating = Number(r?.rating) || 0;
           const created = r?.createdAt || r?.date || null;
-
-          // photos: either r.images (array) or r.image (single)
           const photos = Array.isArray(r?.images)
             ? r.images
             : r?.image
@@ -182,9 +189,17 @@ export default function ReviewsPage() {
                 <div className="user-info">
                   <div className="name">{username}</div>
                   <div className="subinfo">
-                    {/* if you have counts in API, replace the fallbacks below */}
-                    {r?.user?.reviewsCount ?? "5 reviews"} ·{" "}
-                    {r?.user?.photosCount ?? "3 photos"}
+                    {rating > 0 && (
+                      <span>
+                        {t("reviews.star", { count: rating })}
+                      </span>
+                    )}
+                    {rating > 0 && photos.length > 0 && " · "}
+                    {photos.length > 0 && (
+                      <span>
+                        {t("reviews.photo", { count: photos.length })}
+                      </span>
+                    )}
                   </div>
                 </div>
 
@@ -202,10 +217,10 @@ export default function ReviewsPage() {
                   {openMenuId === id && (
                     <div className="menu-dropdown" role="menu">
                       <button className="menu-item" onClick={() => onShare(r)}>
-                        Share review
+                        {t("reviews.share")}
                       </button>
                       <button className="menu-item" onClick={() => onReport(r)}>
-                        Report review
+                        {t("reviews.report")}
                       </button>
                     </div>
                   )}
@@ -228,7 +243,9 @@ export default function ReviewsPage() {
               {comment && (
                 <p className="comment">
                   {comment}{" "}
-                  {comment.length > 100 && <span className="more">More</span>}
+                  {comment.length > 100 && (
+                    <span className="more">{t("reviews.more")}</span>
+                  )}
                 </p>
               )}
 
@@ -248,7 +265,7 @@ export default function ReviewsPage() {
             </li>
           );
         })}
-        {!list.length && <li className="center">No reviews yet.</li>}
+        {!list.length && <li className="center">{t("reviews.noReviews")}</li>}
       </ul>
     </div>
   );

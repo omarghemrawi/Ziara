@@ -25,7 +25,10 @@ export default function AdditionalInfo() {
     // simple validation
     const newErrors = {};
     if (!info.city.trim()) newErrors.city = "Please enter your city.";
-    if (info.phone.trim().length < 8) newErrors.phone = "Please enter a valid phone number (min 8 chars).";
+if (!/^\d{8}$/.test(info.phone)) {
+  newErrors.phone = "Please enter a valid 8-digit phone number.";
+}
+
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
@@ -74,18 +77,25 @@ export default function AdditionalInfo() {
         </label>
         {errors.city && <p className="error">{errors.city}</p>}
 
-        <label>
-          Phone Number
-          <input
-            type="tel"
-            name="phone"
-            value={info.phone}
-            onChange={handleChange}
-            placeholder="+961-3-123456"
-            required
-          />
-        </label>
-        {errors.phone && <p className="error">{errors.phone}</p>}
+<label>
+  Phone Number
+  <input
+    type="text"
+    name="phone"
+    value={info.phone}
+    onChange={(e) => {
+      // allow only digits
+      const onlyNums = e.target.value.replace(/\D/g, "");
+      setInfo((prev) => ({ ...prev, phone: onlyNums }));
+      setErrors((prev) => ({ ...prev, phone: "" }));
+    }}
+    placeholder="e.g. 70123456"
+    required
+    maxLength={8}   // ensures max 8 digits
+  />
+</label>
+{errors.phone && <p className="error">{errors.phone}</p>}
+
 
         <button type="submit" className="btn info-submit" disabled={submitting}>
           {submitting ? "Saving..." : "Continue"}

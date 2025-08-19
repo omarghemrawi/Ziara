@@ -17,4 +17,45 @@
 .pay-btn{background:#0a0a0a;color:#fff;border:none;height:44px;border-radius:10px;font-weight:800;cursor:pointer;width:100%;margin-top:6px}
 .pay-btn:hover{opacity:.92}
 .fine{font-size:12px;color:#666;margin-top:10px;line-height:1.5}
-@media (max-width:960px){.checkout-grid{grid-template-columns:1fr}}
+@media (max-width:960px){.checkout-grid{grid-template-columns:1fr}}/* responsive */
+
+/* Tablet: stack summary and form */
+@media (max-width: 960px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile: refine payment inputs */
+@media (max-width: 640px) {
+  .field-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* number full row, expiry + cvc in one row */
+    gap: 10px;
+  }
+
+  /* first input (card number) takes full width */
+  .field-row input[name="number"] {
+    grid-column: 1 / -1;
+  }
+
+  /* expiry + cvc share the second row */
+  .field-row input[name="expiry"],
+  .field-row input[name="cvc"] {
+    width: 100%;
+  }
+
+  .summary,
+  .form {
+    padding: 14px;
+  }
+
+  .summary-price .s-amount {
+    font-size: 22px;
+  }
+
+  .pay-btn {
+    font-size: 15px;
+    height: 44px;
+  }
+}

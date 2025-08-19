@@ -160,13 +160,23 @@
   gap: 6px;
   margin-top: 10px;
 }
-.photo-grid .big img,
-.photo-grid .small-col img {
+/* big photo */
+.photo-grid .big img {
   width: 100%;
-  height: 120px;
+  height: 200px;       /* larger main image */
   object-fit: cover;
   border-radius: 10px;
   display: block;
+}
+
+/* small column photos */
+.photo-grid .small-col img {
+  width: 100%;
+  height: 95px;        /* smaller side images */
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+
 }
 .photo-grid .small-col {
   display: grid;
@@ -182,4 +192,15 @@
   .summary-body { grid-template-columns: 1fr; }
   .summary-stats { border-left: 0; border-top: 1px solid #f0f0f0; padding-top: 12px; }
   .photo-grid { grid-template-columns: 1fr; }
+}
+/* By default: English LTR */
+.menu-wrap {
+  position: relative;
+  margin-left: auto;   /* ⬅️ يروح يمين */
+}
+
+/* لما الصفحة بالعربية RTL */
+html[dir="rtl"] .menu-wrap {
+  margin-left: 0;      /* شيل المسافة من اليسار */
+  margin-right: auto;  /* ⬅️ يروح يسار */
 }

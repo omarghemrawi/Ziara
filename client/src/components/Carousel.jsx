@@ -1,57 +1,58 @@
+// src/components/Carousel.jsx
 import React, { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";   // ✅ الترجمة
 import "./Carousel.css";
 
-const slides = [
-  {
-    title: "Ziara",
-    description: "Discover Lebanon in a whole new way.",
-    image: "/image/intro.png",
-    bgColor: "#faf0e6",
-    fontFamily: "'Rampart One', cursive",
-  },
-  {
-    title: "Discover Lebanon Like Never Before",
-    description:
-      "Explore hidden gems, cultural wonders, and local experiences—all in one app.",
-    image: "/image/map.png",
-    bgColor: "#ffe2b6ff",
-  },
-  {
-    title: "From Ancient Ruins to Sacred Spaces",
-    description: "Visit Lebanon’s rich history and diverse spiritual landmarks.",
-    image: "/image/window.png",
-    bgColor: "#fff5e6",
-  },
-  {
-    title: "Ask the Locals, Get Insider Tips",
-    description:
-      "Chat, ask questions, or discover new places—all through AI chat.",
-    image: "/image/Car.png",
-    bgColor: "#ffe2b6ff",
-  },
-  {
-    title: "Dine Like a Local",
-    description:
-      "Discover traditional Lebanese restaurants and street-food favorites.",
-    image: "/image/Hummus.png",
-    bgColor: "#fff5e6",
-  },
-  {
-    title: "Support Local & Take Home a Memory",
-    description:
-      "Browse souvenirs and handcrafted treasures from small Lebanese businesses.",
-    image: "/image/tarbushPackage.png",
-    bgColor: "#ffe2b6ff",
-  },
-];
-
 export default function Carousel() {
+  const { t } = useTranslation();  // ✅ hook الترجمة
+
+  // ✅ slides من i18n
+  const slides = [
+    {
+      title: t("carousel.slide1.title"),
+      description: t("carousel.slide1.desc"),
+      image: "/image/intro.png",
+      bgColor: "#faf0e6",
+      fontFamily: "'Rampart One', cursive",
+    },
+    {
+      title: t("carousel.slide2.title"),
+      description: t("carousel.slide2.desc"),
+      image: "/image/map.png",
+      bgColor: "#ffe2b6ff",
+    },
+    {
+      title: t("carousel.slide3.title"),
+      description: t("carousel.slide3.desc"),
+      image: "/image/window.png",
+      bgColor: "#fff5e6",
+    },
+    {
+      title: t("carousel.slide4.title"),
+      description: t("carousel.slide4.desc"),
+      image: "/image/Car.png",
+      bgColor: "#ffe2b6ff",
+    },
+    {
+      title: t("carousel.slide5.title"),
+      description: t("carousel.slide5.desc"),
+      image: "/image/Hummus.png",
+      bgColor: "#fff5e6",
+    },
+    {
+      title: t("carousel.slide6.title"),
+      description: t("carousel.slide6.desc"),
+      image: "/image/tarbushPackage.png",
+      bgColor: "#ffe2b6ff",
+    },
+  ];
+
   const [index, setIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const minSwipeDistance = 50;
 
-  // === Autoplay (every 2s) ===
+  // Autoplay
   const AUTO_DELAY = 2000;
   const autoRef = useRef(null);
   const startAuto = () => {
@@ -73,8 +74,7 @@ export default function Carousel() {
 
   const safeMod = (i) => ((i % slides.length) + slides.length) % slides.length;
   const currentIndex = safeMod(index);
-  const { title, description, image, bgColor, fontFamily } =
-    slides[currentIndex];
+  const { title, description, image, bgColor, fontFamily } = slides[currentIndex];
 
   const prevSlide = () => {
     stopAuto();
@@ -129,7 +129,6 @@ export default function Carousel() {
         onMouseLeave={startAuto}
       >
         <img src={image} alt={title} />
-
         <div className="slide-content">
           <h2>{title}</h2>
           {description && <p>{description}</p>}
