@@ -15,15 +15,12 @@ export const addToVisited = async (req, res) => {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // Ensure place exists in favorites
- 
-  
-const isInFavorites = user.favoritePlaces.includes(place_id);
-if (!isInFavorites) {
-  return res
-    .status(404)
-    .json({ success: false, message: "Place not found in favorites" });
-}
+      const isInFavorites = user.favoritePlaces.includes(place_id);
+      if (!isInFavorites) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Place not found in favorites" });
+      }
 
 
     // Add to visited if not already there
@@ -66,15 +63,6 @@ export const deleteFromVisited = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    // Check if place exists in visited
-    // const isInVisited = user.visitedPlaces.includes(placeId);
-    // if (!isInVisited) {
-    //   return res.status(404).json({
-    //     success: false,
-    //     message: "Place not found in visited",
-    //   });
-    // }
-
     // Remove from visited
     user.visitedPlaces = user.visitedPlaces.filter(
       (id) => String(id) !== String(placeId)
@@ -85,7 +73,7 @@ export const deleteFromVisited = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Place deleted from visited successfully",
-      userId : user._id, // return updated user
+      userId : user._id, 
     });
   } catch (error) {
     console.error(error);

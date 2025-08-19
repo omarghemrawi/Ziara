@@ -20,7 +20,6 @@ export const sendDeactivationEmail = async (clientEmail, clientName) => {
     };
 
     await transporter.sendMail(message);
-    console.log("Deactivation email sent to", clientEmail);
   } catch (err) {
     console.error("Failed to send email:", err);
   }
@@ -41,12 +40,11 @@ export const sendBannednEmail = async (clientEmail, clientName) => {
     const message = {
       from: `"Ziara" <${process.env.EMAIL_USER}>`,
       to: clientEmail,
-      subject: "Account Deactivated",
+      subject: "Account banned",
       text: `Hello ${clientName},\n\nYour account has been banned . If you think this is a mistake, contact support.`,
     };
 
     await transporter.sendMail(message);
-    console.log("Deactivation email sent to", clientEmail);
   } catch (err) {
     console.error("Failed to send email:", err);
   }
@@ -76,7 +74,6 @@ export const sendClientRegisterNotfication = async (clientData) => {
       `,
     });
 
-    console.log("Email sent:", info.messageId);
   } catch (err) {
     console.error("Error sending email:", err);
   }

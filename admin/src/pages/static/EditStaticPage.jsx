@@ -39,7 +39,7 @@ const EditStaticPage = () => {
       try {
         setInitialLoading(true);
         const res = await axios.get(`${API_URL}/${id}`, {
-  headers: { Authorization: `Bearer ${token}` }});
+        headers: { Authorization: `Bearer ${token}` }});
         const data = res.data;
 
         if (data.success) {

@@ -34,8 +34,8 @@ const ClientPage = () => {
   const getPlaces = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/client/to-admin", {
-  headers: { Authorization: `Bearer ${token}` },
-});
+      headers: { Authorization: `Bearer ${token}` },
+      });
       setClientPlaces(res.data.places);
     } catch (error) {
       console.error("Error fetching client places:", error);
@@ -61,7 +61,7 @@ const ClientPage = () => {
  const bannedClient = async (id) => {
   try {
     const { data } = await axios.delete(`http://localhost:5000/api/client/${id}`, {
-      headers: {
+        headers: {
         Authorization: `Bearer ${token}`,
       },
     });
@@ -69,7 +69,6 @@ const ClientPage = () => {
     if (data.success) {
       toast("Client deleted successfully!");
       getPlaces();
-      // Optionally, refresh your client list here
     }
   } catch (error) {
     console.error("Failed to delete client:", error);
@@ -77,7 +76,6 @@ const ClientPage = () => {
   }
 };
 
-  // Run once on component mount to load client places
   useEffect(() => {
     getPlaces();
   }, []);

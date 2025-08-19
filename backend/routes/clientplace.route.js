@@ -27,20 +27,39 @@ clientRouter.post("/signup", SignUp);
 clientRouter.post("/login", logIn);
 clientRouter.put(
   "/update-profile",
+  // Verify that the user has 'client' role before updating profile
   verifyTokenAndRole(['client']),
+
+  // Middleware to dynamically set the max number of reference images allowed
   (req, res, next) => {
+    // Fetch client from DB to get their current plan
     ClientPlace.findById(req.userId)
       .then(client => {
+        if (!client) {
+          return res.status(404).json({ success: false, message: "Client not found" });
+        }
+
+        // Determine max reference images based on plan
         const maxImages = client?.plan?.imageLimit || 5;
+
+        // Setup multer upload fields
+        // 'profile' = single profile image (maxCount: 1)
+        // 'referenceImages' = array of reference images limited by maxImages
         upload.fields([
           { name: "profile", maxCount: 1 },
           { name: "referenceImages", maxCount: maxImages },
         ])(req, res, next);
       })
-      .catch(err => res.status(500).json({ message: "Error fetching plan info" }));
+      .catch(err => {
+        console.error("Error fetching plan info:", err);
+        res.status(500).json({ success: false, message: "Error fetching plan info" });
+      });
   },
+
+  // Controller to handle the actual profile update
   updateProfile
 );
+
 clientRouter.put("/complete-register",verifyTokenAndRole(['client']),completeRegister)
 clientRouter.put("/subscribe",verifyTokenAndRole(['client']), submitPayment);
 clientRouter.put("/deactive-subscribe",verifyTokenAndRole(['admin']) , deactivePayment);
