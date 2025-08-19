@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Helper to filter and standardize place data
 const filterPlaces = (places) => {
   return places.map((place) => ({
     place_id: place.place_id,
@@ -13,59 +14,50 @@ const filterPlaces = (places) => {
   }));
 };
 
+// -------------------- GET NEARBY PLACES --------------------
 export const getNearbyPlaces = async (req, res) => {
-//   const { latitude, longitude } = req.query;
+  const { latitude, longitude } = req.query;
   const apiKey = process.env.API_KEY_GOOGLE_PLACES;
 
-  const latitude = 34.45387
-  const longitude= 35.87083
-
   if (!latitude || !longitude) {
-    return res
-      .status(400)
-      .json({ error: "Latitude and longitude are required" });
+    return res.status(400).json({ error: "Latitude and longitude are required" });
   }
 
   const radius = 1500;
 
   try {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&key=${apiKey}`;
+    const response = await axios.get(url);
 
     const filtered = filterPlaces(response.data.results).filter(
-      (place) =>
-        place.rating &&
-        place.rating >= 4.5
+      (place) => place.rating && place.rating >= 4.5
     );
+
     res.status(200).json({ places: filtered });
   } catch (error) {
     console.error("Google Places error:", error.message);
     res.status(500).json({ error: "Failed to fetch nearby places" });
   }
 };
-    // const latitude = 34.424569
-    // const longitude= 35.8304939
 
+// -------------------- GET NEARBY RESTAURANTS --------------------
 export const getNearbyRestaurants = async (req, res) => {
   const { latitude, longitude } = req.query;
   const apiKey = process.env.API_KEY_GOOGLE_PLACES;
 
-
   if (!latitude || !longitude) {
-    return res
-      .status(400)
-      .json({ error: "Latitude and longitude are required" });
+    return res.status(400).json({ error: "Latitude and longitude are required" });
   }
 
-  const radius = 100;
+  const radius = 10000;
   const type = "restaurant";
 
   try {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${apiKey}`;
     const response = await axios.get(url);
+
     const filtered = filterPlaces(response.data.results).filter(
-      (place) =>
-        place.rating &&
-        place.rating >= 3.7
+      (place) => place.rating && place.rating >= 3.5
     );
 
     res.status(200).json({ restaurants: filtered });
@@ -75,16 +67,13 @@ export const getNearbyRestaurants = async (req, res) => {
   }
 };
 
+// -------------------- GET NEARBY TOURISTIC PLACES --------------------
 export const getNearbyTouristicPlaces = async (req, res) => {
-//   const { latitude, longitude } = req.query;
+  const { latitude, longitude } = req.query;
   const apiKey = process.env.API_KEY_GOOGLE_PLACES;
-    const latitude = 34.424569
-    const longitude= 35.8304939
 
   if (!latitude || !longitude) {
-    return res
-      .status(400)
-      .json({ error: "Latitude and longitude are required" });
+    return res.status(400).json({ error: "Latitude and longitude are required" });
   }
 
   const radius = 3500;
@@ -93,10 +82,9 @@ export const getNearbyTouristicPlaces = async (req, res) => {
   try {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${apiKey}`;
     const response = await axios.get(url);
+
     const filtered = filterPlaces(response.data.results).filter(
-      (place) =>
-        place.rating &&
-        place.rating >= 4.5
+      (place) => place.rating && place.rating >= 4.0
     );
 
     res.status(200).json({ touristPlaces: filtered });
@@ -106,25 +94,20 @@ export const getNearbyTouristicPlaces = async (req, res) => {
   }
 };
 
+// -------------------- GET NEARBY RELIGIOUS PLACES --------------------
 export const getNearbyReligiousPlaces = async (req, res) => {
-//   const { latitude, longitude } = req.query;
-
-  const latitude = 34.45387;
-  const longitude = 35.87083;
-  const radius = 1500;
+  const { latitude, longitude } = req.query;
   const apiKey = process.env.API_KEY_GOOGLE_PLACES;
 
   if (!latitude || !longitude) {
-    return res
-      .status(400)
-      .json({ error: "Latitude and longitude are required" });
+    return res.status(400).json({ error: "Latitude and longitude are required" });
   }
 
-  // أنواع الأماكن الدينية
-  const types = ["church", "mosque"];
+  const radius = 1500;
+  const types = ["church", "mosque"]; // can add more if needed
 
   try {
-    // بعمل كل الريكوستات مع بعض
+    // Fetch all types in parallel
     const requests = types.map((type) => {
       const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=${type}&key=${apiKey}`;
       return axios.get(url);
@@ -132,7 +115,7 @@ export const getNearbyReligiousPlaces = async (req, res) => {
 
     const responses = await Promise.all(requests);
 
-    // دمج النتائج وإزالة التكرار
+    // Merge results and remove duplicates
     const placesMap = new Map();
     responses.forEach((response) => {
       response.data.results.forEach((place) => {
@@ -142,9 +125,9 @@ export const getNearbyReligiousPlaces = async (req, res) => {
 
     const uniquePlaces = Array.from(placesMap.values());
 
-    // تطبيق الـ filter
+    // Filter by rating
     const filtered = filterPlaces(uniquePlaces).filter(
-      (place) => place.rating && place.rating >= 4.5
+      (place) => place.rating && place.rating >= 4.0
     );
 
     res.status(200).json({ religiousPlaces: filtered });
@@ -153,4 +136,3 @@ export const getNearbyReligiousPlaces = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch religious places" });
   }
 };
-
