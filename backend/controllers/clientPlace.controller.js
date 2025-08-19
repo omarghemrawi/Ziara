@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import ClientPlace from "../models/clientPlace.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { sendDeactivationEmail , sendClientRegisterNotfication } from "../utils/emailSender.js";
+import { sendDeactivationEmail , sendClientRegisterNotfication , sendBannednEmail } from "../utils/emailSender.js";
 
 // ?
 export const getAllPlaces = async (req, res) => {
@@ -101,6 +101,7 @@ export const deleteClient = async (req, res) => {
     if (!deletedUser) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
+    await sendBannednEmail(deletedUser.email, deletedUser.name);
 
     res.status(200).json({
       success: true,

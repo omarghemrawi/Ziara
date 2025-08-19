@@ -13,6 +13,7 @@ import ReportPage from "./pages/report/Report";
 import ProtectedRoute from "./utils/ProtectedRoute.jsx";
 import Review from "./pages/review/Review.jsx";
 import "./pages/report/report.css";
+import User from "./pages/user/user.jsx";
 
 
 function App() {
@@ -77,6 +78,14 @@ function App() {
       element={
         <ProtectedRoute>
           <Review />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/user"
+      element={
+        <ProtectedRoute>
+          <User />
         </ProtectedRoute>
       }
     />

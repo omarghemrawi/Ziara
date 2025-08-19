@@ -8,13 +8,16 @@ import {
   verifyEmailCode,
   resendVerificationCode,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  getUsers,
+  deleteUser
 
 } from "../controllers/user.controller.js";
 import { verifyTokenAndRole } from "../middleware/auth.js";
 
 const userRouter = express.Router();
-
+userRouter.get("/",verifyTokenAndRole(['admin']),getUsers)
+userRouter.delete("/:id",verifyTokenAndRole(['admin']),deleteUser)
 userRouter.post("/signup", userSignUp);
 userRouter.post("/login", userLogin);
 userRouter.put("/",verifyTokenAndRole(['user']), updateProfile);
