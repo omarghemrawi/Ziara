@@ -1,18 +1,52 @@
-// src/pages/plan/Plan.jsx
 import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "../../redux/userActions";   // ⚡ استدعاء الأكشن
+import { setUser } from "../../redux/userActions";
+import { useTranslation } from "react-i18next"; // 👈 Added
 import "./Plan.css";
 
-const plans = [
-  { id: "standard", name: "Standard", price: 10, period: "USD / month",
-    features: ["Active subscription","Image limit: 5","Normal search ranking"], cta: "Get Standard" },
-  { id: "plus", name: "Plus", price: 20, period: "USD / month",
-    features: ["Active subscription","Image limit: 10","Random Boost in search (occasionally top)"],
-    tag: "POPULAR", highlighted: true, cta: "Get Plus" },
-  { id: "pro", name: "Pro", price: 50, period: "USD / month",
-    features: ["Active subscription","Unlimited images","Top Rank (always)"], cta: "Get Pro" },
+const plansBase = (t) => [
+  {
+    id: "standard",
+    name: t("plan.standard.name"),
+    price: 10,
+    period: t("plan.period"),
+    features: [
+      t("plan.features.active"),
+      t("plan.features.limit5"),
+      t("plan.features.normalRank")
+    ],
+    cta: t("plan.standard.cta"),
+    subtitle: t("plan.standard.subtitle")
+  },
+  {
+    id: "plus",
+    name: t("plan.plus.name"),
+    price: 20,
+    period: t("plan.period"),
+    features: [
+      t("plan.features.active"),
+      t("plan.features.limit10"),
+      t("plan.features.boost")
+    ],
+    tag: t("plan.plus.tag"),
+    highlighted: true,
+    cta: t("plan.plus.cta"),
+    subtitle: t("plan.plus.subtitle")
+  },
+  {
+    id: "pro",
+    name: t("plan.pro.name"),
+    price: 50,
+    period: t("plan.period"),
+    features: [
+      t("plan.features.active"),
+      t("plan.features.unlimited"),
+      t("plan.features.topRank")
+    ],
+    cta: t("plan.pro.cta"),
+    subtitle: t("plan.pro.subtitle")
+  }
 ];
 
 const normalizePlan = (p) => {
@@ -25,20 +59,24 @@ const normalizePlan = (p) => {
 };
 
 const getSavedUser = () => {
-  try { const raw = localStorage.getItem("userData"); return raw ? JSON.parse(raw) : null; }
-  catch { return null; }
+  try {
+    const raw = localStorage.getItem("userData");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
 };
 
 const sniffPlan = (u) => {
   if (!u) return "";
-  if (u.plan?.name) return normalizePlan(u.plan.name);  // ✅ جاي من backend مباشرة
+  if (u.plan?.name) return normalizePlan(u.plan.name);
   return "";
 };
 
-
 export default function Plan() {
+  const { t } = useTranslation(); // 👈 Added
   const navigate = useNavigate();
-  const dispatch = useDispatch();   // ⚡ استخدام الديسباتش
+  const dispatch = useDispatch();
 
   const reduxUser = useSelector((s) => s?.user?.userData ?? s?.user ?? null);
   const currentPlan = useMemo(() => {
@@ -58,14 +96,15 @@ export default function Plan() {
     };
     localStorage.setItem("userData", JSON.stringify(updatedUser));
 
-    dispatch(setUser(updatedUser));   // ⚡ تحديث الريدوكس
-
+    dispatch(setUser(updatedUser));
     navigate(`/plan/checkout/${planId}`);
   };
 
+  const plans = plansBase(t); // 👈 build plans with translations
+
   return (
     <div className="pricing-wrap">
-      <h1 className="pricing-title">Upgrade your plan</h1>
+      <h1 className="pricing-title">{t("plan.upgradeTitle")}</h1>
 
       <div className="pricing-cards">
         {plans.map((p) => {
@@ -75,30 +114,25 @@ export default function Plan() {
           return (
             <div key={p.id} className={cardClass}>
               {p.tag && <div className="card-tag">{p.tag}</div>}
-              {isCurrent && <div className="card-tag card-tag--current">Current</div>}
+              {isCurrent && <div className="card-tag card-tag--current">{t("plan.current")}</div>}
 
               <div className="card-price">
                 <span className="currency">$</span>
                 <span className="amount">{p.price}</span>
-                <span className="per"> {p.period}</span>
+                <span className="per">{p.period}</span>
               </div>
 
               <h3 className="card-title">{p.name}</h3>
-
-              <p className="card-subtitle">
-                {p.id === "standard" ? "For everyday listing"
-                 : p.id === "plus" ? "More access to advanced ranking"
-                 : "Full access to top ranking"}
-              </p>
+              <p className="card-subtitle">{p.subtitle}</p>
 
               <button
                 className={`card-cta ${isCurrent ? "is-current" : ""}`}
                 onClick={() => goCheckout(p.id)}
                 disabled={isCurrent}
                 aria-disabled={isCurrent}
-                title={isCurrent ? "This is your current plan" : undefined}
+                title={isCurrent ? t("plan.thisCurrent") : undefined}
               >
-                {isCurrent ? "Current plan" : p.cta}
+                {isCurrent ? t("plan.currentPlan") : p.cta}
               </button>
 
               <ul className="card-features">

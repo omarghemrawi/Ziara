@@ -251,3 +251,29 @@
   .svc-grid{ grid-template-columns: 1fr; }
   .plans-grid{ grid-template-columns: 1fr; }
 }
+
+/* =========================
+   Direction Fix (LTR/RTL)
+   ========================= */
+
+/* Default (English / LTR) */
+.svc-hero,
+.svc-section,
+.svc-card,
+.svc-card h3,
+.svc-card p,
+.svc-list {
+  text-align: left;
+  direction: ltr;
+}
+
+/* Arabic (RTL) */
+html[dir="rtl"] .svc-hero,
+html[dir="rtl"] .svc-section,
+html[dir="rtl"] .svc-card,
+html[dir="rtl"] .svc-card h3,
+html[dir="rtl"] .svc-card p,
+html[dir="rtl"] .svc-list {
+  text-align: right !important;
+  direction: rtl !important;
+}

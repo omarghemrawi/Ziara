@@ -1,8 +1,9 @@
+// src/pages/Services.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import SignupButton from "../components/SignupButton";
+import { useTranslation } from "react-i18next";   // ✅ إضافة الترجمة
 import "./Services.css";
-
 
 /* Inline icons */
 function Icon({ name, size = 28 }) {
@@ -47,12 +48,10 @@ function BusinessCard({ icon, title, bullets }) {
       <ul className="svc-list">
         {bullets.map((b, i) => <li key={i}>{b}</li>)}
       </ul>
-      {/* No links */}
     </div>
   );
 }
 
-/* Pricing pieces (no buttons/links) */
 function Price({ amount }) {
   return (
     <div className="price">
@@ -79,42 +78,45 @@ function PlanCard({ variant, name, price, subtitle, features, badge }) {
 
 export default function Services() {
   const navigate = useNavigate();
-  const goContact = () => navigate("/contact"); // غيّر المسار إذا بدّك
+  const { t } = useTranslation();  // ✅ hook الترجمة
+
+  const goContact = () => navigate("/contact");
+
   const businesses = [
     {
       icon: "restaurant",
-      title: "Restaurants",
+      title: t("services.businesses.restaurants.title"),
       bullets: [
-        "Menu link + photos of dishes (up to your plan limit).",
-        "Opening hours, delivery/pick-up info, and location map.",
-        "Customers can rate & write reviews; you can reply.",
+        t("services.businesses.restaurants.item1"),
+        t("services.businesses.restaurants.item2"),
+        t("services.businesses.restaurants.item3"),
       ],
     },
     {
       icon: "hotel",
-      title: "Hotels",
+      title: t("services.businesses.hotels.title"),
       bullets: [
-        "Show room types, amenities, and highlights.",
-        "Add gallery and pin your exact location.",
-        "Attach external booking link if you have one.",
+        t("services.businesses.hotels.item1"),
+        t("services.businesses.hotels.item2"),
+        t("services.businesses.hotels.item3"),
       ],
     },
     {
       icon: "activities",
-      title: "Activities & Places",
+      title: t("services.businesses.activities.title"),
       bullets: [
-        "Tours, attractions, museums, landmarks describe what guests will find.",
-        "Add timing, ticket info (if any), and must-see photos.",
-        "Visitors can favorite, rate, and leave feedback.",
+        t("services.businesses.activities.item1"),
+        t("services.businesses.activities.item2"),
+        t("services.businesses.activities.item3"),
       ],
     },
     {
       icon: "shop",
-      title: "Shops",
+      title: t("services.businesses.shops.title"),
       bullets: [
-        "Showcase best items with short descriptions.",
-        "Add price range and contact details.",
-        "Links to social profiles & website.",
+        t("services.businesses.shops.item1"),
+        t("services.businesses.shops.item2"),
+        t("services.businesses.shops.item3"),
       ],
     },
   ];
@@ -123,14 +125,14 @@ export default function Services() {
     <div className="services-page">
       {/* Hero banner */}
       <section className="page-hero svc-hero">
-        <span className="kicker">SERVICES</span>
-        <h1>Discover Lebanon, together.</h1>
-        <p>Choose a plan and list your business — Restaurants, Hotels, Activities & Places, and Shops.</p>
+        <span className="kicker">{t("services.hero.kicker")}</span>
+        <h1>{t("services.hero.title")}</h1>
+        <p>{t("services.hero.subtitle")}</p>
       </section>
 
       {/* Four business types */}
       <section className="svc-section">
-        <h2 className="svc-title">Who we serve</h2>
+        <h2 className="svc-title">{t("services.who.title")}</h2>
         <div className="svc-grid">
           {businesses.map((b) => (
             <BusinessCard key={b.title} icon={b.icon} title={b.title} bullets={b.bullets} />
@@ -140,63 +142,62 @@ export default function Services() {
 
       {/* Plans */}
       <section className="svc-section">
-        <h2 className="svc-title">Plans</h2>
-        <p className="svc-sub">Pick a plan that fits your needs. You can upgrade anytime.</p>
+        <h2 className="svc-title">{t("services.plans.title")}</h2>
+        <p className="svc-sub">{t("services.plans.subtitle")}</p>
 
         <div className="plans-grid">
           <PlanCard
             variant="standard"
-            name="Standard"
+            name={t("services.plans.standard.name")}
             price={10}
-            subtitle="For everyday listing"
+            subtitle={t("services.plans.standard.subtitle")}
             features={[
-              "Active subscription",
-              "Image limit: 5",
-              "Normal search ranking",
+              t("services.plans.standard.item1"),
+              t("services.plans.standard.item2"),
+              t("services.plans.standard.item3"),
             ]}
           />
           <PlanCard
             variant="plus"
-            name="Plus"
+            name={t("services.plans.plus.name")}
             price={20}
-            subtitle="More access to advanced ranking"
-            badge="POPULAR"
+            subtitle={t("services.plans.plus.subtitle")}
+            badge={t("services.plans.plus.badge")}
             features={[
-              "Active subscription",
-              "Image limit: 10",
-              "Random Boost in search (occasionally top)",
+              t("services.plans.plus.item1"),
+              t("services.plans.plus.item2"),
+              t("services.plans.plus.item3"),
             ]}
           />
           <PlanCard
             variant="pro"
-            name="Advanced"
+            name={t("services.plans.pro.name")}
             price={50}
-            subtitle="Full access to top ranking"
+            subtitle={t("services.plans.pro.subtitle")}
             features={[
-              "Active subscription",
-              "Unlimited images",
-              "Top Rank (always)",
+              t("services.plans.pro.item1"),
+              t("services.plans.pro.item2"),
+              t("services.plans.pro.item3"),
             ]}
           />
         </div>
       </section>
 
-      {/* CTA (non-clickable; no links) */}
+      {/* CTA */}
       <section className="svc-cta-final">
-        <h3>Ready to grow with Ziara?</h3>
-        <p className="svc-sub">Create an account or reach out to our team anytime.</p>
+        <h3>{t("services.cta.title")}</h3>
+        <p className="svc-sub">{t("services.cta.subtitle")}</p>
         <div className="cta-actions">
-         <SignupButton />
-
-         <div
-          className="btn-pill btn-pill--outline"
-           aria-disabled="true"
-           onClick={goContact}
+          <SignupButton />
+          <div
+            className="btn-pill btn-pill--outline"
+            aria-disabled="true"
+            onClick={goContact}
             role="button"
-           tabIndex={0}
+            tabIndex={0}
             onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && goContact()}
-         >
-            Contact Us
+          >
+            {t("services.cta.contact")}
           </div>
         </div>
       </section>

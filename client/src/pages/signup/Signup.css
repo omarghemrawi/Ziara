@@ -138,3 +138,21 @@
     margin: 0 auto;
   }
 }
+.signup-login-link {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: #565b6b;
+}
+
+.signup-login-link span {
+  color: #A75D3E;  /* brand gold-brown */
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.signup-login-link span:hover {
+  color: #FAC75C; /* gold hover */
+}
+

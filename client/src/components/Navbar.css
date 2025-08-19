@@ -4,83 +4,88 @@ html, body {
   padding: 0;
 }
 
-/* ===== Brand palette ===== */
 :root {
-  --brown:#A75D3E;
-  --gold:#FAC75C;
-  --gold-deep:#E9B245;
-  --beige:#EFE2D5;
-  --text:#111213;
-  --muted:#565b6b;
-  --white:#fff;
+  --brown: #A75D3E;
+  --gold: #FAC75C;
+  --gold-deep: #E9B245;
+  --beige: #EFE2D5;
+  --text: #111213;
+  --muted: #565b6b;
+  --white: #fff;
 }
 
-/* ===== Bar ===== */
 .navbar {
   position: fixed;
   top: 0;
   width: 100%;
   height: 60px;
   background: var(--white);
-  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-family: "Poppins", sans-serif;
   z-index: 1000;
+    align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; /* ✅ Allows wrapping gracefully on small screens */
+  direction: ltr; /* default, override when language is ar */
 }
 
-/* ===== Inner container ===== */
 .navbar .container {
   max-width: 1200px;
   margin: 0 auto;
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 0 20px;
 }
 
-/* ===== Logo + text ===== */
 .navbar__logo {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-right: auto;
+  order: 1;
 }
-.logo-img { width: 40px; height: auto; }
+
+.logo-img {
+  width: 40px;
+  height: auto;
+}
+
 .logo-text {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--gold);
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
 }
 
-/* ===== Links ===== */
 .navbar__links {
   display: flex;
   list-style: none;
   gap: 32px;
   margin: 0;
   padding: 0;
+  order: 2;
 }
+
 .navbar__links a {
   text-decoration: none;
   color: #333;
   font-weight: 500;
-  transition: color .2s, text-decoration-color .2s;
+  transition: color 0.2s, text-decoration-color 0.2s;
 }
+
 .navbar__links a:hover {
   color: var(--brown);
   text-decoration: underline;
 }
 
-/* ===== Actions (right side) ===== */
 .navbar__actions {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-left: 32px;
+  order: 3;
 }
 
-/* ===== Buttons base ===== */
 .btn, .btn-profile, .language-switch {
   font-size: 1rem;
   line-height: 1;
@@ -89,45 +94,46 @@ html, body {
   border: 1px solid transparent;
   cursor: pointer;
   user-select: none;
-  transition: all .2s;
+  transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Login */
 .btn.login {
   background: transparent;
   color: var(--brown);
   font-weight: 600;
 }
-.btn.login:hover { background: var(--beige); }
 
-/* Sign Up */
+.btn.login:hover {
+  background: var(--beige);
+}
+
 .btn.signup {
   background: var(--gold);
   color: #2b1a12;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(250,199,92,.35);
+  box-shadow: 0 2px 8px rgba(250, 199, 92, 0.35);
 }
+
 .btn.signup:hover {
   background: var(--gold-deep);
   transform: translateY(-1px);
 }
 
-/* Logout */
 .btn.logout {
   background: var(--gold);
   color: #2b1a12;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(250,199,92,.35);
+  box-shadow: 0 2px 8px rgba(250, 199, 92, 0.35);
 }
+
 .btn.logout:hover {
   background: var(--gold-deep);
   transform: translateY(-1px);
 }
 
-/* Profile */
 .btn-profile {
   background: linear-gradient(135deg, var(--brown), var(--gold-deep));
   color: #fff;
@@ -135,43 +141,46 @@ html, body {
   padding: 10px 18px;
   border-radius: 30px;
   text-decoration: none;
-  box-shadow: 0 4px 12px rgba(167,93,62,.28);
+  box-shadow: 0 4px 12px rgba(167, 93, 62, 0.28);
 }
+
 .btn-profile:hover {
   filter: brightness(1.02);
   transform: translateY(-2px);
 }
 
-/* Language */
 .language-switch {
   background: var(--white);
   color: var(--text);
   border: 1px solid #e6e6e6;
   font-weight: 600;
   gap: 6px;
+  direction: ltr;
 }
-.language-switch:hover { background: var(--beige); }
 
-/* Active Link */
+.language-switch:hover {
+  background: var(--beige);
+}
+
 .navbar__links a.active {
   color: var(--brown);
-  background: linear-gradient(180deg, transparent 60%, rgba(250,199,92,.45) 0);
+  background: linear-gradient(180deg, transparent 60%, rgba(250, 199, 92, 0.45) 0);
   border-radius: 4px;
   padding: 2px 6px;
 }
 
-/* ===== Responsive ===== */
+/* Responsive */
 @media (max-width: 900px) {
   .navbar .container {
     flex-wrap: wrap;
-    row-gap: .5rem;
-    padding: .5rem 10px;
+    row-gap: 0.5rem;
+    padding: 0.5rem 10px;
   }
   .navbar__links {
     order: 3;
     width: 100%;
     justify-content: center;
-    padding: .5rem 0;
+    padding: 0.5rem 0;
     border-top: 1px solid #f0f0f0;
   }
   .navbar__actions {
@@ -180,7 +189,9 @@ html, body {
 }
 
 @media (max-width: 600px) {
-  .logo-text { display: none; }
+  .logo-text {
+    display: none;
+  }
   .navbar__links {
     gap: 20px;
     font-size: 0.9rem;
@@ -190,7 +201,7 @@ html, body {
     font-size: 0.9rem;
   }
 }
-/* زر الهامبرغر */
+
 .menu-toggle {
   display: none;
   font-size: 1.5rem;
@@ -199,11 +210,62 @@ html, body {
   cursor: pointer;
 }
 
-/* Mobile responsive */
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
     margin-left: auto;
+    color: var(--brown);
+  }
+  .navbar__links {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    background: var(--white);
+    padding: 1rem;
+    border-top: 1px solid #eee;
+  }
+  .navbar__links.open {
+    display: flex;
+  }
+  .navbar__actions {
+    gap: 12px;
+    margin-left: auto;
+  }
+}
+
+/* RTL Fixes */
+html[dir="rtl"] .navbar .container {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .navbar__logo {
+  order: 3;
+  flex-direction: row-reverse;
+  margin-left: 1rem;
+}
+
+html[dir="rtl"] .navbar__links {
+  order: 2;
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .navbar__actions {
+  order: 1;
+  flex-direction: row-reverse;
+}
+.menu-toggle {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+    margin-inline-start: auto;
     color: var(--brown);
   }
 
@@ -220,9 +282,179 @@ html, body {
   .navbar__links.open {
     display: flex;
   }
+}
+html[dir="rtl"] .menu-toggle {
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+html[dir="rtl"] .navbar {
+  direction: rtl;
+}
+/* Keep navbar elements on one line */
+.navbar .container {
+  flex-wrap: nowrap;
+}
 
-  .navbar__actions {
-    gap: 12px;
-    margin-left: auto;
+/* Prevent buttons from expanding too much */
+.navbar__actions .btn,
+.navbar__actions .language-switch {
+  white-space: nowrap;
+  min-width: 80px;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Arabic-specific fixes */
+html[dir="rtl"] .navbar__actions .btn,
+html[dir="rtl"] .navbar__actions .language-switch {
+  font-size: 0.9rem; /* Slightly smaller in Arabic */
+  padding: 6px 12px; /* Tighter padding */
+  line-height: 1.2;
+}
+
+/* Keep logo and buttons aligned in Arabic */
+html[dir="rtl"] .navbar .container {
+  align-items: center;
+}
+/* Default: LTR (English) */
+.navbar__logo {
+  order: 1;
+}
+.menu-toggle {
+  order: 2;
+}
+.navbar__links {
+  order: 3;
+}
+.navbar__actions {
+  order: 4;
+}
+
+/* RTL Arabic Fix (reverse order) */
+html[dir="rtl"] .navbar__logo {
+  order: 2; /* Logo after hamburger */
+}
+html[dir="rtl"] .menu-toggle {
+  order: 1; /* Hamburger comes first in Arabic */
+}
+@media (max-width: 768px) {
+  .navbar__links {
+    display: none;
+    position: absolute;     /* ✅ خلي اللستة تنزل برا النوف بار */
+    top: 60px;              /* ✅ ارتفاع النوف بار */
+    left: 0;
+    width: 100%;
+    background: var(--white);
+    flex-direction: row;    /* ✅ صف أفقي */
+    justify-content: center;
+    gap: 20px;
+    padding: 0.8rem 0;
+    border-top: 1px solid #eee;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08); /* ظل خفيف تحت */
+    z-index: 999;           /* فوق المحتوى */
   }
+
+  .navbar__links.open {
+    display: flex;
+  }
+
+
+  .menu-toggle {
+    display: block;
+    margin-inline-start: auto;
+    color: var(--brown);
+  }
+}
+/* ✅ ترتيب العناصر بالـ LTR (انجليزي) */
+html[dir="ltr"] .navbar__logo {
+  order: 1;
+}
+html[dir="ltr"] .menu-toggle {
+  order: 2;
+}
+html[dir="ltr"] .navbar__links {
+  order: 3;
+}
+html[dir="ltr"] .navbar__actions {
+  order: 4;
+}
+
+/* ✅ ترتيب العناصر بالـ RTL (عربي) */
+html[dir="rtl"] .menu-toggle {
+  order: 3;
+}
+html[dir="rtl"] .navbar__logo {
+  order: 4;
+}
+html[dir="rtl"] .navbar__links {
+  order: 2;
+}
+html[dir="rtl"] .navbar__actions {
+  order: 1;
+}
+/* Default LTR (English) */
+html[dir="ltr"] .navbar__actions .btn.login {
+  order: 1;
+}
+html[dir="ltr"] .navbar__actions .btn.signup {
+  order: 2;
+}
+html[dir="ltr"] .navbar__actions .btn-profile {
+  order: 1;
+}
+html[dir="ltr"] .navbar__actions .btn.logout {
+  order: 2;
+}
+html[dir="ltr"] .navbar__actions .language-switch {
+  order: 3;
+}
+
+/* RTL (Arabic) */
+html[dir="rtl"] .navbar__actions .language-switch {
+  order: 1; /* أول شي زر اللغة */
+}
+html[dir="rtl"] .navbar__actions .btn-profile,
+html[dir="rtl"] .navbar__actions .btn.login {
+  order: 2;
+}
+html[dir="rtl"] .navbar__actions .btn.logout,
+html[dir="rtl"] .navbar__actions .btn.signup {
+  order: 3;
+}
+/* ===================== */
+/* LTR (English) ترتيب اللينكات */
+/* ===================== */
+html[dir="ltr"] .navbar__links li:nth-child(1) { order: 1; } /* Home */
+html[dir="ltr"] .navbar__links li:nth-child(2) { order: 2; } /* About */
+html[dir="ltr"] .navbar__links li:nth-child(3) { order: 3; } /* Services */
+html[dir="ltr"] .navbar__links li:nth-child(4) { order: 4; } /* Contact */
+
+/* ===================== */
+/* RTL (Arabic) ترتيب اللينكات بالعكس */
+/* ===================== */
+html[dir="rtl"] .navbar__links li:nth-child(1) { order: 4; } /* الرئيسية */
+html[dir="rtl"] .navbar__links li:nth-child(2) { order: 3; } /* من نحن */
+html[dir="rtl"] .navbar__links li:nth-child(3) { order: 2; } /* الخدمات */
+html[dir="rtl"] .navbar__links li:nth-child(4) { order: 1; } /* تواصل معنا */
+/* LTR (English) → Logo image أول شي, text بعدو */
+html[dir="ltr"] .navbar__logo img {
+  order: 1;
+}
+html[dir="ltr"] .navbar__logo .logo-text {
+  order: 2;
+}
+
+/* RTL (Arabic) → Logo text أول شي, image بعدو */
+html[dir="rtl"] .navbar__logo .logo-text {
+  order: 1;
+}
+html[dir="rtl"] .navbar__logo img {
+  order: 2;
+}
+.navbar__links a.active {
+  color: var(--brown);
+  background: linear-gradient(180deg, transparent 60%, rgba(250, 199, 92, 0.45) 0);
+  border-radius: 4px;
+  padding: 2px 6px;
 }

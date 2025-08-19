@@ -1,17 +1,19 @@
+// ✅ FINAL VERSION OF JSX for Navbar layout to match both English and Arabic perfectly
+
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import "./Navbar.css";
 
 export default function Navbar() {
-  const [lang, setLang] = useState("EN");
+  const { t, i18n } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const isActive = (p) =>
-    p === "/" ? pathname === "/" : pathname.startsWith(p);
+  const isActive = (p) => (p === "/" ? pathname === "/" : pathname.startsWith(p));
 
   const user = (() => {
     try {
@@ -23,10 +25,10 @@ export default function Navbar() {
   })();
 
   const toggleLang = () => {
-    const next = lang === "EN" ? "ع" : "EN";
-    setLang(next);
-    document.documentElement.lang = next === "EN" ? "en" : "ar";
-    document.documentElement.dir = next === "EN" ? "ltr" : "rtl";
+    const nextLang = i18n.language === "en" ? "ar" : "en";
+    i18n.changeLanguage(nextLang);
+    document.documentElement.lang = nextLang;
+    document.documentElement.dir = nextLang === "ar" ? "rtl" : "ltr";
   };
 
   const handleLogout = () => {
@@ -39,79 +41,55 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="container">
         {/* Logo */}
+
         <div className="navbar__logo">
-          <img
-            src="/image/navbar__logo.png"
-            alt="Ziara logo"
-            className="logo-img"
-          />
+          <img src="/image/navbar__logo.png" alt="Ziara logo" className="logo-img" />
           <span className="logo-text">Ziara</span>
         </div>
+                    {/* ✅ Menu toggle (hamburger) */}
+        <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+         ☰
+          </button>
 
-        {/* Hamburger icon (mobile only) */}
-        <button
-          className="menu-toggle"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </button>
+<ul className={`navbar__links ${menuOpen ? "open" : ""}`}>
+  <li>
+    <Link to="/" className={isActive("/") ? "active" : ""}>
+      {t("navbar.home")}
+    </Link>
+  </li>
+  <li>
+    <Link to="/about" className={isActive("/about") ? "active" : ""}>
+      {t("navbar.about")}
+    </Link>
+  </li>
+  <li>
+    <Link to="/services" className={isActive("/services") ? "active" : ""}>
+      {t("navbar.services")}
+    </Link>
+  </li>
+  <li>
+    <Link to="/contact" className={isActive("/contact") ? "active" : ""}>
+      {t("navbar.contact")}
+    </Link>
+  </li>
+</ul>
 
-        {/* Links */}
-        <ul className={`navbar__links ${menuOpen ? "open" : ""}`}>
-          <li>
-            <Link to="/" className={isActive("/") ? "active" : undefined}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/about"
-              className={isActive("/about") ? "active" : undefined}
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/services"
-              className={isActive("/services") ? "active" : undefined}
-            >
-              Services
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/contact"
-              className={isActive("/contact") ? "active" : undefined}
-            >
-              Contact
-            </Link>
-          </li>
-        </ul>
 
         {/* Actions */}
         <div className="navbar__actions">
           {user ? (
             <>
-              <Link to="/profile" className="btn-profile">
-                Profile
-              </Link>
-              <button className="btn logout" onClick={handleLogout}>
-                Logout
-              </button>
+              <Link to="/profile" className="btn-profile">{t("navbar.profile")}</Link>
+              <button className="btn logout" onClick={handleLogout}>{t("navbar.logout")}</button>
             </>
           ) : (
             <>
-              <Link to="/login" className="btn login">
-                Login
-              </Link>
-              <Link to="/signup" className="btn signup">
-                Sign Up
-              </Link>
+              <Link to="/login" className="btn login">{t("navbar.login")}</Link>
+              <Link to="/signup" className="btn signup">{t("navbar.signup")}</Link>
             </>
           )}
           <button className="language-switch" onClick={toggleLang}>
-            {lang} <span>▼</span>
+            {i18n.language === "en" ? "EN" : "ع"} <span>▼</span>
           </button>
         </div>
       </div>

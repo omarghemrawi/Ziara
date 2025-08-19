@@ -1,46 +1,474 @@
 {
-  "nav": {
+  "login": {
+    "title": "Login",
+    "email": "Email",
+    "password": "Password",
+    "button": "Log In",
+    "loading": "Logging in...",
+    "failed": "Login Failed",
+    "alt": "Login illustration"
+  },
+  "navbar": {
     "home": "Home",
     "about": "About",
     "services": "Services",
-    "contact": "Contact"
+    "contact": "Contact",
+    "signup": "Sign Up",
+    "login": "Login",
+    "profile": "Profile",
+    "logout": "Logout"
   },
-  "home": {
-    "exploreTitle": "Explore by category",
-    "restaurants": "Restaurants",
-    "hotels": "Hotels",
-    "activities": "Activities & Places",
-    "shops": "Shops",
-    "whyZiara": "Why Ziara?",
-    "bilingual": "Bilingual by default",
-    "smartRanking": "Smart ranking",
-    "richReviews": "Rich reviews"
+  "validation": {
+    "invalidEmail": "Invalid email",
+    "requiredEmail": "Email is required",
+    "shortPassword": "Password must be at least 6 characters",
+    "requiredPassword": "Password is required"
   },
-  "contact": {
-    "title": "Get in touch.",
-    "desc": "Choose a plan or have questions about listing your business on Ziara? Send us a message — we usually reply within 24–48 hours.",
-    "fullName": "Full name",
-    "email": "Email",
-    "subject": "Subject (optional)",
-    "message": "Message",
-    "send": "Send"
-  },
-  
-  "auth": {
-    "loginTitle": "Login to your account",
-    "signupTitle": "Create a new account",
+  "signup": {
+    "title": "Sign Up",
+    "businessName": "Business Name",
     "email": "Email",
     "password": "Password",
-    "confirmPassword": "Confirm password",
-    "businessName": "Business name",
-    "selectBusiness": "Choose your business type",
-    "loginBtn": "Login",
-    "signupBtn": "Sign Up",
-    "noAccount": "Don't have an account?",
-    "haveAccount": "Already have an account?",
-    "goSignup": "Sign up here",
-    "goLogin": "Login here"
-  }
+    "confirmPassword": "Confirm Password",
+    "passwordPlaceholder": "At least 6 characters & a number",
+    "confirmPlaceholder": "Repeat your password",
+    "business": "Business",
+    "selectBusiness": "Select your business",
+    "button": "Sign Up",
+    "loading": "Signing up...",
+    "already": "Already have an account?",
+    "login": "Login",
+    "alt": "Sign up illustration",
+    "businessOptions": {
+      "shop": "Shop",
+      "restaurant": "Restaurant",
+      "hotel": "Hotel",
+      "activity": "Activity"
+    },
+    "validation": {
+      "businessName": "Business name is required",
+      "shortPassword": "Password must be at least 6 characters",
+      "numberRequired": "Password must contain a number",
+      "requiredPassword": "Password is required",
+      "passwordsMatch": "Passwords do not match",
+      "confirmPassword": "Confirm password is required",
+      "business": "Please choose your business"
+    }
+  },
+  "plan": {
+    "upgradeTitle": "Upgrade your plan",
+    "period": "USD / month",
+    "current": "Current",
+    "thisCurrent": "This is your current plan",
+    "currentPlan": "Current plan",
 
+    "features": {
+      "active": "Active subscription",
+      "limit5": "Image limit: 5",
+      "limit10": "Image limit: 10",
+      "unlimited": "Unlimited images",
+      "normalRank": "Normal search ranking",
+      "boost": "Random Boost in search (occasionally top)",
+      "topRank": "Top Rank (always)"
+    },
+
+    "standard": {
+      "name": "Standard",
+      "cta": "Get Standard",
+      "subtitle": "For everyday listing"
+    },
+    "plus": {
+      "name": "Plus",
+      "cta": "Get Plus",
+      "tag": "POPULAR",
+      "subtitle": "More access to advanced ranking"
+    },
+    "pro": {
+      "name": "Pro",
+      "cta": "Get Pro",
+      "subtitle": "Full access to top ranking"
+    }
+  },
+  "checkout": {
+    "subscribeTo": "Subscribe to {{plan}}",
+    "month": "month",
+    "subtotal": "Subtotal",
+    "tax": "Tax",
+    "total": "Total due today",
+    "contactInfo": "Contact information",
+    "paymentMethod": "Payment method",
+    "email": "Email",
+    "cardNumber": "1234 1234 1234 1234",
+    "expiry": "MM / YY",
+    "cvc": "CVC",
+    "cardName": "Cardholder name",
+    "payNow": "Pay ${{price}} / month",
+    "agreement": "By subscribing, you agree to our Terms and authorize storing your payment method for renewals.",
+    "failed": "Failed",
+    "paymentFailed": "Payment failed"
+  },
+  "profile": {
+    "unlimitedPhotos": "You can upload unlimited photos.",
+    "limitedPhotos": "You can upload only {{limit}} photos.",
+    "editProfileInfo": "Edit Profile Info",
+    "changePhoto": "Change Profile Image",
+    "description": "Description",
+    "editDescription": "Edit Description",
+    "noDescription": "No description",
+    "links": "Links & Location",
+    "editLinks": "Edit Links",
+    "instagram": "Instagram",
+    "facebook": "Facebook",
+    "location": "Location",
+    "menu": "Menu",
+    "photos": "Photos",
+    "editPhotos": "Edit Photos",
+    "uploadPhoto": "Upload a Photo",
+    "deleteSelected": "Delete Selected Photos",
+    "reviews": "Rating & Review",
+    "viewAllReviews": "View All Reviews",
+    "viewAll": "View All",
+    "reviewsCount": "Reviews",
+    "ratingsCount": "Ratings",
+    "upgradePlan": "Upgrade Your Plan",
+    "editPlan": "Edit Plan",
+    "subscribedPlan": "You have subscribe by : {{plan}} Plan with fee {{fee}}$"
+  },
+  "report": {
+    "title": "Report review",
+    "back": "Back",
+    "unknownUser": "Unknown user",
+    "choose": "Choose",
+    "submit": "Submit report",
+    "submitting": "Submitting…",
+    "success": "Report submitted. Thank you.",
+    "fail": "Could not submit report. Please try again.",
+    "offTopic": {
+      "title": "Off topic",
+      "desc": "Review doesn’t pertain to an experience at or with this business"
+    },
+    "spam": {
+      "title": "Spam",
+      "desc": "Review is from a bot, a fake account, or contains ads and promotions"
+    },
+    "conflict": {
+      "title": "Conflict of interest",
+      "desc": "Review is from someone affiliated with the business or a competitor’s business"
+    },
+    "profanity": {
+      "title": "Profanity",
+      "desc": "Review contains swear words, has sexually explicit language, or details graphic violence"
+    },
+    "hateSpeech": {
+      "title": "Discrimination or hate speech",
+      "desc": "Review has harmful language about an individual or group based on identity"
+    }
+  },
+  "reviews": {
+    "title": "Rating & Review",
+    "summaryTitle": "Review summary",
+    "loading": "Loading reviews…",
+    "totalReviews": "reviews",
+    "anonymous": "Anonymous",
+    "reviewBy": "Review by",
+    "linkCopied": "Link copied to clipboard!",
+    "star": "{{count}} star",
+    "star_plural": "{{count}} stars",
+    "photo": "{{count}} photo",
+    "photo_plural": "{{count}} photos",
+    "share": "Share review",
+    "report": "Report review",
+    "more": "More",
+    "noReviews": "No reviews yet."
+  },
+  "home": {
+    "hero": {
+      "kicker": "WELCOME TO ZIARA",
+      "title": "Discover Lebanon, together.",
+      "subtitle": "Ziara connects visitors with local restaurants, stays, activities & places, and shops—through a simple, bilingual experience across web and mobile.",
+      "explore": "Explore services"
+    },
+    "categories": {
+      "title": "Explore by category",
+      "restaurants": {
+        "title": "Restaurants",
+        "item1": "Menu link + photos",
+        "item2": "Hours, delivery & map",
+        "item3": "Ratings and reviews"
+      },
+      "hotels": {
+        "title": "Hotels",
+        "item1": "Rooms & amenities",
+        "item2": "Gallery + exact location",
+        "item3": "External booking link"
+      },
+      "activities": {
+        "title": "Activities & Places",
+        "item1": "Tours & attractions",
+        "item2": "Timing & ticket info",
+        "item3": "Must-see photos"
+      },
+      "shops": {
+        "title": "Shops",
+        "item1": "Showcase items",
+        "item2": "Price range + contacts",
+        "item3": "Social links & website"
+      }
+    },
+    "why": {
+      "title": "Why Ziara?",
+      "bilingual": {
+        "title": "Bilingual by default",
+        "desc": "Arabic/English UI with instant LTR/RTL switch."
+      },
+      "ranking": {
+        "title": "Smart ranking",
+        "desc": "Plans boost visibility so the right visitors find you."
+      },
+      "reviews": {
+        "title": "Rich reviews",
+        "desc": "Photo reviews with owner replies keep listings fresh."
+      }
+    },
+    "final": {
+      "title": "Ready to get started?",
+      "plans": "See plans",
+      "about": "About Us",
+      "contact": "Contact Us"
+    }
+  },
+  "contact": {
+    "hero": {
+      "kicker": "CONTACT",
+      "title": "Get in touch.",
+      "subtitle": "Choose a plan or have questions about listing your business on Ziara? Send us a message — we usually reply within 24–48 hours."
+    },
+    "form": {
+      "name": "Full name",
+      "email": "Email",
+      "subject": "Subject (optional)",
+      "message": "Message",
+      "placeholders": {
+        "name": "John Doe",
+        "email": "john@example.com",
+        "subject": "How can we help?",
+        "message": "Write your message here..."
+      },
+      "send": "Send message",
+      "sending": "Sending...",
+      "success": "Your message was sent. Thank you! ✅",
+      "errors": {
+        "name": "Please enter your name.",
+        "email": "Enter a valid email.",
+        "message": "Message cannot be empty.",
+        "failed": "Failed to send. Try again.",
+        "unknown": "Something went wrong"
+      }
+    },
+    "info": {
+      "email": { "title": "Email" },
+      "support": { "title": "Support hours", "text": "Mon–Fri, 9:00–17:00" },
+      "list": {
+        "item1": "Partnerships & subscriptions",
+        "item2": "Listing/verification help",
+        "item3": "Report a technical issue"
+      },
+      "note": "We’ll reply via email as soon as possible."
+    }
+  },
+  "about": {
+    "hero": {
+      "kicker": "About Ziara",
+      "title": "Discover Lebanon, together.",
+      "subtitle": "Ziara connects visitors with local businesses—restaurants, stays, activities, and shops—through a simple, bilingual experience across web and mobile."
+    },
+    "what": {
+      "title": "What is Ziara?",
+      "visitors": {
+        "title": "Mobile app for visitors",
+        "desc": "Search by category and GPS, save Favorites and move them to Visited, and read/write photo reviews. UI supports Arabic/English."
+      },
+      "owners": {
+        "title": "Website for business owners",
+        "desc": "Create a rich profile (photos, description, links, map; restaurants add a menu link), pick a plan to boost visibility, and reply to reviews."
+      },
+      "admin": {
+        "title": "Admin dashboard",
+        "desc": "Manage accounts, review reports, and curate touristic/religious places to keep the ecosystem healthy."
+      }
+    },
+    "sync": {
+      "title": "Website × Mobile: one system",
+      "item1": "Updates on the website appear instantly in the app.",
+      "item2": "App reviews/photos show on the website; owners can reply.",
+      "item3": "Plans chosen on the website influence ranking and limits in the app."
+    },
+    "cards": {
+      "visitors": {
+        "title": "For Visitors",
+        "item1": "Discover nearby places by category & location",
+        "item2": "Save Favorites → move to Visited after your trip",
+        "item3": "Read & write honest, photo-based reviews"
+      },
+      "owners": {
+        "title": "For Business Owners",
+        "item1": "Professional profile with photos, description, links & map",
+        "item2": "Restaurant-friendly: add your public menu link",
+        "item3": "Flexible plans to boost visibility in the app"
+      }
+    },
+    "trust": {
+      "title": "Trust & Safety",
+      "desc": "Users can report spam, off-topic, or abusive content. Admin tools keep Ziara fair and helpful for everyone."
+    }
+  },
+  "services": {
+    "hero": {
+      "kicker": "SERVICES",
+      "title": "Discover Lebanon, together.",
+      "subtitle": "Choose a plan and list your business — Restaurants, Hotels, Activities & Places, and Shops."
+    },
+    "who": {
+      "title": "Who we serve"
+    },
+    "businesses": {
+      "restaurants": {
+        "title": "Restaurants",
+        "item1": "Menu link + photos of dishes (up to your plan limit).",
+        "item2": "Opening hours, delivery/pick-up info, and location map.",
+        "item3": "Customers can rate & write reviews; you can reply."
+      },
+      "hotels": {
+        "title": "Hotels",
+        "item1": "Show room types, amenities, and highlights.",
+        "item2": "Add gallery and pin your exact location.",
+        "item3": "Attach external booking link if you have one."
+      },
+      "activities": {
+        "title": "Activities & Places",
+        "item1": "Tours, attractions, museums, landmarks describe what guests will find.",
+        "item2": "Add timing, ticket info (if any), and must-see photos.",
+        "item3": "Visitors can favorite, rate, and leave feedback."
+      },
+      "shops": {
+        "title": "Shops",
+        "item1": "Showcase best items with short descriptions.",
+        "item2": "Add price range and contact details.",
+        "item3": "Links to social profiles & website."
+      }
+    },
+    "plans": {
+      "title": "Plans",
+      "subtitle": "Pick a plan that fits your needs. You can upgrade anytime.",
+      "standard": {
+        "name": "Standard",
+        "subtitle": "For everyday listing",
+        "item1": "Active subscription",
+        "item2": "Image limit: 5",
+        "item3": "Normal search ranking"
+      },
+      "plus": {
+        "name": "Plus",
+        "subtitle": "More access to advanced ranking",
+        "badge": "POPULAR",
+        "item1": "Active subscription",
+        "item2": "Image limit: 10",
+        "item3": "Random Boost in search (occasionally top)"
+      },
+      "pro": {
+        "name": "Advanced",
+        "subtitle": "Full access to top ranking",
+        "item1": "Active subscription",
+        "item2": "Unlimited images",
+        "item3": "Top Rank (always)"
+      }
+    },
+    "cta": {
+      "title": "Ready to grow with Ziara?",
+      "subtitle": "Create an account or reach out to our team anytime.",
+      "contact": "Contact Us"
+    }
+  },
+  "signupButton": {
+    "create": "Create account",
+    "profile": "Go to Profile"
+  },
+  "carousel": {
+    "slide1": {
+      "title": "Ziara",
+      "desc": "Discover Lebanon in a whole new way."
+    },
+    "slide2": {
+      "title": "Discover Lebanon Like Never Before",
+      "desc": "Explore hidden gems, cultural wonders, and local experiences—all in one app."
+    },
+    "slide3": {
+      "title": "From Ancient Ruins to Sacred Spaces",
+      "desc": "Visit Lebanon’s rich history and diverse spiritual landmarks."
+    },
+    "slide4": {
+      "title": "Ask the Locals, Get Insider Tips",
+      "desc": "Chat, ask questions, or discover new places—all through AI chat."
+    },
+    "slide5": {
+      "title": "Dine Like a Local",
+      "desc": "Discover traditional Lebanese restaurants and street-food favorites."
+    },
+    "slide6": {
+      "title": "Support Local & Take Home a Memory",
+      "desc": "Browse souvenirs and handcrafted treasures from small Lebanese businesses."
+    }
+  },
+  "editProfile": {
+    "title": "Edit Profile",
+    "name": {
+      "label": "Edit your business name",
+      "placeholder": "Enter a new business name"
+    },
+    "city": {
+      "label": "Edit city",
+      "placeholder": "Enter new location"
+    },
+    "save": "Save"
+  },
+  "editLinks": {
+    "title": "Edit Links & Location",
+    "instagram": {
+      "label": "Edit Instagram",
+      "placeholder": "Enter your Instagram link"
+    },
+    "facebook": {
+      "label": "Edit Facebook",
+      "placeholder": "Enter your Facebook link"
+    },
+    "location": {
+      "label": "Edit Location",
+      "placeholder": "Enter your location"
+    },
+    "menu": {
+      "label": "Menu (URL)",
+      "placeholder": "https://your-restaurant.com/menu"
+    },
+    "save": "Save"
+  },
+  "editDescription": {
+    "title": "Edit Description",
+    "placeholder": "Enter your new description",
+    "save": "Save"
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

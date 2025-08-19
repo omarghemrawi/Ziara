@@ -5,15 +5,11 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useTranslation } from "react-i18next"; // 👈 Added
 import "./Login.css";
 
-// Validation schema using Yup
-const LoginSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string().min(6, "Password must be at least 6 characters").required("Password is required"),
-});
-
 export default function Login() {
+  const { t } = useTranslation(); // 👈 Added
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,14 +20,27 @@ export default function Login() {
 
       localStorage.setItem("token", response.data.token);
       dispatch(setUser(user));
-      navigate("/profile",{ replace: true });
+      navigate("/profile", { replace: true });
     } catch (err) {
       console.error(err);
-      alert("Login Failed");
+      alert(t("login.failed")); // 👈 translated error
     } finally {
       setSubmitting(false);
     }
   };
+  
+// Validation schema using Y
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string()
+    .email(t("validation.invalidEmail"))
+    .required(t("validation.requiredEmail")),
+  password: Yup.string()
+    .min(6, t("validation.shortPassword"))
+    .required(t("validation.requiredPassword")),
+});
+
+
 
   return (
     <div className="login-page">
@@ -44,13 +53,13 @@ export default function Login() {
         >
           {({ isSubmitting }) => (
             <Form className="login-form">
-              <h2>Login</h2>
+              <h2>{t("login.title")}</h2>
 
-              <label>Email</label>
+              <label>{t("login.email")}</label>
               <Field type="email" name="email" />
               <ErrorMessage name="email" component="div" className="error" />
 
-              <label>Password</label>
+              <label>{t("login.password")}</label>
               <Field type="password" name="password" />
               <ErrorMessage name="password" component="div" className="error" />
 
@@ -59,7 +68,7 @@ export default function Login() {
                 className="btn login-submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Logging in..." : "Log In"}
+                {isSubmitting ? t("login.loading") : t("login.button")}
               </button>
             </Form>
           )}
@@ -67,7 +76,7 @@ export default function Login() {
 
         {/* Right: Illustration */}
         <div className="login-image">
-          <img src="/image/intro.png" alt="Login illustration" />
+          <img src="/image/intro.png" alt={t("login.alt")} />
         </div>
       </div>
     </div>

@@ -1,9 +1,11 @@
 // src/components/SignupButton.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";   // ✅ إضافة الترجمة
 
 export default function SignupButton({ className = "btn-pill btn-gold" }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();   // ✅ hook الترجمة
 
   const user = (() => {
     try {
@@ -27,7 +29,7 @@ export default function SignupButton({ className = "btn-pill btn-gold" }) {
         onClick={goSignup}
         onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && goSignup()}
       >
-        Create account
+        {t("signupButton.create")}
       </div>
     );
   }
@@ -41,7 +43,7 @@ export default function SignupButton({ className = "btn-pill btn-gold" }) {
       onClick={goProfile}
       onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && goProfile()}
     >
-      Go to Profile
+      {t("signupButton.profile")}
     </div>
   );
 }

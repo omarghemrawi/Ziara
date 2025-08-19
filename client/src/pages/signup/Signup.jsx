@@ -1,4 +1,3 @@
-// src/pages/Signup.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,31 +5,35 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux"; 
 import { setUser } from "../../redux/userActions";   
+import { useTranslation } from "react-i18next"; // 👈 Added
 import "./Signup.css";
 
-// Yup validation schema
-const SignupSchema = Yup.object().shape({
-  businessName: Yup.string().required("Business name is required"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string()
-    .min(6, "Password must be at least 6 characters")
-    .matches(/\d/, "Password must contain a number")
-    .required("Password is required"),
-  confirm: Yup.string()
-    .oneOf([Yup.ref("password")], "Passwords do not match")
-    .required("Confirm password is required"),
-  business: Yup.string().required("Please choose your business"),
-});
-
 export default function Signup() {
+  const { t } = useTranslation(); // 👈 Added
   const navigate = useNavigate();
-    const dispatch = useDispatch();    
+  const dispatch = useDispatch();    
+
+  // Yup validation schema with i18n
+  const SignupSchema = Yup.object().shape({
+    businessName: Yup.string().required(t("signup.validation.businessName")),
+    email: Yup.string()
+      .email(t("validation.invalidEmail"))
+      .required(t("validation.requiredEmail")),
+    password: Yup.string()
+      .min(6, t("signup.validation.shortPassword"))
+      .matches(/\d/, t("signup.validation.numberRequired"))
+      .required(t("signup.validation.requiredPassword")),
+    confirm: Yup.string()
+      .oneOf([Yup.ref("password")], t("signup.validation.passwordsMatch"))
+      .required(t("signup.validation.confirmPassword")),
+    business: Yup.string().required(t("signup.validation.business")),
+  });
 
   const businessList = [
-    { id: "shop", label: "Shop" },
-    { id: "restaurant", label: "Restaurant" },
-    { id: "hotel", label: "Hotel" },
-    { id: "activity", label: "Activity" },
+    { id: "shop", label: t("signup.businessOptions.shop") },
+    { id: "restaurant", label: t("signup.businessOptions.restaurant") },
+    { id: "hotel", label: t("signup.businessOptions.hotel") },
+    { id: "activity", label: t("signup.businessOptions.activity") },
   ];
 
   const handleSignup = async (values, { setSubmitting }) => {
@@ -45,10 +48,7 @@ export default function Signup() {
 
       localStorage.setItem("token", response.data.token);
 
-      console.log("Signup successful:", response.data);
-
       dispatch(setUser(response.data.user));
-  
       navigate("/additional-info", { replace: true });
     } catch (error) {
       console.error("Signup error:", error.response?.data || error.message);
@@ -62,7 +62,7 @@ export default function Signup() {
       <div className="signup-container">
         {/* Left: illustration */}
         <div className="signup-image">
-          <img src="/image/intro.png" alt="Sign up illustration" />
+          <img src="/image/intro.png" alt={t("signup.alt")} />
         </div>
 
         {/* Right: Formik form */}
@@ -79,27 +79,27 @@ export default function Signup() {
         >
           {({ isSubmitting }) => (
             <Form className="signup-form">
-              <h2>Sign Up</h2>
+              <h2>{t("signup.title")}</h2>
 
-              <label>Business Name</label>
+              <label>{t("signup.businessName")}</label>
               <Field name="businessName" />
               <ErrorMessage name="businessName" component="p" className="error" />
 
-              <label>Email</label>
+              <label>{t("signup.email")}</label>
               <Field name="email" type="email" />
               <ErrorMessage name="email" component="p" className="error" />
 
-              <label>Password</label>
-              <Field name="password" type="password" placeholder="At least 6 characters & a number" />
+              <label>{t("signup.password")}</label>
+              <Field name="password" type="password" placeholder={t("signup.passwordPlaceholder")} />
               <ErrorMessage name="password" component="p" className="error" />
 
-              <label>Confirm Password</label>
-              <Field name="confirm" type="password" placeholder="Repeat your password" />
+              <label>{t("signup.confirmPassword")}</label>
+              <Field name="confirm" type="password" placeholder={t("signup.confirmPlaceholder")} />
               <ErrorMessage name="confirm" component="p" className="error" />
 
-              <label className="business-label">Business</label>
+              <label className="business-label">{t("signup.business")}</label>
               <Field as="select" name="business">
-                <option value="">Select your business</option>
+                <option value="">{t("signup.selectBusiness")}</option>
                 {businessList.map((b) => (
                   <option key={b.id} value={b.id}>
                     {b.label}
@@ -113,8 +113,13 @@ export default function Signup() {
                 className="btn signup-submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Signing up..." : "Sign Up"}
+                {isSubmitting ? t("signup.loading") : t("signup.button")}
               </button>
+
+              <p className="signup-login-link">
+                {t("signup.already")}{" "}
+                <span onClick={() => navigate("/login")}>{t("signup.login")}</span>
+              </p>
             </Form>
           )}
         </Formik>

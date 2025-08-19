@@ -76,3 +76,28 @@
 .save-btn:hover {
   background-color: #e5b24e !important;
 }
+/* =========================
+   RTL Arabic Fixes
+   ========================= */
+html[dir="rtl"] .full-width-modal {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .modal-header {
+  flex-direction: row-reverse; /* يخلي زر الإغلاق يجي على الشمال */
+}
+
+html[dir="rtl"] .modal-header h3 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+html[dir="rtl"] .description-textarea {
+  text-align: right;
+  direction: rtl;
+}
+
+html[dir="rtl"] .modal-actions {
+  flex-direction: row-reverse; /* يخلي زر Save يبين بمحلو الصح */
+}
