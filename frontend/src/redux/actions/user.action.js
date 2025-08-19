@@ -4,7 +4,7 @@ export const refreshUser = userId => async dispatch => {
   try {
     const token = await AsyncStorage.getItem('token');
 
-    const res = await axios.get(`http://10.0.2.2:5000/api/user/${userId}`, {
+    const res = await axios.get(`http://192.168.0.101:5000/api/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     dispatch({
