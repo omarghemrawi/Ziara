@@ -7,8 +7,8 @@ export const sendDeactivationEmail = async (clientEmail, clientName) => {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS,
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -26,6 +26,32 @@ export const sendDeactivationEmail = async (clientEmail, clientName) => {
   }
 };
 
+export const sendBannednEmail = async (clientEmail, clientName) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const message = {
+      from: `"Ziara" <${process.env.EMAIL_USER}>`,
+      to: clientEmail,
+      subject: "Account Deactivated",
+      text: `Hello ${clientName},\n\nYour account has been banned . If you think this is a mistake, contact support.`,
+    };
+
+    await transporter.sendMail(message);
+    console.log("Deactivation email sent to", clientEmail);
+  } catch (err) {
+    console.error("Failed to send email:", err);
+  }
+};
+
 export const sendClientRegisterNotfication = async (clientData) => {
   try {
     const transporter = nodemailer.createTransport({
@@ -33,8 +59,8 @@ export const sendClientRegisterNotfication = async (clientData) => {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.GMAIL_USER, // your Gmail
-        pass: process.env.GMAIL_PASS, // app password
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASS,
       },
     });
 

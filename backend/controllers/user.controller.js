@@ -197,8 +197,7 @@ export const updateProfile = async (req, res) => {
 };
 
 
-//Get user by ID
-
+//Get single user by ID
 export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -213,6 +212,33 @@ export const getUser = async (req, res) => {
 
     res.status(200).json({ user });
 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error. Please try again later." });
+  }
+};
+//Get all user 
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
+    if (!users || users.length === 0) {
+      return res.status(404).json({ message: "Users not found." });
+    }
+    res.status(200).json({ users });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error. Please try again later." });
+  }
+};
+// Delete User
+export const deleteUser = async (req, res) => {
+  try {
+    const {id} = req.params
+    const user = await User.findOneAndDelete(id).select("-password");
+    if (!user) {
+  return res.status(404).json({ message: "User not found." });
+}
+    res.status(200).json({ success:true, user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Server error. Please try again later." });

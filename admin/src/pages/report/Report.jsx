@@ -190,10 +190,10 @@ function ReportPage() {
                 </h4>
 
                 <div className="report-detail">
-                  <strong>Target:</strong> {report.targetId.name || report.targetId.username}
+                  <strong>Target:</strong> {report?.targetId?.name || report?.targetId?.username}
                 </div>
                 <div className="report-detail">
-                  <strong>Email:</strong> {report.targetId.email}
+                  <strong>Email:</strong> {report?.targetId?.email}
                 </div>
                 <div className="report-description">
                   <strong>Reason:</strong>

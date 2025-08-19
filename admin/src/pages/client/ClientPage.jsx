@@ -58,7 +58,7 @@ const ClientPage = () => {
   };
 
   // Delete a client place 
- const deleteClient = async (id) => {
+ const bannedClient = async (id) => {
   try {
     const { data } = await axios.delete(`http://localhost:5000/api/client/${id}`, {
       headers: {
@@ -181,6 +181,12 @@ const ClientPage = () => {
                       {plan.priority || "None"}
                     </span>
                   </div>
+                  <div className="detail-group">
+                    <span className="detail-label">Email:</span>
+                    <span className="detail-value">
+                      {place.email|| "None"}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -197,10 +203,10 @@ const ClientPage = () => {
               </div>
               <div>
                <button
-                  className="delete-button"
-                  onClick={() => deleteClient(_id)}
+                  className="banned-button"
+                  onClick={() => bannedClient(_id)}
                 >
-                  Delete
+                  Banned
                 </button>
               </div>
             </div>

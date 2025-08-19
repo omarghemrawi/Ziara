@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema(
     currentCity: String,
     verificationCode: { type: String },
     resetCode: { type: String },
-resetCodeExpire: { type: Date },
+    resetCodeExpire: { type: Date },
 
   },
   {

@@ -54,6 +54,14 @@ const Dashboard = () => {
           <h2>Reviews</h2>
           <p>View and manage user reviews.</p>
         </div>
+        <div
+          className="dashboard-card"
+          onClick={() => navigate("/user")}
+          style={{ cursor: "pointer" }}
+        >
+          <h2>Users</h2>
+          <p>View and manage user</p>
+        </div>
       </section>
     </div>
   );
