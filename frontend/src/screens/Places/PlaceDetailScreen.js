@@ -262,7 +262,7 @@ export default function PlaceDetailScreen() {
       <View style={styles.reviewHeader}>
         <Image
           source={{
-            uri: review.userId.profile || 'https://via.placeholder.com/50',
+            uri: review?.userId?.profile || 'https://via.placeholder.com/50',
           }}
           style={styles.reviewAvatar}
         />
