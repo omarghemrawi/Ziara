@@ -43,7 +43,7 @@ export default function Visited() {
       );
 
       if (data.success) {
-        // toast.success('✅ Place removed from visited');
+        toast.success('✅ Place removed from visited');
         dispatch(refreshUser(user._id));
         getVisitedPlaces();
       }
@@ -53,24 +53,21 @@ export default function Visited() {
   };
 
   const getVisitedPlaces = () => {
-    if (!user || !user.visitedPlaces) {
-      setVisitedPLaces([]);
-      return;
-    }
+
     setVisitedPLaces(
-      places.filter(place => user.visitedPlaces.includes(place._id)),
+      places.filter(place => user?.visitedPlaces?.includes(place._id)),
     );
   };
 
   useEffect(() => {
-    if (user && user.visitedPlaces) {
+    if (user && user?.visitedPlaces) {
       getVisitedPlaces();
           AsyncStorage.setItem('visited', JSON.stringify(user.visitedPlaces));
     } else {
       setVisitedPLaces([]);
          AsyncStorage.removeItem('visited');
     }
-  }, [user.visitedPlaces]);
+  }, [user?.visitedPlaces]);
 
   return (
     <ScrollView style={styles.container}>
