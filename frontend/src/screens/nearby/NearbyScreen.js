@@ -16,6 +16,9 @@ import i18n from '../locales/i18n';
 import Config from 'react-native-config';
 import axios from 'axios';
 
+
+
+
 export default function NearbyScreen() {
   const [location, setLocation] = useState(null);
   const [religious, setReligious] = useState([]);
@@ -23,6 +26,7 @@ export default function NearbyScreen() {
   const [touristic, setTouristic] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locationError, setLocationError] = useState(false);
+  const API_KEY_GOOGLE_PLACES = Config.API_KEY_GOOGLE_PLACES;
 
 
   const fetchData = async () => {
@@ -154,7 +158,7 @@ const getValidPlaces = places => {
         {data.map(place => {
           // Build photo URL if photo_reference exists
           const photoUrl = place.photo_reference
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photo_reference}&key=AIzaSyCEcwxMIkPKG2RoZ8Qa1LKAkB0BHnKU6go`
+            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photo_reference}&key=${API_KEY_GOOGLE_PLACES}`
             : 'https://via.placeholder.com/400'; // fallback image
 
           return (
