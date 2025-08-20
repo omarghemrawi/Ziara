@@ -12,6 +12,7 @@ import reportRouter from "./routes/report.route.js";
 import Emailrouter from "./routes/email.route.js";
 import adminRouter from "./routes/admin.route.js";
 import nearbyRouter from "./routes/nearbyPlace.route.js";
+import clientRouter from "./routes/clientplace.route.js";
 
 dotenv.config();
 const app = express();
