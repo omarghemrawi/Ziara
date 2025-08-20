@@ -166,3 +166,20 @@
     height: auto;
   }
 }
+.login-forgot-link {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #565b6b;
+}
+
+.login-forgot-link a {
+  color: #A75D3E;  /* نفس لون الـ Login link */
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.login-forgot-link a:hover {
+  text-decoration: underline;
+}

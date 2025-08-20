@@ -1,17 +1,36 @@
 import React from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { setUser } from "../../redux/userActions";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom"; // 👈 Link added
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useTranslation } from "react-i18next"; // 👈 Added
+import { useTranslation } from "react-i18next"; 
 import "./Login.css";
 
 export default function Login() {
-  const { t } = useTranslation(); // 👈 Added
+  const { t } = useTranslation(); 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.userData); 
+
+  // ✅ Validation schema with translation
+  const LoginSchema = Yup.object().shape({
+    email: Yup.string()
+      .email(t("validation.invalidEmail"))
+      .required(t("validation.requiredEmail")),
+    password: Yup.string()
+      .min(6, t("validation.shortPassword"))
+      .required(t("validation.requiredPassword")),
+  });
+
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token && user) {  
+      navigate("/profile", { replace: true });
+    }
+  }, [navigate, user]);
 
   const handleLogin = async (values, { setSubmitting }) => {
     try {
@@ -23,24 +42,11 @@ export default function Login() {
       navigate("/profile", { replace: true });
     } catch (err) {
       console.error(err);
-      alert(t("login.failed")); // 👈 translated error
+      alert(t("login.failed")); 
     } finally {
       setSubmitting(false);
     }
   };
-  
-// Validation schema using Y
-
-const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .email(t("validation.invalidEmail"))
-    .required(t("validation.requiredEmail")),
-  password: Yup.string()
-    .min(6, t("validation.shortPassword"))
-    .required(t("validation.requiredPassword")),
-});
-
-
 
   return (
     <div className="login-page">
@@ -70,6 +76,11 @@ const LoginSchema = Yup.object().shape({
               >
                 {isSubmitting ? t("login.loading") : t("login.button")}
               </button>
+
+              {/* 👇 Added forgot password link */}
+              <div className="login-forgot-link">
+                <Link to="/forgot-password">{t("login.forgotPassword")}</Link>
+              </div>
             </Form>
           )}
         </Formik>
