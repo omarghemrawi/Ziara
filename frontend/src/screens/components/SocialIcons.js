@@ -10,6 +10,11 @@ const SocialIcons = ({ facebookLink, instagramLink, isResto, menuLink }) => {
 
     try {
       await Linking.openURL(url);
+        if (url.includes("#")) {
+      const parts = url.split("#");
+ 
+      url = `${parts[0]}/${parts[1]}`;
+    }
     } catch (err) {
       console.error("Failed to open URL:", err);
       Alert.alert("Error", "Unable to open the link.");

@@ -414,12 +414,12 @@ export default function PlaceDetailScreen() {
         )}
 
         <Text style={styles.sectionTitle}>{i18n.t('Visit Us')}</Text>
-        {place?.facebook || place?.instagram || place?.menuLink ? (
+        {place?.facebook || place?.instagram || place?.menu ? (
           <SocialIcons
             facebookLink={place?.facebook}
             instagramLink={place?.instagram}
             isResto={place?.type === 'restaurant'}
-            menuLink={place?.menuLink}
+            menuLink={place?.menu}
           />
         ) : (
           ''
