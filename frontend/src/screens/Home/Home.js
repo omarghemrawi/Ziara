@@ -16,7 +16,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { Linking } from 'react-native';
-import { API_URL } from './env';
+import Config from 'react-native-config';const API_URL = Config.API_URL;
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';

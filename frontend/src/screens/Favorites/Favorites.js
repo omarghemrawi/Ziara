@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { API_URL } from './env';
+import Config from 'react-native-config';const API_URL = Config.API_URL;
 import Entypo from 'react-native-vector-icons/Entypo';
 import Modal from 'react-native-modal';
 import { useTheme } from '../Theme/Theme';

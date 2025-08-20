@@ -6,7 +6,7 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { API_URL } from './env';
+import Config from 'react-native-config';const API_URL = Config.API_URL;
 
 export default function Signup({ navigation }) {
   const [passwordInput, setPasswordInput] = useState('');

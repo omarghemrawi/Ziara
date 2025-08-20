@@ -11,16 +11,17 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { API_URL } from './env';
+import Config from 'react-native-config';
 import { useSelector, useDispatch } from 'react-redux';
 import { uploadImageToCloudinary } from '../../utils/cloudinaryUpload';
 import { useNavigation } from '@react-navigation/native';
-import Config from 'react-native-config';
+
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+const API_URL = Config.API_URL;
 
 export default function EditProfileScreen({ navigation }) {
   const dispatch = useDispatch();

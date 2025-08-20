@@ -8,7 +8,7 @@ import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { API_URL } from './env';
+import Config from 'react-native-config';const API_URL = Config.API_URL;
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');

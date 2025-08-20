@@ -13,12 +13,12 @@ import MapView, { Marker } from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
 import styles from './NearbyScreenstyle';
 import i18n from '../locales/i18n';
-import { API_URL } from './env';
 import Config from 'react-native-config';
+
 import axios from 'axios';
 
 
-
+const API_URL = Config.API_URL;
 
 export default function NearbyScreen() {
   const [location, setLocation] = useState(null);

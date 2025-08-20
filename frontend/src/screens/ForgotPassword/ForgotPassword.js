@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import styles from './styles';
-import { API_URL } from './env';
+import Config from 'react-native-config';const API_URL = Config.API_URL;
 
 export default function ForgotPassword({ navigation }) {
   const [step, setStep] = useState(1); // 1 = request code, 2 = reset password

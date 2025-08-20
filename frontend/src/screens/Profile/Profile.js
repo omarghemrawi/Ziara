@@ -19,7 +19,8 @@ import i18n from '../locales/i18n';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setPlacesRefresh } from '../../redux/actions/user.action';
-import { API_URL } from './env';
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
