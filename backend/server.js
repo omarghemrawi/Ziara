@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 import { connectCloudinary } from "./config/cloudinary.js";
 import userRouter from "./routes/users.route.js";
 import staticPlaceRouter from "./routes/staticPlace.route.js";
-import clientRouter from "./routes/clientplace.route.js";
 import favRouter from "./routes/favorite.route.js";
 import visitedRouter from "./routes/visited.route.js";
 import reviewRouter from "./routes/reviews.route.js";
