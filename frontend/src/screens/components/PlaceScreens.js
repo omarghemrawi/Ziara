@@ -130,7 +130,7 @@ const PlacesSection = ({ title, headerColor, headerImage, typePlace }) => {
         <View style={styles.searchInputContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder={i18n.t('search')}
+            placeholder={i18n.t('searchCityname')}
             value={searchValue}
             onChangeText={setSearchValue}
           />
