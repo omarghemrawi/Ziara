@@ -54,7 +54,12 @@
       "passwordsMatch": "Passwords do not match",
       "confirmPassword": "Confirm password is required",
       "business": "Please choose your business"
-    }
+    },
+      "errors": {
+    "invalidEmail": "This email address is not valid",
+    "exists": "This email is already registered",
+    "general": "Signup failed. Please try again"
+  }
   },
   "plan": {
     "upgradeTitle": "Upgrade your plan",
