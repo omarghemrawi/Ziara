@@ -1,19 +1,22 @@
+// src/pages/Signup.jsx
 import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux"; 
-import { setUser } from "../../redux/userActions";   
-import { useTranslation } from "react-i18next"; // 👈 Added
+import { setUser } from "../../redux/userActions";  
+import { useTranslation } from "react-i18next";  
 import "./Signup.css";
 
 export default function Signup() {
-  const { t } = useTranslation(); // 👈 Added
+  const { t } = useTranslation(); // ✅ الترجمة
   const navigate = useNavigate();
-  const dispatch = useDispatch();    
+  const dispatch = useDispatch(); 
+  const user = useSelector((state) => state.user.userData);
 
-  // Yup validation schema with i18n
+  // ✅ Validation schema مع الترجمة
   const SignupSchema = Yup.object().shape({
     businessName: Yup.string().required(t("signup.validation.businessName")),
     email: Yup.string()
@@ -28,6 +31,13 @@ export default function Signup() {
       .required(t("signup.validation.confirmPassword")),
     business: Yup.string().required(t("signup.validation.business")),
   });
+
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token && user) {
+      navigate("/profile", { replace: true });
+    }
+  }, [navigate, user]);   
 
   const businessList = [
     { id: "shop", label: t("signup.businessOptions.shop") },
@@ -47,7 +57,6 @@ export default function Signup() {
       });
 
       localStorage.setItem("token", response.data.token);
-
       dispatch(setUser(response.data.user));
       navigate("/additional-info", { replace: true });
     } catch (error) {
@@ -90,11 +99,19 @@ export default function Signup() {
               <ErrorMessage name="email" component="p" className="error" />
 
               <label>{t("signup.password")}</label>
-              <Field name="password" type="password" placeholder={t("signup.passwordPlaceholder")} />
+              <Field
+                name="password"
+                type="password"
+                placeholder={t("signup.passwordPlaceholder")}
+              />
               <ErrorMessage name="password" component="p" className="error" />
 
               <label>{t("signup.confirmPassword")}</label>
-              <Field name="confirm" type="password" placeholder={t("signup.confirmPlaceholder")} />
+              <Field
+                name="confirm"
+                type="password"
+                placeholder={t("signup.confirmPlaceholder")}
+              />
               <ErrorMessage name="confirm" component="p" className="error" />
 
               <label className="business-label">{t("signup.business")}</label>

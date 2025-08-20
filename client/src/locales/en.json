@@ -3,10 +3,17 @@
     "title": "Login",
     "email": "Email",
     "password": "Password",
-    "button": "Log In",
+    "button": "Login",
     "loading": "Logging in...",
-    "failed": "Login Failed",
-    "alt": "Login illustration"
+    "failed": "Login failed. Please try again.",
+    "alt": "Login illustration",
+    "forgotPassword": "Forgot password?"
+  },
+  "validation": {
+    "invalidEmail": "Invalid email",
+    "requiredEmail": "Email is required",
+    "shortPassword": "Password must be at least 6 characters",
+    "requiredPassword": "Password is required"
   },
   "navbar": {
     "home": "Home",
@@ -17,12 +24,6 @@
     "login": "Login",
     "profile": "Profile",
     "logout": "Logout"
-  },
-  "validation": {
-    "invalidEmail": "Invalid email",
-    "requiredEmail": "Email is required",
-    "shortPassword": "Password must be at least 6 characters",
-    "requiredPassword": "Password is required"
   },
   "signup": {
     "title": "Sign Up",
@@ -455,8 +456,43 @@
     "title": "Edit Description",
     "placeholder": "Enter your new description",
     "save": "Save"
+  },
+  "forgot": {
+    "title": "Forgot Password",
+    "email": "Enter your email",
+    "button": "Send reset link",
+    "loading": "Sending...",
+    "success": "Reset code sent to your email",
+    "failed": "Something went wrong"
+  },
+  "reset": {
+    "title": "Reset Password",
+    "pin": "Enter the 6-digit code",
+    "verifyCode": "Verify Code",
+    "password": "New Password",
+    "confirmPassword": "Confirm Password",
+    "button": "Change Password",
+    "loading": "Processing...",
+    "success": "Password updated successfully",
+    "failed": "Invalid or expired code",
+    "codeAccepted": "Code verified, please set your new password",
+    "validation": {
+      "pinLength": "Code must be 6 digits",
+      "pinRequired": "Code is required",
+      "shortPassword": "Password must be at least 6 characters",
+      "numberRequired": "Password must contain a number",
+      "requiredPassword": "Password is required",
+      "confirmPassword": "Please confirm your password",
+      "passwordsMatch": "Passwords must match"
+    }
+  },
+  "validation": {
+    "invalidEmail": "Invalid email address",
+    "requiredEmail": "Email is required"
   }
+
 }
+
 
 
 

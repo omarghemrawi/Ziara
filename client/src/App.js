@@ -14,6 +14,8 @@ import ProfilePage from "./pages/profile/ProfilePage";
  import Contact from "./pages/Contact";
  import Services from "./pages/Services";
  import Home from "./pages/Home";
+ import ForgotPassword from "./pages/password/ForgotPassword";
+
 import "./App.css";
 
 function App() {
@@ -51,7 +53,7 @@ function App() {
             <Route path="/report-review" element={<ReportReview />} />
             <Route path="/plan/checkout/:planId" element={<Checkout />} />
             {/* <Route path="/" element={<ReportReview />} /> */}
-
+<Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </main>
     </>

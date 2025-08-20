@@ -25,9 +25,6 @@ export default function ReviewsPage() {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
-     console.log("✅ Full API response:", res.data);
-    console.log("✅ Reviews array:", res.data.reviews);
       setReviews(Array.isArray(res?.data?.reviews) ? res.data.reviews : []);
     } catch (e) {
       console.error(e);

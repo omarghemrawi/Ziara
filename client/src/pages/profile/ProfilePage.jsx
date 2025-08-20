@@ -128,14 +128,33 @@ export default function ProfilePage() {
   const avatarInputRef = useRef(null);
   const handleEditPhoto = () => avatarInputRef.current?.click();
 
-  const handleAvatarChange = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => setCurrentAvatar(reader.result);
-    reader.readAsDataURL(file);
-    e.target.value = "";
-  };
+const handleAvatarChange = async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  try {
+    const formData = new FormData();
+    formData.append("userId", user._id);
+    formData.append("profile", file); // 👈 send under field name 'profile'
+
+    const res = await axios.put(
+      "http://localhost:5000/api/client/update-profile",
+      formData,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (res.data?.user) {
+      dispatch(setUser(res.data.user)); // update Redux user
+      setCurrentAvatar(res.data.user.profile); // backend path/URL
+    }
+  } catch (err) {
+    console.error("Profile photo upload failed", err);
+    alert(t("profile.uploadFailed"));
+  }
+
+  e.target.value = "";
+};
+
 
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIndexes, setSelectedIndexes] = useState([]);
@@ -221,6 +240,69 @@ const deleteSelectedPhotos = async () => {
   const serviceNamePretty = serviceRaw
     ? serviceRaw.charAt(0).toUpperCase() + serviceRaw.slice(1)
     : "—";
+
+    const handleSaveLinks = async () => {
+  try {
+    const res = await axios.put(
+      "http://localhost:5000/api/client/update-profile",
+      {
+        userId: user._id,
+        ...editedLinks,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (res.data?.user) {
+      dispatch(setUser(res.data.user)); // ✅ تحديث الـ Redux
+      setShowLinksModal(false);         // ✅ سكّر المودال
+    }
+  } catch (err) {
+    console.error("Failed to save links", err);
+    alert(t("profile.updateFailed"));
+  }
+};
+const handleSaveDescription = async () => {
+  try {
+    const res = await axios.put(
+      "http://localhost:5000/api/client/update-profile",
+      {
+        userId: user._id,
+        description: profileDescription,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (res.data?.user) {
+      dispatch(setUser(res.data.user));  // ✅ حدّث الـ Redux
+      setShowDescriptionModal(false);    // ✅ سكّر المودال
+    }
+  } catch (err) {
+    console.error("Failed to save description", err);
+    alert(t("profile.updateFailed"));
+  }
+};
+const handleSaveProfile = async () => {
+  try {
+    const res = await axios.put(
+      "http://localhost:5000/api/client/update-profile",
+      {
+        userId: user._id,
+        name: businessName,
+        city: city,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (res.data?.user) {
+      dispatch(setUser(res.data.user));   // ✅ تحديث بيانات Redux
+      setShowHeaderModal(false);          // ✅ سكّر المودال
+    }
+  } catch (err) {
+    console.error("Failed to save profile info", err);
+    alert(t("profile.updateFailed"));
+  }
+};
+
 
   return (
     <div className="profile-page">
@@ -390,7 +472,7 @@ const deleteSelectedPhotos = async () => {
           tempCity={city}
           setTempName={setBusinessName}
           setTempCity={setCity}
-          onSave={() => {}}
+          onSave={handleSaveProfile}
           onCancel={() => setShowHeaderModal(false)}
           setProfileFile={() => {}}
           setReferenceFiles={() => {}}
@@ -400,7 +482,7 @@ const deleteSelectedPhotos = async () => {
         <EditDescriptionModal
           description={profileDescription}
           onChange={setProfileDescription}
-          onSave={() => {}}
+          onSave={handleSaveDescription}
           onCancel={() => setShowDescriptionModal(false)}
         />
       )}
@@ -408,7 +490,7 @@ const deleteSelectedPhotos = async () => {
         <EditLinksModal
           links={editedLinks}
           setLinks={setEditedLinks}
-          onSave={() => {}}
+           onSave={handleSaveLinks}
           onCancel={() => setShowLinksModal(false)}
         />
       )}

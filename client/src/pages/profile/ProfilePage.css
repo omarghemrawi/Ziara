@@ -328,3 +328,19 @@
   .avatar-area{ left: 12px; }
   .profile-details{ margin-left: calc(var(--avatar-size) + var(--text-gap)); }
 }
+/* =====================================================
+   Fix for Links & Location (long URLs wrapping)
+   ===================================================== */
+.section-content a {
+  display: inline-block;
+  max-width: 100%;             /* ما يخلي اللينك يوسع الكارد */
+  word-break: break-word;      /* بيكسر الكلمة الطويلة إذا لزم */
+  overflow-wrap: anywhere;     /* يلف اللينك بأي مكان */
+  white-space: normal;         /* يخلي اللينك ينزل لسطر جديد */
+  line-height: 1.5;            /* شكل مرتب */
+}
+
+.section-content {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
