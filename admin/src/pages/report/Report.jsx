@@ -148,7 +148,7 @@ function ReportPage() {
   // Filter reports
   const getFilteredReports = () => {
     if (filterType === "all") return reports;
-    return reports.filter((report) => report.complainant.toLowerCase() === filterType);
+    return reports.filter((report) => report?.complainant?.toLowerCase() === filterType);
   };
 
   const filteredReports = getFilteredReports();
@@ -181,12 +181,12 @@ function ReportPage() {
                 <button className="delete-report-btn" onClick={() => deleteReport(report._id)}>✖</button>
 
                 <h3>
-                  Reported BY: {report.reportedBy.name || report.reportedBy.username}
-                  <br /> Email: {report.reportedBy.email}
+                  Reported BY: {report?.reportedBy?.name || report?.reportedBy?.username}
+                  <br /> Email: {report?.reportedBy?.email}
                 </h3>
 
                 <h4 style={{ fontSize: "0.8em", color: "#666" }}>
-                  ({new Date(report.createdAt).toLocaleString()})
+                  ({new Date(report?.createdAt).toLocaleString()})
                 </h4>
 
                 <div className="report-detail">

@@ -114,20 +114,20 @@ useEffect(() => {
 }, [location]);
 
   // Filter and validate places data
-  const getValidPlaces = places => {
-    return places.filter(
-      place =>
-        place &&
-        typeof place.latitude === 'number' &&
-        typeof place.longitude === 'number' &&
-        !isNaN(place.latitude) &&
-        !isNaN(place.longitude) &&
-        place.latitude >= -90 &&
-        place.latitude <= 90 &&
-        place.longitude >= -180 &&
-        place.longitude <= 180,
-    );
-  };
+const getValidPlaces = places => {
+  return places.filter(
+    place =>
+      place &&
+      typeof place.lat === 'number' &&
+      typeof place.lng === 'number' &&
+      !isNaN(place.lat) &&
+      !isNaN(place.lng) &&
+      place.lat >= -90 &&
+      place.lat <= 90 &&
+      place.lng >= -180 &&
+      place.lng <= 180,
+  );
+};
 
   // Combine all valid places for map markers
   const allValidPlaces = [
@@ -216,17 +216,26 @@ useEffect(() => {
             }}
             showsUserLocation={!locationError}
           >
-            {allValidPlaces.map((place, index) => (
-              <Marker
-                key={place.id || place.place_id || `marker-${index}`}
-                coordinate={{
-                  latitude: Number(place.latitude),
-                  longitude: Number(place.longitude),
-                }}
-                title={place.name || place.title || 'Unknown Place'}
-                description={place.address || ''}
-              />
-            ))}
+       {allValidPlaces.map((place, index) => {
+  let pinColor = 'gray';
+  if (restaurants.includes(place)) pinColor = 'red';
+  else if (touristic.includes(place)) pinColor = 'blue';
+  else if (religious.includes(place)) pinColor = 'green';
+
+  return (
+    <Marker
+      key={place.id || place.place_id || `marker-${index}`}
+      coordinate={{
+        latitude: Number(place.lat),
+    longitude: Number(place.lng),
+      }}
+      title={place.name || place.title || 'Unknown Place'}
+      description={place.address || ''}
+      pinColor={pinColor} // set pin color by type
+    />
+  );
+})}
+
           </MapView>
         )}
 
