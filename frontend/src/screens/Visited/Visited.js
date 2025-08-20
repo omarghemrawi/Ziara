@@ -17,6 +17,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { refreshUser } from '../../redux/actions/user.action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { API_URL } from './env';
 
 export default function Visited() {
   const navigation = useNavigation();
@@ -34,7 +35,7 @@ export default function Visited() {
       console.log(token);
 
       const { data } = await axios.delete(
-        `http://192.168.0.101:5000/api/visited/${placeId}`,
+        `${API_URL}/api/visited/${placeId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

@@ -11,6 +11,7 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { API_URL } from './env';
 import { useSelector, useDispatch } from 'react-redux';
 import { uploadImageToCloudinary } from '../../utils/cloudinaryUpload';
 import { useNavigation } from '@react-navigation/native';
@@ -55,7 +56,7 @@ export default function EditProfileScreen({ navigation }) {
         imageUrl = user?.profile;
       }
       await axios.put(
-        'http://192.168.0.101:5000/api/user',
+        `${API_URL}/api/user`,
         {
           profile: imageUrl,
           userId: user._id,

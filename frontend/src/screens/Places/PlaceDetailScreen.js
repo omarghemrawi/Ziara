@@ -13,6 +13,7 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { API_URL } from './env';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -89,14 +90,14 @@ export default function PlaceDetailScreen() {
     try {
       if (newValue) {
         await axios.post(
-          'http://192.168.0.101:5000/api/favorite/',
+          `${API_URL}/api/favorite/`,
           { placeId: id },
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
       } else {
-        await axios.delete('http://192.168.0.101:5000/api/favorite', {
+        await axios.delete(`${API_URL}/api/favorite`, {
           data: { placeId: id },
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -156,7 +157,7 @@ export default function PlaceDetailScreen() {
         : 'ClientPlace';
       // Submit review data
       const res = await axios.post(
-        'http://192.168.0.101:5000/api/review',
+        `${API_URL}/api/review`,
         {
           rating: selectedStar,
           comment: reviewText,
@@ -235,7 +236,7 @@ export default function PlaceDetailScreen() {
 
     try {
       const res = await axios.get(
-        `http://192.168.0.101:5000/api/review/place/${placeId}`,
+        `${API_URL}/api/review/place/${placeId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },

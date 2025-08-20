@@ -13,6 +13,7 @@ import MapView, { Marker } from 'react-native-maps';
 import GetLocation from 'react-native-get-location';
 import styles from './NearbyScreenstyle';
 import i18n from '../locales/i18n';
+import { API_URL } from './env';
 import Config from 'react-native-config';
 import axios from 'axios';
 
@@ -27,6 +28,7 @@ export default function NearbyScreen() {
   const [loading, setLoading] = useState(true);
   const [locationError, setLocationError] = useState(false);
   const API_KEY_GOOGLE_PLACES = Config.API_KEY_GOOGLE_PLACES;
+  
 
 
   const fetchData = async () => {
@@ -34,19 +36,19 @@ export default function NearbyScreen() {
     if (!location) return; 
 
     const [resRestaurants, resTouristic, resReligious] = await Promise.all([
-      axios.get('http://192.168.0.101:5000/api/nearby/restaurant', {
+      axios.get(`${API_URL}/api/nearby/restaurant`, {
         params: {
           latitude: location.latitude,
           longitude: location.longitude,
         },
       }),
-      axios.get('http://192.168.0.101:5000/api/nearby/touristic', {
+      axios.get(`${API_URL}/api/nearby/touristic`, {
         params: {
           latitude: location.latitude,
           longitude: location.longitude,
         },
       }),
-      axios.get('http://192.168.0.101:5000/api/nearby/religious', {
+      axios.get(`${API_URL}/api/nearby/religious`, {
         params: {
           latitude: location.latitude,
           longitude: location.longitude,

@@ -1,10 +1,11 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {API_URL} from './env'
 export const refreshUser = userId => async dispatch => {
   try {
     const token = await AsyncStorage.getItem('token');
 
-    const res = await axios.get(`http://192.168.0.101:5000/api/user/${userId}`, {
+    const res = await axios.get(`${API_URL}/api/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     dispatch({
