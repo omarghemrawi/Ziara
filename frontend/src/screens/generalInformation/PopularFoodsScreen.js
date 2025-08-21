@@ -37,7 +37,7 @@ const popularDishes = [
     name: 'Hummus',
     location: 'Traditional Dip',
     image:
-         require('../../assets/images/hummus.jpeg'),
+         require('../../assets/images/humus.jpeg'),
   },
   {
     id: '5',
