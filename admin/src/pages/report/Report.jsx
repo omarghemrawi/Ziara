@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+const API_URL = import.meta.env.VITE_API_URL;
 
 function ReportPage() {
   const [reports, setReports] = useState([]);
@@ -14,7 +15,7 @@ function ReportPage() {
   const fetchTargetDetails = async (id, type) => {
     try {
       if (type === "place") {
-        const res = await axios.get(`http://localhost:5000/api/client/place/${id}`, {
+        const res = await axios.get(`${API_URL}/api/client/place/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
         });
         if (res.data.success) {
@@ -24,7 +25,7 @@ function ReportPage() {
           alert("Failed to fetch target details");
         }
       } else {
-        const res = await axios.get(`http://localhost:5000/api/review/${id}`, {
+        const res = await axios.get(`${API_URL}/api/review/${id}`, {
          headers: { Authorization: `Bearer ${token}` }
          });
         if (res.data.success) {
@@ -42,10 +43,10 @@ function ReportPage() {
   // Deactivate client place //?
   const deactivate = async (placeId, reportId) => {
     try {
-      const res = await axios.put("http://localhost:5000/api/client/deactive-subscribe", { userId: placeId }, {
+      const res = await axios.put(`${API_URL}/api/client/deactive-subscribe`, { userId: placeId }, {
             headers: { Authorization: `Bearer ${token}` },});
       if (res) {
-        await axios.delete(`http://localhost:5000/api/report/${reportId}`, {
+        await axios.delete(`${API_URL}/api/report/${reportId}`, {
             headers: { Authorization: `Bearer ${token}` },});
         getReports();
         toast.success("Deactivated successfully");
@@ -59,7 +60,7 @@ function ReportPage() {
   // Fetch reports //?
   const getReports = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/report", {
+      const res = await axios.get(`${API_URL}/api/report`, {
           headers: { Authorization: `Bearer ${token}` }
         });
       if (res.data.success) {
@@ -77,7 +78,7 @@ function ReportPage() {
   const deleteReport = async (reportId) => {
     try {
      
-      await axios.delete(`http://localhost:5000/api/report/${reportId}`, 
+      await axios.delete(`${API_URL}/api/report/${reportId}`, 
     {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -96,7 +97,7 @@ function ReportPage() {
   // Delete review and related report
   const deleteReview = async (reviewId, reportId) => {
     try {
-      const res = await axios.delete(`http://localhost:5000/api/review/${reviewId}`, 
+      const res = await axios.delete(`${API_URL}/api/review/${reviewId}`, 
     {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -121,7 +122,7 @@ function ReportPage() {
         message: "Thank you for your report, we resolved it.",
       };
 
-      const res = await axios.post("http://localhost:5000/api/email/send-email", emailData, {
+      const res = await axios.post(`${API_URL}/api/email/send-email`, emailData, {
     headers: { Authorization: `Bearer ${token}` }
   });
 

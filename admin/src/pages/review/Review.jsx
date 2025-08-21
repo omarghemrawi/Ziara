@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./review.css"; // custom styles
-
+const API_URL = import.meta.env.VITE_API_URL;
 const Review = () => {
   const [reviews, setReviews] = useState([]);
   const [filteredReviews, setFilteredReviews] = useState([]);
@@ -12,7 +12,7 @@ const Review = () => {
   // Fetch reviews from API
   const fetchReviews = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/review", {
+      const res = await axios.get(`${API_URL}/api/review`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setReviews(res.data.reviews || []);
