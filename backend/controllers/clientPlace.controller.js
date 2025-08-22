@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import ClientPlace from "../models/clientPlace.model.js";
 import { sendClientRegisterNotfication, sendBannednEmail, sendDeactivationEmail } from "../utils/emailSender.js";
+import nodemailer from "nodemailer";
 
 //! Fetch all active client places
 // ============================
@@ -275,9 +276,7 @@ export const getAllPlacesToAdmin = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
-import nodemailer from "nodemailer";
-import bcrypt from "bcrypt";
-import ClientPlace from "../models/clientPlace.model.js";
+
 
 // ================================
 // Forgot Password
