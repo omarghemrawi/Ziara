@@ -116,7 +116,8 @@
 
   
   "callus": "Call us",
-      "searchCityname": "Search by city or place name"
+      "searchCityPlaceName": "Search by city or place name",
+       "noPlacesFoundSameCity": "No places found in the same city/region"
 
 
  

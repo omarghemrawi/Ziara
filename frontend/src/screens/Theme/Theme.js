@@ -29,7 +29,7 @@ subtitle1:'#fff',
 };
 
 const darkTheme = {
-  background: '#121212',
+  background: '#3C3D37',
   text: '#b3b3b3',
   subtitle:'#fff',
   subtitle1:'#fff',

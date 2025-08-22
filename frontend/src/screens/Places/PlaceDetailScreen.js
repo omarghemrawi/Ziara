@@ -453,7 +453,7 @@ export default function PlaceDetailScreen() {
               <Text
                 style={{ color: '#555', fontStyle: 'italic', marginLeft: 10 }}
               >
-                No places found in same city/region.
+               {i18n.t('noPlacesFoundSameCity')}
               </Text>
             )}
           </View>
@@ -501,7 +501,7 @@ export default function PlaceDetailScreen() {
               name="chevron-right"
               size={20}
               color="black"
-              style={{ marginTop: 50 }}
+              style={{ marginTop: 50,marginBottom:30 }}
             />
           </TouchableOpacity>
         </View>
@@ -756,12 +756,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 10,
-    marginTop: 0,
+   
   },
   actionText: {
     fontSize: 16,
     marginRight: 200,
-    marginTop: 30,
+    marginTop: 10,
   },
 
   // Modal styles
