@@ -9,6 +9,7 @@ import {
   Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useTheme } from '../Theme/Theme';
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,7 +45,11 @@ export default function Visited() {
       );
 
       if (data.success) {
-        toast.success('✅ Place removed from visited');
+        
+        Toast.show({
+  type: 'success',
+  text1: '✅ Place removed from visited',
+});
         dispatch(refreshUser(user._id));
         getVisitedPlaces();
       }
