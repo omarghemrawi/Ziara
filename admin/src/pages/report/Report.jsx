@@ -9,6 +9,7 @@ function ReportPage() {
   const [details, setDetails] = useState(null);
   const [showPlaceDetails, setShowPlaceDetails] = useState(false);
   const [showReviewDetails, setShowReviewDetails] = useState(false);
+  const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("adminToken")
 
   // Fetch target details (Place or Review) //?
@@ -60,6 +61,7 @@ function ReportPage() {
   // Fetch reports //?
   const getReports = async () => {
     try {
+      setLoading(true)
       const res = await axios.get(`${API_URL}/api/report`, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -72,6 +74,7 @@ function ReportPage() {
       console.error("Error fetching reports:", error);
       toast.error("❌ An error occurred while fetching reports", { position: "top-right", autoClose: 3000 });
     }
+    setLoading(false); // stop loading
   };
 
   // Delete report
@@ -173,7 +176,10 @@ function ReportPage() {
 
         {/* Reports List */}
         <div id="reportsContainer" className="reports-container">
-          {filteredReports.length === 0 ? (
+          {loading ? (
+            <p className="loading-message">⏳ Loading reports...</p> // ✅ show loading state
+          ) :
+          (filteredReports.length === 0 ? (
             <p className="loading-message">No reports found for the selected filter.</p>
           ) : (
             filteredReports.map((report, index) => (
@@ -231,8 +237,8 @@ function ReportPage() {
                   </button>
                 )}
               </div>
-            ))
-          )}
+              ))
+            ) )}  
         </div>
 
         {/* Place Details Modal */}

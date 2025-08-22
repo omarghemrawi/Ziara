@@ -6,7 +6,7 @@ const Review = () => {
   const [reviews, setReviews] = useState([]);
   const [filteredReviews, setFilteredReviews] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-      const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("adminToken");
 
 
   // Fetch reviews from API
