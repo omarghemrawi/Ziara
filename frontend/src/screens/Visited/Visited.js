@@ -18,7 +18,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { refreshUser } from '../../redux/actions/user.action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Config from 'react-native-config';const API_URL = Config.API_URL;
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function Visited() {
   const navigation = useNavigation();
@@ -36,7 +37,7 @@ export default function Visited() {
       console.log(token);
 
       const { data } = await axios.delete(
-        `${API_URL}/api/visited/${placeId}`,
+        `http://192.168.0.101:5000/api/visited/${placeId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,11 +46,10 @@ export default function Visited() {
       );
 
       if (data.success) {
-        
         Toast.show({
-  type: 'success',
-  text1: '✅ Place removed from visited',
-});
+          type: 'success',
+          text1: '✅ Place removed from visited',
+        });
         dispatch(refreshUser(user._id));
         getVisitedPlaces();
       }

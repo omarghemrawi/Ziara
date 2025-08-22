@@ -60,11 +60,14 @@ export default function ProfileScreen() {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await axios.delete(`${API_URL}/api/review/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await axios.delete(
+        `http://192.168.0.101:5000/api/review/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       if (res.data.success) {
         fetchReviews();
         setModalVisible(false);
@@ -95,7 +98,7 @@ export default function ProfileScreen() {
     const token = await AsyncStorage.getItem('token');
     if (!token) return;
     try {
-      const res = await axios.get(`${API_URL}/api/review/user`, {
+      const res = await axios.get('http://192.168.0.101:5000/api/review/user', {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log('API response:', res.data);

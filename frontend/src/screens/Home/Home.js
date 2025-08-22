@@ -16,7 +16,8 @@ import {
   ScrollView,
 } from 'react-native';
 import { Linking } from 'react-native';
-import Config from 'react-native-config';const API_URL = Config.API_URL;
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from '../Theme/Theme';
@@ -37,8 +38,8 @@ export default function Home() {
 
   const getData = async (searchTerm = '') => {
     try {
-      const staticRes = await axios.get(`${API_URL}/api/static`);
-      const clientRes = await axios.get(`${API_URL}/api/client`);
+      const staticRes = await axios.get('http://192.168.0.101:5000/api/static');
+      const clientRes = await axios.get('http://192.168.0.101:5000/api/client');
 
       const staticPlaces = staticRes.data.places || [];
       const clientPlaces = clientRes.data.places || [];

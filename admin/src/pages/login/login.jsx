@@ -4,15 +4,11 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
-
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
-
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -77,7 +73,7 @@ const Login = () => {
           textAlign: "center",
         }}
       >
-        <strong>Admin:</strong> ziara961libanon@gmail.com / ziaralebanon
+        <strong>Admin:</strong> ziaralebanon@gmail.com / ziaralebanon123
       </div>
     </div>
   );

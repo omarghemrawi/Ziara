@@ -7,7 +7,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import axios from 'axios';
-import Config from 'react-native-config';const API_URL = Config.API_URL;
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function VerifyEmail({ route, navigation }) {
   const { email } = route.params;
@@ -41,7 +42,7 @@ export default function VerifyEmail({ route, navigation }) {
 
     try {
       const resp = await axios.post(
-        `${API_URL}/api/user/verify-email`,
+        'http://192.168.0.101:5000/api/user/verify-email',
         {
           email,
           code: verificationCode,
@@ -63,7 +64,7 @@ export default function VerifyEmail({ route, navigation }) {
   const handleResend = async () => {
     try {
       const resp = await axios.post(
-        `${API_URL}/api/user/resend-code`,
+        'http://192.168.0.101:5000/api/user/resend-code',
         { email },
       );
       alert(resp.data.message);

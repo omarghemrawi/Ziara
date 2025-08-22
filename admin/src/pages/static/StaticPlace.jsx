@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./StaticPlace.css";
-const API_URL1 = import.meta.env.VITE_API_URL;
+const API_URL_ENV = import.meta.env.VITE_API_URL;
 
 const StaticPlace = () => {
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
-  const API_URL = `${API_URL1}/api/static`;
+  const API_URL = `${API_URL_ENV}/api/static`;
   const token = localStorage.getItem("adminToken")
 
   // Fetch all static places from backend

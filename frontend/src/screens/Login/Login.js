@@ -8,7 +8,8 @@ import axios from 'axios';
 import { CommonActions } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import Config from 'react-native-config';const API_URL = Config.API_URL;
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
@@ -25,10 +26,13 @@ export default function Login({ navigation }) {
 
   const handleLogin = async values => {
     try {
-      const response = await axios.post(`${API_URL}/api/user/login`, {
-        email: values.email,
-        password: values.password,
-      });
+      const response = await axios.post(
+        'http://192.168.0.101:5000/api/user/login',
+        {
+          email: values.email,
+          password: values.password,
+        },
+      );
 
       if (response.data.success) {
         await AsyncStorage.setItem('user', JSON.stringify(response.data.user));

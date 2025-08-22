@@ -13,7 +13,8 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { launchImageLibrary } from 'react-native-image-picker';
-import Config from 'react-native-config';const API_URL = Config.API_URL;
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 import { useNavigation, useRoute } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -90,14 +91,14 @@ export default function PlaceDetailScreen() {
     try {
       if (newValue) {
         await axios.post(
-          `${API_URL}/api/favorite/`,
+          'http://192.168.0.101:5000/api/favorite/',
           { placeId: id },
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
       } else {
-        await axios.delete(`${API_URL}/api/favorite`, {
+        await axios.delete('http://192.168.0.101:5000/api/favorite', {
           data: { placeId: id },
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -157,7 +158,7 @@ export default function PlaceDetailScreen() {
         : 'ClientPlace';
       // Submit review data
       const res = await axios.post(
-        `${API_URL}/api/review`,
+        'http://192.168.0.101:5000/api/review',
         {
           rating: selectedStar,
           comment: reviewText,
@@ -236,7 +237,7 @@ export default function PlaceDetailScreen() {
 
     try {
       const res = await axios.get(
-        `${API_URL}/api/review/place/${placeId}`,
+        `http://192.168.0.101:5000/api/review/place/${placeId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -409,7 +410,9 @@ export default function PlaceDetailScreen() {
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
         <Text style={styles.descriptionText}>{place?.description}</Text>
         {place?.phone ? (
-          <Text style={styles.phoneText}>{i18n.t('callus')} : {place?.phone}</Text>
+          <Text style={styles.phoneText}>
+            {i18n.t('callus')} : {place?.phone}
+          </Text>
         ) : (
           ''
         )}
@@ -453,7 +456,7 @@ export default function PlaceDetailScreen() {
               <Text
                 style={{ color: '#555', fontStyle: 'italic', marginLeft: 10 }}
               >
-               {i18n.t('noPlacesFoundSameCity')}
+                {i18n.t('noPlacesFoundSameCity')}
               </Text>
             )}
           </View>
@@ -501,7 +504,7 @@ export default function PlaceDetailScreen() {
               name="chevron-right"
               size={20}
               color="black"
-              style={{ marginTop: 50,marginBottom:30 }}
+              style={{ marginTop: 50, marginBottom: 30 }}
             />
           </TouchableOpacity>
         </View>
@@ -756,7 +759,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 10,
-   
   },
   actionText: {
     fontSize: 16,

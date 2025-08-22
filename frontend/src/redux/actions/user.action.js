@@ -6,9 +6,12 @@ export const refreshUser = userId => async dispatch => {
   try {
     const token = await AsyncStorage.getItem('token');
 
-    const res = await axios.get(`${API_URL}/api/user/${userId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await axios.get(
+      `http://192.168.0.101:5000/api/user/${userId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
     dispatch({
       type: 'SET_USER',
       payload: res.data.user,

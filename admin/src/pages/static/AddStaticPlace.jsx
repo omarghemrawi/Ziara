@@ -4,7 +4,8 @@ import "./AddStaticPlace.css";
 import axios from "axios";
 import { uploadImageToCloudinary } from "../../utils/cloudinaryUpload";
 import {toast} from "react-toastify"
-const API_URL1 = import.meta.env.VITE_API_URL;
+const API_URL_ENV = import.meta.env.VITE_API_URL;
+
 const initialForm = {
   name: "",
   type: "religious", // Default to religious
@@ -19,7 +20,7 @@ const initialForm = {
 const AddStaticPlace = () => {
   const [form, setForm] = useState(initialForm);
   const navigate = useNavigate();
-  const API_URL = `${API_URL1}/api/static`;
+  const API_URL = `${API_URL_ENV}/api/static`;
   const token = localStorage.getItem("adminToken")
 
 
