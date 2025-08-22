@@ -115,7 +115,10 @@
 
 
   
-  "callus": "Call us"
+  "callus": "Call us",
+      "searchCityPlaceName": "Search by city or place name",
+       "noPlacesFoundSameCity": "No places found in the same city/region"
+
 
  
 

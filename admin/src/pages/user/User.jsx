@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./User.css"; // import CSS file
-
+const API_URL = import.meta.env.VITE_API_URL;
 const User = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
@@ -11,7 +11,7 @@ const User = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/user", {
+        const { data } = await axios.get(`${API_URL}/api/user`, {
       headers: { Authorization: `Bearer ${token}` },
       });
         setUsers(data.users);
@@ -24,7 +24,7 @@ const User = () => {
 
   const handleRemoveButton = async (userId) => {
     try {
-      const response =  await axios.delete(`http://localhost:5000/api/user/${userId}`, {
+      const response =  await axios.delete(`${API_URL}/api/user/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.success) {

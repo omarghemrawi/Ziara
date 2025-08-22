@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./ClientPage.css";
 import { toast } from "react-toastify";
-
+const API_URL = import.meta.env.VITE_API_URL;
 const types = ["all", "restaurant", "shop", "hotel", "activity"];
 const statuses = ["all", "active", "inactive"];
 const plans = ["all", "Standard", "Plus", "Pro"];
@@ -33,7 +33,7 @@ const ClientPage = () => {
   // Fetch all client places from the API
   const getPlaces = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/client/to-admin", {
+      const res = await axios.get(`${API_URL}/api/client/to-admin`, {
       headers: { Authorization: `Bearer ${token}` },
       });
       setClientPlaces(res.data.places);
@@ -45,7 +45,7 @@ const ClientPage = () => {
   // Deactivate a client place by ID
   const deactivate = async (placeId) => {
     try {
-      const res = await axios.put("http://localhost:5000/api/client/deactive-subscribe", {
+      const res = await axios.put(`${API_URL}/api/client/deactive-subscribe`, {
         userId: placeId,
       }, {
       headers: { Authorization: `Bearer ${token}` },
@@ -60,7 +60,7 @@ const ClientPage = () => {
   // Delete a client place 
  const bannedClient = async (id) => {
   try {
-    const { data } = await axios.delete(`http://localhost:5000/api/client/${id}`, {
+    const { data } = await axios.delete(`${API_URL}/api/client/${id}`, {
         headers: {
         Authorization: `Bearer ${token}`,
       },

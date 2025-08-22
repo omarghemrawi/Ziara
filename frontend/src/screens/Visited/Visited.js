@@ -9,6 +9,7 @@ import {
   Switch,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useTheme } from '../Theme/Theme';
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,6 +18,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { refreshUser } from '../../redux/actions/user.action';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function Visited() {
   const navigation = useNavigation();
@@ -34,7 +37,7 @@ export default function Visited() {
       console.log(token);
 
       const { data } = await axios.delete(
-        `http://10.0.2.2:5000/api/visited/${placeId}`,
+        `http://192.168.0.101:5000/api/visited/${placeId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,7 +46,10 @@ export default function Visited() {
       );
 
       if (data.success) {
-        toast.success('✅ Place removed from visited');
+        Toast.show({
+          type: 'success',
+          text1: '✅ Place removed from visited',
+        });
         dispatch(refreshUser(user._id));
         getVisitedPlaces();
       }

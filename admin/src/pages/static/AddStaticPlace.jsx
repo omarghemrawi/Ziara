@@ -19,7 +19,8 @@ const initialForm = {
 const AddStaticPlace = () => {
   const [form, setForm] = useState(initialForm);
   const navigate = useNavigate();
-  const API_URL = "http://localhost:5000/api/static";
+  const API_URL = "${API_URL}
+/api/static";
   const token = localStorage.getItem("adminToken")
 
 

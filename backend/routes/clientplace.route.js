@@ -9,7 +9,9 @@ import {
   deactivePayment,
   completeRegister,
   getAllPlacesToAdmin,
-  deleteClient
+  deleteClient,
+  forgotPassword,
+  resetPassword
 } from "../controllers/clientPlace.controller.js";
 import { verifyTokenAndRole } from "../middleware/auth.js";
 import ClientPlace from "../models/clientPlace.model.js";
@@ -25,6 +27,8 @@ clientRouter.get("/place/:place_id", getPlace);
 clientRouter.get("/to-admin",verifyTokenAndRole(['admin']), getAllPlacesToAdmin);
 clientRouter.post("/signup", SignUp);
 clientRouter.post("/login", logIn);
+clientRouter.post("/forgot-password", forgotPassword);
+clientRouter.post("/reset-password", resetPassword);
 clientRouter.put(
   "/update-profile",
   // Verify that the user has 'client' role before updating profile

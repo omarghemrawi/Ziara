@@ -19,6 +19,8 @@ import i18n from '../locales/i18n';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setPlacesRefresh } from '../../redux/actions/user.action';
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
@@ -58,11 +60,14 @@ export default function ProfileScreen() {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      const res = await axios.delete(`http://10.0.2.2:5000/api/review/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const res = await axios.delete(
+        `http://192.168.0.101:5000/api/review/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       if (res.data.success) {
         fetchReviews();
         setModalVisible(false);
@@ -93,7 +98,7 @@ export default function ProfileScreen() {
     const token = await AsyncStorage.getItem('token');
     if (!token) return;
     try {
-      const res = await axios.get('http://10.0.2.2:5000/api/review/user', {
+      const res = await axios.get('http://192.168.0.101:5000/api/review/user', {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log('API response:', res.data);

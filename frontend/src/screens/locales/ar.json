@@ -112,7 +112,15 @@
     "login_message": "يجب أن تكون مسجلاً للدخول لتعديل ملفك الشخصي. هل ترغب في إنشاء حساب؟",
       "SuggestedPlaces": "أماكن مقترحة",
         "trip": "رحلة",
-        "callus": "اتصل بنا"
+        "callus": "اتصل بنا",
+          "PopularLebaneseDishes": "أشهر الأطباق اللبنانية",
+   
+   
+    "searchCityPlaceName": "ابحث حسب المدينة أو اسم المكان",
+     "noPlacesFoundSameCity": "لا توجد أماكن في نفس المدينة/المنطقة"
+  
+
+
       
 
 

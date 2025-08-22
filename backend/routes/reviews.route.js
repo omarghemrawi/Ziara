@@ -12,7 +12,7 @@ import {verifyTokenAndRole} from "../middleware/auth.js"
 const reviewRouter = express.Router();
 
 reviewRouter.get("/user", verifyTokenAndRole(["user"]), getUserReviews);
-reviewRouter.get("/place/:placeId", verifyTokenAndRole(["user", "client"]), getPlaceReviews);
+reviewRouter.get("/place/:placeId",  getPlaceReviews);
 reviewRouter.get("/", verifyTokenAndRole(["admin"]), getAllReviews);
 reviewRouter.post("/", verifyTokenAndRole(["user"]), createReview);
 reviewRouter.delete("/:id", verifyTokenAndRole(["admin", "user"]), deleteReview);

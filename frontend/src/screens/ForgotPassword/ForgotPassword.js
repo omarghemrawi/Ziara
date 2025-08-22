@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import styles from './styles';
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function ForgotPassword({ navigation }) {
   const [step, setStep] = useState(1); // 1 = request code, 2 = reset password
@@ -13,7 +15,7 @@ export default function ForgotPassword({ navigation }) {
   const requestResetCode = async () => {
     try {
       const res = await axios.post(
-        'http://10.0.2.2:5000/api/user/forgot-password',
+        'http://192.168.0.101:5000/api/user/forgot-password',
         { email: email.toLowerCase() },
       );
       Alert.alert('Success', res.data.message);
@@ -32,7 +34,7 @@ export default function ForgotPassword({ navigation }) {
     }
     try {
       const res = await axios.post(
-        'http://10.0.2.2:5000/api/user/reset-password',
+        'http://192.168.0.101:5000/api/user/reset-password',
         {
           email: email.toLowerCase(),
           code,

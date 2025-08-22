@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/userActions";  
 import { useTranslation } from "react-i18next";  
 import "./Signup.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Signup() {
   const { t } = useTranslation(); // ✅ الترجمة
@@ -46,25 +47,41 @@ export default function Signup() {
     { id: "activity", label: t("signup.businessOptions.activity") },
   ];
 
-  const handleSignup = async (values, { setSubmitting }) => {
-    try {
-      const { confirm, ...payload } = values;
-      const response = await axios.post("http://localhost:5000/api/client/signup", {
-        name: payload.businessName,
-        type: payload.business,
-        email: payload.email,
-        password: payload.password,
-      });
+const handleSignup = async (values, { setSubmitting, setFieldError }) => {
+  try {
+    const { confirm, ...payload } = values;
+    const response = await axios.post(`${API_URL}
+/api/client/signup`, {
+      name: payload.businessName,
+      type: payload.business,
+      email: payload.email,
+      password: payload.password,
+    });
 
-      localStorage.setItem("token", response.data.token);
-      dispatch(setUser(response.data.user));
-      navigate("/additional-info", { replace: true });
-    } catch (error) {
-      console.error("Signup error:", error.response?.data || error.message);
-    } finally {
-      setSubmitting(false);
+    localStorage.setItem("token", response.data.token);
+    dispatch(setUser(response.data.user));
+    navigate("/additional-info", { replace: true });
+  } catch (error) {
+    const msg = error.response?.data?.message || "Signup failed";
+
+    // ✅ إذا الخطأ متعلق بالإيميل (invalid or exists) → بيظهر تحت خانة الإيميل
+    if (msg.toLowerCase().includes("email") || msg.toLowerCase().includes("client")) {
+      setFieldError("email", 
+        msg.includes("exists") 
+          ? t("signup.errors.exists") 
+          : t("signup.errors.invalidEmail")
+      );
+    } else {
+      // باقي الأخطاء العامة
+      setFieldError("businessName", t("signup.errors.general"));
     }
-  };
+
+    console.error("Signup error:", msg);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   return (
     <div className="signup-page">

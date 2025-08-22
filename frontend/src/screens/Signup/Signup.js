@@ -6,6 +6,8 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function Signup({ navigation }) {
   const [passwordInput, setPasswordInput] = useState('');
@@ -52,7 +54,7 @@ export default function Signup({ navigation }) {
           try {
             // Signup request
             const resp = await axios.post(
-              'http://10.0.2.2:5000/api/user/signup',
+              'http://192.168.0.101:5000/api/user/signup',
               {
                 username: values.username,
                 email: values.email,

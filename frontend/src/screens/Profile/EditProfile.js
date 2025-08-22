@@ -11,15 +11,17 @@ import {
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { launchImageLibrary } from 'react-native-image-picker';
+import Config from 'react-native-config';
 import { useSelector, useDispatch } from 'react-redux';
 import { uploadImageToCloudinary } from '../../utils/cloudinaryUpload';
 import { useNavigation } from '@react-navigation/native';
-import Config from 'react-native-config';
+
 import axios from 'axios';
 import { refreshUser } from '../../redux/actions/user.action';
 import i18n from '../locales/i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+const API_URL = Config.API_URL;
 
 export default function EditProfileScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -55,7 +57,7 @@ export default function EditProfileScreen({ navigation }) {
         imageUrl = user?.profile;
       }
       await axios.put(
-        'http://10.0.2.2:5000/api/user',
+        'http://192.168.0.101:5000/api/user',
         {
           profile: imageUrl,
           userId: user._id,

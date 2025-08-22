@@ -8,6 +8,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next"; 
 import "./Login.css";
+const API_URL = process.env.REACT_APP_API_URL;
+
 
 export default function Login() {
   const { t } = useTranslation(); 
@@ -34,7 +36,8 @@ export default function Login() {
 
   const handleLogin = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.post("http://localhost:5000/api/client/login", values);
+      const response = await axios.post(`${API_URL}
+/api/client/login`, values);
       const user = response.data.user;
 
       localStorage.setItem("token", response.data.token);

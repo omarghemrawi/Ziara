@@ -5,12 +5,14 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 
+
 import EditProfileModal from "../../components/EditProfileModal";
 import EditDescriptionModal from "../../components/EditDescriptionModal";
 import EditLinksModal from "../../components/EditLinksModal";
 import { setUser } from "../../redux/userActions";
 import { useTranslation } from "react-i18next"; // 👈 Added
 import "./ProfilePage.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 function SectionCard({ title, children }) {
   return (
@@ -91,7 +93,8 @@ export default function ProfilePage() {
     if (!placeId) return;
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/review/place/${placeId}`,
+        `${API_URL}
+/api/review/place/${placeId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       if (res.data?.success) setReviews(res.data.reviews || []);
@@ -138,7 +141,8 @@ const handleAvatarChange = async (e) => {
     formData.append("profile", file); // 👈 send under field name 'profile'
 
     const res = await axios.put(
-      "http://localhost:5000/api/client/update-profile",
+      `${API_URL}
+/api/client/update-profile`,
       formData,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -186,7 +190,8 @@ const handlePhotoUpload = async (e) => {
     files.forEach((f) => formData.append("referenceImages", f));
 
     const res = await axios.put(
-      "http://localhost:5000/api/client/update-profile",
+      `${API_URL}
+/api/client/update-profile`,
       formData,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -217,7 +222,8 @@ const deleteSelectedPhotos = async () => {
     };
 
     const res = await axios.put(
-      "http://localhost:5000/api/client/update-profile",
+      `${API_URL}
+/api/client/update-profile`,
       payload,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -244,7 +250,8 @@ const deleteSelectedPhotos = async () => {
     const handleSaveLinks = async () => {
   try {
     const res = await axios.put(
-      "http://localhost:5000/api/client/update-profile",
+      `${API_URL}
+/api/client/update-profile`,
       {
         userId: user._id,
         ...editedLinks,
@@ -264,7 +271,8 @@ const deleteSelectedPhotos = async () => {
 const handleSaveDescription = async () => {
   try {
     const res = await axios.put(
-      "http://localhost:5000/api/client/update-profile",
+      `${API_URL}
+/api/client/update-profile`,
       {
         userId: user._id,
         description: profileDescription,
@@ -284,7 +292,8 @@ const handleSaveDescription = async () => {
 const handleSaveProfile = async () => {
   try {
     const res = await axios.put(
-      "http://localhost:5000/api/client/update-profile",
+      `${API_URL}
+/api/client/update-profile`,
       {
         userId: user._id,
         name: businessName,

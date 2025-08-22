@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 import Entypo from 'react-native-vector-icons/Entypo';
 import Modal from 'react-native-modal';
 import { useTheme } from '../Theme/Theme';
@@ -53,7 +55,7 @@ export default function Favourites() {
   const handleMoveToVisited = async () => {
     try {
       await axios.post(
-        'http://10.0.2.2:5000/api/visited',
+        'http://192.168.0.101:5000/api/visited',
         { place_id: idSelectedPlace },
         { headers: { Authorization: `Bearer ${token}` } },
       );
@@ -72,7 +74,7 @@ export default function Favourites() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete('http://10.0.2.2:5000/api/favorite', {
+      await axios.delete('http://192.168.0.101:5000/api/favorite', {
         data: { placeId: idSelectedPlace },
         headers: { Authorization: `Bearer ${token}` },
       });

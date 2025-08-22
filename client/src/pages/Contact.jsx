@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";   // ✅ إضافة الترجمة
 import "./Contact.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Contact() {
   const { t } = useTranslation();   // ✅ hook الترجمة
@@ -26,7 +27,8 @@ export default function Contact() {
     try {
       setStatus({ loading: true, ok: null, msg: "" });
 
-      const res = await fetch("http://localhost:5000/api/contact", {
+      const res = await fetch(`${API_URL}
+/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

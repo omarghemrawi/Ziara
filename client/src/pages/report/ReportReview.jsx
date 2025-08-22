@@ -4,6 +4,7 @@ import "./ReportReview.css";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next"; // 👈 Added
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function ReportReview() {
   const { t } = useTranslation(); // 👈 Added
@@ -68,7 +69,8 @@ export default function ReportReview() {
         reason: [selectedReasonId],
       };
 
-      const res = await axios.post("http://localhost:5000/api/report", payload, {
+      const res = await axios.post(`${API_URL}
+/api/report`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

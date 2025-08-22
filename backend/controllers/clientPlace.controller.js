@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import ClientPlace from "../models/clientPlace.model.js";
 import { sendClientRegisterNotfication, sendBannednEmail, sendDeactivationEmail } from "../utils/emailSender.js";
+import nodemailer from "nodemailer";
 
 //! Fetch all active client places
 // ============================
@@ -272,6 +273,75 @@ export const getAllPlacesToAdmin = async (req, res) => {
     res.status(200).json({ success: true, places });
   } catch (error) {
     console.error("Error fetching all places for admin:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
+// ================================
+// Forgot Password
+// ================================
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const client = await ClientPlace.findOne({ email });
+    if (!client) return res.status(404).json({ message: "Client not found" });
+
+    // Generate code 6 digits
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    client.resetCode = code;
+    client.resetCodeExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+    await client.save();
+
+    // Send email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: `"Ziara" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Ziara Password Reset Code",
+      html: `<p>Your password reset code is: <b>${code}</b></p>`,
+    });
+
+    res.json({ success: true, message: "Reset code sent to your email" });
+  } catch (err) {
+    console.error("Forgot password error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ================================
+// Reset Password
+// ================================
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, code, newPassword } = req.body;
+    const client = await ClientPlace.findOne({ email });
+    if (!client) return res.status(404).json({ message: "Client not found" });
+
+    const isExpired = !client.resetCodeExpire || client.resetCodeExpire < Date.now();
+    const codeMismatch = client.resetCode !== code;
+
+    if (codeMismatch || isExpired) {
+      return res.status(400).json({ success: false, message: "Invalid or expired code" });
+    }
+
+    // Hash new password
+    const hashed = await bcrypt.hash(newPassword, 10);
+    client.password = hashed;
+    client.resetCode = undefined;
+    client.resetCodeExpire = undefined;
+    await client.save();
+
+    res.json({ success: true, message: "Password updated successfully" });
+  } catch (err) {
+    console.error("Reset password error:", err);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

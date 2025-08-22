@@ -5,6 +5,7 @@ import axios from "axios";
 // import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "./AdditionalInfo.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function AdditionalInfo() {
   const navigate = useNavigate();
@@ -38,7 +39,8 @@ if (!/^\d{8}$/.test(info.phone)) {
       
 
         const { data } = await axios.put(
-        "http://localhost:5000/api/client/complete-register",
+        `${API_URL}
+/api/client/complete-register`,
         { city: info.city, phone: info.phone },
         {
         headers: { Authorization: `Bearer ${token}` },}

@@ -80,7 +80,7 @@ useEffect(() => {
     } else if (guest) {
       setInitialRoute('Home');  // guest
     } else {
-      setInitialRoute('Onboarding'); // not logged in
+      setInitialRoute('Launching'); // not logged in
     }
   };
 

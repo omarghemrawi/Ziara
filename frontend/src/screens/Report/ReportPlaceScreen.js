@@ -14,6 +14,8 @@ import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import Config from 'react-native-config';
+const API_URL = Config.API_URL;
 
 export default function ReportPlaceScreen() {
   const { theme } = useTheme();
@@ -52,7 +54,7 @@ export default function ReportPlaceScreen() {
     }
     try {
       const response = await axios.post(
-        'http://10.0.2.2:5000/api/report',
+        'http://192.168.0.101:5000/api/report',
         {
           type: 'ClientPlace',
           complainant: 'User',
