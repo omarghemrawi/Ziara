@@ -16,9 +16,6 @@ import i18n from '../locales/i18n';
 import Config from 'react-native-config';
 import axios from 'axios';
 
-
-
-
 export default function NearbyScreen() {
   const [location, setLocation] = useState(null);
   const [religious, setReligious] = useState([]);
@@ -28,41 +25,40 @@ export default function NearbyScreen() {
   const [locationError, setLocationError] = useState(false);
   const API_KEY_GOOGLE_PLACES = Config.API_KEY_GOOGLE_PLACES;
 
-
   const fetchData = async () => {
-  try {
-    if (!location) return; 
+    try {
+      if (!location) return;
 
-    const [resRestaurants, resTouristic, resReligious] = await Promise.all([
-      axios.get('http://192.168.0.101:5000/api/nearby/restaurant', {
-        params: {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-      }),
-      axios.get('http://192.168.0.101:5000/api/nearby/touristic', {
-        params: {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-      }),
-      axios.get('http://192.168.0.101:5000/api/nearby/religious', {
-        params: {
-          latitude: location.latitude,
-          longitude: location.longitude,
-        },
-      }),
-    ]);
+      const [resRestaurants, resTouristic, resReligious] = await Promise.all([
+        axios.get('http://10.0.2.2:5000/api/nearby/restaurant', {
+          params: {
+            latitude: location.latitude,
+            longitude: location.longitude,
+          },
+        }),
+        axios.get('http://10.0.2.2:5000/api/nearby/touristic', {
+          params: {
+            latitude: location.latitude,
+            longitude: location.longitude,
+          },
+        }),
+        axios.get('http://10.0.2.2:5000/api/nearby/religious', {
+          params: {
+            latitude: location.latitude,
+            longitude: location.longitude,
+          },
+        }),
+      ]);
 
-    setRestaurants(resRestaurants.data.restaurants || []);
-    setTouristic(resTouristic.data.touristPlaces || []);
-    setReligious(resReligious.data.religiousPlaces || []);
-  } catch (error) {
-    console.error('Failed to fetch nearby places:', error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+      setRestaurants(resRestaurants.data.restaurants || []);
+      setTouristic(resTouristic.data.touristPlaces || []);
+      setReligious(resReligious.data.religiousPlaces || []);
+    } catch (error) {
+      console.error('Failed to fetch nearby places:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -72,7 +68,7 @@ export default function NearbyScreen() {
         setLocation(loc);
         Alert.alert(
           'Location Retrieved',
-          `Latitude: ${loc.latitude}\nLongitude: ${loc.longitude}`
+          `Latitude: ${loc.latitude}\nLongitude: ${loc.longitude}`,
         );
       })
       .catch(error => {
@@ -81,57 +77,57 @@ export default function NearbyScreen() {
         Alert.alert('Error', message);
       });
   }, []);
-//   useEffect(() => {
-//   const requestLocation = async () => {
-//     try {
-//       const loc = await GetLocation.getCurrentPosition({
-//         enableHighAccuracy: true,
-//         timeout: 60000,
-//       });
-//       setLocation(loc);
-//       setLocationError(false);
-//       Alert.alert(
-//         'Location Retrieved',
-//         `Latitude: ${loc.latitude}\nLongitude: ${loc.longitude}`
-//       );
-//     } catch (error) {
-//       console.warn('Location error:', error.message);
-//       setLocationError(true);
-//       setLocation({
-//         latitude: 33.8938,
-//         longitude: 35.5018, // Beirut fallback
-//       });
-//       Alert.alert(
-//         'Location Error',
-//         'Using default location (Beirut)'
-//       );
-//     }
-//   };
+  //   useEffect(() => {
+  //   const requestLocation = async () => {
+  //     try {
+  //       const loc = await GetLocation.getCurrentPosition({
+  //         enableHighAccuracy: true,
+  //         timeout: 60000,
+  //       });
+  //       setLocation(loc);
+  //       setLocationError(false);
+  //       Alert.alert(
+  //         'Location Retrieved',
+  //         `Latitude: ${loc.latitude}\nLongitude: ${loc.longitude}`
+  //       );
+  //     } catch (error) {
+  //       console.warn('Location error:', error.message);
+  //       setLocationError(true);
+  //       setLocation({
+  //         latitude: 33.8938,
+  //         longitude: 35.5018, // Beirut fallback
+  //       });
+  //       Alert.alert(
+  //         'Location Error',
+  //         'Using default location (Beirut)'
+  //       );
+  //     }
+  //   };
 
-//   requestLocation();
-// }, []);
+  //   requestLocation();
+  // }, []);
 
-useEffect(() => {
-  if (location) {
-    fetchData(); // now it will fetch only after location is available
-  }
-}, [location]);
+  useEffect(() => {
+    if (location) {
+      fetchData(); // now it will fetch only after location is available
+    }
+  }, [location]);
 
   // Filter and validate places data
-const getValidPlaces = places => {
-  return places.filter(
-    place =>
-      place &&
-      typeof place.lat === 'number' &&
-      typeof place.lng === 'number' &&
-      !isNaN(place.lat) &&
-      !isNaN(place.lng) &&
-      place.lat >= -90 &&
-      place.lat <= 90 &&
-      place.lng >= -180 &&
-      place.lng <= 180,
-  );
-};
+  const getValidPlaces = places => {
+    return places.filter(
+      place =>
+        place &&
+        typeof place.lat === 'number' &&
+        typeof place.lng === 'number' &&
+        !isNaN(place.lat) &&
+        !isNaN(place.lng) &&
+        place.lat >= -90 &&
+        place.lat <= 90 &&
+        place.lng >= -180 &&
+        place.lng <= 180,
+    );
+  };
 
   // Combine all valid places for map markers
   const allValidPlaces = [
@@ -220,26 +216,25 @@ const getValidPlaces = places => {
             }}
             showsUserLocation={!locationError}
           >
-       {allValidPlaces.map((place, index) => {
-  let pinColor = 'gray';
-  if (restaurants.includes(place)) pinColor = 'red';
-  else if (touristic.includes(place)) pinColor = 'blue';
-  else if (religious.includes(place)) pinColor = 'green';
+            {allValidPlaces.map((place, index) => {
+              let pinColor = 'gray';
+              if (restaurants.includes(place)) pinColor = 'red';
+              else if (touristic.includes(place)) pinColor = 'blue';
+              else if (religious.includes(place)) pinColor = 'green';
 
-  return (
-    <Marker
-      key={place.id || place.place_id || `marker-${index}`}
-      coordinate={{
-        latitude: Number(place.lat),
-    longitude: Number(place.lng),
-      }}
-      title={place.name || place.title || 'Unknown Place'}
-      description={place.address || ''}
-      pinColor={pinColor} // set pin color by type
-    />
-  );
-})}
-
+              return (
+                <Marker
+                  key={place.id || place.place_id || `marker-${index}`}
+                  coordinate={{
+                    latitude: Number(place.lat),
+                    longitude: Number(place.lng),
+                  }}
+                  title={place.name || place.title || 'Unknown Place'}
+                  description={place.address || ''}
+                  pinColor={pinColor} // set pin color by type
+                />
+              );
+            })}
           </MapView>
         )}
 
@@ -250,4 +245,3 @@ const getValidPlaces = places => {
     </SafeAreaView>
   );
 }
-

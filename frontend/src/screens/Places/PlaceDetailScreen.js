@@ -89,14 +89,14 @@ export default function PlaceDetailScreen() {
     try {
       if (newValue) {
         await axios.post(
-          'http://192.168.0.101:5000/api/favorite/',
+          'http://10.0.2.2:5000/api/favorite/',
           { placeId: id },
           {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
       } else {
-        await axios.delete('http://192.168.0.101:5000/api/favorite', {
+        await axios.delete('http://10.0.2.2:5000/api/favorite', {
           data: { placeId: id },
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -156,7 +156,7 @@ export default function PlaceDetailScreen() {
         : 'ClientPlace';
       // Submit review data
       const res = await axios.post(
-        'http://192.168.0.101:5000/api/review',
+        'http://10.0.2.2:5000/api/review',
         {
           rating: selectedStar,
           comment: reviewText,
@@ -235,7 +235,7 @@ export default function PlaceDetailScreen() {
 
     try {
       const res = await axios.get(
-        `http://192.168.0.101:5000/api/review/place/${placeId}`,
+        `http://10.0.2.2:5000/api/review/place/${placeId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -408,7 +408,9 @@ export default function PlaceDetailScreen() {
         <Text style={styles.sectionTitle}>{i18n.t('Description')}</Text>
         <Text style={styles.descriptionText}>{place?.description}</Text>
         {place?.phone ? (
-          <Text style={styles.phoneText}>{i18n.t('callus')} : {place?.phone}</Text>
+          <Text style={styles.phoneText}>
+            {i18n.t('callus')} : {place?.phone}
+          </Text>
         ) : (
           ''
         )}
