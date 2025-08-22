@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTranslation } from "react-i18next"; // 🟢 للترجمة
 import "./ReviewsPage.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function ReviewsPage() {
   const { placeId } = useParams();
@@ -20,7 +21,8 @@ export default function ReviewsPage() {
     try {
       setLoading(true);
       const res = await axios.get(
-        `http://localhost:5000/api/review/place/${placeId}`,
+        `${API_URL}
+/api/review/place/${placeId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

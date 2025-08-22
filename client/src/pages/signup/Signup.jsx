@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../redux/userActions";  
 import { useTranslation } from "react-i18next";  
 import "./Signup.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Signup() {
   const { t } = useTranslation(); // ✅ الترجمة
@@ -49,7 +50,8 @@ export default function Signup() {
 const handleSignup = async (values, { setSubmitting, setFieldError }) => {
   try {
     const { confirm, ...payload } = values;
-    const response = await axios.post("http://localhost:5000/api/client/signup", {
+    const response = await axios.post(`${API_URL}
+/api/client/signup`, {
       name: payload.businessName,
       type: payload.business,
       email: payload.email,

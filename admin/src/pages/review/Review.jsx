@@ -30,7 +30,8 @@ const Review = () => {
   const handleDelete = async (reviewId) => {
     if (!window.confirm("Are you sure you want to delete this review?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/review/${reviewId}`, {
+      await axios.delete(`${API_URL}
+/api/review/${reviewId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const updatedReviews = reviews.filter((rev) => rev._id !== reviewId);

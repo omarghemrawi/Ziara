@@ -5,6 +5,7 @@ import axios from "axios";
 import { setUser } from "../../redux/userActions";
 import { useTranslation } from "react-i18next"; // 👈 Added
 import "./Checkout.css";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const PLANS = {
   standard: { id: "standard", name: "Standard", price: 10 },
@@ -48,7 +49,8 @@ export default function Checkout() {
   const payNow = async (plan) => {
     try {
       const response = await axios.put(
-        "http://localhost:5000/api/client/subscribe",
+        `${API_URL}
+/api/client/subscribe`,
         { planName: plan.name },
         { headers: { Authorization: `Bearer ${token}` } }
       );

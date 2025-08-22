@@ -6,6 +6,8 @@ import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import "./ForgotPassword.css";
+const API_URL = process.env.REACT_APP_API_URL;
+
 
 export default function ForgotPassword() {
   const { t } = useTranslation();
@@ -42,7 +44,7 @@ export default function ForgotPassword() {
     try {
       if (step === 1) {
         // Step 1: send reset code
-        await axios.post("http://localhost:5000/api/client/forgot-password", {
+        await axios.post(`${API_URL}/api/client/forgot-password`, {
           email: values.email,
         });
         setEmail(values.email);
@@ -55,7 +57,7 @@ export default function ForgotPassword() {
         setStep(3);
       } else if (step === 3) {
         // Step 3: reset password
-        await axios.post("http://localhost:5000/api/client/reset-password", {
+        await axios.post(`${API_URL}/api/client/reset-password`, {
           email,
           code,
           newPassword: values.password,
