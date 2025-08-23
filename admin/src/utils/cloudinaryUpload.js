@@ -1,16 +1,15 @@
 import axios from "axios";
 
-const CLOUD_NAME = "duvaij387";
-const UPLOAD_PRESET = "Ziara-preset";
-
+const VITE_CLOUD_NAME = import.meta.env.VITE_CLOUD_NAME
+const VITE_UPLOAD_PRESET = import.meta.env.VITE_UPLOAD_PRESET
 export const uploadImageToCloudinary = async (file) => {
   try {
     const formData = new FormData();
     formData.append("file", file); // file from <input type="file" />
-    formData.append("upload_preset", UPLOAD_PRESET);
+    formData.append("upload_preset", VITE_UPLOAD_PRESET);
 
     const res = await axios.post(
-      `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${VITE_CLOUD_NAME}/image/upload`,
       formData,
       {
         headers: {
