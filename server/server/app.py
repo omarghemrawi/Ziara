@@ -16,7 +16,7 @@ CORS(app)
 genai.configure(api_key=os.getenv("GEMINI_API_KEY")) # Recommended to use a new env variable name
 
 # Initialize the Gemini model
-# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY")) # REMOVE THIS LINE
+
 model = genai.GenerativeModel('models/gemini-1.5-flash') # USE 'gemini-pro' for text-only, or other models as needed
 
 @app.route('/list_models', methods=['GET'])

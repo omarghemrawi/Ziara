@@ -74,7 +74,7 @@ export default function Favourites() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete('http://192.168.0.101:5000/api/favorite', {
+      await axios.delete(`${API_URL}/api/favorite`, {
         data: { placeId: idSelectedPlace },
         headers: { Authorization: `Bearer ${token}` },
       });
